@@ -3,7 +3,5 @@ node_modules/
 build/
 dist/
 bun.lock
-CHANGELOG.md
-.changeset/*.md
 # Prose: tables and wrapping are written by hand
 *.md
