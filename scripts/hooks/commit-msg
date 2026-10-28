@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# commit-msg gate (activated with scripts/setup-hooks.sh). Rejects messages
+# carrying a disallowed trailer or footer; CI runs the same check on PRs.
+exec bash "$(git rev-parse --show-toplevel)/scripts/message-standard.sh" "$1"
