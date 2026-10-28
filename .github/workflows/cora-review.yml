@@ -18,6 +18,9 @@ permissions:
 jobs:
   cora-review:
     name: Cora Review
+    # pull_request_target holds credentials while checking out PR code: run only
+    # for branches of this repository. Fork PRs are reviewed by a maintainer.
+    if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
