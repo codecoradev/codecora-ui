@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+# Pre-commit gate (activated with scripts/setup-hooks.sh). Cheapest first:
+#   1. bun run check + bun run test — once package.json exists (M0) and code is staged
+#   2. cora review --staged         — only with CORA_HOOK=1; the primary review of
+#      every commit is the agent review flow described in AGENTS.md
+# Emergency escape: `git commit --no-verify` (say why in the PR). Never use it to
+# skip review findings.
+set -uo pipefail
+
+staged=$(git diff --cached --name-only --diff-filter=ACMRD)
+[ -z "$staged" ] && exit 0
+
+fail() {
+  echo "commit denied: $1"
+  [ -n "${2:-}" ] && echo "  $2"
+  exit 1
+}
+
+root=$(git rev-parse --show-toplevel)
+
+if [ -f "$root/package.json" ] && echo "$staged" | grep -qE '\.(ts|js|svelte|css)$|(^|/)package\.json$|(^|/)bun\.lock$'; then
+  command -v bun >/dev/null 2>&1 || fail "bun not installed" "install bun, see CONTRIBUTING.md"
+  echo "check..."
+  out=$(cd "$root" && bun run check 2>&1) || { echo "$out" | tail -20; fail "check failed" "run: bun run check"; }
+  echo "test..."
+  out=$(cd "$root" && bun run test 2>&1) || { echo "$out" | tail -20; fail "tests failed" "run: bun run test"; }
+fi
+
+if [ "${CORA_HOOK:-0}" = "1" ]; then
+  CORA_BIN="${CORA_BIN:-cora}"
+  command -v "$CORA_BIN" >/dev/null 2>&1 || fail "cora not installed" "install cora, or set CORA_BIN"
+  echo "cora review --staged (blocks on major and above)..."
+  # --ci: exit 2 on findings (without it cora always exits 0)
+  "$CORA_BIN" review --staged --ci --severity major --format compact
+  rc=$?
+  if [ "$rc" -eq 2 ]; then
+    fail "review found major or critical issues" "fix them and commit again"
+  elif [ "$rc" -ne 0 ]; then
+    echo "warning: review did not complete (exit $rc); get a real verdict before pushing"
+  fi
+fi
+
+exit 0

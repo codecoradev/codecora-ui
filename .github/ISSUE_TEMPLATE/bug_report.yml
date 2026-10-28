@@ -1,0 +1,52 @@
+name: Bug report
+description: Something in a @codecora package does not work as documented
+labels: ["bug"]
+body:
+  - type: dropdown
+    id: package
+    attributes:
+      label: Package
+      options:
+        - "@codecora/tokens"
+        - "@codecora/ui"
+        - "@codecora/icons"
+        - "@codecora/brand"
+        - "@codecora/memory"
+        - registry / playground
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Package version
+      placeholder: "0.1.0"
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: A minimal snippet or a playground link helps most. Include theme, browser and viewport if relevant.
+    validations:
+      required: true
+  - type: textarea
+    id: env
+    attributes:
+      label: Environment
+      placeholder: "Svelte 5.x, SvelteKit 3.x / Vite, browser, OS"
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched existing issues and found no duplicate
+          required: true
+        - label: This is not a security vulnerability (see SECURITY.md)
+          required: true
