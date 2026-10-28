@@ -80,17 +80,16 @@ Skeleton, Spinner.
   `src/lib/ts/transport.ts`.
 - Capabilities hide what a backend lacks (Uteke Cloud: no graph, lifecycle,
   dream; namespaces deprecated).
-- Uteke Cloud note: the portal session cookie is scoped to `/api/v2/portal`,
-  so the cloud transport for the browser needs a portal-scoped data route
-  (proposed `/api/v2/portal/data/*` over the internal data router), a contract
-  change in uteke-cloud.
+- The Uteke Cloud browser transport authenticates with the portal session,
+  which needs a session-scoped data route on the Uteke Cloud side (tracked in
+  the Uteke Cloud project).
 
 ## Distribution
 
 - npmjs.com `@codecora/*`, published from GitHub Actions with provenance,
   versioned with changesets (semver per package).
 - shadcn-svelte registry JSON served with the playground build.
-- Gitea pull mirror for the fleet.
+- A read-only mirror on the team's internal forge.
 
 ## Quality gates (CI)
 
