@@ -14,6 +14,7 @@ changesets once packages exist.
 - Repository baseline: `AGENTS.md`, contributing guide, code of conduct, security policy, PR template and issue forms, commit hooks (`scripts/hooks/`), PR checks and review workflows.
 - Dependabot for GitHub Actions.
 - Monorepo tooling: bun workspaces, strict TypeScript 6, `svelte-package` + publint, vitest with Testing Library, ESLint and Prettier, changesets; `@codecora/ui` and playground skeletons.
+- `@codecora/tokens`: primitive, semantic and theme tiers with the `neutral`, `uteke` and `corin` themes, `data-accent` and `data-density` modifiers, nesting per element, a Tailwind 4 preset and a shadcn-svelte bridge; WCAG AA contrast check for every theme and accent.
 
 ### Security
 

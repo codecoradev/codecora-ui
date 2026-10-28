@@ -16,6 +16,7 @@
     "build": "bun run build:packages && bun run --filter './apps/*' build",
     "check": "bun run build:packages && bun run --filter './packages/*' --filter './apps/*' check",
     "test": "bun run --filter './packages/*' --filter './apps/*' test",
+    "contrast": "bun run --filter './packages/tokens' contrast",
     "lint": "prettier --check . && eslint .",
     "format": "prettier --write .",
     "changeset": "changeset",
