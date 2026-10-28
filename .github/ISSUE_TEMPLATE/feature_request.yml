@@ -1,6 +1,6 @@
 name: Feature request
 description: Propose a component, theme, token or package change
-labels: ["enhancement"]
+labels: ['enhancement']
 body:
   - type: markdown
     attributes:
@@ -28,8 +28,8 @@ body:
     attributes:
       label: Will you contribute the implementation?
       options:
-        - "Yes"
-        - "Yes, with guidance"
-        - "No, just suggesting"
+        - 'Yes'
+        - 'Yes, with guidance'
+        - 'No, just suggesting'
     validations:
       required: true

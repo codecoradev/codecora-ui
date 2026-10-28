@@ -13,6 +13,7 @@ changesets once packages exist.
 - Planning documents: decisions D1–D12, architecture, roadmap M0–M4 with the issue map.
 - Repository baseline: `AGENTS.md`, contributing guide, code of conduct, security policy, PR template and issue forms, commit hooks (`scripts/hooks/`), PR checks and review workflows.
 - Dependabot for GitHub Actions.
+- Monorepo tooling: bun workspaces, strict TypeScript 6, `svelte-package` + publint, vitest with Testing Library, ESLint and Prettier, changesets; `@codecora/ui` and playground skeletons.
 
 ### Security
 
