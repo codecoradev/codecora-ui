@@ -11,10 +11,12 @@ Branch: <type>/<issue>-<slug> from develop.
 <!-- The problem this solves. -->
 
 ## Testing
-<!-- What you ran and saw. From M0 on: -->
+<!-- What you ran and saw. -->
 - [ ] `bun run check`
 - [ ] `bun run test`
 - [ ] `bun run build`
+- [ ] `bun run lint`
+- [ ] Changeset added (changes to a published package)
 - [ ] Contrast check passes for every theme
 - [ ] Keyboard-only and 375 px checked for changed components
 - [ ] Review of the staged diff: verdict quoted here

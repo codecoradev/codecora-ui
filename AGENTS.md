@@ -10,7 +10,7 @@ Read before changing anything:
 
 ## Repo layout
 
-Planned (M0, issue #1); only `docs/`, `scripts/` and `.github/` exist today.
+bun workspaces (`packages/*`, `apps/*`). Today: `packages/ui` (a skeleton) and `apps/playground` (a skeleton); the other packages land with their issues.
 
 - `packages/tokens` — `@codecora/tokens`: primitive, semantic and theme tokens; CSS, TS, Tailwind 4 preset, shadcn bridge
 - `packages/ui` — `@codecora/ui`: Svelte 5 components on bits-ui, plain CSS on semantic tokens
@@ -20,6 +20,7 @@ Planned (M0, issue #1); only `docs/`, `scripts/` and `.github/` exist today.
 - `registry/` — shadcn-svelte registry items (blocks, templates)
 - `apps/playground` — SvelteKit catalogue of every component in every theme
 - `scripts/` — `hooks/` (pre-commit, commit-msg), `setup-hooks.sh`, `message-standard.sh`
+- Root config — `tsconfig.base.json` (strict TS 6, extended by every workspace), `eslint.config.js`, `.prettierrc` (Markdown is not formatted), `.changeset/` (per-package versions, base branch `develop`)
 - `.github/` — PR template, issue forms, workflows (`pr-checks.yml`: branch naming, PR description, Conventional Commits title, message standard; `cora-review.yml`: automated review)
 
 Boundaries that reviews enforce:
@@ -55,10 +56,11 @@ merge → cleanup → release (bump + CHANGELOG + tag). 1 issue = 1 branch = 1 P
 
 ## Before committing — mandatory checks
 
-1. **Activate the hooks once per clone:** `bash scripts/setup-hooks.sh` (sets `core.hooksPath=scripts/hooks`; from M0 on `bun install` does it through `prepare`).
+1. **Activate the hooks once per clone:** `bash scripts/setup-hooks.sh` (sets `core.hooksPath=scripts/hooks`; `bun install` does it through `prepare`).
 2. **Review every commit** before it is made: run the agent review flow on `git diff --staged` (prepare, answer, finalize at severity `major`), or `cora review --staged --ci --severity major` by hand. Major or critical findings block the commit. A tool error or a missing verdict is not a pass: retry, or review file by file. Quote the verdict in the PR `## Testing`.
 3. Never `git commit --no-verify` past a finding (emergency only, and say why in the PR). False positives get fixed by rewording or restructuring, not by bypassing.
-4. **Local gates** (mirror of CI, from M0 on): `bun install --frozen-lockfile`, `bun run check`, `bun run test`, `bun run build`, contrast check for every theme.
+4. **Local gates** (mirror of CI): `bun install --frozen-lockfile`, `bun run check` (builds the packages, then `svelte-check` in every workspace), `bun run test`, `bun run build`, `bun run lint`; the contrast check for every theme joins with the tokens (#3).
+5. A change to a published `@codecora/*` package adds a changeset (`bun run changeset`).
 
 ## Tooling
 

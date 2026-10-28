@@ -21,14 +21,17 @@ decision need an issue and maintainer agreement before code.
 
 ## Local checks
 
-Available from milestone M0 (tooling, issue #1):
+Requires [bun](https://bun.sh) 1.4+ and Node 22.17+ (SvelteKit 3).
 
 ```bash
-bun install --frozen-lockfile
-bun run check
-bun run test
-bun run build
+bun install --frozen-lockfile   # also activates the git hooks
+bun run check                   # builds the packages, then svelte-check everywhere
+bun run test                    # vitest
+bun run build                   # packages (svelte-package + publint), then the playground
+bun run lint                    # prettier --check and eslint (bun run format fixes formatting)
 ```
+
+A change to a published `@codecora/*` package needs a changeset: `bun run changeset`.
 
 Every component must work with the keyboard alone, at 375 px width, and in
 every theme with WCAG AA contrast.
