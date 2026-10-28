@@ -37,9 +37,9 @@ jobs:
         if: env.FEDERATION_RULE_ID != '' && env.ORGANIZATION_ID != '' && env.SERVICE_ACCOUNT_ID != '' && env.WORKSPACE_ID != ''
         continue-on-error: true
         run: |
-          # The OIDC token stays in this step's shell: it is never exported to the
-          # job environment, so later steps (checkout of the PR, the review action)
-          # cannot see it. Only the short-lived Anthropic access token is exported.
+          # The OIDC token stays in this step's shell. The short-lived Anthropic
+          # access token leaves it only as a step output, which reaches just the
+          # steps that name it (never the job environment or the PR checkout).
           jwt=$(curl -sS -H "Authorization: Bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
             "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=https://api.anthropic.com" | jq -r '.value // empty')
           if [ -z "$jwt" ]; then
@@ -67,7 +67,7 @@ jobs:
           token=$(jq -r '.access_token' exchange.json)
           rm -f exchange.json
           echo "::add-mask::$token"
-          echo "ACCESS_TOKEN=$token" >> "$GITHUB_ENV"
+          echo "token=$token" >> "$GITHUB_OUTPUT"
           echo "Using a short-lived Anthropic access token (workload identity federation)."
 
       # SECURITY: this job checks out untrusted PR code while holding a credential
@@ -75,17 +75,15 @@ jobs:
       # and exfiltrate it. CORA_BASE_URL (env) always takes precedence over
       # project config, so the base URL is pinned here, and the Anthropic token
       # is only ever paired with api.anthropic.com (never with CORA_BASE_URL).
+      # Without a federation token the stored secrets are required. An empty
+      # secret must fail the job: a skipped or fallback review is not a pass.
       - name: Require the review secrets
+        if: steps.wif.outputs.token == ''
         env:
           CORA_API_KEY: ${{ secrets.CORA_API_KEY }}
           CORA_BASE_URL: ${{ secrets.CORA_BASE_URL }}
           CORA_MODEL: ${{ secrets.CORA_MODEL }}
         run: |
-          # No federation token: the stored secrets are required. An empty secret
-          # must fail the job: a skipped or fallback review is not a pass.
-          if [ -n "${ACCESS_TOKEN:-}" ]; then
-            exit 0
-          fi
           missing=0
           for name in CORA_API_KEY CORA_BASE_URL CORA_MODEL; do
             if [ -z "${!name}" ]; then
@@ -95,19 +93,21 @@ jobs:
           done
           exit "$missing"
 
+      # Actions are pinned to commit SHAs (this job holds a credential);
+      # Dependabot keeps the pins current.
       - name: Checkout PR head
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
           persist-credentials: false
 
       - name: Run Cora AI Code Review
-        uses: codecoradev/cora-review-action@v1
+        uses: codecoradev/cora-review-action@f4804f361593078b84aa8d5a82fad084969fd381 # v1.0.5
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           # With a federation token, key, base URL and model switch together so the
           # token is only ever sent to api.anthropic.com.
-          cora-api-key: ${{ env.ACCESS_TOKEN || secrets.CORA_API_KEY }}
-          cora-base-url: ${{ env.ACCESS_TOKEN && 'https://api.anthropic.com/v1' || secrets.CORA_BASE_URL }}
-          cora-model: ${{ env.ACCESS_TOKEN && (secrets.ANTHROPIC_MODEL || vars.ANTHROPIC_MODEL || 'claude-opus-5-5') || secrets.CORA_MODEL }}
+          cora-api-key: ${{ steps.wif.outputs.token || secrets.CORA_API_KEY }}
+          cora-base-url: ${{ steps.wif.outputs.token && 'https://api.anthropic.com/v1' || secrets.CORA_BASE_URL }}
+          cora-model: ${{ steps.wif.outputs.token && (secrets.ANTHROPIC_MODEL || vars.ANTHROPIC_MODEL || 'claude-opus-5-5') || secrets.CORA_MODEL }}

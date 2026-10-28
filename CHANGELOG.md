@@ -12,3 +12,8 @@ changesets once packages exist.
 
 - Planning documents: decisions D1–D12, architecture, roadmap M0–M4 with the issue map.
 - Repository baseline: `AGENTS.md`, contributing guide, code of conduct, security policy, PR template and issue forms, commit hooks (`scripts/hooks/`), PR checks and review workflows.
+- Dependabot for GitHub Actions.
+
+### Security
+
+- Workflows: the review access token is a step output instead of a job-wide variable, actions are pinned to commit SHAs, the message standard runs from the base branch, and the PR description check requires real content under whole `## What` / `## Why` / `## Testing` headings.
