@@ -7,3 +7,14 @@
 | **M2 Memory** | `@codecora/memory`: client, transports (uteke-serve, Uteke Cloud), capabilities, MemoryList, MemoryDetail, MemoryEditor; uteke-cloud adds the portal data route (contract change there) | A memory browser runs against uteke-serve and Uteke Cloud |
 | **M3 Uteke Cloud portal** | Portal moves to AppShell + Sidebar and gains the Memories page; folds in uteke-cloud #289 | Released in uteke-cloud |
 | **M4 Adoption** | Corin moves onto the packages; shadcn bridge for titen and gaira; registry blocks; other apps adopt when they touch UI | Two or more products beyond Uteke Cloud on the packages |
+
+## Issues
+
+| Milestone | Issues |
+|---|---|
+| M0 Foundation | #1 tooling, #2 CI and npm publishing, #3 tokens, #4 impeccable, #5 playground |
+| M1 Primitives | #6 primitives, #7 AppShell + Sidebar, #8 icons, #9 brand |
+| M2 Memory | #10 client and transports, #11 memory browser components |
+| M3 Uteke Cloud portal | #12 (work in uteke-cloud: Gitea codecoradev/uteke-cloud#303) |
+| M4 Adoption | #13 Corin, #14 shadcn registry and bridge |
+| Owner | #15 npm scope and Gitea mirror |
