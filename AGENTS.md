@@ -59,13 +59,14 @@ merge → cleanup → release (bump + CHANGELOG + tag). 1 issue = 1 branch = 1 P
 1. **Activate the hooks once per clone:** `bash scripts/setup-hooks.sh` (sets `core.hooksPath=scripts/hooks`; `bun install` does it through `prepare`).
 2. **Review every commit** before it is made: run the agent review flow on `git diff --staged` (prepare, answer, finalize at severity `major`), or `cora review --staged --ci --severity major` by hand. Major or critical findings block the commit. A tool error or a missing verdict is not a pass: retry, or review file by file. Quote the verdict in the PR `## Testing`.
 3. Never `git commit --no-verify` past a finding (emergency only, and say why in the PR). False positives get fixed by rewording or restructuring, not by bypassing.
-4. **Local gates** (mirror of CI): `bun install --frozen-lockfile`, `bun run check` (builds the packages, then `svelte-check` in every workspace), `bun run test`, `bun run build`, `bun run lint`, `bun run contrast` (WCAG AA for every theme and accent; the same check runs in `bun run test`).
+4. **Local gates** (mirror of CI): `bun install --frozen-lockfile`, `bun run check` (builds the packages, then `svelte-check` in every workspace), `bun run test`, `bun run build`, `bun run lint`, `bun run contrast` (WCAG AA for every theme and accent; the same check runs in `bun run test`), `bun run detect` (impeccable detector on component and playground sources).
 5. A change to a published `@codecora/*` package adds a changeset (`bun run changeset`).
 
 ## Tooling
 
 - `cora` (CLI or MCP): code index and review; prefer `cora brain search` over blind grep for symbol and caller queries. Its local state lives in `.cora/` (gitignored).
 - Design work uses the impeccable workflow (D12): `init`, `extract`, `document`, `critique`, `audit`, `polish`; its detector runs in CI from M0.
+- Design context: [PRODUCT.md](PRODUCT.md) (product truth), [DESIGN.md](DESIGN.md) (rules every theme shares) and `docs/design/<theme>.md` (one per theme; colour frontmatter is checked against the tokens by a unit test). Detector exceptions live in `.impeccable/config.json`, each with a reason; per-edit agent hooks are a local opt-in (`/impeccable hooks on`).
 - Never print credentials (headers, env files); compare keys by fingerprint, not value.
 
 ## Releases
