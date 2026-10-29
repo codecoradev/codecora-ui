@@ -17,6 +17,7 @@ changesets once packages exist.
 - `@codecora/tokens`: primitive, semantic and theme tiers with the `neutral`, `uteke` and `corin` themes, `data-accent` and `data-density` modifiers, nesting per element, a Tailwind 4 preset and a shadcn-svelte bridge; WCAG AA contrast check for every theme and accent.
 - Design context for the impeccable workflow: `PRODUCT.md`, a shared `DESIGN.md`, one `docs/design/<theme>.md` per theme kept in sync with the tokens by a test, and `bun run detect`.
 - Playground catalogue: theme, accent and density switchers, colour roles, control states, type, radius and spacing scales, a nested-theme demo, the contrast table per theme and accent, and fixed `/themes/<name>` pages for visual snapshots.
+- CI: a `Gates` workflow (lint, check, test, build, contrast, detector, pack dry run) on every PR and push to `develop` and `main`, and a `Release` workflow that publishes to npm with trusted publishing and provenance from `main`, dry run until publishing is enabled.
 
 ### Security
 

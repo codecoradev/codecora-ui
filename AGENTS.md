@@ -21,7 +21,7 @@ bun workspaces (`packages/*`, `apps/*`). Today: `packages/tokens`, `packages/ui`
 - `apps/playground` — SvelteKit catalogue of every component in every theme
 - `scripts/` — `hooks/` (pre-commit, commit-msg), `setup-hooks.sh`, `message-standard.sh`
 - Root config — `tsconfig.base.json` (strict TS 6, extended by every workspace), `eslint.config.js`, `.prettierrc` (Markdown is not formatted), `.changeset/` (per-package versions, base branch `develop`)
-- `.github/` — PR template, issue forms, workflows (`pr-checks.yml`: branch naming, PR description, Conventional Commits title, message standard; `cora-review.yml`: automated review)
+- `.github/` — PR template, issue forms, workflows (`ci.yml`: the Gates job, a mirror of the local gates; `pr-checks.yml`: branch naming, PR description, Conventional Commits title, message standard; `cora-review.yml`: automated review; `release.yml`: npm publishing)
 
 Boundaries that reviews enforce:
 
@@ -72,5 +72,11 @@ merge → cleanup → release (bump + CHANGELOG + tag). 1 issue = 1 branch = 1 P
 ## Releases
 
 - Per-package SemVer through changesets, published to npmjs.com under `@codecora/*` from GitHub Actions with provenance (#2). 0.x until the API settles: minor = features, patch = fixes. `CHANGELOG.md` at the root summarises each release.
+- Release steps:
+  1. A maintainer approves the version bump.
+  2. On a `release/vX.Y.Z` branch from `develop`, run `bun run version-packages` (it applies the pending changesets) and update `CHANGELOG.md`, then open a PR to `develop`.
+  3. Open a release PR `develop` → `main` (merge commit).
+  4. The merge to `main` runs `release.yml`, which runs `scripts/publish.sh`. The script publishes every package whose version is not on npm yet (trusted publishing, provenance) and pushes `<name>@<version>` tags.
+- `release.yml` has two jobs. `verify` is read-only (test, build, pack dry run). `publish` runs only on `main`, in the `npm-publish` environment, and only once the repository variable `NPM_PUBLISH_ENABLED` is `true` (after #15); until then every run is a dry run. `bash scripts/publish.sh --dry-run` shows locally what would be published; the CI Gates job runs it too.
 - Never pick a version yourself: propose minor or patch with the reason and wait for a maintainer before publishing or tagging.
 - After each batch of merged work: remove leftover worktrees and branches, then propose the version increment.
