@@ -43,7 +43,9 @@ for manifest in "$root"/packages/*/package.json; do
     echo "skip $name: not versioned yet (0.0.0)"
     continue
   fi
-  if npm view "$name@$version" version >/dev/null 2>&1; then
+  # Compare the output, not only the exit code: some npm versions exit 0 with
+  # empty output for a version that does not exist.
+  if [ "$(npm view "$name@$version" version 2>/dev/null)" = "$version" ]; then
     echo "skip $name@$version: already on npm"
     if [ "$dry_run" = false ]; then tag_release "$name@$version"; fi
     continue

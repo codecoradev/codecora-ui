@@ -77,6 +77,6 @@ merge → cleanup → release (bump + CHANGELOG + tag). 1 issue = 1 branch = 1 P
   2. On a `release/vX.Y.Z` branch from `develop`, run `bun run version-packages` (it applies the pending changesets) and update `CHANGELOG.md`, then open a PR to `develop`.
   3. Open a release PR `develop` → `main` (merge commit).
   4. The merge to `main` runs `release.yml`, which runs `scripts/publish.sh`. The script publishes every package whose version is not on npm yet (trusted publishing, provenance) and pushes `<name>@<version>` tags.
-- Until the repository variable `NPM_PUBLISH_ENABLED` is `true` (after #15), `release.yml` only does a dry run. `bash scripts/publish.sh --dry-run` shows locally what would be published; the CI Gates job runs it too.
+- `release.yml` has two jobs. `verify` is read-only (test, build, pack dry run). `publish` runs only on `main`, in the `npm-publish` environment, and only once the repository variable `NPM_PUBLISH_ENABLED` is `true` (after #15); until then every run is a dry run. `bash scripts/publish.sh --dry-run` shows locally what would be published; the CI Gates job runs it too.
 - Never pick a version yourself: propose minor or patch with the reason and wait for a maintainer before publishing or tagging.
 - After each batch of merged work: remove leftover worktrees and branches, then propose the version increment.
