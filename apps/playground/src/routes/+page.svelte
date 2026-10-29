@@ -1,6 +1,13 @@
 <script lang="ts">
   import { resolve } from '$app/paths';
-  import { themeNames, themes, type AccentName, type ThemeName } from '@codecora/tokens';
+  import {
+    accentNames,
+    densities,
+    themeNames,
+    themes,
+    type AccentName,
+    type ThemeName,
+  } from '@codecora/tokens';
   import Catalogue from '../lib/Catalogue.svelte';
   import Switchers from '../lib/Switchers.svelte';
 
@@ -10,13 +17,17 @@
   let density = $state('comfortable');
   let restored = $state(false);
 
-  // Remember the last choice per browser; storage may be unavailable.
+  const isOneOf = <T extends string>(list: readonly T[], value: unknown): value is T =>
+    list.includes(value as T);
+
+  // Remember the last choice per browser; storage may be unavailable or hold
+  // stale values, so only known names are restored.
   $effect(() => {
     try {
       const saved = JSON.parse(localStorage.getItem(KEY) ?? '{}');
-      if (themeNames.includes(saved.theme)) theme = saved.theme;
-      if (typeof saved.accent === 'string') accent = saved.accent;
-      if (typeof saved.density === 'string') density = saved.density;
+      if (isOneOf(themeNames, saved?.theme)) theme = saved.theme;
+      if (saved?.accent === 'default' || isOneOf(accentNames, saved?.accent)) accent = saved.accent;
+      if (isOneOf(densities, saved?.density)) density = saved.density;
     } catch {
       // keep the defaults
     }
