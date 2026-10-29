@@ -28,7 +28,7 @@ Boundaries that reviews enforce:
 - Dependencies point down only: `memory -> ui -> tokens`. `@codecora/ui` never imports an icon set or anything product-specific.
 - Product-only UI (billing, admin, quotas of any one product) never enters this repo.
 - Components read semantic `--cc-*` tokens only; raw colour literals live in `packages/tokens` and nowhere else.
-- Svelte 5 runes, `svelte ^5.25` peer, no `$app/*` imports: packages must work in SvelteKit 2, SvelteKit 3 and plain Vite apps.
+- Svelte 5 runes, `svelte ^5.33` peer, no `$app/*` imports: packages must work in SvelteKit 2, SvelteKit 3 and plain Vite apps.
 - Every theme passes WCAG AA; every component works with the keyboard alone and at 375 px.
 
 ## Session start (continuity ritual)

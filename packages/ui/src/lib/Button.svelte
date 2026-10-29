@@ -24,6 +24,7 @@
     href,
     type = 'button',
     disabled,
+    onclick,
     class: className,
     children,
     ...rest
@@ -36,6 +37,7 @@
 {#if href !== undefined}
   <a
     {...rest as HTMLAnchorAttributes}
+    onclick={inactive ? undefined : (onclick as HTMLAnchorAttributes['onclick'])}
     href={inactive ? undefined : href}
     role={inactive ? 'link' : undefined}
     aria-disabled={inactive || undefined}
@@ -47,6 +49,7 @@
 {:else}
   <button
     {...rest as HTMLButtonAttributes}
+    onclick={onclick as HTMLButtonAttributes['onclick']}
     {type}
     disabled={inactive}
     aria-busy={loading || undefined}

@@ -42,6 +42,13 @@ describe('Button', () => {
     expect(link).toHaveAttribute('aria-disabled', 'true');
   });
 
+  it('does not run onclick on a disabled or loading link', async () => {
+    const onclick = vi.fn();
+    render(Button, { children: text('Docs'), href: '/docs', loading: true, onclick });
+    await fireEvent.click(screen.getByRole('link', { name: /Docs/ }));
+    expect(onclick).not.toHaveBeenCalled();
+  });
+
   it('renders a leading icon component, hidden from assistive technology', () => {
     const { container } = render(Button, { children: text('Star'), icon: Star });
     expect(container.querySelector('.cc-icon[aria-hidden="true"] svg')).not.toBeNull();
