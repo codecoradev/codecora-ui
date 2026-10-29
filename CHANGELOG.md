@@ -15,6 +15,7 @@ changesets once packages exist.
 - Dependabot for GitHub Actions.
 - Monorepo tooling: bun workspaces, strict TypeScript 6, `svelte-package` + publint, vitest with Testing Library, ESLint and Prettier, changesets; `@codecora/ui` and playground skeletons.
 - `@codecora/tokens`: primitive, semantic and theme tiers with the `neutral`, `uteke` and `corin` themes, `data-accent` and `data-density` modifiers, nesting per element, a Tailwind 4 preset and a shadcn-svelte bridge; WCAG AA contrast check for every theme and accent.
+- Design context for the impeccable workflow: `PRODUCT.md`, a shared `DESIGN.md`, one `docs/design/<theme>.md` per theme kept in sync with the tokens by a test, and `bun run detect`.
 
 ### Security
 

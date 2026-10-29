@@ -1,0 +1,20 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "space grotesk",
+        "createdAt": "2026-10-29T01:12:19.983Z",
+        "reason": "Maintainer decision: issue #3 builds the uteke theme from uteke.app tokens, brand fonts included"
+      },
+      {
+        "rule": "overused-font",
+        "value": "geist",
+        "createdAt": "2026-10-29T01:12:20.093Z",
+        "reason": "Maintainer decision: issue #3 builds the uteke theme from uteke.app tokens, brand fonts included"
+      }
+    ]
+  }
+}
