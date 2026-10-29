@@ -1,0 +1,55 @@
+/* Playground chrome. Reads semantic tokens only; no colour literals. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--cc-font-sans);
+  font-size: var(--cc-font-size-md);
+  line-height: var(--cc-leading-normal);
+  -webkit-font-smoothing: antialiased;
+}
+
+:where(h1, h2, h3) {
+  font-family: var(--cc-font-display);
+  line-height: var(--cc-leading-tight);
+  text-wrap: balance;
+  margin: 0;
+}
+
+:where(p) {
+  margin: 0;
+  max-width: 65ch;
+  text-wrap: pretty;
+}
+
+::selection {
+  background: var(--cc-accent-soft);
+  color: var(--cc-text);
+}
+
+:where(a) {
+  color: var(--cc-accent);
+  text-underline-offset: 0.2em;
+}
+
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--cc-focus);
+  outline-offset: 2px;
+}
+
+:where(input, textarea) {
+  caret-color: var(--cc-accent);
+}
+
+:where(code, kbd, .num) {
+  font-family: var(--cc-font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+html {
+  scrollbar-color: var(--cc-border-strong) var(--cc-surface);
+}
