@@ -25,6 +25,7 @@
 
 <style>
   .cc-table-wrap {
+    position: relative; /* contains the visually hidden caption and header labels */
     overflow-x: auto;
     border: 1px solid var(--cc-border);
     border-radius: var(--cc-radius-md);

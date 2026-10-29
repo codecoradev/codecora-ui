@@ -19,6 +19,11 @@ changesets once packages exist.
 - Playground catalogue: theme, accent and density switchers, colour roles, control states, type, radius and spacing scales, a nested-theme demo, the contrast table per theme and accent, and fixed `/themes/<name>` pages for visual snapshots.
 - CI: a `Gates` workflow (lint, check, test, build, contrast, detector, pack dry run) on every PR and push to `develop` and `main`, and a `Release` workflow that publishes to npm with trusted publishing and provenance from `main`, dry run until publishing is enabled.
 - `@codecora/ui`: first primitive set on bits-ui (Button, IconButton, Field, Input, Textarea, Select, Dialog, ConfirmDialog, Sheet, Tabs, Table, Badge, Toast, Tooltip, EmptyState, Skeleton, Spinner) with unit tests; a Components page in the playground and screenshots under `docs/assets/screenshots/`.
+- Playground: an admin dashboard sample at `/dashboard` built from the primitives (sidebar and navigation sheet, usage summary, chart, filterable keys table, revoke flow), a shared appearance store for its pages, and its screenshots.
+
+### Fixed
+
+- `Table`: the visually hidden caption and header labels no longer widen the page on narrow screens.
 
 ### Security
 
