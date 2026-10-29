@@ -5,15 +5,9 @@
 -->
 <script lang="ts">
   import { resolve } from '$app/paths';
-  import {
-    accentNames,
-    densities,
-    themeNames,
-    themes,
-    type AccentName,
-    type ThemeName,
-  } from '@codecora/tokens';
+  import { themeNames, themes, type AccentName, type ThemeName } from '@codecora/tokens';
   import type { Snippet } from 'svelte';
+  import { createAppearance } from './appearance.svelte.js';
   import Switchers from './Switchers.svelte';
 
   interface Props {
@@ -24,40 +18,7 @@
 
   let { title, lead, children }: Props = $props();
 
-  const KEY = 'cc-playground';
-  let theme = $state<ThemeName>('neutral');
-  let accent = $state('default');
-  let density = $state('comfortable');
-  let restored = $state(false);
-
-  const isOneOf = <T extends string>(list: readonly T[], value: unknown): value is T =>
-    list.includes(value as T);
-
-  // Remember the last choice per browser; storage may be unavailable or hold
-  // stale values, so only known names are restored.
-  $effect(() => {
-    try {
-      const saved = JSON.parse(localStorage.getItem(KEY) ?? '{}');
-      if (isOneOf(themeNames, saved?.theme)) theme = saved.theme;
-      if (saved?.accent === 'default' || isOneOf(accentNames, saved?.accent)) accent = saved.accent;
-      if (isOneOf(densities, saved?.density)) density = saved.density;
-    } catch {
-      // keep the defaults
-    }
-    restored = true;
-  });
-
-  $effect(() => {
-    const value = JSON.stringify({ theme, accent, density });
-    if (!restored) return;
-    try {
-      localStorage.setItem(KEY, value);
-    } catch {
-      // not persisted; the page still works
-    }
-  });
-
-  const accentName = $derived(accent === 'default' ? undefined : (accent as AccentName));
+  const appearance = createAppearance();
 </script>
 
 <svelte:head>
@@ -66,19 +27,24 @@
 
 <div
   class="stage"
-  data-theme={theme}
-  data-accent={accentName}
-  data-density={density === 'comfortable' ? undefined : density}
+  data-theme={appearance.theme}
+  data-accent={appearance.accentName}
+  data-density={appearance.densityName}
 >
   <header>
     <div class="intro">
       <h1>{title}</h1>
       <p>{lead}</p>
     </div>
-    <Switchers bind:theme bind:accent bind:density />
+    <Switchers
+      bind:theme={appearance.theme}
+      bind:accent={appearance.accent}
+      bind:density={appearance.density}
+    />
     <nav aria-label="Playground pages">
       <a href={resolve('/')}>Tokens</a>
       <a href={resolve('/components')}>Components</a>
+      <a href={resolve('/dashboard')}>Admin dashboard</a>
       <span class="sep" aria-hidden="true"></span>
       Fixed theme pages for visual snapshots:
       {#each themeNames as name (name)}
@@ -88,7 +54,7 @@
   </header>
 
   <main>
-    {@render children({ theme, accent: accentName })}
+    {@render children({ theme: appearance.theme, accent: appearance.accentName })}
   </main>
 </div>
 

@@ -31,6 +31,18 @@ The playground's Components page in each theme (`docs/assets/screenshots/`).
 
 ![Confirm dialog, uteke theme](docs/assets/screenshots/confirm-dialog-uteke.png)
 
+The admin dashboard sample (`/dashboard`), assembled from the primitives:
+
+| Neutral | Uteke | Corin |
+|---|---|---|
+| ![Admin dashboard, neutral theme](docs/assets/screenshots/dashboard-neutral.png) | ![Admin dashboard, uteke theme](docs/assets/screenshots/dashboard-uteke.png) | ![Admin dashboard, corin theme](docs/assets/screenshots/dashboard-corin.png) |
+
+On a phone (375 px), with the navigation sheet open:
+
+| Dashboard | Navigation |
+|---|---|
+| ![Admin dashboard at 375 px](docs/assets/screenshots/dashboard-uteke-375.png) | ![Navigation sheet at 375 px](docs/assets/screenshots/dashboard-uteke-375-nav.png) |
+
 ## Themes
 
 Themes are sets of semantic token values applied with attributes on any
