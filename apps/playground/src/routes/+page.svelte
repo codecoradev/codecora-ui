@@ -1,99 +1,109 @@
 <script lang="ts">
-  import { VisuallyHidden } from '@codecora/ui';
+  import { resolve } from '$app/paths';
+  import { themeNames, themes, type AccentName, type ThemeName } from '@codecora/tokens';
+  import Catalogue from '../lib/Catalogue.svelte';
+  import Switchers from '../lib/Switchers.svelte';
+
+  const KEY = 'cc-playground';
+  let theme = $state<ThemeName>('neutral');
+  let accent = $state('default');
+  let density = $state('comfortable');
+  let restored = $state(false);
+
+  // Remember the last choice per browser; storage may be unavailable.
+  $effect(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem(KEY) ?? '{}');
+      if (themeNames.includes(saved.theme)) theme = saved.theme;
+      if (typeof saved.accent === 'string') accent = saved.accent;
+      if (typeof saved.density === 'string') density = saved.density;
+    } catch {
+      // keep the defaults
+    }
+    restored = true;
+  });
+
+  $effect(() => {
+    const value = JSON.stringify({ theme, accent, density });
+    if (!restored) return;
+    try {
+      localStorage.setItem(KEY, value);
+    } catch {
+      // not persisted; the page still works
+    }
+  });
+
+  const accentName = $derived(accent === 'default' ? undefined : (accent as AccentName));
 </script>
 
 <svelte:head>
   <title>CodeCora UI playground</title>
 </svelte:head>
 
-{#snippet sample(title: string)}
-  <h2>{title}</h2>
-  <p class="muted">Muted text on the theme surface.</p>
-  <button type="button" class="primary">Primary action</button>
-  <span class="soft">Selected</span>
-  <span class="danger">Danger text</span>
-{/snippet}
-
-<main>
-  <h1>CodeCora UI playground</h1>
-  <p class="muted">
-    Skeleton for M0. The catalogue with theme, density and accent switchers comes with issue #5.
-  </p>
-  <button type="button" class="primary">
-    <span aria-hidden="true">×</span>
-    <VisuallyHidden>Close (sample of a package component)</VisuallyHidden>
-  </button>
-
-  <section aria-labelledby="nesting">
-    <h2 id="nesting">Themes nest per element</h2>
-    <div class="grid">
-      <div class="panel" data-theme="uteke">
-        {@render sample('uteke')}
-        <div class="panel" data-theme="corin">
-          {@render sample('corin inside uteke')}
-        </div>
-      </div>
-      <div class="panel" data-theme="corin" data-accent="violet" data-density="compact">
-        {@render sample('corin, violet accent, compact')}
-        <div class="panel" data-theme="neutral" data-density="comfortable">
-          {@render sample('neutral inside corin, comfortable')}
-        </div>
-      </div>
+<div
+  class="stage"
+  data-theme={theme}
+  data-accent={accentName}
+  data-density={density === 'comfortable' ? undefined : density}
+>
+  <header>
+    <div class="intro">
+      <h1>CodeCora UI</h1>
+      <p>
+        Tokens, themes and components for CodeCora products. Pick a theme, accent and density;
+        everything below follows.
+      </p>
     </div>
-  </section>
-</main>
+    <Switchers bind:theme bind:accent bind:density />
+    <nav aria-label="Snapshot pages">
+      Fixed pages for visual snapshots:
+      {#each themeNames as name (name)}
+        <a href={resolve('/themes/[theme]', { theme: name })}>{themes[name].label}</a>
+      {/each}
+    </nav>
+  </header>
+
+  <main>
+    <Catalogue {theme} accent={accentName} />
+  </main>
+</div>
 
 <style>
+  .stage {
+    min-height: 100dvh;
+    padding: var(--cc-space-8) var(--cc-space-4) var(--cc-space-16);
+  }
+  header,
   main {
-    font-family: var(--cc-font-sans);
-    padding: var(--cc-space-6) var(--cc-space-4);
     max-width: 72rem;
     margin-inline: auto;
   }
-  h1,
-  h2 {
-    font-family: var(--cc-font-display);
+  header {
+    display: grid;
+    gap: var(--cc-space-6);
+    padding-bottom: var(--cc-space-8);
   }
-  .muted {
+  .intro {
+    display: grid;
+    gap: var(--cc-space-3);
+  }
+  h1 {
+    font-size: var(--cc-font-size-3xl);
+  }
+  .intro p {
+    color: var(--cc-text-muted);
+    font-size: var(--cc-font-size-lg);
+  }
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--cc-space-3);
+    font-size: var(--cc-font-size-sm);
     color: var(--cc-text-muted);
   }
-  .grid {
-    display: grid;
-    gap: var(--cc-space-4);
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
-  }
-  .panel {
-    border: 1px solid var(--cc-border);
-    border-radius: var(--cc-radius-lg);
-    padding: var(--cc-gap);
-    display: grid;
-    gap: var(--cc-gap);
-    justify-items: start;
-  }
-  .primary {
-    min-height: var(--cc-control-h);
-    padding-inline: var(--cc-control-px);
-    border: 0;
-    border-radius: var(--cc-radius-md);
-    background: var(--cc-accent);
-    color: var(--cc-accent-text);
-    font: inherit;
-    cursor: pointer;
-    transition: background-color var(--cc-duration-fast) var(--cc-ease-out);
-  }
-  .primary:hover {
-    background: var(--cc-accent-hover);
-  }
-  .primary:focus-visible {
-    outline: 2px solid var(--cc-focus);
-    outline-offset: 2px;
-  }
-  .soft {
-    background: var(--cc-accent-soft);
-    padding: var(--cc-space-1) var(--cc-space-2);
-    border-radius: var(--cc-radius-pill);
-  }
-  .danger {
-    color: var(--cc-danger);
+  @media (min-width: 48rem) {
+    .stage {
+      padding-inline: var(--cc-space-8);
+    }
   }
 </style>
