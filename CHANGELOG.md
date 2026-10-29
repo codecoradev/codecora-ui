@@ -18,6 +18,7 @@ changesets once packages exist.
 - Design context for the impeccable workflow: `PRODUCT.md`, a shared `DESIGN.md`, one `docs/design/<theme>.md` per theme kept in sync with the tokens by a test, and `bun run detect`.
 - Playground catalogue: theme, accent and density switchers, colour roles, control states, type, radius and spacing scales, a nested-theme demo, the contrast table per theme and accent, and fixed `/themes/<name>` pages for visual snapshots.
 - CI: a `Gates` workflow (lint, check, test, build, contrast, detector, pack dry run) on every PR and push to `develop` and `main`, and a `Release` workflow that publishes to npm with trusted publishing and provenance from `main`, dry run until publishing is enabled.
+- `@codecora/ui`: first primitive set on bits-ui (Button, IconButton, Field, Input, Textarea, Select, Dialog, ConfirmDialog, Sheet, Tabs, Table, Badge, Toast, Tooltip, EmptyState, Skeleton, Spinner) with unit tests; a Components page in the playground and screenshots under `docs/assets/screenshots/`.
 
 ### Security
 

@@ -18,8 +18,8 @@
 <section aria-labelledby="samples">
   <h2 id="samples">Controls and states</h2>
   <p class="lead">
-    Plain HTML on tokens, to show density, focus, error, disabled and selected states before the M1
-    components land.
+    Plain HTML on tokens, to show density, focus, error, disabled and selected states. The real
+    components are on the Components page.
   </p>
   <Samples id="samples-{theme}" />
 </section>

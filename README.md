@@ -21,6 +21,16 @@ Plus a shadcn-svelte registry for blocks and templates that apps copy and
 customise (login, settings, dashboard shell, data table), and
 `apps/playground`, a SvelteKit catalogue of every component in every theme.
 
+## Screenshots
+
+The playground's Components page in each theme (`docs/assets/screenshots/`).
+
+| Neutral | Uteke | Corin |
+|---|---|---|
+| ![Components, neutral theme](docs/assets/screenshots/components-neutral.png) | ![Components, uteke theme](docs/assets/screenshots/components-uteke.png) | ![Components, corin theme](docs/assets/screenshots/components-corin.png) |
+
+![Confirm dialog, uteke theme](docs/assets/screenshots/confirm-dialog-uteke.png)
+
 ## Themes
 
 Themes are sets of semantic token values applied with attributes on any

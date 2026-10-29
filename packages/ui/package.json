@@ -20,7 +20,9 @@
   },
   "files": [
     "dist",
-    "!dist/**/*.test.*"
+    "!dist/**/*.test.*",
+    "!dist/fixtures",
+    "!dist/test-helpers.*"
   ],
   "sideEffects": [
     "**/*.css"
@@ -31,6 +33,9 @@
     "test": "vitest run"
   },
   "peerDependencies": {
-    "svelte": "^5.25.0"
+    "svelte": "^5.33.0"
+  },
+  "dependencies": {
+    "bits-ui": "2.20.2"
   }
 }

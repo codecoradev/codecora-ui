@@ -51,7 +51,7 @@ Every theme must pass WCAG AA contrast for text and UI pairs (checked in CI).
 ### Components (`@codecora/ui`)
 
 - Built on bits-ui; styled with plain CSS reading semantic tokens only.
-- Svelte 5 runes, `svelte ^5.25` peer, no `$app/*` imports (works in
+- Svelte 5 runes, `svelte ^5.33` peer, no `$app/*` imports (works in
   SvelteKit 2, SvelteKit 3 and Vite SPAs such as Corin).
 - Packaged with `svelte-package`: `.svelte` sources ship and compile in the
   consuming app.
