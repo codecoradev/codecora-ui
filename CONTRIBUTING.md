@@ -31,7 +31,7 @@ bun run build                   # packages (svelte-package + publint), then the 
 bun run lint                    # prettier --check and eslint (bun run format fixes formatting)
 ```
 
-A change to a published `@codecora/*` package needs a changeset: `bun run changeset`.
+A change to a published `@codecora/*` package needs a changeset: `bun run changeset`. Releases and publishing are described in [AGENTS.md](AGENTS.md#releases).
 
 Every component must work with the keyboard alone, at 375 px width, and in
 every theme with WCAG AA contrast.
