@@ -44,6 +44,20 @@ export function createAppearance() {
     }
   });
 
+  // Dialogs, sheets, selects and toasts render in a portal under <body>, outside
+  // the page frame, so the choice is mirrored on <html> for them to inherit.
+  $effect(() => {
+    const root = document.documentElement;
+    const set = (name: string, value: string | undefined) =>
+      value === undefined ? root.removeAttribute(name) : root.setAttribute(name, value);
+    set('data-theme', theme);
+    set('data-accent', accent === 'default' ? undefined : accent);
+    set('data-density', density === 'comfortable' ? undefined : density);
+    return () => {
+      for (const name of ['data-theme', 'data-accent', 'data-density']) root.removeAttribute(name);
+    };
+  });
+
   return {
     get theme() {
       return theme;
