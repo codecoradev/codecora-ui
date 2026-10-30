@@ -26,4 +26,5 @@ pass icon components to it, and this package makes them follow the theme.
 ```
 
 `@lucide/svelte` and `phosphor-svelte` are optional peers: install the one you
-use.
+use. Load `@codecora/tokens/tokens.css` for the theme values; without it icons
+fall back to 1.25 rem and stroke 2.

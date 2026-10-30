@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { render, screen } from '@testing-library/svelte';
 import { describe, expect, it } from 'vitest';
 import Mark from './fixtures/Mark.svelte';
@@ -70,5 +72,13 @@ describe('Phosphor adapter', () => {
     b.unmount();
     const c = render(PhosphorIcon, { icon: Mark });
     expect(c.container.querySelector('svg')).toHaveAttribute('data-weight', 'regular');
+  });
+});
+
+describe('without the tokens stylesheet', () => {
+  it('declares fallbacks so the svg keeps a sane size', () => {
+    const source = readFileSync(join(process.cwd(), 'src/lib/Icon.svelte'), 'utf8');
+    expect(source).toMatch(/var\(--cc-icon-size, 1\.25rem\)/);
+    expect(source).toMatch(/var\(--cc-icon-stroke, 2\)/);
   });
 });

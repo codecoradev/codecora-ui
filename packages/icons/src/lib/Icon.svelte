@@ -40,8 +40,9 @@
     flex: none;
   }
   .cc-icon :global(svg) {
-    width: var(--cc-icon-size);
-    height: var(--cc-icon-size);
-    stroke-width: var(--cc-icon-stroke);
+    /* The fallbacks match the neutral theme, so an app without the tokens still gets sane icons. */
+    width: var(--cc-icon-size, 1.25rem);
+    height: var(--cc-icon-size, 1.25rem);
+    stroke-width: var(--cc-icon-stroke, 2);
   }
 </style>
