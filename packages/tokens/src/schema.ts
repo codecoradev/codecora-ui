@@ -1,7 +1,15 @@
 // Names and shapes shared by the theme data, the CSS generator and the
 // contrast check.
 
-export const themeNames = ['neutral', 'uteke', 'corin'] as const;
+export const themeNames = [
+  'neutral',
+  'uteke',
+  'corin',
+  'neutral-dark',
+  'uteke-dark',
+  'sepia',
+  'contrast',
+] as const;
 export type ThemeName = (typeof themeNames)[number];
 
 /** Values of `data-accent`. Every theme defines every accent. */
@@ -67,6 +75,10 @@ export interface Theme {
   font: { sans: string; display: string; mono: string };
   icon: { stroke: string; size: string };
   shape: ThemeShape;
+  /** The same brand in the other colour scheme, so an app can follow `prefers-color-scheme`. */
+  twin?: ThemeName;
+  /** Minimum ratio for body and muted text; 7 for the high-contrast theme, 4.5 otherwise. */
+  minText?: number;
 }
 
 /** Status hues that get a `-soft` tint derived from the surface. */

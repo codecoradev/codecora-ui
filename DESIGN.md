@@ -25,6 +25,10 @@ This file holds the rules every theme shares. Each theme records its own colours
 | `neutral` (default) | The Plain Workbench | [docs/design/neutral.md](docs/design/neutral.md) |
 | `uteke` | The Field Notebook | [docs/design/uteke.md](docs/design/uteke.md) |
 | `corin` | The Night Console | [docs/design/corin.md](docs/design/corin.md) |
+| `neutral-dark` | The Plain Workbench after dark | [docs/design/neutral-dark.md](docs/design/neutral-dark.md) |
+| `uteke-dark` | The Field Notebook by lamplight | [docs/design/uteke-dark.md](docs/design/uteke-dark.md) |
+| `sepia` | The Reading Room | [docs/design/sepia.md](docs/design/sepia.md) |
+| `contrast` | High Beam | [docs/design/contrast.md](docs/design/contrast.md) |
 
 The token source of truth is `packages/tokens/src` ([README](packages/tokens/README.md)); these files describe it and must not contradict it. Product context lives in [PRODUCT.md](PRODUCT.md).
 

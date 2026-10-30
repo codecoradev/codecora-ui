@@ -30,7 +30,7 @@ One system, many themes, mixable per element (`data-theme`, `data-accent`, `data
 ## Capabilities and Constraints
 
 - Packages: `@codecora/tokens`, `@codecora/ui`, `@codecora/icons`, `@codecora/brand`, `@codecora/memory`; dependencies point down only (`memory -> ui -> tokens`).
-- Themes today: `neutral` (default), `uteke`, `corin`. Accents: blue, green, teal, violet, orange, indigo, cyan (rose and amber are left out because they sit next to the danger and warning hues). Densities: comfortable, compact.
+- Themes today: `neutral` (default), `uteke`, `corin`, `neutral-dark`, `uteke-dark`, `sepia` (reading) and `contrast` (7:1 text). Accents: blue, green, teal, violet, orange, indigo, cyan (rose and amber are left out because they sit next to the danger and warning hues). Densities: comfortable, compact.
 - A component enters `@codecora/ui` only when at least two products need it; product-specific variants go to the registry.
 - Product-only UI (billing, admin, quotas of any one product) never enters this repository; `@codecora/ui` knows nothing about Uteke (D11).
 - Icons: Lucide by default, Phosphor optional; components take any Svelte icon component and never import an icon set (D9).

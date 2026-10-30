@@ -31,8 +31,21 @@ describe('shape hooks', () => {
     });
   }
 
-  it('gives the themes distinct shapes beyond colour', () => {
-    const shapes = Object.values(themes).map((t) => JSON.stringify(t.shape));
+  // A dark twin is the same brand, so it keeps its light theme's shape; brands must differ.
+  const brands = Object.values(themes).filter((t) => !(t.twin && t.colorScheme === 'dark'));
+
+  it('gives each brand a distinct shape beyond colour', () => {
+    const shapes = brands.map((t) => JSON.stringify(t.shape));
     expect(new Set(shapes).size).toBe(shapes.length);
+  });
+
+  it('keeps a twin pair on the same shape and points both ways', () => {
+    for (const theme of Object.values(themes)) {
+      if (!theme.twin) continue;
+      const twin = themes[theme.twin];
+      expect(twin.twin).toBe(theme.name);
+      expect(twin.shape).toEqual(theme.shape);
+      expect(twin.colorScheme).not.toBe(theme.colorScheme);
+    }
   });
 });

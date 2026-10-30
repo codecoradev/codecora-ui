@@ -40,6 +40,53 @@ export const night = {
   text: '#E6E9EF',
 } as const;
 
+/** Cool graphite for `neutral-dark`: the neutral hue (260) after dark. */
+export const graphite = {
+  crust: 'oklch(14% 0.008 260)',
+  base: 'oklch(18% 0.01 260)',
+  mantle: 'oklch(22% 0.01 260)',
+  hover: 'oklch(27% 0.012 260)',
+  rule: 'oklch(31% 0.012 260)',
+  strong: 'oklch(60% 0.014 260)',
+  muted: 'oklch(73% 0.012 260)',
+  text: 'oklch(94% 0.005 260)',
+} as const;
+
+/** Green-black paper for `uteke-dark`: the notebook by lamplight (hue 155). */
+export const dusk = {
+  crust: 'oklch(15% 0.012 155)',
+  base: 'oklch(19% 0.012 155)',
+  mantle: 'oklch(23% 0.012 155)',
+  hover: 'oklch(28% 0.014 155)',
+  rule: 'oklch(32% 0.014 155)',
+  strong: 'oklch(61% 0.02 150)',
+  muted: 'oklch(74% 0.02 150)',
+  text: 'oklch(94% 0.012 150)',
+} as const;
+
+/** Warm printed page for `sepia` (hue 85 paper, hue 60 ink). */
+export const sepia = {
+  raised: 'oklch(97% 0.015 85)',
+  base: 'oklch(95% 0.02 85)',
+  sunken: 'oklch(91% 0.025 85)',
+  hover: 'oklch(89% 0.028 85)',
+  rule: 'oklch(85% 0.03 80)',
+  strong: 'oklch(50% 0.04 70)',
+  muted: 'oklch(43% 0.035 60)',
+  ink: 'oklch(28% 0.03 60)',
+} as const;
+
+/** Pure greys for `contrast`: white paper, near-black ink, 7:1 text. */
+export const stark = {
+  white: 'oklch(100% 0 0)',
+  sunken: 'oklch(96% 0 0)',
+  hover: 'oklch(92% 0 0)',
+  rule: 'oklch(55% 0 0)',
+  strong: 'oklch(35% 0 0)',
+  muted: 'oklch(32% 0 0)',
+  ink: 'oklch(15% 0 0)',
+} as const;
+
 /** Accent and status hues tuned for light surfaces: fill, hover fill, text on fill. */
 export const light = {
   blue: ['oklch(50% 0.16 260)', 'oklch(44% 0.16 260)', 'oklch(99% 0.003 260)'],
@@ -71,4 +118,8 @@ export const scrim = {
   slate: 'oklch(22% 0.012 260 / 0.45)',
   paper: 'oklch(21% 0.015 155 / 0.45)',
   night: 'rgb(10 12 16 / 0.6)',
+  graphite: 'oklch(10% 0.008 260 / 0.6)',
+  dusk: 'oklch(10% 0.012 155 / 0.6)',
+  sepia: 'oklch(28% 0.03 60 / 0.45)',
+  stark: 'oklch(0% 0 0 / 0.6)',
 } as const;
