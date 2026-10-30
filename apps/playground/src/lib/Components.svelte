@@ -21,6 +21,7 @@
     Tooltip,
     toast,
   } from '@codecora/ui';
+  import ChoiceControls from './ChoiceControls.svelte';
 
   let name = $state('');
   let region = $state('eu');
@@ -135,6 +136,8 @@
     </Field>
   </div>
 </section>
+
+<ChoiceControls />
 
 <section aria-labelledby="c-overlays">
   <h2 id="c-overlays">Dialog, ConfirmDialog, Sheet, Toast</h2>

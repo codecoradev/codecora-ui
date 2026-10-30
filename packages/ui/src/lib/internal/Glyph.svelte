@@ -5,7 +5,15 @@
 -->
 <script lang="ts">
   interface Props {
-    name: 'close' | 'chevron-down' | 'check' | 'chevron-left' | 'chevron-right' | 'menu' | 'alert';
+    name:
+      | 'close'
+      | 'chevron-down'
+      | 'check'
+      | 'chevron-left'
+      | 'chevron-right'
+      | 'menu'
+      | 'alert'
+      | 'minus';
   }
 
   let { name }: Props = $props();
@@ -17,6 +25,7 @@
     'chevron-left': 'M15 6l-6 6 6 6',
     'chevron-right': 'M9 6l6 6-6 6',
     menu: 'M4 7h16M4 12h16M4 17h16',
+    minus: 'M6 12h12',
     alert: 'M12 8v5M12 16.5v.01M3.5 12a8.5 8.5 0 1 0 17 0 8.5 8.5 0 0 0-17 0',
   } as const;
 </script>
