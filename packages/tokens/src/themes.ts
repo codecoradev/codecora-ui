@@ -16,6 +16,9 @@ const accents = (set: Record<AccentName, Hue>): Record<AccentName, AccentColors>
   green: accent(set.green),
   teal: accent(set.teal),
   violet: accent(set.violet),
+  orange: accent(set.orange),
+  indigo: accent(set.indigo),
+  cyan: accent(set.cyan),
 });
 
 const systemSans = "ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif";
