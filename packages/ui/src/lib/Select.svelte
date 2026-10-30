@@ -103,7 +103,7 @@
     color: var(--cc-text-muted);
   }
   :global(.cc-select-content) {
-    z-index: 60;
+    z-index: var(--cc-layer-popover);
     min-width: var(--bits-select-anchor-width);
     max-height: min(20rem, var(--bits-select-content-available-height));
     overflow-y: auto;
@@ -112,8 +112,7 @@
     border-radius: var(--cc-radius-md);
     background: var(--cc-surface-raised);
     color: var(--cc-text);
-    box-shadow: 0 var(--cc-space-2) var(--cc-space-6)
-      color-mix(in srgb, var(--cc-scrim) 50%, transparent);
+    box-shadow: var(--cc-shadow-popover);
     font-family: var(--cc-font-sans);
   }
   :global(.cc-select-item) {
