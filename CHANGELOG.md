@@ -8,6 +8,10 @@ changesets (`packages/*/CHANGELOG.md`).
 
 ## [Unreleased]
 
+### Changed
+
+- `release.yml` can authenticate with an optional `NPM_TOKEN` repository secret (a granular token for the `@codecora` scope), so the first release can publish from CI before trusted publishing is configured; without the secret it behaves as before.
+
 ## [0.1.0] - 2026-10-30
 
 First release of `@codecora/tokens`, `@codecora/ui`, `@codecora/icons` and `@codecora/brand` (all 0.1.0). Not on npm yet: install the tarballs attached to the GitHub Release (see the README); publishing to npm starts once the `@codecora` scope is set up (#15).

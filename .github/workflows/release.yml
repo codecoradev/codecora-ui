@@ -1,7 +1,9 @@
 name: Release
 
-# Publishes @codecora/* to npmjs.com with trusted publishing (OIDC) and
-# provenance after a release PR (develop -> main) merges. Versions are set
+# Publishes @codecora/* to npmjs.com with provenance after a release PR
+# (develop -> main) merges. It authenticates with the optional NPM_TOKEN
+# repository secret (a granular token for the @codecora scope) or, when no
+# token is set, with npm trusted publishing (OIDC). Versions are set
 # beforehand by a maintainer with changesets (`bun run version-packages`).
 #
 # `verify` runs on every trigger with read-only rights: test, build and a pack
@@ -65,7 +67,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     # Restrict this environment to main (and add reviewers) in the repository
-    # settings, and name it in the npm trusted-publisher configuration.
+    # settings; name it in the npm trusted-publisher configuration if you use that.
     environment: npm-publish
     permissions:
       contents: write # push the <name>@<version> tags
@@ -78,7 +80,7 @@ jobs:
           node-version: 22
           registry-url: https://registry.npmjs.org
 
-      # Trusted publishing needs npm 11.5.1 or later.
+      # Trusted publishing needs npm 11.5.1 or later (provenance does too).
       - name: Install npm 11
         run: npm install --global npm@11.21.1
 
@@ -93,6 +95,9 @@ jobs:
         run: bun run build:packages
 
       - name: Publish
+        env:
+          # Empty when the secret is not set; npm then falls back to trusted publishing.
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
