@@ -13,6 +13,7 @@
   import Pagination from './Pagination.svelte';
   import Skeleton from './Skeleton.svelte';
   import Table from './Table.svelte';
+  import VisuallyHidden from './VisuallyHidden.svelte';
 
   interface Column<R> {
     key: string;
@@ -99,12 +100,14 @@
   // itself is left alone, so a selection kept across server-side pages survives.
   const present = $derived(new Set(rows.map(rowKey)));
   const active = $derived(selected.filter((key) => present.has(key)));
+  // Row lookups run once per row, so they use a Set instead of scanning the array each time.
+  const chosen = $derived(new Set(selected));
 
   const visible = $derived(
     pageSize ? sorted.slice((page - 1) * pageSize, page * pageSize) : sorted,
   );
   const visibleKeys = $derived(visible.map(rowKey));
-  const selectedHere = $derived(visibleKeys.filter((key) => selected.includes(key)));
+  const selectedHere = $derived(visibleKeys.filter((key) => chosen.has(key)));
   const allHere = $derived(visibleKeys.length > 0 && selectedHere.length === visibleKeys.length);
   const someHere = $derived(selectedHere.length > 0 && !allHere);
   const span = $derived(columns.length + (selectable ? 1 : 0));
@@ -130,6 +133,7 @@
 </script>
 
 <div class="cc-datatable">
+  <VisuallyHidden><span role="status">{loading ? `Loading ${label}` : ''}</span></VisuallyHidden>
   {#if active.length > 0 && bulk}
     <div class="bar" role="status">
       <span>{active.length} selected</span>
@@ -188,13 +192,13 @@
       {:else}
         {#each visible as row (rowKey(row))}
           {@const key = rowKey(row)}
-          <tr data-selected={selected.includes(key) ? 'true' : undefined}>
+          <tr data-selected={chosen.has(key) ? 'true' : undefined}>
             {#if selectable}
               <td class="check">
                 <Checkbox
                   label="Select row"
                   labelHidden
-                  checked={selected.includes(key)}
+                  checked={chosen.has(key)}
                   onchange={(on) => toggleRow(key, on)}
                 />
               </td>

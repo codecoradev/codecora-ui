@@ -78,9 +78,9 @@ describe('DataTable selection', () => {
       render: () => '<button type="button">Revoke</button>',
     }));
     view({ selectable: true, bulk });
-    expect(screen.queryByRole('status')).toBeNull();
+    expect(screen.queryByText(/\d+ selected/)).toBeNull();
     await fireEvent.click(screen.getAllByRole('checkbox', { name: 'Select row' })[1]!);
-    expect(screen.getByRole('status')).toHaveTextContent('1 selected');
+    expect(screen.getByText('1 selected')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Revoke' })).toBeInTheDocument();
   });
 });
@@ -105,9 +105,9 @@ describe('DataTable data changes', () => {
       render: () => '<button type="button">Revoke</button>',
     }));
     const { rerender } = view({ selectable: true, selected: ['1', '2'], bulk });
-    expect(screen.getByRole('status')).toHaveTextContent('2 selected');
+    expect(screen.getByText('2 selected')).toBeInTheDocument();
     await rerender({ ...base, rows: rows.slice(1), selectable: true, bulk });
-    expect(screen.getByRole('status')).toHaveTextContent('1 selected');
+    expect(screen.getByText('1 selected')).toBeInTheDocument();
   });
 });
 
@@ -122,6 +122,11 @@ describe('DataTable paging and states', () => {
   it('shows an empty state with its message', () => {
     view({ rows: [], emptyTitle: 'No keys yet' });
     expect(screen.getByText('No keys yet')).toBeInTheDocument();
+  });
+
+  it('announces loading to assistive tech', () => {
+    view({ loading: true });
+    expect(screen.getByRole('status')).toHaveTextContent('Loading API keys');
   });
 
   it('marks the body busy and hides the rows while loading', () => {
