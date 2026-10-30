@@ -48,14 +48,14 @@
     },
     "packages/brand": {
       "name": "@codecora/brand",
-      "version": "0.0.0",
+      "version": "0.1.0",
       "peerDependencies": {
         "svelte": "^5.33.0",
       },
     },
     "packages/icons": {
       "name": "@codecora/icons",
-      "version": "0.0.0",
+      "version": "0.1.0",
       "devDependencies": {
         "@lucide/svelte": "1.64.0",
         "phosphor-svelte": "3.1.1",
@@ -72,11 +72,11 @@
     },
     "packages/tokens": {
       "name": "@codecora/tokens",
-      "version": "0.0.0",
+      "version": "0.1.0",
     },
     "packages/ui": {
       "name": "@codecora/ui",
-      "version": "0.0.0",
+      "version": "0.1.0",
       "dependencies": {
         "bits-ui": "2.20.2",
       },

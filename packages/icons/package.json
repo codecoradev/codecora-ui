@@ -1,6 +1,6 @@
 {
   "name": "@codecora/icons",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Icon contract for CodeCora products: an Icon wrapper that follows the theme's stroke and size, a curated Lucide set and a Phosphor adapter",
   "license": "Apache-2.0",
   "repository": {

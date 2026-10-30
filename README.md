@@ -3,11 +3,28 @@
 Shared design tokens, themes and Svelte 5 components for CodeCora products
 (Uteke Cloud, Corin, and any other Svelte app in the fleet).
 
-> Status: **planning (M0)**. Nothing is published yet. See
-> [docs/architecture.md](docs/architecture.md) and
-> [docs/decisions.md](docs/decisions.md).
+> Status: **0.1.0** (milestones M0 and M1 done: tokens, themes, 17 primitives,
+> AppShell and Sidebar, icons, brand). Not on npm yet; install from the GitHub
+> Release below. See [docs/architecture.md](docs/architecture.md),
+> [docs/decisions.md](docs/decisions.md) and [docs/roadmap.md](docs/roadmap.md).
 
-## Packages (planned)
+## Install (until npm)
+
+Each release attaches one tarball per package. The same URL works with bun, npm
+and pnpm; install only the packages you use (they do not depend on each other):
+
+```bash
+bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.1.0/codecora-tokens-0.1.0.tgz
+bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.1.0/codecora-ui-0.1.0.tgz
+bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.1.0/codecora-icons-0.1.0.tgz
+bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.1.0/codecora-brand-0.1.0.tgz
+```
+
+(`npm install <url>` and `pnpm add <url>` take the same URLs.) Publishing to npm
+under `@codecora/*` starts once the scope is set up; the import names stay the
+same.
+
+## Packages
 
 | Package | What | Depends on |
 |---|---|---|
