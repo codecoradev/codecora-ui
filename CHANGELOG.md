@@ -8,9 +8,24 @@ changesets (`packages/*/CHANGELOG.md`).
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-10-30
+
+`@codecora/tokens` and `@codecora/ui` 0.2.0, and the first release of `@codecora/memory` (0.1.0). `@codecora/icons` and `@codecora/brand` stay at 0.1.0. Install from the GitHub Release tarballs (see the README); npm publishing is still pending (#15).
+
 ### Added
 
-- `@codecora/memory`: a `MemoryClient` over uteke-serve and Uteke Cloud (HTTP) and the Corin desktop commands (Tauri), with typed memories, documents, rooms, tags, stats, export and import, per-backend `Capabilities`, and contract tests that run against a real uteke-serve (and a Uteke Cloud stack when configured).
+- `@codecora/tokens`: theme shape hooks (badge radius, case, tracking and font; focus-ring width and offset; selected-row marker), stacking layers (`--cc-layer-*`) and theme-aware shadows (`--cc-shadow-popover`, `--cc-shadow-modal`); a test that fails when a component reads a token the package does not emit.
+- `@codecora/ui`: Checkbox (with a mixed state), Switch, RadioGroup, Combobox, Slider, FieldGroup, Card, Alert, Avatar, Progress, Separator, Kbd, Link, CodeBlock, Breadcrumb, Accordion, ToggleGroup, Pagination, Popover, DropdownMenu, CommandPalette and DataTable (sorting, selection, bulk bar, paging, loading and empty states).
+- `@codecora/memory`: a `MemoryClient` over uteke-serve and Uteke Cloud (HTTP) and the Corin desktop commands (Tauri), with typed memories, documents, rooms, tags, stats, export and import, per-backend `Capabilities`, and contract tests that run against a real uteke-serve (and a Uteke Cloud stack when configured). The HTTP client refuses to send an API key over plain `http` to a remote host.
+- Playground: a state matrix and props on the Components page, and a Samples page (sign in, settings, list and detail, data table, first run).
+
+### Fixed
+
+- The Progress bar read a duration token that does not exist, so it never animated.
+
+### Known gaps
+
+- The Uteke Cloud contract run (#10) is deferred until a test Cloud workspace exists.
 
 ## [0.1.0] - 2026-10-30
 

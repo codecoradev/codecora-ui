@@ -1,6 +1,6 @@
 {
   "name": "@codecora/ui",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Svelte 5 components for CodeCora products, on bits-ui and semantic --cc-* tokens",
   "license": "Apache-2.0",
   "repository": {
