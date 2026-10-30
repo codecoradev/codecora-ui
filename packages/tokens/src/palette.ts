@@ -46,6 +46,9 @@ export const light = {
   green: ['oklch(46% 0.15 150)', 'oklch(40% 0.14 150)', 'oklch(98% 0.006 150)'],
   teal: ['oklch(47% 0.09 190)', 'oklch(41% 0.085 190)', 'oklch(98.5% 0.005 190)'],
   violet: ['oklch(50% 0.17 295)', 'oklch(44% 0.17 295)', 'oklch(99% 0.004 295)'],
+  orange: ['oklch(47% 0.15 50)', 'oklch(41% 0.14 50)', 'oklch(99% 0.004 50)'],
+  indigo: ['oklch(47% 0.17 275)', 'oklch(41% 0.16 275)', 'oklch(99% 0.004 275)'],
+  cyan: ['oklch(47% 0.1 215)', 'oklch(41% 0.095 215)', 'oklch(98.5% 0.005 215)'],
   red: ['oklch(47% 0.18 27)', 'oklch(41% 0.17 27)', 'oklch(99% 0.004 27)'],
   amber: ['oklch(47% 0.1 70)', 'oklch(41% 0.09 70)', 'oklch(99% 0.004 70)'],
 } as const;
@@ -56,6 +59,9 @@ export const dark = {
   green: ['#34D399', '#6EE7B7', '#0E1015'],
   teal: ['#4FD8D2', '#7EE3DE', '#0E1015'],
   violet: ['#C4A7FF', '#D6C2FF', '#0E1015'],
+  orange: ['oklch(80% 0.14 50)', 'oklch(86% 0.11 50)', '#0E1015'],
+  indigo: ['oklch(80% 0.12 275)', 'oklch(86% 0.09 275)', '#0E1015'],
+  cyan: ['oklch(80% 0.095 215)', 'oklch(86% 0.08 215)', '#0E1015'],
   red: ['#F87171', '#FCA5A5', '#0E1015'],
   amber: ['#E89B3C', '#F0B76E', '#0E1015'],
 } as const;

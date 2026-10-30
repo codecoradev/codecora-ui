@@ -5,7 +5,7 @@ export const themeNames = ['neutral', 'uteke', 'corin'] as const;
 export type ThemeName = (typeof themeNames)[number];
 
 /** Values of `data-accent`. Every theme defines every accent. */
-export const accentNames = ['blue', 'green', 'teal', 'violet'] as const;
+export const accentNames = ['blue', 'green', 'teal', 'violet', 'orange', 'indigo', 'cyan'] as const;
 export type AccentName = (typeof accentNames)[number];
 
 /** Values of `data-density`; `comfortable` is the default. */
