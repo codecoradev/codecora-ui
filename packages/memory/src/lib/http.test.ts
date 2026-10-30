@@ -33,7 +33,7 @@ const raw = {
 describe('HTTP client requests', () => {
   it('sends the bearer key and a JSON body, dropping undefined fields', async () => {
     const fetch = mockFetch(() => ({ id: 'new' }));
-    const client = createHttpClient({ baseUrl: 'http://srv:8767/', apiKey: 'secret', fetch });
+    const client = createHttpClient({ baseUrl: 'https://srv:8767/', apiKey: 'secret', fetch });
     const id = await client.remember({
       content: 'x',
       tags: ['t'],
@@ -42,7 +42,7 @@ describe('HTTP client requests', () => {
     });
     expect(id).toBe('new');
     const [href, init] = fetch.mock.calls[0]!;
-    expect(href).toBe('http://srv:8767/remember');
+    expect(href).toBe('https://srv:8767/remember');
     expect((init as RequestInit).method).toBe('POST');
     const headers = new Headers((init as RequestInit).headers);
     expect(headers.get('Authorization')).toBe('Bearer secret');
@@ -81,7 +81,7 @@ describe('HTTP client requests', () => {
 
   it('never puts the key in the URL', async () => {
     const fetch = mockFetch(() => raw);
-    await createHttpClient({ baseUrl: 'http://srv', apiKey: 'k-123', fetch }).get('abc');
+    await createHttpClient({ baseUrl: 'https://srv', apiKey: 'k-123', fetch }).get('abc');
     expect(String(fetch.mock.calls[0]![0])).not.toContain('k-123');
   });
 
@@ -105,6 +105,24 @@ describe('HTTP client requests', () => {
     const fetch = mockFetch(() => [{ memory: raw, score: 0.42 }]);
     const hits = await createHttpClient({ baseUrl: 'http://srv', fetch }).recall('q', { limit: 3 });
     expect(hits).toEqual([{ memory: toMemory(raw), score: 0.42 }]);
+  });
+});
+
+describe('API key transport', () => {
+  it('refuses to send a key over plain http to a remote host', () => {
+    expect(() => createHttpClient({ baseUrl: 'http://uteke.example.com', apiKey: 'k' })).toThrow(
+      MemoryError,
+    );
+  });
+
+  it('allows plain http on this machine and https anywhere', () => {
+    for (const baseUrl of ['http://127.0.0.1:8767', 'http://localhost:8767', 'https://uteke.app']) {
+      expect(() => createHttpClient({ baseUrl, apiKey: 'k' })).not.toThrow();
+    }
+  });
+
+  it('does not restrict plain http when there is no key', () => {
+    expect(() => createHttpClient({ baseUrl: 'http://srv:8767' })).not.toThrow();
   });
 });
 
@@ -263,7 +281,7 @@ describe('headers', () => {
   it('a caller header in another case cannot sit next to the key', async () => {
     const fetch = mockFetch(() => ({}));
     await createHttpClient({
-      baseUrl: 'http://srv',
+      baseUrl: 'https://srv',
       apiKey: 'real',
       headers: { authorization: 'Bearer stale', 'X-Trace': '1' },
       fetch,

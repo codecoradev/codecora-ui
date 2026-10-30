@@ -43,6 +43,10 @@ calling it anyway throws `UnsupportedError` before any request.
 | namespaces                                                       |    full     | deprecated  | full  |
 | graph, lifecycle, dream, orphans (reserved, no client method yet) |     yes     |     no      |  no   |
 
+## Keys and TLS
+
+`createHttpClient` throws a `MemoryError` (`invalid`) when an `apiKey` is set and `baseUrl` is plain `http` on a remote host, so a Bearer key never travels unencrypted. `localhost`, `127.0.0.1` and `[::1]` are allowed, and a same-origin path such as `/api` is not affected.
+
 ## Errors
 
 Every failure is a `MemoryError` with `code` (`http`, `network`, `unsupported`)

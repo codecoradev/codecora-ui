@@ -33,6 +33,22 @@ export interface HttpClientOptions {
   capabilities?: Partial<Capabilities>;
 }
 
+/** Plain http is fine on this machine; anywhere else a Bearer key needs TLS. */
+function isInsecureRemote(base: string): boolean {
+  if (!/^http:\/\//i.test(base)) return false;
+  try {
+    const host = new URL(base).hostname.toLowerCase();
+    return !(
+      host === 'localhost' ||
+      host.endsWith('.localhost') ||
+      host === '127.0.0.1' ||
+      host === '[::1]'
+    );
+  } catch {
+    return true;
+  }
+}
+
 type Query = Record<string, string | number | boolean | undefined>;
 
 /**
@@ -43,6 +59,12 @@ export function createHttpClient(options: HttpClientOptions): MemoryClient {
   const kind = options.kind ?? 'uteke-serve';
   const capabilities: Capabilities = { ...capabilitiesFor(kind), ...options.capabilities };
   const base = options.baseUrl.replace(/\/+$/, '');
+  if (options.apiKey && isInsecureRemote(base)) {
+    throw new MemoryError(
+      'baseUrl uses plain http for a remote host; the API key would travel unencrypted. Use https.',
+      'invalid',
+    );
+  }
   const doFetch = options.fetch ?? ((...args: Parameters<typeof fetch>) => fetch(...args));
 
   async function send(
