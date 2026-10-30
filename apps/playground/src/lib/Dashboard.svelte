@@ -1,9 +1,9 @@
 <!--
   Sample admin screen built only from @codecora/ui primitives and plain
-  layout CSS: navigation (sidebar, or a Sheet on narrow screens), usage
+  layout CSS: the AppShell (sidebar, or a drawer and bottom bar on narrow
+  screens, with an optional per-region sidebar theme), usage
   summary, chart, keys table with row actions, filters and a revoke flow.
-  Generic data; nothing product-specific (D11). AppShell (#7) will replace
-  the hand-written frame.
+  Generic data; nothing product-specific (D11).
 -->
 <script lang="ts">
   import { resolve } from '$app/paths';
@@ -12,12 +12,12 @@
   import Funnel from '@lucide/svelte/icons/funnel';
   import KeyRound from '@lucide/svelte/icons/key-round';
   import LayoutDashboard from '@lucide/svelte/icons/layout-dashboard';
-  import Menu from '@lucide/svelte/icons/menu';
   import Plus from '@lucide/svelte/icons/plus';
   import Settings from '@lucide/svelte/icons/settings';
   import Trash from '@lucide/svelte/icons/trash';
   import Users from '@lucide/svelte/icons/users';
   import {
+    AppShell,
     Badge,
     Button,
     ConfirmDialog,
@@ -38,14 +38,20 @@
   const appearance = createAppearance();
 
   const nav = [
-    { label: 'Overview', icon: LayoutDashboard },
-    { label: 'API keys', icon: KeyRound },
-    { label: 'Activity', icon: Activity },
-    { label: 'Members', icon: Users },
-    { label: 'Settings', icon: Settings },
+    {
+      label: 'Workspace',
+      items: [
+        { id: 'Overview', label: 'Overview', icon: LayoutDashboard, pinned: true },
+        { id: 'API keys', label: 'API keys', icon: KeyRound, badge: 5, pinned: true },
+        { id: 'Activity', label: 'Activity', icon: Activity },
+        { id: 'Members', label: 'Members', icon: Users },
+      ],
+    },
+    { label: 'Account', items: [{ id: 'Settings', label: 'Settings', icon: Settings }] },
   ];
   let current = $state('Overview');
-  let navOpen = $state(false);
+  let collapsed = $state(false);
+  let sidebarTheme = $state('same');
   let filterOpen = $state(false);
   let revoking = $state<Key | null>(null);
   let revokeOpen = $state(false);
@@ -140,80 +146,77 @@
   }
 </script>
 
-{#snippet navList()}
-  <nav aria-label="Main">
-    <ul>
-      {#each nav as item (item.label)}
-        {@const Icon = item.icon}
-        <li>
-          <button
-            type="button"
-            class="nav-item"
-            aria-current={current === item.label ? 'page' : undefined}
-            onclick={() => {
-              current = item.label;
-              navOpen = false;
-            }}
-          >
-            <Icon />
-            {item.label}
-          </button>
-        </li>
-      {/each}
-    </ul>
-  </nav>
-{/snippet}
-
 <div
-  class="app"
+  class="themed"
   data-theme={appearance.theme}
   data-accent={appearance.accentName}
   data-density={appearance.densityName}
 >
-  <aside class="sidebar">
-    <p class="brand">Sample Admin</p>
-    {@render navList()}
-    <div class="sidebar-foot">
-      <Field label="Theme">
-        {#snippet children(control)}
-          <Select
-            {...control}
-            items={themeNames.map((name) => ({ value: name, label: themes[name].label }))}
-            bind:value={() => appearance.theme, (value) => (appearance.theme = value as ThemeName)}
-          />
-        {/snippet}
-      </Field>
-      <a href={resolve('/components')}>Back to the playground</a>
-    </div>
-  </aside>
+  <AppShell
+    {nav}
+    {current}
+    bind:collapsed
+    sidebarTheme={sidebarTheme === 'same' ? undefined : sidebarTheme}
+    onselect={(item) => (current = item.id)}
+  >
+    {#snippet brand({ collapsed })}
+      {collapsed ? 'SA' : 'Sample Admin'}
+    {/snippet}
 
-  <div class="main">
-    <header class="topbar">
-      <div class="menu">
-        <IconButton
-          icon={Menu}
-          label="Open navigation"
-          variant="secondary"
-          onclick={() => (navOpen = true)}
-        />
-      </div>
-      <h1>{current}</h1>
-      <div class="actions">
-        <Button variant="secondary" icon={Funnel} onclick={() => (filterOpen = true)}
-          >Filters</Button
-        >
-        <Button
-          variant="primary"
-          icon={Plus}
-          onclick={() =>
-            toast.show({ title: 'Key creation is a demo', description: 'Nothing is stored.' })}
-        >
-          Create key
-        </Button>
-      </div>
-    </header>
+    {#snippet footer({ collapsed })}
+      {#if !collapsed}
+        <div class="sidebar-foot">
+          <Field label="Theme">
+            {#snippet children(control)}
+              <Select
+                {...control}
+                items={themeNames.map((name) => ({ value: name, label: themes[name].label }))}
+                bind:value={
+                  () => appearance.theme, (value) => (appearance.theme = value as ThemeName)
+                }
+              />
+            {/snippet}
+          </Field>
+          <Field label="Sidebar">
+            {#snippet children(control)}
+              <Select
+                {...control}
+                items={[
+                  { value: 'same', label: 'Same as page' },
+                  ...themeNames.map((name) => ({
+                    value: name,
+                    label: `${themes[name].label} only`,
+                  })),
+                ]}
+                bind:value={sidebarTheme}
+              />
+            {/snippet}
+          </Field>
+          <a href={resolve('/components')}>Back to the playground</a>
+        </div>
+      {/if}
+    {/snippet}
 
-    <main>
+    {#snippet header()}
+      <div class="page-head">
+        <h1>{current}</h1>
+        <div class="actions">
+          <Button variant="secondary" icon={Funnel} onclick={() => (filterOpen = true)}>
+            Filters
+          </Button>
+          <Button
+            variant="primary"
+            icon={Plus}
+            onclick={() =>
+              toast.show({ title: 'Key creation is a demo', description: 'Nothing is stored.' })}
+          >
+            Create key
+          </Button>
+        </div>
+      </div>
+    {/snippet}
+
+    <div class="content">
       <section aria-labelledby="usage">
         <h2 id="usage" class="visually-label">Usage summary</h2>
         <dl class="stats">
@@ -358,13 +361,9 @@
           {/snippet}
         </Tabs>
       </section>
-    </main>
-  </div>
+    </div>
+  </AppShell>
 </div>
-
-<Sheet bind:open={navOpen} side="left" title="Navigation">
-  {@render navList()}
-</Sheet>
 
 <Sheet bind:open={filterOpen} title="Filters" description="Narrow the key list.">
   <Field label="Status">
@@ -399,65 +398,10 @@
 <Toaster />
 
 <style>
-  .app {
-    display: grid;
-    min-height: 100dvh;
-    background: var(--cc-surface);
-    color: var(--cc-text);
-    font-family: var(--cc-font-sans);
-    font-size: var(--cc-font-size-md);
-    line-height: var(--cc-leading-normal);
-  }
-  .sidebar {
-    display: none;
-  }
-  .brand {
-    margin: 0;
-    padding: var(--cc-space-2) var(--cc-space-3);
-    font-family: var(--cc-font-display);
-    font-size: var(--cc-font-size-lg);
-    font-weight: 600;
-  }
   ul {
     margin: 0;
     padding: 0;
     list-style: none;
-  }
-  .nav-item {
-    display: flex;
-    align-items: center;
-    gap: var(--cc-space-3);
-    width: 100%;
-    min-height: var(--cc-control-h);
-    padding-inline: var(--cc-space-3);
-    border: 0;
-    border-radius: var(--cc-radius-md);
-    background: transparent;
-    color: var(--cc-text);
-    font: inherit;
-    text-align: left;
-    cursor: pointer;
-  }
-  .nav-item :global(svg) {
-    width: var(--cc-icon-size);
-    height: var(--cc-icon-size);
-    stroke-width: var(--cc-icon-stroke);
-    color: var(--cc-text-muted);
-  }
-  .nav-item:hover {
-    background: var(--cc-surface-hover);
-  }
-  .nav-item[aria-current='page'] {
-    background: var(--cc-accent-soft);
-    color: var(--cc-accent);
-    font-weight: 600;
-  }
-  .nav-item[aria-current='page'] :global(svg) {
-    color: inherit;
-  }
-  .nav-item:focus-visible {
-    outline: 2px solid var(--cc-focus);
-    outline-offset: 2px;
   }
   .sidebar-foot {
     display: grid;
@@ -474,21 +418,15 @@
     outline-offset: 2px;
   }
 
-  .main {
-    min-width: 0;
-  }
-  .topbar {
+  .page-head {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    justify-content: space-between;
     gap: var(--cc-space-3);
-    padding: var(--cc-space-3) var(--cc-space-4);
-    border-bottom: 1px solid var(--cc-border);
-    background: var(--cc-surface-raised);
   }
   h1 {
     margin: 0;
-    flex: 1;
     font-family: var(--cc-font-display);
     font-size: var(--cc-font-size-xl);
   }
@@ -497,7 +435,7 @@
     flex-wrap: wrap;
     gap: var(--cc-space-2);
   }
-  main {
+  .content {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     gap: var(--cc-space-6);
@@ -598,27 +536,7 @@
   }
 
   @media (min-width: 48rem) {
-    .app {
-      grid-template-columns: 15rem minmax(0, 1fr);
-    }
-    .sidebar {
-      position: sticky;
-      top: 0;
-      display: flex;
-      flex-direction: column;
-      gap: var(--cc-space-4);
-      height: 100dvh;
-      padding: var(--cc-space-4);
-      border-right: 1px solid var(--cc-border);
-      background: var(--cc-surface-sunken);
-    }
-    .menu {
-      display: none;
-    }
-    .topbar {
-      padding-inline: var(--cc-space-8);
-    }
-    main {
+    .content {
       padding-inline: var(--cc-space-8);
     }
     .stats {

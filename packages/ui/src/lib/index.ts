@@ -18,3 +18,6 @@ export { default as Tooltip } from './Tooltip.svelte';
 export { default as VisuallyHidden } from './VisuallyHidden.svelte';
 export { toast, type ToastOptions } from './toast.svelte.js';
 export type { IconComponent, Tone } from './types.js';
+export { default as AppShell } from './AppShell.svelte';
+export { default as Sidebar } from './Sidebar.svelte';
+export type { NavGroup, NavItem } from './types.js';

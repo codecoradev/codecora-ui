@@ -37,7 +37,13 @@ The admin dashboard sample (`/dashboard`), assembled from the primitives:
 |---|---|---|
 | ![Admin dashboard, neutral theme](docs/assets/screenshots/dashboard-neutral.png) | ![Admin dashboard, uteke theme](docs/assets/screenshots/dashboard-uteke.png) | ![Admin dashboard, corin theme](docs/assets/screenshots/dashboard-corin.png) |
 
-On a phone (375 px), with the navigation sheet open:
+AppShell: a dark sidebar next to light content (a per-region theme), and the sidebar collapsed to icons:
+
+| Dark sidebar | Collapsed |
+|---|---|
+| ![AppShell with a dark sidebar](docs/assets/screenshots/shell-dark-sidebar.png) | ![AppShell with a collapsed sidebar](docs/assets/screenshots/shell-collapsed.png) |
+
+On a phone (375 px), with the navigation drawer open:
 
 | Dashboard | Navigation |
 |---|---|
