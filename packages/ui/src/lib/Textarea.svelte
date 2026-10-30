@@ -42,5 +42,6 @@
   }
   .cc-textarea[aria-invalid='true'] {
     border-color: var(--cc-danger);
+    box-shadow: inset 0 0 0 1px var(--cc-danger);
   }
 </style>

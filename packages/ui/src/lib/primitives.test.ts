@@ -12,6 +12,7 @@ import Table from './Table.svelte';
 import Textarea from './Textarea.svelte';
 import { text } from './test-helpers.js';
 import { createRawSnippet } from 'svelte';
+import FieldInput from './fixtures/FieldInput.svelte';
 import Star from './fixtures/Star.svelte';
 
 describe('Button', () => {
@@ -40,6 +41,11 @@ describe('Button', () => {
     const link = screen.getByRole('link', { name: 'Docs' });
     expect(link).not.toHaveAttribute('href');
     expect(link).toHaveAttribute('aria-disabled', 'true');
+  });
+
+  it('announces what is loading', () => {
+    render(Button, { children: text('Save'), loading: true, loadingLabel: 'Saving' });
+    expect(screen.getByRole('status')).toHaveTextContent('Saving');
   });
 
   it('does not run onclick on a disabled or loading link', async () => {
@@ -83,7 +89,22 @@ describe('Field with Input', () => {
     render(Field, { label: 'Email', error: 'Enter a valid email', children: control });
     const input = screen.getByLabelText('Email');
     expect(input).toBeInvalid();
-    expect(input).toHaveAccessibleDescription('Enter a valid email');
+    expect(input).toHaveAccessibleDescription(/Error:\s*Enter a valid email/);
+  });
+});
+
+describe('Field with a real Input', () => {
+  it('forwards required and invalid to the control', () => {
+    render(FieldInput, { error: 'Enter a valid email', required: true });
+    const input = screen.getByLabelText(/Email/);
+    expect(input).toBeRequired();
+    expect(input).toBeInvalid();
+    expect(input).toHaveAccessibleDescription(/Work address.*Error:\s*Enter a valid email/s);
+  });
+
+  it('marks the error with an icon as well as colour', () => {
+    const { container } = render(FieldInput, { error: 'Enter a valid email' });
+    expect(container.querySelector('.error .cc-glyph')).not.toBeNull();
   });
 });
 

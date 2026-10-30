@@ -21,10 +21,12 @@ changesets once packages exist.
 - `@codecora/ui`: first primitive set on bits-ui (Button, IconButton, Field, Input, Textarea, Select, Dialog, ConfirmDialog, Sheet, Tabs, Table, Badge, Toast, Tooltip, EmptyState, Skeleton, Spinner) with unit tests; a Components page in the playground and screenshots under `docs/assets/screenshots/`.
 - Playground: an admin dashboard sample at `/dashboard` built from the primitives (sidebar and navigation sheet, usage summary, chart, filterable keys table, revoke flow), a shared appearance store for its pages, and its screenshots.
 - `@codecora/ui`: `AppShell` and `Sidebar` (grouped navigation with brand and footer slots, collapsible on desktop, a drawer and a bottom bar of up to 5 items on narrow screens, a skip link, a per-region sidebar theme) with unit tests; the dashboard sample now uses them.
+- `@codecora/ui`: error states and ConfirmDialog hardened after the impeccable critique of the primitives (see Fixed).
 
 ### Fixed
 
 - `Table`: the visually hidden caption and header labels no longer widen the page on narrow screens.
+- `Field` errors no longer rely on colour alone (icon and "Error:" prefix), `required` reaches the control, and invalid controls have a stronger border; `ConfirmDialog` forwards `theme`, focuses Cancel first for danger, emphasises the irreversible sentence and can require a typed name; `Button` accepts a `loadingLabel`.
 
 ### Security
 

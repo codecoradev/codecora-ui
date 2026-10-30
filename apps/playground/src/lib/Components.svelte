@@ -70,7 +70,7 @@
     <Button>Secondary</Button>
     <Button variant="ghost" icon={Download}>Export</Button>
     <Button variant="danger" icon={Trash}>Revoke</Button>
-    <Button variant="primary" loading={saving} onclick={save}>
+    <Button variant="primary" loading={saving} loadingLabel="Saving key" onclick={save}>
       {saving ? 'Saving' : 'Save changes'}
     </Button>
     <Button disabled>Disabled</Button>
@@ -117,6 +117,29 @@
       {/snippet}
     </Field>
   </div>
+
+  <h3 id="c-invalid">Invalid state</h3>
+  <p class="muted">
+    An icon and a screen-reader "Error:" prefix back the red text, and the control gets a stronger
+    border, so the state never depends on colour alone.
+  </p>
+  <div class="form">
+    <Field label="Email" error="Enter an address like name@example.com." required>
+      {#snippet children(control)}
+        <Input {...control} type="email" value="not-an-email" />
+      {/snippet}
+    </Field>
+    <Field label="Region" error="Choose a region to continue." required>
+      {#snippet children(control)}
+        <Select {...control} items={regions} value="" />
+      {/snippet}
+    </Field>
+    <Field label="Notes" error="Notes are limited to 200 characters.">
+      {#snippet children(control)}
+        <Textarea {...control} value={'x'.repeat(40) + ' …'} />
+      {/snippet}
+    </Field>
+  </div>
 </section>
 
 <section aria-labelledby="c-overlays">
@@ -157,6 +180,7 @@
     title="Revoke ci-deploy?"
     description="Anything using this key stops working immediately. This cannot be undone."
     confirmLabel="Revoke key"
+    confirmText="ci-deploy"
     tone="danger"
     onconfirm={() => {
       toast.success('Key revoked');
@@ -260,6 +284,10 @@
   }
   h2 {
     font-size: var(--cc-font-size-xl);
+  }
+  h3 {
+    margin: 0;
+    font-size: var(--cc-font-size-lg);
   }
   .row {
     display: flex;

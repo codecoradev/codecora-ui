@@ -17,6 +17,7 @@
     label?: string;
     id?: string;
     invalid?: boolean;
+    required?: boolean;
     disabled?: boolean;
     'aria-describedby'?: string;
   }
@@ -28,6 +29,7 @@
     label,
     id,
     invalid = false,
+    required = false,
     disabled = false,
     'aria-describedby': describedby,
   }: Props = $props();
@@ -41,6 +43,7 @@
     aria-label={label}
     aria-describedby={describedby}
     aria-invalid={invalid || undefined}
+    aria-required={required || undefined}
     class="cc-select-trigger"
   >
     <span class:placeholder={!selected}>{selected?.label ?? placeholder}</span>
@@ -86,6 +89,7 @@
   }
   :global(.cc-select-trigger[aria-invalid='true']) {
     border-color: var(--cc-danger);
+    box-shadow: inset 0 0 0 1px var(--cc-danger);
   }
   :global(.cc-select-trigger:focus-visible) {
     outline: 2px solid var(--cc-focus);
