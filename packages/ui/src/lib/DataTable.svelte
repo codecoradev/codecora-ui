@@ -88,6 +88,20 @@
     });
   });
 
+  // A filter that shrinks the rows must not leave the table on a page that no longer exists.
+  const lastPage = $derived(pageSize ? Math.max(1, Math.ceil(sorted.length / pageSize)) : 1);
+  $effect(() => {
+    if (page > lastPage) page = lastPage;
+  });
+
+  // A bulk action must only reach rows that are still in the table.
+  $effect(() => {
+    const present = new Set(rows.map(rowKey));
+    if (selected.some((key) => !present.has(key))) {
+      selected = selected.filter((key) => present.has(key));
+    }
+  });
+
   const visible = $derived(
     pageSize ? sorted.slice((page - 1) * pageSize, page * pageSize) : sorted,
   );

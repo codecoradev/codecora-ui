@@ -85,6 +85,25 @@ describe('DataTable selection', () => {
   });
 });
 
+describe('DataTable data changes', () => {
+  it('moves back to the last page when the rows shrink', async () => {
+    const { rerender } = view({ pageSize: 2, page: 3 });
+    expect(names()).toEqual(['zeta']);
+    await rerender({ ...base, rows: rows.slice(0, 3), pageSize: 2 });
+    expect(names()).toEqual(['dashboard']);
+  });
+
+  it('drops selected rows that are no longer in the table', async () => {
+    const bulk = createRawSnippet(() => ({
+      render: () => '<button type="button">Revoke</button>',
+    }));
+    const { rerender } = view({ selectable: true, selected: ['1', '2'], bulk });
+    expect(screen.getByRole('status')).toHaveTextContent('2 selected');
+    await rerender({ ...base, rows: rows.slice(1), selectable: true, bulk });
+    expect(screen.getByRole('status')).toHaveTextContent('1 selected');
+  });
+});
+
 describe('DataTable paging and states', () => {
   it('shows one page of rows and moves to the next', async () => {
     view({ pageSize: 2 });
