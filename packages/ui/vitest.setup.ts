@@ -6,3 +6,6 @@ globalThis.ResizeObserver ??= class {
   unobserve() {}
   disconnect() {}
 };
+
+// jsdom has no scrollIntoView; the command list scrolls the highlighted item into view.
+Element.prototype.scrollIntoView ??= () => {};
