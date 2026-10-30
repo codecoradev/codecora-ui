@@ -35,6 +35,8 @@
     columns: Column<T>[];
     rows: T[];
     rowKey: (row: T) => string;
+    /** Names a row for its selection checkbox; defaults to the first column's value. */
+    rowLabel?: (row: T) => string;
     sort?: Sort | null;
     selectable?: boolean;
     selected?: string[];
@@ -57,6 +59,7 @@
     columns,
     rows,
     rowKey,
+    rowLabel,
     sort = $bindable(null),
     selectable = false,
     selected = $bindable([]),
@@ -128,6 +131,8 @@
     selected = on ? [...selected, key] : selected.filter((k) => k !== key);
   }
 
+  const nameOf = (row: T) => rowLabel?.(row) ?? String(read(row, columns[0]!) ?? rowKey(row));
+
   const ariaSort = (column: Column<T>) =>
     sort?.key === column.key ? (sort.direction === 'asc' ? 'ascending' : 'descending') : undefined;
 </script>
@@ -196,7 +201,7 @@
             {#if selectable}
               <td class="check">
                 <Checkbox
-                  label="Select row"
+                  label="Select {nameOf(row)}"
                   labelHidden
                   checked={chosen.has(key)}
                   onchange={(on) => toggleRow(key, on)}

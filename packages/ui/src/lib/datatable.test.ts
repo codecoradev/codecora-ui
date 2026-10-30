@@ -61,7 +61,7 @@ describe('DataTable selection', () => {
   it('selects rows, shows a mixed header state and selects all', async () => {
     view({ selectable: true });
     const all = screen.getByRole('checkbox', { name: 'Select all rows on this page' });
-    const boxes = screen.getAllByRole('checkbox', { name: 'Select row' });
+    const boxes = screen.getAllByRole('checkbox', { name: /^Select (?!all)/ });
     expect(boxes).toHaveLength(5);
     await fireEvent.click(boxes[0]!);
     expect(all).toHaveAttribute('aria-checked', 'mixed');
@@ -73,13 +73,19 @@ describe('DataTable selection', () => {
     expect(boxes.every((box) => box.getAttribute('aria-checked') === 'false')).toBe(true);
   });
 
+  it('names each row checkbox after its row', () => {
+    view({ selectable: true });
+    expect(screen.getByRole('checkbox', { name: 'Select ci-deploy' })).toBeInTheDocument();
+    expect(screen.getByRole('checkbox', { name: 'Select zeta' })).toBeInTheDocument();
+  });
+
   it('shows the bulk bar with a count while rows are selected', async () => {
     const bulk = createRawSnippet(() => ({
       render: () => '<button type="button">Revoke</button>',
     }));
     view({ selectable: true, bulk });
     expect(screen.queryByText(/\d+ selected/)).toBeNull();
-    await fireEvent.click(screen.getAllByRole('checkbox', { name: 'Select row' })[1]!);
+    await fireEvent.click(screen.getAllByRole('checkbox', { name: /^Select (?!all)/ })[1]!);
     expect(screen.getByText('1 selected')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Revoke' })).toBeInTheDocument();
   });
