@@ -1,0 +1,99 @@
+name: Release
+
+# Publishes @codecora/* to npmjs.com with trusted publishing (OIDC) and
+# provenance after a release PR (develop -> main) merges. Versions are set
+# beforehand by a maintainer with changesets (`bun run version-packages`).
+#
+# `verify` runs on every trigger with read-only rights: test, build and a pack
+# dry run. `publish` holds the elevated rights and runs only on main, only
+# when the repository variable NPM_PUBLISH_ENABLED is "true" (set once the
+# @codecora scope exists and trusts this workflow, #15), only in the
+# `npm-publish` environment, and never for a manual dry run.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Pack and dry-run only, publish nothing
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    name: Verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version-file: package.json
+
+      - name: Install
+        run: bun install --frozen-lockfile
+
+      - name: Test and build
+        run: |
+          bun run test
+          bun run build:packages
+
+      - name: Pack dry run
+        run: bash scripts/publish.sh --dry-run
+
+  publish:
+    name: Publish
+    needs: verify
+    if: >-
+      github.ref == 'refs/heads/main' &&
+      vars.NPM_PUBLISH_ENABLED == 'true' &&
+      (github.event_name == 'push' || inputs.dry_run == false)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    # Restrict this environment to main (and add reviewers) in the repository
+    # settings, and name it in the npm trusted-publisher configuration.
+    environment: npm-publish
+    permissions:
+      contents: write # push the <name>@<version> tags
+      id-token: write # npm trusted publishing and provenance
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+
+      # Trusted publishing needs npm 11.5.1 or later.
+      - name: Install npm 11
+        run: npm install --global npm@11.21.1
+
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version-file: package.json
+
+      - name: Install
+        run: bun install --frozen-lockfile
+
+      - name: Build
+        run: bun run build:packages
+
+      - name: Publish
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          bash scripts/publish.sh

@@ -1,0 +1,37 @@
+{
+  "name": "@codecora/tokens",
+  "version": "0.1.0",
+  "description": "Design tokens and themes for CodeCora products: CSS custom properties, TypeScript constants, Tailwind 4 preset, shadcn bridge",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codecoradev/codecora-ui.git",
+    "directory": "packages/tokens"
+  },
+  "type": "module",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./tokens.css": "./dist/css/tokens.css",
+    "./base.css": "./dist/css/base.css",
+    "./themes/*.css": "./dist/css/themes/*.css",
+    "./tailwind.css": "./dist/css/tailwind.css",
+    "./shadcn.css": "./dist/css/shadcn.css"
+  },
+  "files": [
+    "dist",
+    "!dist/**/*.test.*"
+  ],
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "scripts": {
+    "build": "rm -rf dist && tsc -p tsconfig.build.json && bun scripts/build-css.ts && publint",
+    "check": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "contrast": "bun scripts/contrast.ts"
+  }
+}

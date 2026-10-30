@@ -1,0 +1,59 @@
+name: CI
+
+# The gate every PR and every push to develop or main must pass. Mirrors the
+# local gates in AGENTS.md.
+on:
+  pull_request:
+    branches: [develop, main]
+  push:
+    branches: [develop, main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  gates:
+    name: Gates
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      # Tools with a node shebang (svelte-check, vite, impeccable) need Node 22.17+.
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version-file: package.json
+
+      - name: Install
+        run: bun install --frozen-lockfile
+
+      - name: Lint (Prettier, ESLint)
+        run: bun run lint
+
+      - name: Check (build packages, svelte-check every workspace)
+        run: bun run check
+
+      - name: Test (vitest, includes the contrast and design-doc checks)
+        run: bun run test
+
+      - name: Build (packages with publint, playground)
+        run: bun run build
+
+      - name: Contrast report (WCAG AA, every theme and accent)
+        run: bun run contrast
+
+      - name: Design detector (impeccable)
+        run: bun run detect
+
+      - name: Pack dry run (what npm would receive)
+        run: bash scripts/publish.sh --dry-run

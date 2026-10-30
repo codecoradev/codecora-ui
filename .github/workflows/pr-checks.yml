@@ -1,0 +1,137 @@
+name: PR Checks
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+    branches: [develop, main]
+
+jobs:
+  branch-naming:
+    name: Branch Naming
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check branch name
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+          BASE_REF: ${{ github.base_ref }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
+          REPO: ${{ github.repository }}
+        run: |
+          echo "Checking branch: $HEAD_REF"
+
+          # Release PR (this repo's develop -> main, merge commit) is the one allowed exception
+          if [ "$HEAD_REF" = "develop" ] && [ "$BASE_REF" = "main" ] && [ "$HEAD_REPO" = "$REPO" ]; then
+            echo "✅ Release PR develop -> main"
+            exit 0
+          fi
+
+          # Dependabot names its own branches (action pin updates)
+          if [ "$PR_AUTHOR" = "dependabot[bot]" ] && [[ "$HEAD_REF" == dependabot/* ]]; then
+            echo "✅ Dependabot branch"
+            exit 0
+          fi
+
+          # Allowed prefixes (kebab-case)
+          ALLOWED="^(feat|fix|docs|chore|perf|security|refactor|test|build|ci|release)/"
+
+          if echo "$HEAD_REF" | grep -qE "$ALLOWED"; then
+            echo "✅ Branch name follows convention"
+          else
+            echo "::error::Branch name must start with one of: feat/, fix/, docs/, chore/, perf/, security/, refactor/, test/, build/, ci/, release/"
+            echo "Example: fix/42-dialog-focus, feat/6-ui-primitives, release/v0.1.0"
+            echo "Current: $HEAD_REF"
+            exit 1
+          fi
+
+  pr-template:
+    name: PR Description
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check PR body
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+        run: |
+          echo "Checking PR description..."
+
+          # Dependabot writes its own description (release notes, commits)
+          if [ "$PR_AUTHOR" = "dependabot[bot]" ]; then
+            echo "✅ Dependabot PR, generated description"
+            exit 0
+          fi
+
+          # Each section needs its own heading line (`## What`, not `## Whatever`)
+          # and real content under it: HTML comments and unticked template
+          # checkboxes do not count, so an untouched template fails.
+          body=$(printf '%s\n' "$PR_BODY" | tr -d '\r' | perl -0pe 's/<!--.*?-->//gs')
+
+          MISSING=""
+          for section in What Why Testing; do
+            content=$(printf '%s\n' "$body" | awk -v want="$(echo "$section" | tr '[:upper:]' '[:lower:]')" '
+              /^##[ \t]/ {
+                h = tolower($0); sub(/^##[ \t]+/, "", h); sub(/[ \t]+$/, "", h)
+                inside = (h == want); next
+              }
+              inside && $0 !~ /^[ \t]*$/ && $0 !~ /^[ \t]*[-*][ \t]+\[[ \t]\]/ { print }
+            ')
+            if [ -z "$content" ]; then
+              MISSING="$MISSING\n  - ## $section (heading on its own line, with content)"
+            fi
+          done
+
+          if [ -n "$MISSING" ]; then
+            echo -e "::error::PR description is missing or has empty required sections:$MISSING"
+            echo ""
+            echo "Please fill out the PR template. Copy it from:"
+            echo "https://github.com/codecoradev/codecora-ui/blob/develop/.github/PULL_REQUEST_TEMPLATE.md"
+            exit 1
+          fi
+
+          echo "✅ PR description has required sections"
+
+  commit-conventional:
+    name: Conventional Commits
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check PR title format
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          echo "Checking PR title: $PR_TITLE"
+
+          # Conventional Commits: type(scope): description
+          # Types: feat, fix, docs, chore, perf, refactor, test, build, ci, security, release
+          PATTERN="^(feat|fix|docs|chore|perf|refactor|test|build|ci|security|release)(\\(.+\\))?!?: .+"
+
+          if echo "$PR_TITLE" | grep -qE "$PATTERN"; then
+            echo "✅ PR title follows Conventional Commits"
+          else
+            echo "::error::PR title must follow Conventional Commits format"
+            echo "Expected: type(scope): short description"
+            echo "Example: fix(ui): restore dialog focus, release: v0.1.0"
+            echo "Types: feat, fix, docs, chore, perf, refactor, test, build, ci, security, release"
+            echo "Current: $PR_TITLE"
+            exit 1
+          fi
+
+  message-standard:
+    name: Message Standard
+    runs-on: ubuntu-latest
+    steps:
+      # The checker comes from the base branch, so a PR cannot weaken the
+      # script that checks it (changes to this workflow still show in review).
+      # The release PR from this repo's develop to main uses develop's copy: it
+      # is already reviewed and protected, and main may predate the script.
+      # head_ref is only a name, so the head repo is checked too (forks can
+      # have a branch called develop).
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ (github.base_ref == 'main' && github.head_ref == 'develop' && github.event.pull_request.head.repo.full_name == github.repository) && github.event.pull_request.head.sha || github.base_ref }}
+          persist-credentials: false
+          sparse-checkout: scripts
+      - name: Check PR title and body
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: printf '%s\n\n%s\n' "$PR_TITLE" "$PR_BODY" | bash scripts/message-standard.sh -

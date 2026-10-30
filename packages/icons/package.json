@@ -1,0 +1,59 @@
+{
+  "name": "@codecora/icons",
+  "version": "0.1.0",
+  "description": "Icon contract for CodeCora products: an Icon wrapper that follows the theme's stroke and size, a curated Lucide set and a Phosphor adapter",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codecoradev/codecora-ui.git",
+    "directory": "packages/icons"
+  },
+  "type": "module",
+  "svelte": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "svelte": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./lucide": {
+      "types": "./dist/lucide.d.ts",
+      "svelte": "./dist/lucide.js",
+      "default": "./dist/lucide.js"
+    },
+    "./phosphor": {
+      "types": "./dist/phosphor.d.ts",
+      "svelte": "./dist/phosphor.js",
+      "default": "./dist/phosphor.js"
+    }
+  },
+  "files": [
+    "dist",
+    "!dist/**/*.test.*",
+    "!dist/fixtures"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "svelte-package -i src/lib -o dist && publint",
+    "check": "svelte-check --tsconfig ./tsconfig.json --fail-on-warnings",
+    "test": "vitest run"
+  },
+  "peerDependencies": {
+    "@lucide/svelte": "^1.0.0",
+    "phosphor-svelte": "^3.0.0",
+    "svelte": "^5.33.0"
+  },
+  "peerDependenciesMeta": {
+    "@lucide/svelte": {
+      "optional": true
+    },
+    "phosphor-svelte": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@lucide/svelte": "1.64.0",
+    "phosphor-svelte": "3.1.1"
+  }
+}

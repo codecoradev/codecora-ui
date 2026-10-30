@@ -3,23 +3,78 @@
 Shared design tokens, themes and Svelte 5 components for CodeCora products
 (Uteke Cloud, Corin, and any other Svelte app in the fleet).
 
-> Status: **planning (M0)**. Nothing is published yet. See
-> [docs/architecture.md](docs/architecture.md) and
-> [docs/decisions.md](docs/decisions.md).
+> Status: **0.1.0** (milestones M0 and M1 done: tokens, themes, 17 primitives,
+> AppShell and Sidebar, icons, brand). Not on npm yet; install from the GitHub
+> Release below. See [docs/architecture.md](docs/architecture.md),
+> [docs/decisions.md](docs/decisions.md) and [docs/roadmap.md](docs/roadmap.md).
 
-## Packages (planned)
+## Install (until npm)
+
+Each release attaches one tarball per package. The same URL works with bun, npm
+and pnpm; install only the packages you use (they do not depend on each other):
+
+```bash
+bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.1.0/codecora-tokens-0.1.0.tgz
+bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.1.0/codecora-ui-0.1.0.tgz
+bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.1.0/codecora-icons-0.1.0.tgz
+bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.1.0/codecora-brand-0.1.0.tgz
+```
+
+(`npm install <url>` and `pnpm add <url>` take the same URLs.) Publishing to npm
+under `@codecora/*` starts once the scope is set up; the import names stay the
+same.
+
+## Packages
 
 | Package | What | Depends on |
 |---|---|---|
 | `@codecora/tokens` | Primitive and semantic design tokens, themes (`neutral`, `uteke`, `corin`, more later), CSS variables, TS export, Tailwind 4 preset, shadcn variable bridge | nothing |
 | `@codecora/ui` | Svelte 5 components on [bits-ui](https://bits-ui.com): Button, Field, Select, Dialog, Sheet, Tabs, Table, Badge, Toast, Tooltip, EmptyState, Skeleton, AppShell + Sidebar, CommandPalette. Plain CSS on semantic tokens, works with or without Tailwind | `@codecora/tokens`, `bits-ui` |
-| `@codecora/icons` | Icon contract (`--cc-icon-*` tokens), the few internal icons components need, and adapters; Lucide by default, Phosphor optional | `@lucide/svelte` (peer) |
-| `@codecora/brand` | CodeCora product marks and favicon sets (SVG) | nothing |
+| `@codecora/icons` | Icon contract: an `Icon` wrapper that follows the `--cc-icon-*` tokens, a curated Lucide set (the default) and a Phosphor adapter | `@lucide/svelte`, `phosphor-svelte` (optional peers) |
+| `@codecora/brand` | Product marks and favicon sets (Uteke, Corin, Gatehouse) as files and Svelte components | nothing |
 | `@codecora/memory` | Uteke domain layer: types, `MemoryClient`, transports (Tauri, uteke-serve, Uteke Cloud), capabilities, memory browser components | `@codecora/ui` |
 
 Plus a shadcn-svelte registry for blocks and templates that apps copy and
 customise (login, settings, dashboard shell, data table), and
 `apps/playground`, a SvelteKit catalogue of every component in every theme.
+
+## Screenshots
+
+The playground's Components page in each theme (`docs/assets/screenshots/`).
+
+| Neutral | Uteke | Corin |
+|---|---|---|
+| ![Components, neutral theme](docs/assets/screenshots/components-neutral.png) | ![Components, uteke theme](docs/assets/screenshots/components-uteke.png) | ![Components, corin theme](docs/assets/screenshots/components-corin.png) |
+
+![Confirm dialog, uteke theme](docs/assets/screenshots/confirm-dialog-uteke.png)
+
+The admin dashboard sample (`/dashboard`), assembled from the primitives:
+
+| Neutral | Uteke | Corin |
+|---|---|---|
+| ![Admin dashboard, neutral theme](docs/assets/screenshots/dashboard-neutral.png) | ![Admin dashboard, uteke theme](docs/assets/screenshots/dashboard-uteke.png) | ![Admin dashboard, corin theme](docs/assets/screenshots/dashboard-corin.png) |
+
+AppShell: a dark sidebar next to light content (a per-region theme), and the sidebar collapsed to icons:
+
+| Dark sidebar | Collapsed |
+|---|---|
+| ![AppShell with a dark sidebar](docs/assets/screenshots/shell-dark-sidebar.png) | ![AppShell with a collapsed sidebar](docs/assets/screenshots/shell-collapsed.png) |
+
+Icons: the contract follows each theme's own size and stroke (neutral 2, uteke and corin 1.75), with a curated Lucide set and a Phosphor adapter:
+
+![Icons page, corin theme](docs/assets/screenshots/icons-corin.png)
+
+Brand: Uteke (vector), Corin (raster) and Gatehouse (vector) with their favicon sets, and the comparison that chose vector or PNG for each:
+
+![Brand page, uteke theme](docs/assets/screenshots/brand-uteke.png)
+
+![PNG against the covecto traces](docs/assets/screenshots/brand-vectorization.png)
+
+On a phone (375 px), with the navigation drawer open:
+
+| Dashboard | Navigation |
+|---|---|
+| ![Admin dashboard at 375 px](docs/assets/screenshots/dashboard-uteke-375.png) | ![Navigation sheet at 375 px](docs/assets/screenshots/dashboard-uteke-375-nav.png) |
 
 ## Themes
 

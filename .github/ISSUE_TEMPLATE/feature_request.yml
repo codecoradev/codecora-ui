@@ -1,0 +1,35 @@
+name: Feature request
+description: Propose a component, theme, token or package change
+labels: ['enhancement']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A component enters `@codecora/ui` only when at least two products need it, and changes to the locked decisions in docs/decisions.md need maintainer agreement. A "no" is not a judgment of the idea.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: The use case, and which products need it.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed API or design
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+  - type: dropdown
+    id: contribution
+    attributes:
+      label: Will you contribute the implementation?
+      options:
+        - 'Yes'
+        - 'Yes, with guidance'
+        - 'No, just suggesting'
+    validations:
+      required: true
