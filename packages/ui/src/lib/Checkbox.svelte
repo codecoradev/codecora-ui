@@ -5,6 +5,8 @@
 
   interface Props {
     label: string;
+    /** Keep the label for assistive tech only, for a checkbox in a table row. */
+    labelHidden?: boolean;
     description?: string;
     checked?: boolean;
     /** Mixed state, for a parent whose children are partly selected. */
@@ -15,11 +17,14 @@
     invalid?: boolean;
     required?: boolean;
     disabled?: boolean;
+    /** Called with the new state when the user toggles it. */
+    onchange?: (checked: boolean) => void;
     'aria-describedby'?: string;
   }
 
   let {
     label,
+    labelHidden = false,
     description,
     checked = $bindable(false),
     indeterminate = $bindable(false),
@@ -29,6 +34,7 @@
     invalid = false,
     required = false,
     disabled = false,
+    onchange,
     'aria-describedby': describedby,
   }: Props = $props();
 
@@ -49,6 +55,7 @@
     {value}
     {required}
     {disabled}
+    onCheckedChange={onchange}
     aria-describedby={described}
     aria-invalid={invalid || undefined}
     class="cc-box"
@@ -57,7 +64,7 @@
       {#if indeterminate}<Glyph name="minus" />{:else if checked}<Glyph name="check" />{/if}
     {/snippet}
   </Checkbox.Root>
-  <div class="text">
+  <div class={labelHidden ? 'text hidden' : 'text'}>
     <label for={controlId}>{label}</label>
     {#if description}<p id={hintId}>{description}</p>{/if}
   </div>
@@ -105,6 +112,14 @@
   :global(.cc-box[data-disabled]) {
     opacity: 0.55;
     cursor: not-allowed;
+  }
+  .hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
   .text {
     display: grid;

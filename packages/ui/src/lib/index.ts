@@ -11,6 +11,7 @@ export { default as CodeBlock } from './CodeBlock.svelte';
 export { default as Combobox } from './Combobox.svelte';
 export { default as CommandPalette } from './CommandPalette.svelte';
 export { default as ConfirmDialog } from './ConfirmDialog.svelte';
+export { default as DataTable } from './DataTable.svelte';
 export { default as Dialog } from './Dialog.svelte';
 export { default as DropdownMenu } from './DropdownMenu.svelte';
 export { default as EmptyState } from './EmptyState.svelte';
