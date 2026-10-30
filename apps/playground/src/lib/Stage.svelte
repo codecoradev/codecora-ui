@@ -47,6 +47,7 @@
       <a href={resolve('/icons')}>Icons</a>
       <a href={resolve('/brand')}>Brand</a>
       <a href={resolve('/dashboard')}>Admin dashboard</a>
+      <a href={resolve('/samples')}>Samples</a>
       <span class="sep" aria-hidden="true"></span>
       Fixed theme pages for visual snapshots:
       {#each themeNames as name (name)}
