@@ -13,6 +13,8 @@
     icon?: IconComponent;
     /** Shows a spinner and blocks activation; the button keeps its width. */
     loading?: boolean;
+    /** What a screen reader hears while loading, for example "Saving". */
+    loadingLabel?: string;
     children: Snippet;
   } & Omit<HTMLButtonAttributes, 'children'> &
     Omit<HTMLAnchorAttributes, 'children' | 'type'>;
@@ -21,6 +23,7 @@
     variant = 'secondary',
     icon,
     loading = false,
+    loadingLabel = 'Loading',
     href,
     type = 'button',
     disabled,
@@ -43,7 +46,7 @@
     aria-disabled={inactive || undefined}
     class={['cc-button', `cc-button-${variant}`, className]}
   >
-    {#if loading}<Spinner label="Loading" />{:else if icon}<Icon {icon} />{/if}
+    {#if loading}<Spinner label={loadingLabel} />{:else if icon}<Icon {icon} />{/if}
     {@render children()}
   </a>
 {:else}
@@ -55,7 +58,7 @@
     aria-busy={loading || undefined}
     class={['cc-button', `cc-button-${variant}`, className]}
   >
-    {#if loading}<Spinner label="Loading" />{:else if icon}<Icon {icon} />{/if}
+    {#if loading}<Spinner label={loadingLabel} />{:else if icon}<Icon {icon} />{/if}
     {@render children()}
   </button>
 {/if}

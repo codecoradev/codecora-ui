@@ -25,6 +25,10 @@
     alert?: boolean;
     /** Theme name for the panel, which renders outside the page frame (a portal). */
     theme?: string;
+    /** Danger adds a warning mark and stronger description text. */
+    tone?: 'default' | 'danger';
+    /** Id of the element that takes focus on open, instead of the first focusable one. */
+    initialFocus?: string;
   }
 
   let {
@@ -38,12 +42,23 @@
     onOpenChange,
     alert = false,
     theme,
+    tone = 'default',
+    initialFocus,
   }: Props = $props();
+  function focusInitial(event: Event) {
+    const el = initialFocus ? document.getElementById(initialFocus) : null;
+    if (!el) return;
+    event.preventDefault();
+    el.focus();
+  }
 </script>
 
 {#snippet header(Title: typeof Dialog.Title, close: boolean)}
   <header class="cc-modal-header">
-    <Title class="cc-modal-title">{title}</Title>
+    <Title class="cc-modal-title">
+      {#if tone === 'danger'}<span class="cc-modal-mark"><Glyph name="alert" /></span>{/if}
+      {title}
+    </Title>
     {#if close}
       <Dialog.Close class="cc-modal-close">
         <Glyph name="close" />
@@ -58,7 +73,11 @@
   <AlertDialog.Root bind:open {onOpenChange}>
     <AlertDialog.Portal>
       <AlertDialog.Overlay class="cc-modal-overlay" />
-      <AlertDialog.Content class="cc-modal cc-modal-{placement}" data-theme={theme}>
+      <AlertDialog.Content
+        class="cc-modal cc-modal-{placement} cc-modal-{tone}"
+        data-theme={theme}
+        onOpenAutoFocus={focusInitial}
+      >
         {@render header(AlertDialog.Title, false)}
         {#if description}
           <AlertDialog.Description class="cc-modal-description"
@@ -79,7 +98,11 @@
     {/if}
     <Dialog.Portal>
       <Dialog.Overlay class="cc-modal-overlay" />
-      <Dialog.Content class="cc-modal cc-modal-{placement}" data-theme={theme}>
+      <Dialog.Content
+        class="cc-modal cc-modal-{placement} cc-modal-{tone}"
+        data-theme={theme}
+        onOpenAutoFocus={focusInitial}
+      >
         {@render header(Dialog.Title, true)}
         {#if description}
           <Dialog.Description class="cc-modal-description">{description}</Dialog.Description>
@@ -169,6 +192,19 @@
   :global(.cc-modal-description) {
     margin: 0;
     color: var(--cc-text-muted);
+  }
+  :global(.cc-modal-title) {
+    display: flex;
+    align-items: center;
+    gap: var(--cc-space-2);
+  }
+  :global(.cc-modal-mark) {
+    display: inline-flex;
+    color: var(--cc-danger);
+  }
+  :global(.cc-modal-danger .cc-modal-description) {
+    color: var(--cc-text);
+    font-weight: 500;
   }
   :global(.cc-modal-close) {
     display: inline-flex;

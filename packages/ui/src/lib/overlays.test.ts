@@ -60,6 +60,41 @@ describe('ConfirmDialog', () => {
   });
 });
 
+describe('ConfirmDialog hardening', () => {
+  it('danger tone focuses Cancel first and marks the dialog', async () => {
+    render(ConfirmDialog, { open: true, title: 'Delete key?', tone: 'danger', onconfirm: vi.fn() });
+    const dialog = await screen.findByRole('alertdialog', { name: 'Delete key?' });
+    await waitFor(() => expect(screen.getByRole('button', { name: 'Cancel' })).toHaveFocus());
+    expect(dialog).toHaveClass('cc-modal-danger');
+  });
+
+  it('confirmText keeps the action disabled until the name is typed', async () => {
+    const onconfirm = vi.fn();
+    render(ConfirmDialog, {
+      open: true,
+      title: 'Revoke ci-deploy?',
+      confirmLabel: 'Revoke',
+      confirmText: 'ci-deploy',
+      tone: 'danger',
+      onconfirm,
+    });
+    const confirm = await screen.findByRole('button', { name: 'Revoke' });
+    expect(confirm).toBeDisabled();
+    const field = screen.getByLabelText('Type ci-deploy to confirm');
+    await fireEvent.input(field, { target: { value: 'ci-depl' } });
+    expect(confirm).toBeDisabled();
+    await fireEvent.input(field, { target: { value: 'ci-deploy' } });
+    expect(confirm).toBeEnabled();
+    await fireEvent.click(confirm);
+    await waitFor(() => expect(onconfirm).toHaveBeenCalledOnce());
+  });
+
+  it('passes its theme to the portalled panel', async () => {
+    render(ConfirmDialog, { open: true, title: 'Sure?', theme: 'corin', onconfirm: vi.fn() });
+    expect(await screen.findByRole('alertdialog')).toHaveAttribute('data-theme', 'corin');
+  });
+});
+
 describe('Tabs', () => {
   const panel = createRawSnippet<[string]>((value) => ({
     render: () => `<p>panel ${value()}</p>`,

@@ -8,11 +8,14 @@
 -->
 <script lang="ts">
   import type { Snippet } from 'svelte';
+  import Glyph from './internal/Glyph.svelte';
+  import VisuallyHidden from './VisuallyHidden.svelte';
 
   interface ControlProps {
     id: string;
     'aria-describedby': string | undefined;
     invalid: boolean;
+    required: boolean;
   }
 
   interface Props {
@@ -38,9 +41,14 @@
   <label for={id}>
     {label}{#if required}<span class="req" aria-hidden="true"> *</span>{/if}
   </label>
-  {@render children({ id, 'aria-describedby': describedby, invalid: Boolean(error) })}
+  {@render children({ id, 'aria-describedby': describedby, invalid: Boolean(error), required })}
   {#if description}<p id="{uid}-hint" class="hint">{description}</p>{/if}
-  {#if error}<p id="{uid}-error" class="error">{error}</p>{/if}
+  {#if error}
+    <p id="{uid}-error" class="error">
+      <Glyph name="alert" /><VisuallyHidden>Error:</VisuallyHidden>
+      {error}
+    </p>
+  {/if}
 </div>
 
 <style>
@@ -64,6 +72,14 @@
     color: var(--cc-text-muted);
   }
   .error {
+    display: flex;
+    align-items: start;
+    gap: var(--cc-space-1);
     color: var(--cc-danger);
+  }
+  .error :global(.cc-glyph) {
+    margin-top: 0.15em;
+    width: 1em;
+    height: 1em;
   }
 </style>
