@@ -238,20 +238,22 @@
         </li>
       {/each}
     </ul>
-    <Card>
-      {#snippet header()}{open.title}{/snippet}
-      <div class="stack">
-        <p>{open.body}</p>
-        <div class="tags">
-          {#each open.tags as tag (tag)}<Badge>{tag}</Badge>{/each}
+    <div class="stack">
+      <Card>
+        {#snippet header()}{open.title}{/snippet}
+        <div class="stack">
+          <p>{open.body}</p>
+          <div class="tags">
+            {#each open.tags as tag (tag)}<Badge>{tag}</Badge>{/each}
+          </div>
         </div>
-        <CodeBlock language="bash" code={`uteke get ${open.id}`} />
-      </div>
-      {#snippet footer()}
-        <Button>Edit</Button>
-        <Button variant="danger">Forget</Button>
-      {/snippet}
-    </Card>
+        {#snippet footer()}
+          <Button>Edit</Button>
+          <Button variant="danger">Forget</Button>
+        {/snippet}
+      </Card>
+      <CodeBlock language="bash" code={`uteke get ${open.id}`} />
+    </div>
   </div>
 </section>
 
@@ -374,10 +376,9 @@
   h2 {
     font-size: var(--cc-font-size-xl);
   }
+  /* A flat band, not a bordered box, so the Cards inside it are the only cards. */
   .frame {
-    padding: var(--cc-space-6);
-    border: 1px solid var(--cc-border);
-    border-radius: var(--cc-radius-lg);
+    padding: var(--cc-space-6) var(--cc-space-4);
     background: var(--cc-surface-sunken);
   }
   .frame.center {
@@ -459,6 +460,5 @@
   .empty {
     border: 1px dashed var(--cc-border-strong);
     border-radius: var(--cc-radius-lg);
-    background: var(--cc-surface);
   }
 </style>
