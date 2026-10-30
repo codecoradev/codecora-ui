@@ -1,0 +1,35 @@
+{
+  "name": "@codecora/brand",
+  "version": "0.0.0",
+  "description": "Product marks and favicon sets for CodeCora products, as files and Svelte components",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codecoradev/codecora-ui.git",
+    "directory": "packages/brand"
+  },
+  "type": "module",
+  "svelte": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "svelte": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./assets/*": "./dist/assets/*"
+  },
+  "files": [
+    "dist",
+    "!dist/**/*.test.*"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "svelte-package -i src/lib -o dist && publint",
+    "check": "svelte-check --tsconfig ./tsconfig.json --fail-on-warnings",
+    "test": "vitest run"
+  },
+  "peerDependencies": {
+    "svelte": "^5.33.0"
+  }
+}

@@ -23,6 +23,7 @@ changesets once packages exist.
 - `@codecora/ui`: `AppShell` and `Sidebar` (grouped navigation with brand and footer slots, collapsible on desktop, a drawer and a bottom bar of up to 5 items on narrow screens, a skip link, a per-region sidebar theme) with unit tests; the dashboard sample now uses them.
 - `@codecora/ui`: error states and ConfirmDialog hardened after the impeccable critique of the primitives (see Fixed).
 - `@codecora/icons`: an `Icon` wrapper that follows the theme's icon size and stroke, a curated Lucide set (`@codecora/icons/lucide`) and a Phosphor adapter (`@codecora/icons/phosphor`); an Icons page in the playground. The playground demos now take their icons from the package.
+- `@codecora/brand`: marks and favicon sets for Uteke, Corin and Gatehouse as files and Svelte components (`Mark`, `Favicons`); the Uteke mark is a covecto trace of its PNG master (smaller and cleaner than the PNG), Corin stays a PNG because a trace distorted it, with the comparison in the package README; a Brand page in the playground, which now uses the Corin favicon set.
 
 ### Fixed
 

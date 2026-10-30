@@ -31,6 +31,7 @@
     "apps/playground": {
       "name": "playground",
       "dependencies": {
+        "@codecora/brand": "workspace:*",
         "@codecora/icons": "workspace:*",
         "@codecora/tokens": "workspace:*",
         "@codecora/ui": "workspace:*",
@@ -43,6 +44,13 @@
         "@sveltejs/adapter-static": "^4.0.0",
         "@sveltejs/kit": "^3.1.0",
         "phosphor-svelte": "3.1.1",
+      },
+    },
+    "packages/brand": {
+      "name": "@codecora/brand",
+      "version": "0.0.0",
+      "peerDependencies": {
+        "svelte": "^5.33.0",
       },
     },
     "packages/icons": {
@@ -129,6 +137,8 @@
     "@clack/core": ["@clack/core@1.5.1", "", { "dependencies": { "fast-wrap-ansi": "^0.2.0", "sisteransi": "^1.0.5" } }, "sha512-iHTrHA8MtVuLl2TfZySmcKv1qO2PoyC9Z7pfSDozEuV5vtY3/wcOPKJXlqJ5Oq2Cx5DDGQGAMVx6HZfRRoVEbQ=="],
 
     "@clack/prompts": ["@clack/prompts@1.8.1", "", { "dependencies": { "@clack/core": "1.5.1", "fast-string-width": "^3.0.2", "fast-wrap-ansi": "^0.2.0", "sisteransi": "^1.0.5" } }, "sha512-dlT1m5e/0yUL0kRNcQn7yGLVThkgbB0Ga/1AmfDDC/8ik6AIiSf2QLQO2zPYvefsHP0aFgxO93cVLCCfDp7kzQ=="],
+
+    "@codecora/brand": ["@codecora/brand@workspace:packages/brand"],
 
     "@codecora/icons": ["@codecora/icons@workspace:packages/icons"],
 

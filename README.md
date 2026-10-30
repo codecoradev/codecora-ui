@@ -14,7 +14,7 @@ Shared design tokens, themes and Svelte 5 components for CodeCora products
 | `@codecora/tokens` | Primitive and semantic design tokens, themes (`neutral`, `uteke`, `corin`, more later), CSS variables, TS export, Tailwind 4 preset, shadcn variable bridge | nothing |
 | `@codecora/ui` | Svelte 5 components on [bits-ui](https://bits-ui.com): Button, Field, Select, Dialog, Sheet, Tabs, Table, Badge, Toast, Tooltip, EmptyState, Skeleton, AppShell + Sidebar, CommandPalette. Plain CSS on semantic tokens, works with or without Tailwind | `@codecora/tokens`, `bits-ui` |
 | `@codecora/icons` | Icon contract: an `Icon` wrapper that follows the `--cc-icon-*` tokens, a curated Lucide set (the default) and a Phosphor adapter | `@lucide/svelte`, `phosphor-svelte` (optional peers) |
-| `@codecora/brand` | CodeCora product marks and favicon sets (SVG) | nothing |
+| `@codecora/brand` | Product marks and favicon sets (Uteke, Corin, Gatehouse) as files and Svelte components | nothing |
 | `@codecora/memory` | Uteke domain layer: types, `MemoryClient`, transports (Tauri, uteke-serve, Uteke Cloud), capabilities, memory browser components | `@codecora/ui` |
 
 Plus a shadcn-svelte registry for blocks and templates that apps copy and
@@ -46,6 +46,12 @@ AppShell: a dark sidebar next to light content (a per-region theme), and the sid
 Icons: the contract follows each theme's own size and stroke (neutral 2, uteke and corin 1.75), with a curated Lucide set and a Phosphor adapter:
 
 ![Icons page, corin theme](docs/assets/screenshots/icons-corin.png)
+
+Brand: Uteke (vector), Corin (raster) and Gatehouse (vector) with their favicon sets, and the comparison that chose vector or PNG for each:
+
+![Brand page, uteke theme](docs/assets/screenshots/brand-uteke.png)
+
+![PNG against the covecto traces](docs/assets/screenshots/brand-vectorization.png)
 
 On a phone (375 px), with the navigation drawer open:
 

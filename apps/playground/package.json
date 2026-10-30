@@ -9,6 +9,7 @@
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --fail-on-warnings"
   },
   "dependencies": {
+    "@codecora/brand": "workspace:*",
     "@codecora/icons": "workspace:*",
     "@codecora/tokens": "workspace:*",
     "@codecora/ui": "workspace:*"
