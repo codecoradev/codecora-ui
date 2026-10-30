@@ -22,6 +22,7 @@
     toast,
   } from '@codecora/ui';
   import ChoiceControls from './ChoiceControls.svelte';
+  import NavigationComponents from './NavigationComponents.svelte';
   import StateMatrix from './StateMatrix.svelte';
 
   let name = $state('');
@@ -272,6 +273,8 @@
     </EmptyState>
   </div>
 </section>
+
+<NavigationComponents />
 
 <Toaster />
 
