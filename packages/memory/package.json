@@ -1,6 +1,6 @@
 {
   "name": "@codecora/memory",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Uteke domain layer for CodeCora products: a MemoryClient with HTTP (uteke-serve, Uteke Cloud) and Tauri transports, and capabilities that say what a backend supports",
   "license": "Apache-2.0",
   "repository": {
