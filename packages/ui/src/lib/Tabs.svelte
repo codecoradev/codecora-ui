@@ -67,6 +67,9 @@
   :global(.cc-tab[data-disabled]) {
     opacity: 0.55;
     cursor: not-allowed;
+    /* A dashed underline tells "unavailable" apart from an unselected tab (none) and the selected one (solid). */
+    border-bottom-style: dashed;
+    border-bottom-color: currentColor;
   }
   :global(.cc-tab:focus-visible) {
     outline: 2px solid var(--cc-focus);

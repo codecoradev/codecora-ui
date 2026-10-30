@@ -158,6 +158,49 @@ describe('Toaster', () => {
     expect(toasts.items).toHaveLength(0);
   });
 
+  it('pauses while hovered or focused and resumes with at least a moment left', () => {
+    vi.useFakeTimers();
+    const id = toast.show({ title: 'Reading', duration: 1000 });
+    vi.advanceTimersByTime(900);
+    toast.pause(id);
+    vi.advanceTimersByTime(60_000);
+    expect(toasts.items).toHaveLength(1);
+    toast.resume(id);
+    vi.advanceTimersByTime(1400);
+    expect(toasts.items).toHaveLength(1);
+    vi.advanceTimersByTime(200);
+    expect(toasts.items).toHaveLength(0);
+    vi.useRealTimers();
+  });
+
+  it('pointer enter and leave on a toast pause and resume it', async () => {
+    vi.useFakeTimers();
+    render(Toaster);
+    toast.show({ title: 'Hover me', duration: 1000 });
+    const el = await screen.findByRole('status');
+    await fireEvent.mouseEnter(el);
+    vi.advanceTimersByTime(10_000);
+    expect(toasts.items).toHaveLength(1);
+    await fireEvent.mouseLeave(el);
+    vi.advanceTimersByTime(2000);
+    expect(toasts.items).toHaveLength(0);
+    vi.useRealTimers();
+  });
+
+  it('hover and focus hold the toast separately', () => {
+    vi.useFakeTimers();
+    const id = toast.show({ title: 'Both', duration: 1000 });
+    toast.pause(id, 'hover');
+    toast.pause(id, 'focus');
+    toast.resume(id, 'hover');
+    vi.advanceTimersByTime(60_000);
+    expect(toasts.items).toHaveLength(1);
+    toast.resume(id, 'focus');
+    vi.advanceTimersByTime(1600);
+    expect(toasts.items).toHaveLength(0);
+    vi.useRealTimers();
+  });
+
   it('dismisses itself after its duration', async () => {
     vi.useFakeTimers();
     toast.show({ title: 'Brief', duration: 1000 });

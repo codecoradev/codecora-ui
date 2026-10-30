@@ -87,6 +87,7 @@
   }
   span {
     display: inline-flex;
+    max-width: 100%;
     align-items: center;
     min-height: 2.25rem;
     padding-inline: var(--cc-space-3);

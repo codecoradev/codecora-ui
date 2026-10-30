@@ -72,6 +72,7 @@
   }
   header {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--cc-space-6);
     padding-bottom: var(--cc-space-8);
   }
@@ -93,6 +94,11 @@
     gap: var(--cc-space-3);
     font-size: var(--cc-font-size-sm);
     color: var(--cc-text-muted);
+  }
+  nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 1.5rem;
   }
   .sep {
     width: 1px;
