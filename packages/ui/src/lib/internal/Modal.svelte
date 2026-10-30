@@ -140,7 +140,7 @@
     animation: cc-rise var(--cc-duration-normal) var(--cc-ease-out);
   }
   :global(.cc-modal:focus-visible) {
-    outline: 2px solid var(--cc-focus);
+    outline: var(--cc-focus-width) solid var(--cc-focus);
     outline-offset: -2px;
   }
   :global(.cc-modal-center) {
@@ -226,8 +226,8 @@
     color: var(--cc-text);
   }
   :global(.cc-modal-close:focus-visible) {
-    outline: 2px solid var(--cc-focus);
-    outline-offset: 2px;
+    outline: var(--cc-focus-width) solid var(--cc-focus);
+    outline-offset: var(--cc-focus-offset);
   }
   .cc-modal-footer {
     display: flex;

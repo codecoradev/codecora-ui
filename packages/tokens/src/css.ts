@@ -93,6 +93,7 @@ export function themeCss(theme: Theme): string {
     ...prefixed('radius', theme.radius),
     ...prefixed('font', theme.font),
     ...prefixed('icon', theme.icon),
+    ...Object.entries(theme.shape).map(([k, v]): [string, string] => [`--cc-${kebab(k)}`, v]),
     // A themed region paints itself, so nested themes show their own surface.
     ['color', 'var(--cc-text)'],
     ['background-color', 'var(--cc-surface)'],
@@ -100,7 +101,7 @@ export function themeCss(theme: Theme): string {
   return `${LAYERS}\n\n${layer('cc.theme', [block(selector, decls)])}`;
 }
 
-const isColor = (t: string) => !/^(radius|font|icon|control|gap|cell)/.test(t);
+const isColor = (t: string) => !/^(radius|font|icon|control|gap|cell|badge|focus-|row)/.test(t);
 
 /** Tailwind 4 preset: `bg-cc-surface`, `text-cc-text-muted`, `rounded-cc-md`, `font-cc-mono`. */
 export function tailwindCss(): string {

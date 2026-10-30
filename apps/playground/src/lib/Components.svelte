@@ -222,8 +222,8 @@
             >
           </thead>
           <tbody>
-            {#each keys as key (key.name)}
-              <tr>
+            {#each keys as key, i (key.name)}
+              <tr data-selected={i === 0 ? 'true' : undefined}>
                 <th scope="row">{key.name}</th>
                 <td>{key.scope}</td>
                 <td><Badge tone={tone[key.status as keyof typeof tone]}>{key.status}</Badge></td>

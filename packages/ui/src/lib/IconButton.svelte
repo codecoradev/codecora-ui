@@ -44,8 +44,8 @@
     transition: background-color var(--cc-duration-fast) var(--cc-ease-out);
   }
   .cc-icon-button:focus-visible {
-    outline: 2px solid var(--cc-focus);
-    outline-offset: 2px;
+    outline: var(--cc-focus-width) solid var(--cc-focus);
+    outline-offset: var(--cc-focus-offset);
   }
   .cc-icon-button:disabled {
     opacity: 0.55;

@@ -129,6 +129,14 @@ The theme names these fonts; the app loads them. Without them the stacks fall ba
 
 Close to print: 4px for inline pieces, 6px for controls and cards, 10px for dialogs, pill for badges.
 
+### Shape hooks
+
+Uteke reads like a printed page, so its small pieces behave like labels.
+
+- **Badge:** 4px corners, uppercase with 0.06em tracking, Geist.
+- **Focus ring:** 2px, offset 3px, a little air around the control.
+- **Selected table row:** accent tint with a 3px green rule on the left, like a margin mark.
+
 ## Components
 
 ### Buttons

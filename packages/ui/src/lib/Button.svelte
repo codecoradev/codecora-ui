@@ -84,8 +84,8 @@
       border-color var(--cc-duration-fast) var(--cc-ease-out);
   }
   .cc-button:focus-visible {
-    outline: 2px solid var(--cc-focus);
-    outline-offset: 2px;
+    outline: var(--cc-focus-width) solid var(--cc-focus);
+    outline-offset: var(--cc-focus-offset);
   }
   .cc-button:is(:disabled, [aria-disabled='true']) {
     opacity: 0.55;

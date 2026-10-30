@@ -72,7 +72,7 @@
     border-bottom-color: currentColor;
   }
   :global(.cc-tab:focus-visible) {
-    outline: 2px solid var(--cc-focus);
+    outline: var(--cc-focus-width) solid var(--cc-focus);
     outline-offset: -2px;
     border-radius: var(--cc-radius-sm);
   }
@@ -80,7 +80,7 @@
     padding-top: var(--cc-space-4);
   }
   :global(.cc-tab-panel:focus-visible) {
-    outline: 2px solid var(--cc-focus);
-    outline-offset: 2px;
+    outline: var(--cc-focus-width) solid var(--cc-focus);
+    outline-offset: var(--cc-focus-offset);
   }
 </style>
