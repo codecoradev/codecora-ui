@@ -70,6 +70,13 @@
         "phosphor-svelte",
       ],
     },
+    "packages/memory": {
+      "name": "@codecora/memory",
+      "version": "0.0.0",
+      "peerDependencies": {
+        "svelte": "^5.33.0",
+      },
+    },
     "packages/tokens": {
       "name": "@codecora/tokens",
       "version": "0.1.0",
@@ -141,6 +148,8 @@
     "@codecora/brand": ["@codecora/brand@workspace:packages/brand"],
 
     "@codecora/icons": ["@codecora/icons@workspace:packages/icons"],
+
+    "@codecora/memory": ["@codecora/memory@workspace:packages/memory"],
 
     "@codecora/tokens": ["@codecora/tokens@workspace:packages/tokens"],
 
