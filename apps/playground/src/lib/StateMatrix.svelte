@@ -5,7 +5,19 @@
 -->
 <script lang="ts">
   import { Download, Trash } from '@codecora/icons/lucide';
-  import { Badge, Button, Field, IconButton, Input, Select, Textarea } from '@codecora/ui';
+  import {
+    Badge,
+    Button,
+    Checkbox,
+    Combobox,
+    Field,
+    IconButton,
+    Input,
+    Select,
+    Slider,
+    Switch,
+    Textarea,
+  } from '@codecora/ui';
 
   const columns = ['Default', 'Disabled', 'Loading', 'Invalid'] as const;
   const regions = [
@@ -101,6 +113,56 @@
           </td>
         </tr>
         <tr>
+          <th scope="row">Checkbox</th>
+          <td><Checkbox label="Receipt" checked /></td>
+          <td><Checkbox label="Receipt (locked)" disabled /></td>
+          <td class="na"><span role="img" aria-label="Not applicable">–</span></td>
+          <td><Checkbox label="Accept terms" invalid /></td>
+        </tr>
+        <tr>
+          <th scope="row">Switch</th>
+          <td><Switch label="Alerts" checked /></td>
+          <td><Switch label="Alerts (locked)" disabled /></td>
+          <td class="na"><span role="img" aria-label="Not applicable">–</span></td>
+          <td class="na"><span role="img" aria-label="Not applicable">–</span></td>
+        </tr>
+        <tr>
+          <th scope="row">Combobox</th>
+          <td>
+            <Field label="Region">
+              {#snippet children(control)}<Combobox
+                  {...control}
+                  items={regions}
+                  value="eu"
+                />{/snippet}
+            </Field>
+          </td>
+          <td>
+            <Field label="Region (locked)">
+              {#snippet children(control)}
+                <Combobox {...control} items={regions} value="eu" disabled />
+              {/snippet}
+            </Field>
+          </td>
+          <td class="na"><span role="img" aria-label="Not applicable">–</span></td>
+          <td>
+            <Field label="Region" error="Choose a region.">
+              {#snippet children(control)}<Combobox
+                  {...control}
+                  items={regions}
+                  value=""
+                />{/snippet}
+            </Field>
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Slider</th>
+          <td><Slider label="Retention" value={30} /></td>
+          <td><Slider label="Retention (locked)" value={30} disabled /></td>
+          <td class="na"><span role="img" aria-label="Not applicable">–</span></td>
+          <td class="na"><span role="img" aria-label="Not applicable">–</span></td>
+        </tr>
+        <tr>
           <th scope="row">Badge</th>
           <td class="badges" colspan="4">
             <Badge>Neutral</Badge>
@@ -124,6 +186,11 @@
 </Field>
 <Select items={[{ value, label, disabled? }]} bind:value />
 <Badge tone="neutral|accent|success|warning|danger" />
+<Checkbox label checked indeterminate invalid disabled onchange />
+<Switch label checked disabled />
+<RadioGroup label items={[{ value, label, description?, disabled? }]} bind:value />
+<Combobox items bind:value label emptyText />   <!-- needs a label or a Field -->
+<Slider label bind:value min max step format showValue />
 <Table label="Required, names the table" />   <!-- tr[data-selected="true"] marks a row -->`}</code
       ></pre>
   </details>
