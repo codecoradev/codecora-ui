@@ -33,7 +33,7 @@
 
 <style>
   :global(.cc-tooltip) {
-    z-index: 70;
+    z-index: var(--cc-layer-tooltip);
     max-width: 18rem;
     padding: var(--cc-space-1) var(--cc-space-2);
     border-radius: var(--cc-radius-sm);

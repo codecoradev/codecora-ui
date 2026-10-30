@@ -37,15 +37,14 @@
 
 <style>
   :global(.cc-popover) {
-    z-index: 60;
+    z-index: var(--cc-layer-popover);
     max-width: min(22rem, calc(100vw - 2rem));
     padding: var(--cc-space-4);
     border: 1px solid var(--cc-border);
     border-radius: var(--cc-radius-md);
     background: var(--cc-surface-raised);
     color: var(--cc-text);
-    box-shadow: 0 var(--cc-space-2) var(--cc-space-6)
-      color-mix(in srgb, var(--cc-scrim) 50%, transparent);
+    box-shadow: var(--cc-shadow-popover);
     font-family: var(--cc-font-sans);
   }
 </style>

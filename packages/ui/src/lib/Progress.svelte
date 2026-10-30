@@ -51,6 +51,6 @@
     height: 100%;
     border-radius: var(--cc-radius-pill);
     background: var(--cc-accent);
-    transition: width var(--cc-duration-base) var(--cc-ease-out);
+    transition: width var(--cc-duration-normal) var(--cc-ease-out);
   }
 </style>
