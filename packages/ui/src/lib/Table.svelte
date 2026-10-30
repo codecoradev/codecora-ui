@@ -32,8 +32,8 @@
     background: var(--cc-surface-raised);
   }
   .cc-table-wrap:focus-visible {
-    outline: 2px solid var(--cc-focus);
-    outline-offset: 2px;
+    outline: var(--cc-focus-width) solid var(--cc-focus);
+    outline-offset: var(--cc-focus-offset);
   }
   .cc-table {
     width: 100%;
@@ -67,6 +67,11 @@
   }
   .cc-table :global(tbody tr:hover) {
     background: var(--cc-surface-hover);
+  }
+  .cc-table :global(tbody tr[data-selected='true']),
+  .cc-table :global(tbody tr[aria-selected='true']) {
+    background: var(--cc-accent-soft);
+    box-shadow: inset var(--cc-row-marker) 0 0 var(--cc-accent);
   }
   .cc-table :global(.num) {
     text-align: right;

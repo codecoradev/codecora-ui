@@ -49,6 +49,15 @@ const neutral: Theme = {
   radius: { sm: '4px', md: '8px', lg: '12px', pill: '999px' },
   font: { sans: systemSans, display: systemSans, mono: systemMono },
   icon: { stroke: '2', size: '1.25rem' },
+  shape: {
+    badgeRadius: 'var(--cc-radius-pill)',
+    badgeCase: 'none',
+    badgeTracking: '0',
+    badgeFont: 'var(--cc-font-sans)',
+    focusWidth: '2px',
+    focusOffset: '2px',
+    rowMarker: '2px',
+  },
 };
 
 /** Editorial light from uteke.app: green paper, ink, one green accent. */
@@ -82,6 +91,16 @@ const uteke: Theme = {
     mono: jetbrainsMono,
   },
   icon: { stroke: '1.75', size: '1.25rem' },
+  // Printed-label feel: small caps tags, a wider ring, a ruled marker on the selected row.
+  shape: {
+    badgeRadius: 'var(--cc-radius-sm)',
+    badgeCase: 'uppercase',
+    badgeTracking: '0.06em',
+    badgeFont: 'var(--cc-font-sans)',
+    focusWidth: '2px',
+    focusOffset: '3px',
+    rowMarker: '3px',
+  },
 };
 
 /** Editor-grade dark from Corin: deep chrome, teal accent, mono for data. */
@@ -111,6 +130,16 @@ const corin: Theme = {
   radius: { sm: '5px', md: '10px', lg: '14px', pill: '999px' },
   font: { sans: systemSans, display: systemSans, mono: jetbrainsMono },
   icon: { stroke: '1.75', size: '1.25rem' },
+  // Console feel: mono data tags, a tight ring, a slim marker on the selected row.
+  shape: {
+    badgeRadius: 'var(--cc-radius-sm)',
+    badgeCase: 'none',
+    badgeTracking: '0',
+    badgeFont: 'var(--cc-font-mono)',
+    focusWidth: '2px',
+    focusOffset: '1px',
+    rowMarker: '2px',
+  },
 };
 
 export const themes: Record<ThemeName, Theme> = { neutral, uteke, corin };
