@@ -10,7 +10,20 @@
 
 <section class="cc-toaster" aria-label="Notifications">
   {#each toasts.items as item (item.id)}
-    <div class="cc-toast cc-toast-{item.tone}" role={item.tone === 'danger' ? 'alert' : 'status'}>
+    <!-- Hover or focus pauses the countdown (WCAG 2.2.1): the element is not interactive itself. -->
+    <div
+      class="cc-toast cc-toast-{item.tone}"
+      role={item.tone === 'danger' ? 'alert' : 'status'}
+      onmouseenter={() => toast.pause(item.id, 'hover')}
+      onmouseleave={() => toast.resume(item.id, 'hover')}
+      onfocusin={() => toast.pause(item.id, 'focus')}
+      onfocusout={(event) => {
+        // Focus moving between controls inside the toast is not leaving it.
+        if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+          toast.resume(item.id, 'focus');
+        }
+      }}
+    >
       <span class="dot" aria-hidden="true"></span>
       <div class="text">
         <strong>{item.title}</strong>

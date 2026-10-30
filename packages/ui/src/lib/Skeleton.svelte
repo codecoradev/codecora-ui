@@ -16,21 +16,16 @@
   .cc-skeleton {
     display: block;
     border-radius: var(--cc-radius-sm);
-    background: linear-gradient(
-      90deg,
-      var(--cc-surface-sunken),
-      var(--cc-surface-hover),
-      var(--cc-surface-sunken)
-    );
-    background-size: 200% 100%;
-    animation: cc-shimmer 1.4s ease-in-out infinite;
+    background: var(--cc-surface-hover);
+    /* Opacity runs on the compositor; the old background-position shimmer repainted every frame. */
+    animation: cc-pulse 1.4s ease-in-out infinite;
   }
   .circle {
     border-radius: var(--cc-radius-pill);
   }
-  @keyframes cc-shimmer {
-    to {
-      background-position: -200% 0;
+  @keyframes cc-pulse {
+    50% {
+      opacity: 0.45;
     }
   }
   @media (prefers-reduced-motion: reduce) {

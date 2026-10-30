@@ -29,6 +29,7 @@ changesets once packages exist.
 
 - `Table`: the visually hidden caption and header labels no longer widen the page on narrow screens.
 - `Field` errors no longer rely on colour alone (icon and "Error:" prefix), `required` reaches the control, and invalid controls have a stronger border; `ConfirmDialog` forwards `theme`, focuses Cancel first for danger, emphasises the irreversible sentence and can require a typed name; `Button` accepts a `loadingLabel`.
+- `Toaster`: a toast pauses while it is hovered or focused (WCAG 2.2.1) and resumes with at least a moment left; `Tabs`: a disabled tab has a dashed underline so it no longer reads like an unselected one; `Skeleton` pulses with opacity instead of repainting a gradient every frame; the playground nav links are 24 px tall.
 
 ### Security
 
