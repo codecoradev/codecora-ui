@@ -23,6 +23,7 @@
   } from '@codecora/ui';
   import ChoiceControls from './ChoiceControls.svelte';
   import DisplayComponents from './DisplayComponents.svelte';
+  import InputComponents from './InputComponents.svelte';
   import StateMatrix from './StateMatrix.svelte';
 
   let name = $state('');
@@ -142,6 +143,8 @@
 </section>
 
 <ChoiceControls />
+
+<InputComponents />
 
 <section aria-labelledby="c-overlays">
   <h2 id="c-overlays">Dialog, ConfirmDialog, Sheet, Toast</h2>
