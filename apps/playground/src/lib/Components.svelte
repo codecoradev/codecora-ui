@@ -313,6 +313,7 @@
     max-width: 28rem;
   }
   .muted {
+    max-width: 65ch;
     color: var(--cc-text-muted);
   }
   .skeletons {

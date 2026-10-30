@@ -374,10 +374,9 @@
   h2 {
     font-size: var(--cc-font-size-xl);
   }
+  /* A flat band, not a bordered box, so the Cards inside it are the only cards. */
   .frame {
-    padding: var(--cc-space-6);
-    border: 1px solid var(--cc-border);
-    border-radius: var(--cc-radius-lg);
+    padding: var(--cc-space-6) var(--cc-space-4);
     background: var(--cc-surface-sunken);
   }
   .frame.center {
@@ -459,6 +458,5 @@
   .empty {
     border: 1px dashed var(--cc-border-strong);
     border-radius: var(--cc-radius-lg);
-    background: var(--cc-surface);
   }
 </style>
