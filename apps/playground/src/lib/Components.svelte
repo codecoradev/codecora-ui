@@ -1,12 +1,6 @@
 <!-- Every @codecora/ui primitive in its states; icons come from Lucide, passed as props. -->
 <script lang="ts">
-  import Bell from '@lucide/svelte/icons/bell';
-  import Copy from '@lucide/svelte/icons/copy';
-  import Download from '@lucide/svelte/icons/download';
-  import Inbox from '@lucide/svelte/icons/inbox';
-  import Plus from '@lucide/svelte/icons/plus';
-  import Search from '@lucide/svelte/icons/search';
-  import Trash from '@lucide/svelte/icons/trash';
+  import { Bell, Copy, Download, Inbox, Plus, Search, Trash } from '@codecora/icons/lucide';
   import {
     Badge,
     Button,
