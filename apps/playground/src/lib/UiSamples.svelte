@@ -238,20 +238,22 @@
         </li>
       {/each}
     </ul>
-    <Card>
-      {#snippet header()}{open.title}{/snippet}
-      <div class="stack">
-        <p>{open.body}</p>
-        <div class="tags">
-          {#each open.tags as tag (tag)}<Badge>{tag}</Badge>{/each}
+    <div class="stack">
+      <Card>
+        {#snippet header()}{open.title}{/snippet}
+        <div class="stack">
+          <p>{open.body}</p>
+          <div class="tags">
+            {#each open.tags as tag (tag)}<Badge>{tag}</Badge>{/each}
+          </div>
         </div>
-        <CodeBlock language="bash" code={`uteke get ${open.id}`} />
-      </div>
-      {#snippet footer()}
-        <Button>Edit</Button>
-        <Button variant="danger">Forget</Button>
-      {/snippet}
-    </Card>
+        {#snippet footer()}
+          <Button>Edit</Button>
+          <Button variant="danger">Forget</Button>
+        {/snippet}
+      </Card>
+      <CodeBlock language="bash" code={`uteke get ${open.id}`} />
+    </div>
   </div>
 </section>
 

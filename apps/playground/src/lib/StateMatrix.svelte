@@ -207,7 +207,7 @@
     font-size: var(--cc-font-size-xl);
   }
   .muted {
-    max-width: 65ch;
+    max-width: 60ch;
     color: var(--cc-text-muted);
   }
   .scroll {

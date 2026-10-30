@@ -85,7 +85,7 @@
     font-size: var(--cc-font-size-3xl);
   }
   .intro p {
-    max-width: 65ch;
+    max-width: 60ch;
     color: var(--cc-text-muted);
     font-size: var(--cc-font-size-lg);
   }
