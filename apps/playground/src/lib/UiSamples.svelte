@@ -3,7 +3,7 @@
   region so the surfaces read as separate pages.
 -->
 <script lang="ts">
-  import { Inbox, Plus } from '@codecora/icons/lucide';
+  import { Ellipsis, Inbox, Pencil, Plus, Trash } from '@codecora/icons/lucide';
   import {
     Alert,
     Badge,
@@ -12,6 +12,9 @@
     Card,
     Checkbox,
     CodeBlock,
+    DataTable,
+    DropdownMenu,
+    IconButton,
     EmptyState,
     Field,
     FieldGroup,
@@ -76,6 +79,32 @@
   ];
   let current = $state('m1');
   const open = $derived(memories.find((m) => m.id === current)!);
+
+  // Data table
+  interface Key {
+    id: string;
+    name: string;
+    owner: string;
+    status: 'Active' | 'Revoked' | 'Expiring';
+    calls: number;
+  }
+  const keys: Key[] = [
+    { id: 'k1', name: 'ci-deploy', owner: 'Ada', status: 'Active', calls: 12840 },
+    { id: 'k2', name: 'dashboard', owner: 'Grace', status: 'Active', calls: 3112 },
+    { id: 'k3', name: 'old-importer', owner: 'Linus', status: 'Revoked', calls: 0 },
+    { id: 'k4', name: 'staging-bot', owner: 'Ada', status: 'Expiring', calls: 411 },
+    { id: 'k5', name: 'billing-sync', owner: 'Grace', status: 'Active', calls: 930 },
+    { id: 'k6', name: 'docs-search', owner: 'Margaret', status: 'Active', calls: 5520 },
+  ];
+  const statusTone = { Active: 'success', Revoked: 'danger', Expiring: 'warning' } as const;
+  let selectedKeys = $state<string[]>([]);
+  let keyPage = $state(1);
+  let keyQuery = $state('');
+  const keyRows = $derived(
+    keys.filter((k) =>
+      `${k.name} ${k.owner}`.toLowerCase().includes(keyQuery.trim().toLowerCase()),
+    ),
+  );
 
   // First run
   const steps = [
@@ -223,6 +252,85 @@
         <Button variant="danger">Forget</Button>
       {/snippet}
     </Card>
+  </div>
+</section>
+
+<section aria-labelledby="s-keys">
+  <h2 id="s-keys">Data table</h2>
+  <div class="frame">
+    <div class="stack">
+      <Breadcrumb items={[{ label: 'Workspace', href: '#s-keys' }, { label: 'API keys' }]} />
+      <DataTable
+        label="API keys"
+        rowKey={(k: Key) => k.id}
+        rows={keyRows}
+        selectable
+        bind:selected={selectedKeys}
+        bind:page={keyPage}
+        pageSize={4}
+        emptyTitle="No keys match"
+        emptyDescription="Try a different name or owner."
+        columns={[
+          { key: 'name', label: 'Name', sortable: true },
+          { key: 'owner', label: 'Owner', sortable: true },
+          { key: 'status', label: 'Status', sortable: true },
+          { key: 'calls', label: 'Calls (30 d)', sortable: true, numeric: true },
+          { key: 'actions', label: 'Actions', value: () => '' },
+        ]}
+      >
+        {#snippet toolbar()}
+          <Input
+            aria-label="Filter keys by name or owner"
+            placeholder="Filter by name or owner"
+            bind:value={keyQuery}
+            oninput={() => (keyPage = 1)}
+          />
+          <Button variant="primary" icon={Plus}>Create key</Button>
+        {/snippet}
+        {#snippet bulk({ clear })}
+          <Button
+            variant="danger"
+            icon={Trash}
+            onclick={() => {
+              toast.error('Keys revoked');
+              clear();
+            }}>Revoke</Button
+          >
+          <Button variant="ghost" onclick={clear}>Clear</Button>
+        {/snippet}
+        {#snippet cell({ row, column, value })}
+          {#if column.key === 'status'}
+            <Badge tone={statusTone[(row as Key).status]}>{value}</Badge>
+          {:else if column.key === 'calls'}
+            {(value as number).toLocaleString('en')}
+          {:else if column.key === 'actions'}
+            <DropdownMenu
+              label="Actions for {(row as Key).name}"
+              items={[
+                {
+                  label: 'Rename',
+                  icon: Pencil,
+                  onselect: () => toast.show({ title: 'Rename chosen' }),
+                },
+                {
+                  label: 'Revoke',
+                  icon: Trash,
+                  danger: true,
+                  separatorBefore: true,
+                  onselect: () => toast.error('Key revoked'),
+                },
+              ]}
+            >
+              {#snippet trigger({ props })}
+                <IconButton {...props} icon={Ellipsis} label="Actions for {(row as Key).name}" />
+              {/snippet}
+            </DropdownMenu>
+          {:else}
+            {value}
+          {/if}
+        {/snippet}
+      </DataTable>
+    </div>
   </div>
 </section>
 
