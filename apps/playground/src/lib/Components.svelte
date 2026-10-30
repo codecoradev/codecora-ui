@@ -23,6 +23,7 @@
   } from '@codecora/ui';
   import ChoiceControls from './ChoiceControls.svelte';
   import DisplayComponents from './DisplayComponents.svelte';
+  import NavigationComponents from './NavigationComponents.svelte';
   import StateMatrix from './StateMatrix.svelte';
 
   let name = $state('');
@@ -275,6 +276,8 @@
 </section>
 
 <DisplayComponents />
+
+<NavigationComponents />
 
 <Toaster />
 
