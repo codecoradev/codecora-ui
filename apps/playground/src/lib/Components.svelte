@@ -21,6 +21,7 @@
     Tooltip,
     toast,
   } from '@codecora/ui';
+  import StateMatrix from './StateMatrix.svelte';
 
   let name = $state('');
   let region = $state('eu');
@@ -56,6 +57,8 @@
     }, 900);
   }
 </script>
+
+<StateMatrix />
 
 <section aria-labelledby="c-buttons">
   <h2 id="c-buttons">Buttons</h2>
