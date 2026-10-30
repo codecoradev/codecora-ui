@@ -21,6 +21,7 @@
     Tooltip,
     toast,
   } from '@codecora/ui';
+  import DisplayComponents from './DisplayComponents.svelte';
   import StateMatrix from './StateMatrix.svelte';
 
   let name = $state('');
@@ -269,6 +270,8 @@
     </EmptyState>
   </div>
 </section>
+
+<DisplayComponents />
 
 <Toaster />
 
