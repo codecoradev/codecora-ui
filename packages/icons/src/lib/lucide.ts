@@ -1,0 +1,45 @@
+// A curated set of Lucide icons (ISC, @lucide/svelte) used across CodeCora products.
+// Each is a deep import, so an app bundles only the icons it uses. Any other
+// Lucide icon works with <Icon>: import it from '@lucide/svelte/icons/<name>'.
+export { default as Plus } from '@lucide/svelte/icons/plus';
+export { default as Minus } from '@lucide/svelte/icons/minus';
+export { default as X } from '@lucide/svelte/icons/x';
+export { default as Check } from '@lucide/svelte/icons/check';
+export { default as ChevronDown } from '@lucide/svelte/icons/chevron-down';
+export { default as ChevronUp } from '@lucide/svelte/icons/chevron-up';
+export { default as ChevronLeft } from '@lucide/svelte/icons/chevron-left';
+export { default as ChevronRight } from '@lucide/svelte/icons/chevron-right';
+export { default as Search } from '@lucide/svelte/icons/search';
+export { default as Trash } from '@lucide/svelte/icons/trash';
+export { default as Pencil } from '@lucide/svelte/icons/pencil';
+export { default as Copy } from '@lucide/svelte/icons/copy';
+export { default as Download } from '@lucide/svelte/icons/download';
+export { default as Upload } from '@lucide/svelte/icons/upload';
+export { default as Settings } from '@lucide/svelte/icons/settings';
+export { default as Bell } from '@lucide/svelte/icons/bell';
+export { default as User } from '@lucide/svelte/icons/user';
+export { default as Users } from '@lucide/svelte/icons/users';
+export { default as KeyRound } from '@lucide/svelte/icons/key-round';
+export { default as Activity } from '@lucide/svelte/icons/activity';
+export { default as LayoutDashboard } from '@lucide/svelte/icons/layout-dashboard';
+export { default as Menu } from '@lucide/svelte/icons/menu';
+export { default as Funnel } from '@lucide/svelte/icons/funnel';
+export { default as LogOut } from '@lucide/svelte/icons/log-out';
+export { default as Info } from '@lucide/svelte/icons/info';
+export { default as CircleAlert } from '@lucide/svelte/icons/circle-alert';
+export { default as TriangleAlert } from '@lucide/svelte/icons/triangle-alert';
+export { default as CircleCheck } from '@lucide/svelte/icons/circle-check';
+export { default as ExternalLink } from '@lucide/svelte/icons/external-link';
+export { default as Ellipsis } from '@lucide/svelte/icons/ellipsis';
+export { default as Inbox } from '@lucide/svelte/icons/inbox';
+export { default as Eye } from '@lucide/svelte/icons/eye';
+export { default as EyeOff } from '@lucide/svelte/icons/eye-off';
+export { default as Lock } from '@lucide/svelte/icons/lock';
+export { default as RefreshCw } from '@lucide/svelte/icons/refresh-cw';
+export { default as ArrowLeft } from '@lucide/svelte/icons/arrow-left';
+export { default as ArrowRight } from '@lucide/svelte/icons/arrow-right';
+export { default as Calendar } from '@lucide/svelte/icons/calendar';
+export { default as Clock } from '@lucide/svelte/icons/clock';
+export { default as Folder } from '@lucide/svelte/icons/folder';
+export { default as FileText } from '@lucide/svelte/icons/file-text';
+export { default as Star } from '@lucide/svelte/icons/star';

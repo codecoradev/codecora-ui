@@ -44,6 +44,7 @@
     <nav aria-label="Playground pages">
       <a href={resolve('/')}>Tokens</a>
       <a href={resolve('/components')}>Components</a>
+      <a href={resolve('/icons')}>Icons</a>
       <a href={resolve('/dashboard')}>Admin dashboard</a>
       <span class="sep" aria-hidden="true"></span>
       Fixed theme pages for visual snapshots:

@@ -8,14 +8,16 @@
 <script lang="ts">
   import { resolve } from '$app/paths';
   import { themeNames, themes, type ThemeName } from '@codecora/tokens';
-  import Activity from '@lucide/svelte/icons/activity';
-  import Funnel from '@lucide/svelte/icons/funnel';
-  import KeyRound from '@lucide/svelte/icons/key-round';
-  import LayoutDashboard from '@lucide/svelte/icons/layout-dashboard';
-  import Plus from '@lucide/svelte/icons/plus';
-  import Settings from '@lucide/svelte/icons/settings';
-  import Trash from '@lucide/svelte/icons/trash';
-  import Users from '@lucide/svelte/icons/users';
+  import {
+    Activity,
+    Funnel,
+    KeyRound,
+    LayoutDashboard,
+    Plus,
+    Settings,
+    Trash,
+    Users,
+  } from '@codecora/icons/lucide';
   import {
     AppShell,
     Badge,

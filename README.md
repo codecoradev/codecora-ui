@@ -13,7 +13,7 @@ Shared design tokens, themes and Svelte 5 components for CodeCora products
 |---|---|---|
 | `@codecora/tokens` | Primitive and semantic design tokens, themes (`neutral`, `uteke`, `corin`, more later), CSS variables, TS export, Tailwind 4 preset, shadcn variable bridge | nothing |
 | `@codecora/ui` | Svelte 5 components on [bits-ui](https://bits-ui.com): Button, Field, Select, Dialog, Sheet, Tabs, Table, Badge, Toast, Tooltip, EmptyState, Skeleton, AppShell + Sidebar, CommandPalette. Plain CSS on semantic tokens, works with or without Tailwind | `@codecora/tokens`, `bits-ui` |
-| `@codecora/icons` | Icon contract (`--cc-icon-*` tokens), the few internal icons components need, and adapters; Lucide by default, Phosphor optional | `@lucide/svelte` (peer) |
+| `@codecora/icons` | Icon contract: an `Icon` wrapper that follows the `--cc-icon-*` tokens, a curated Lucide set (the default) and a Phosphor adapter | `@lucide/svelte`, `phosphor-svelte` (optional peers) |
 | `@codecora/brand` | CodeCora product marks and favicon sets (SVG) | nothing |
 | `@codecora/memory` | Uteke domain layer: types, `MemoryClient`, transports (Tauri, uteke-serve, Uteke Cloud), capabilities, memory browser components | `@codecora/ui` |
 
@@ -42,6 +42,10 @@ AppShell: a dark sidebar next to light content (a per-region theme), and the sid
 | Dark sidebar | Collapsed |
 |---|---|
 | ![AppShell with a dark sidebar](docs/assets/screenshots/shell-dark-sidebar.png) | ![AppShell with a collapsed sidebar](docs/assets/screenshots/shell-collapsed.png) |
+
+Icons: the contract follows each theme's own size and stroke (neutral 2, uteke and corin 1.75), with a curated Lucide set and a Phosphor adapter:
+
+![Icons page, corin theme](docs/assets/screenshots/icons-corin.png)
 
 On a phone (375 px), with the navigation drawer open:
 
