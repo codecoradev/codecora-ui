@@ -10,7 +10,7 @@ Read before changing anything:
 
 ## Repo layout
 
-bun workspaces (`packages/*`, `apps/*`). Today: `packages/tokens`, `packages/ui`, `packages/icons`, `packages/brand` and `apps/playground` (token catalogue, components, icons, brand and admin dashboard sample, with theme, accent and density switchers); the other packages land with their issues.
+bun workspaces (`packages/*`, `apps/*`). Today: `packages/tokens`, `packages/ui`, `packages/icons`, `packages/brand`, `packages/memory` and `apps/playground` (token catalogue, components, icons, brand and admin dashboard sample, with theme, accent and density switchers); the other packages land with their issues.
 
 - `packages/tokens` — `@codecora/tokens`: primitive, semantic and theme tokens; CSS, TS, Tailwind 4 preset, shadcn bridge
 - `packages/ui` — `@codecora/ui`: Svelte 5 components on bits-ui, plain CSS on semantic tokens
