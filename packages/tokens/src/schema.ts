@@ -40,6 +40,22 @@ export interface ThemeColors {
   scrim: string;
 }
 
+/**
+ * Structural hooks: what a theme may change beyond colour, type and radius.
+ * Values are CSS; `badgeFont` and `badgeRadius` may reference other tokens.
+ */
+export interface ThemeShape {
+  badgeRadius: string;
+  badgeCase: 'none' | 'uppercase';
+  badgeTracking: string;
+  badgeFont: string;
+  /** Focus ring thickness; at least 2px so it stays visible (WCAG 2.4.13). */
+  focusWidth: string;
+  focusOffset: string;
+  /** Width of the accent bar on a selected row; at least 2px so selection is not colour alone. */
+  rowMarker: string;
+}
+
 export interface Theme {
   name: ThemeName;
   label: string;
@@ -50,6 +66,7 @@ export interface Theme {
   radius: { sm: string; md: string; lg: string; pill: string };
   font: { sans: string; display: string; mono: string };
   icon: { stroke: string; size: string };
+  shape: ThemeShape;
 }
 
 /** Status hues that get a `-soft` tint derived from the surface. */
@@ -89,6 +106,13 @@ export const semanticTokens = [
   'font-mono',
   'icon-stroke',
   'icon-size',
+  'badge-radius',
+  'badge-case',
+  'badge-tracking',
+  'badge-font',
+  'focus-width',
+  'focus-offset',
+  'row-marker',
   'control-h',
   'control-px',
   'gap',

@@ -8,6 +8,10 @@ changesets (`packages/*/CHANGELOG.md`).
 
 ## [Unreleased]
 
+### Added
+
+- `@codecora/memory`: a `MemoryClient` over uteke-serve and Uteke Cloud (HTTP) and the Corin desktop commands (Tauri), with typed memories, documents, rooms, tags, stats, export and import, per-backend `Capabilities`, and contract tests that run against a real uteke-serve (and a Uteke Cloud stack when configured).
+
 ## [0.1.0] - 2026-10-30
 
 First release of `@codecora/tokens`, `@codecora/ui`, `@codecora/icons` and `@codecora/brand` (all 0.1.0). Not on npm yet: install the tarballs attached to the GitHub Release (see the README); publishing to npm starts once the `@codecora` scope is set up (#15).

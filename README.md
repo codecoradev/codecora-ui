@@ -32,7 +32,7 @@ same.
 | `@codecora/ui` | Svelte 5 components on [bits-ui](https://bits-ui.com): Button, Field, Select, Dialog, Sheet, Tabs, Table, Badge, Toast, Tooltip, EmptyState, Skeleton, AppShell + Sidebar, CommandPalette. Plain CSS on semantic tokens, works with or without Tailwind | `@codecora/tokens`, `bits-ui` |
 | `@codecora/icons` | Icon contract: an `Icon` wrapper that follows the `--cc-icon-*` tokens, a curated Lucide set (the default) and a Phosphor adapter | `@lucide/svelte`, `phosphor-svelte` (optional peers) |
 | `@codecora/brand` | Product marks and favicon sets (Uteke, Corin, Gatehouse) as files and Svelte components | nothing |
-| `@codecora/memory` | Uteke domain layer: types, `MemoryClient`, transports (Tauri, uteke-serve, Uteke Cloud), capabilities, memory browser components | `@codecora/ui` |
+| `@codecora/memory` | Uteke domain layer: types, `MemoryClient`, transports (Tauri, uteke-serve, Uteke Cloud), capabilities; memory browser components come with #11 | `@codecora/ui` (components only) |
 
 Plus a shadcn-svelte registry for blocks and templates that apps copy and
 customise (login, settings, dashboard shell, data table), and

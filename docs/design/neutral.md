@@ -126,6 +126,14 @@ A cool, low-chroma grey field with a single saturated blue.
 
 Soft but not round: 4px for small inline pieces, 8px for controls and cards, 12px for dialogs and sheets, pill only for badges and chips.
 
+### Shape hooks
+
+Neutral keeps every hook at its plain value, so it is the baseline the others are read against.
+
+- **Badge:** pill, sentence case, system sans.
+- **Focus ring:** 2px, offset 2px.
+- **Selected table row:** accent tint with a 2px accent bar on the left.
+
 ## Components
 
 ### Buttons

@@ -22,6 +22,7 @@
     toast,
   } from '@codecora/ui';
   import ChoiceControls from './ChoiceControls.svelte';
+  import StateMatrix from './StateMatrix.svelte';
 
   let name = $state('');
   let region = $state('eu');
@@ -57,6 +58,8 @@
     }, 900);
   }
 </script>
+
+<StateMatrix />
 
 <section aria-labelledby="c-buttons">
   <h2 id="c-buttons">Buttons</h2>
@@ -225,8 +228,8 @@
             >
           </thead>
           <tbody>
-            {#each keys as key (key.name)}
-              <tr>
+            {#each keys as key, i (key.name)}
+              <tr data-selected={i === 0 ? 'true' : undefined}>
                 <th scope="row">{key.name}</th>
                 <td>{key.scope}</td>
                 <td><Badge tone={tone[key.status as keyof typeof tone]}>{key.status}</Badge></td>

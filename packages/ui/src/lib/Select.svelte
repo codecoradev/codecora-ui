@@ -92,7 +92,7 @@
     box-shadow: inset 0 0 0 1px var(--cc-danger);
   }
   :global(.cc-select-trigger:focus-visible) {
-    outline: 2px solid var(--cc-focus);
+    outline: var(--cc-focus-width) solid var(--cc-focus);
     outline-offset: 1px;
   }
   :global(.cc-select-trigger[data-disabled]) {

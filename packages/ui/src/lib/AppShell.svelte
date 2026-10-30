@@ -160,7 +160,7 @@
   }
   .skip:focus-visible {
     transform: none;
-    outline: 2px solid var(--cc-focus);
+    outline: var(--cc-focus-width) solid var(--cc-focus);
   }
   .side {
     display: none;
@@ -229,7 +229,7 @@
     font-weight: 600;
   }
   .bottom :is(a, button):focus-visible {
-    outline: 2px solid var(--cc-focus);
+    outline: var(--cc-focus-width) solid var(--cc-focus);
     outline-offset: -2px;
   }
   .drawer-nav :global(.cc-sidebar) {
