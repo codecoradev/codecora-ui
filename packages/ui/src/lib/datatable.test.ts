@@ -93,7 +93,14 @@ describe('DataTable data changes', () => {
     expect(names()).toEqual(['dashboard']);
   });
 
-  it('drops selected rows that are no longer in the table', async () => {
+  it('keeps the page while loading, when no rows have arrived yet', async () => {
+    const { rerender } = view({ pageSize: 2, page: 3 });
+    await rerender({ ...base, rows: [], pageSize: 2, page: 3, loading: true });
+    await rerender({ ...base, pageSize: 2, page: 3, loading: false });
+    expect(names()).toEqual(['zeta']);
+  });
+
+  it('counts only selected rows that are still in the table', async () => {
     const bulk = createRawSnippet(() => ({
       render: () => '<button type="button">Revoke</button>',
     }));

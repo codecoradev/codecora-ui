@@ -90,17 +90,15 @@
 
   // A filter that shrinks the rows must not leave the table on a page that no longer exists.
   const lastPage = $derived(pageSize ? Math.max(1, Math.ceil(sorted.length / pageSize)) : 1);
+  // Not while loading: server-side tables pass no rows until the page arrives.
   $effect(() => {
-    if (page > lastPage) page = lastPage;
+    if (!loading && page > lastPage) page = lastPage;
   });
 
-  // A bulk action must only reach rows that are still in the table.
-  $effect(() => {
-    const present = new Set(rows.map(rowKey));
-    if (selected.some((key) => !present.has(key))) {
-      selected = selected.filter((key) => present.has(key));
-    }
-  });
+  // The bulk bar and its actions only see rows that are still in the table. `selected`
+  // itself is left alone, so a selection kept across server-side pages survives.
+  const present = $derived(new Set(rows.map(rowKey)));
+  const active = $derived(selected.filter((key) => present.has(key)));
 
   const visible = $derived(
     pageSize ? sorted.slice((page - 1) * pageSize, page * pageSize) : sorted,
@@ -132,10 +130,10 @@
 </script>
 
 <div class="cc-datatable">
-  {#if selected.length > 0 && bulk}
+  {#if active.length > 0 && bulk}
     <div class="bar" role="status">
-      <span>{selected.length} selected</span>
-      {@render bulk({ selected, clear: () => (selected = []) })}
+      <span>{active.length} selected</span>
+      {@render bulk({ selected: active, clear: () => (selected = []) })}
     </div>
   {:else if toolbar}
     <div class="bar">{@render toolbar()}</div>
