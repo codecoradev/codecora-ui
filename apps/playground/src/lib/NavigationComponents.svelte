@@ -5,6 +5,8 @@
     Accordion,
     Breadcrumb,
     Button,
+    CommandPalette,
+    Kbd,
     DropdownMenu,
     IconButton,
     Pagination,
@@ -15,6 +17,7 @@
 
   let view = $state('list');
   let page = $state(3);
+  let palette = $state(false);
 </script>
 
 <section aria-labelledby="c-nav">
@@ -79,6 +82,43 @@
       {/if}
     {/snippet}
   </Accordion>
+
+  <div class="row">
+    <Button onclick={() => (palette = true)}>Open command palette</Button>
+    <span>or press <Kbd>Ctrl</Kbd> <Kbd>K</Kbd></span>
+  </div>
+  <CommandPalette
+    bind:open={palette}
+    groups={[
+      {
+        heading: 'Go to',
+        items: [
+          {
+            value: 'keys',
+            label: 'API keys',
+            hint: 'G K',
+            onselect: () => toast.show({ title: 'Go to API keys' }),
+          },
+          {
+            value: 'billing',
+            label: 'Billing',
+            keywords: ['invoices', 'plan'],
+            onselect: () => toast.show({ title: 'Go to Billing' }),
+          },
+        ],
+      },
+      {
+        heading: 'Actions',
+        items: [
+          {
+            value: 'new-key',
+            label: 'Create API key',
+            onselect: () => toast.success('Key created'),
+          },
+        ],
+      },
+    ]}
+  />
 
   <Pagination count={240} perPage={10} bind:page />
   <p class="plain">Page {page} of 24</p>
