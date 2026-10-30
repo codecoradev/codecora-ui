@@ -58,6 +58,7 @@
 <style>
   section {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--cc-space-4);
     padding-bottom: var(--cc-space-10);
   }
