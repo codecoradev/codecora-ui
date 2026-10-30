@@ -24,6 +24,7 @@
   import ChoiceControls from './ChoiceControls.svelte';
   import DataTableDemo from './DataTableDemo.svelte';
   import DisplayComponents from './DisplayComponents.svelte';
+  import InputComponents from './InputComponents.svelte';
   import NavigationComponents from './NavigationComponents.svelte';
   import StateMatrix from './StateMatrix.svelte';
 
@@ -144,6 +145,8 @@
 </section>
 
 <ChoiceControls />
+
+<InputComponents />
 
 <section aria-labelledby="c-overlays">
   <h2 id="c-overlays">Dialog, ConfirmDialog, Sheet, Toast</h2>
