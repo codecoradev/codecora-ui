@@ -3,9 +3,12 @@
   import type { ComponentProps } from 'svelte';
   import Modal from './internal/Modal.svelte';
 
-  type Props = Omit<ComponentProps<typeof Modal>, 'placement' | 'alert'>;
+  type Props = Omit<ComponentProps<typeof Modal>, 'placement' | 'alert' | 'theme'> & {
+    /** Theme name for the panel, which renders in a portal outside the page frame. */
+    theme?: string;
+  };
 
-  let { open = $bindable(false), ...rest }: Props = $props();
+  let { open = $bindable(false), theme, ...rest }: Props = $props();
 </script>
 
-<Modal bind:open placement="center" {...rest} />
+<Modal bind:open placement="center" {theme} {...rest} />

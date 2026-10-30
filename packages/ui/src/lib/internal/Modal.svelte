@@ -23,6 +23,8 @@
     onOpenChange?: (open: boolean) => void;
     /** Dialog role; confirmations announce as an alert dialog. */
     alert?: boolean;
+    /** Theme name for the panel, which renders outside the page frame (a portal). */
+    theme?: string;
   }
 
   let {
@@ -35,6 +37,7 @@
     children,
     onOpenChange,
     alert = false,
+    theme,
   }: Props = $props();
 </script>
 
@@ -55,7 +58,7 @@
   <AlertDialog.Root bind:open {onOpenChange}>
     <AlertDialog.Portal>
       <AlertDialog.Overlay class="cc-modal-overlay" />
-      <AlertDialog.Content class="cc-modal cc-modal-{placement}">
+      <AlertDialog.Content class="cc-modal cc-modal-{placement}" data-theme={theme}>
         {@render header(AlertDialog.Title, false)}
         {#if description}
           <AlertDialog.Description class="cc-modal-description"
@@ -76,7 +79,7 @@
     {/if}
     <Dialog.Portal>
       <Dialog.Overlay class="cc-modal-overlay" />
-      <Dialog.Content class="cc-modal cc-modal-{placement}">
+      <Dialog.Content class="cc-modal cc-modal-{placement}" data-theme={theme}>
         {@render header(Dialog.Title, true)}
         {#if description}
           <Dialog.Description class="cc-modal-description">{description}</Dialog.Description>

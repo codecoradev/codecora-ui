@@ -6,7 +6,8 @@ and styled with plain CSS on semantic `--cc-*` tokens. See the
 
 > Status: pre-release. First primitive set (M1): Button, IconButton, Field,
 > Input, Textarea, Select, Dialog, ConfirmDialog, Sheet, Tabs, Table, Badge,
-> Toaster (`toast`), Tooltip, EmptyState, Skeleton, Spinner.
+> Toaster (`toast`), Tooltip, EmptyState, Skeleton, Spinner, plus AppShell and
+> Sidebar.
 
 ```svelte
 <script>

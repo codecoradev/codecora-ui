@@ -132,3 +132,13 @@ describe('Toaster', () => {
     vi.useRealTimers();
   });
 });
+
+describe('theme prop', () => {
+  it('Dialog and Sheet pass their theme to the portalled panel', async () => {
+    const dialog = render(Dialog, { open: true, title: 'A', theme: 'corin' });
+    expect(await screen.findByRole('dialog', { name: 'A' })).toHaveAttribute('data-theme', 'corin');
+    dialog.unmount();
+    render(Sheet, { open: true, title: 'B', theme: 'uteke' });
+    expect(await screen.findByRole('dialog', { name: 'B' })).toHaveAttribute('data-theme', 'uteke');
+  });
+});
