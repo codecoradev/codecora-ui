@@ -151,7 +151,7 @@
     position: absolute;
     top: var(--cc-space-2);
     left: var(--cc-space-2);
-    z-index: 90;
+    z-index: var(--cc-layer-skip);
     padding: var(--cc-space-2) var(--cc-space-3);
     border-radius: var(--cc-radius-md);
     background: var(--cc-surface-raised);
@@ -160,7 +160,7 @@
   }
   .skip:focus-visible {
     transform: none;
-    outline: 2px solid var(--cc-focus);
+    outline: var(--cc-focus-width) solid var(--cc-focus);
   }
   .side {
     display: none;
@@ -197,7 +197,7 @@
     right: 0;
     bottom: 0;
     left: 0;
-    z-index: 40;
+    z-index: var(--cc-layer-sticky);
     border-top: 1px solid var(--cc-border);
     background: var(--cc-surface-raised);
   }
@@ -229,7 +229,7 @@
     font-weight: 600;
   }
   .bottom :is(a, button):focus-visible {
-    outline: 2px solid var(--cc-focus);
+    outline: var(--cc-focus-width) solid var(--cc-focus);
     outline-offset: -2px;
   }
   .drawer-nav :global(.cc-sidebar) {

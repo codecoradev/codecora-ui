@@ -28,6 +28,17 @@ export const leading = { tight: '1.2', normal: '1.5' } as const;
 
 /** Durations drop to 0ms under `prefers-reduced-motion: reduce`. */
 export const duration = { fast: '140ms', normal: '240ms' } as const;
+/** Stacking order, lowest first; components read these instead of numbers. */
+export const layer = {
+  sticky: '40',
+  overlay: '50',
+  modal: '51',
+  popover: '60',
+  tooltip: '70',
+  toast: '80',
+  skip: '90',
+} as const;
+
 export const ease = { out: 'cubic-bezier(0.22, 1, 0.36, 1)' } as const;
 
 /**

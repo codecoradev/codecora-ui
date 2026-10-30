@@ -127,6 +127,14 @@ Blue-black layers with a single teal and bright status signals.
 
 Three radii and a pill, from Corin: 5px for inline code and keys, 10px for controls and cards, 14px for dialogs and sheets, pill for chips and badges.
 
+### Shape hooks
+
+Corin is a console, so tags look like data.
+
+- **Badge:** 5px corners, mono, no case change.
+- **Focus ring:** 2px, offset 1px, tight to the control.
+- **Selected table row:** accent tint with a 2px marker on the left, like an editor gutter.
+
 ## Components
 
 ### Buttons

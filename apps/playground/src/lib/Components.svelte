@@ -21,6 +21,12 @@
     Tooltip,
     toast,
   } from '@codecora/ui';
+  import ChoiceControls from './ChoiceControls.svelte';
+  import DataTableDemo from './DataTableDemo.svelte';
+  import DisplayComponents from './DisplayComponents.svelte';
+  import InputComponents from './InputComponents.svelte';
+  import NavigationComponents from './NavigationComponents.svelte';
+  import StateMatrix from './StateMatrix.svelte';
 
   let name = $state('');
   let region = $state('eu');
@@ -56,6 +62,8 @@
     }, 900);
   }
 </script>
+
+<StateMatrix />
 
 <section aria-labelledby="c-buttons">
   <h2 id="c-buttons">Buttons</h2>
@@ -135,6 +143,10 @@
     </Field>
   </div>
 </section>
+
+<ChoiceControls />
+
+<InputComponents />
 
 <section aria-labelledby="c-overlays">
   <h2 id="c-overlays">Dialog, ConfirmDialog, Sheet, Toast</h2>
@@ -222,8 +234,8 @@
             >
           </thead>
           <tbody>
-            {#each keys as key (key.name)}
-              <tr>
+            {#each keys as key, i (key.name)}
+              <tr data-selected={i === 0 ? 'true' : undefined}>
                 <th scope="row">{key.name}</th>
                 <td>{key.scope}</td>
                 <td><Badge tone={tone[key.status as keyof typeof tone]}>{key.status}</Badge></td>
@@ -267,6 +279,12 @@
   </div>
 </section>
 
+<DisplayComponents />
+
+<NavigationComponents />
+
+<DataTableDemo />
+
 <Toaster />
 
 <style>
@@ -295,6 +313,7 @@
     max-width: 28rem;
   }
   .muted {
+    max-width: 60ch;
     color: var(--cc-text-muted);
   }
   .skeletons {

@@ -209,7 +209,7 @@
   }
   .item:focus-visible,
   .toggle:focus-visible {
-    outline: 2px solid var(--cc-focus);
+    outline: var(--cc-focus-width) solid var(--cc-focus);
     outline-offset: -2px;
   }
   .initial {

@@ -18,7 +18,10 @@
     display: inline-flex;
     align-items: center;
     padding: 0.125rem var(--cc-space-2);
-    border-radius: var(--cc-radius-pill);
+    border-radius: var(--cc-badge-radius);
+    font-family: var(--cc-badge-font);
+    text-transform: var(--cc-badge-case);
+    letter-spacing: var(--cc-badge-tracking);
     font-size: var(--cc-font-size-xs);
     font-weight: 500;
     line-height: 1.4;

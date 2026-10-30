@@ -118,13 +118,13 @@
   :global(.cc-modal-overlay) {
     position: fixed;
     inset: 0;
-    z-index: 50;
+    z-index: var(--cc-layer-overlay);
     background: var(--cc-scrim);
     animation: cc-fade var(--cc-duration-normal) var(--cc-ease-out);
   }
   :global(.cc-modal) {
     position: fixed;
-    z-index: 51;
+    z-index: var(--cc-layer-modal);
     display: grid;
     gap: var(--cc-space-3);
     align-content: start;
@@ -134,13 +134,12 @@
     background: var(--cc-surface-raised);
     color: var(--cc-text);
     border: 1px solid var(--cc-border);
-    box-shadow: 0 var(--cc-space-4) var(--cc-space-10)
-      color-mix(in srgb, var(--cc-scrim) 60%, transparent);
+    box-shadow: var(--cc-shadow-modal);
     font-family: var(--cc-font-sans);
     animation: cc-rise var(--cc-duration-normal) var(--cc-ease-out);
   }
   :global(.cc-modal:focus-visible) {
-    outline: 2px solid var(--cc-focus);
+    outline: var(--cc-focus-width) solid var(--cc-focus);
     outline-offset: -2px;
   }
   :global(.cc-modal-center) {
@@ -226,8 +225,8 @@
     color: var(--cc-text);
   }
   :global(.cc-modal-close:focus-visible) {
-    outline: 2px solid var(--cc-focus);
-    outline-offset: 2px;
+    outline: var(--cc-focus-width) solid var(--cc-focus);
+    outline-offset: var(--cc-focus-offset);
   }
   .cc-modal-footer {
     display: flex;

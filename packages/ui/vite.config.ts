@@ -9,5 +9,7 @@ export default defineConfig({
     globals: false,
     include: ['src/**/*.test.ts'],
     setupFiles: ['./vitest.setup.ts'],
+    // bits-ui components compile on first import; a loaded machine needs more than 5 s.
+    testTimeout: 30_000,
   },
 });
