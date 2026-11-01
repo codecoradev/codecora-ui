@@ -4,6 +4,7 @@
 </script>
 
 <Stage
+  panel
   title="Tokens"
   lead="Colour roles, type, radius and spacing, and the contrast pairs of the theme and accent you pick."
 >

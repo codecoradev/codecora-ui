@@ -1,59 +1,94 @@
+<!--
+  Theme, accent and density radios. `part` picks what to show: the theme
+  groups, the accent and density rows ("more"), or everything.
+-->
 <script lang="ts">
-  import { accentNames, densities, themeNames, themes, type ThemeName } from '@codecora/tokens';
+  import { accentNames, densities, themes, type ThemeName } from '@codecora/tokens';
+  import { accessNotes, groupedThemes } from './catalogue.js';
 
   let {
     theme = $bindable(),
     accent = $bindable(),
     density = $bindable(),
-  }: { theme: ThemeName; accent: string; density: string } = $props();
+    part = 'all',
+  }: {
+    theme: ThemeName;
+    accent: string;
+    density: string;
+    part?: 'all' | 'theme' | 'more';
+  } = $props();
+
+  const groups = groupedThemes();
 </script>
 
 <div class="switchers">
-  <fieldset>
-    <legend>Theme</legend>
-    <div class="seg">
-      {#each themeNames as name (name)}
+  {#if part !== 'more'}
+    <fieldset>
+      <legend>Theme</legend>
+      <div class="groups">
+        {#each groups as { group, themes: names } (group)}
+          <div class="group" role="group" aria-labelledby="sw-{part}-{group}">
+            <p class="group-name" id="sw-{part}-{group}">{group}</p>
+            <div class="seg">
+              {#each names as name (name)}
+                <label>
+                  <input type="radio" name="theme-{part}" value={name} bind:group={theme} />
+                  <span
+                    ><span class="chip" data-theme={name} aria-hidden="true"
+                      ><span class="dot"></span></span
+                    >{themes[name].label}</span
+                  >
+                </label>
+              {/each}
+            </div>
+            {#if group === 'Access'}
+              <ul class="notes">
+                {#each names as name (name)}
+                  {#if accessNotes[name]}
+                    <li><strong>{themes[name].label}</strong> {accessNotes[name]}</li>
+                  {/if}
+                {/each}
+              </ul>
+            {/if}
+          </div>
+        {/each}
+      </div>
+    </fieldset>
+  {/if}
+
+  {#if part !== 'theme'}
+    <fieldset>
+      <legend>Accent</legend>
+      <div class="seg">
         <label>
-          <input type="radio" name="theme" value={name} bind:group={theme} />
+          <input type="radio" name="accent-{part}" value="default" bind:group={accent} />
           <span
-            ><span class="chip" data-theme={name} aria-hidden="true"><span class="dot"></span></span
-            >{themes[name].label}</span
+            ><span class="chip" data-theme={theme} aria-hidden="true"
+              ><span class="dot"></span></span
+            >Theme default</span
           >
         </label>
-      {/each}
-    </div>
-  </fieldset>
+        {#each accentNames as name (name)}
+          <label>
+            <input type="radio" name="accent-{part}" value={name} bind:group={accent} />
+            <span><span class="dot solo" data-accent={name} aria-hidden="true"></span>{name}</span>
+          </label>
+        {/each}
+      </div>
+    </fieldset>
 
-  <fieldset>
-    <legend>Accent</legend>
-    <div class="seg">
-      <label>
-        <input type="radio" name="accent" value="default" bind:group={accent} />
-        <span
-          ><span class="chip" data-theme={theme} aria-hidden="true"><span class="dot"></span></span
-          >Theme default</span
-        >
-      </label>
-      {#each accentNames as name (name)}
-        <label>
-          <input type="radio" name="accent" value={name} bind:group={accent} />
-          <span><span class="dot solo" data-accent={name} aria-hidden="true"></span>{name}</span>
-        </label>
-      {/each}
-    </div>
-  </fieldset>
-
-  <fieldset>
-    <legend>Density</legend>
-    <div class="seg">
-      {#each densities as name (name)}
-        <label>
-          <input type="radio" name="density" value={name} bind:group={density} />
-          <span>{name}</span>
-        </label>
-      {/each}
-    </div>
-  </fieldset>
+    <fieldset>
+      <legend>Density</legend>
+      <div class="seg">
+        {#each densities as name (name)}
+          <label>
+            <input type="radio" name="density-{part}" value={name} bind:group={density} />
+            <span>{name}</span>
+          </label>
+        {/each}
+      </div>
+    </fieldset>
+  {/if}
 </div>
 
 <style>
@@ -75,6 +110,33 @@
     font-size: var(--cc-font-size-xs);
     font-weight: 600;
     color: var(--cc-text-muted);
+  }
+  .groups {
+    display: grid;
+    gap: var(--cc-space-3);
+  }
+  .group {
+    display: grid;
+    gap: var(--cc-space-1);
+  }
+  .group-name {
+    margin: 0;
+    color: var(--cc-text-muted);
+    font-size: var(--cc-font-size-xs);
+  }
+  .notes {
+    display: grid;
+    gap: 0.125rem;
+    max-width: 60ch;
+    margin: var(--cc-space-1) 0 0;
+    padding: 0;
+    list-style: none;
+    color: var(--cc-text-muted);
+    font-size: var(--cc-font-size-xs);
+  }
+  .notes strong {
+    color: var(--cc-text);
+    font-weight: 600;
   }
   .seg {
     display: flex;

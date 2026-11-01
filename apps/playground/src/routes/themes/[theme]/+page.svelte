@@ -2,6 +2,7 @@
   import { resolve } from '$app/paths';
   import { themes } from '@codecora/tokens';
   import Catalogue from '../../../lib/Catalogue.svelte';
+  import PageNav from '../../../lib/PageNav.svelte';
 
   let { data } = $props();
 </script>
@@ -13,6 +14,7 @@
 <!-- Fixed theme, default accent and density: stable pages for visual snapshots. -->
 <div class="stage" data-theme={data.theme}>
   <header>
+    <PageNav />
     <h1>{themes[data.theme].label} theme</h1>
     <a href={resolve('/tokens')}>Back to the tokens page</a>
   </header>
