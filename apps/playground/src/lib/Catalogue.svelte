@@ -1,7 +1,8 @@
 <script lang="ts">
   import { resolve } from '$app/paths';
   import { VisuallyHidden } from '@codecora/ui';
-  import type { AccentName, ThemeName } from '@codecora/tokens';
+  import { themes, type AccentName, type ThemeName } from '@codecora/tokens';
+  import Character from './Character.svelte';
   import ContrastTable from './ContrastTable.svelte';
   import NestedDemo from './NestedDemo.svelte';
   import Samples from './Samples.svelte';
@@ -10,6 +11,15 @@
 
   let { theme, accent }: { theme: ThemeName; accent?: AccentName } = $props();
 </script>
+
+<section aria-labelledby="character">
+  <h2 id="character">The face of {themes[theme].label}</h2>
+  <p class="lead">
+    What a theme may change: fonts, corners, label shape, icon stroke and focus ring. Structure and
+    accessibility stay the same in every theme.
+  </p>
+  <Character {theme} />
+</section>
 
 <section aria-labelledby="colors">
   <h2 id="colors">Colour roles</h2>
