@@ -14,7 +14,7 @@
 <div class="stage" data-theme={data.theme}>
   <header>
     <h1>{themes[data.theme].label} theme</h1>
-    <a href={resolve('/')}>Back to the interactive catalogue</a>
+    <a href={resolve('/tokens')}>Back to the tokens page</a>
   </header>
   <main>
     <Catalogue theme={data.theme} />

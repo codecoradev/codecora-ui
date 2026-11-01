@@ -1,3 +1,5 @@
+import { replaceState } from '$app/navigation';
+import { SvelteURL, SvelteURLSearchParams } from 'svelte/reactivity';
 import {
   accentNames,
   densities,
@@ -12,8 +14,9 @@ const isOneOf = <T extends string>(list: readonly T[], value: unknown): value is
   list.includes(value as T);
 
 /**
- * Theme, accent and density of a playground page, restored from localStorage.
- * Storage may be unavailable or hold stale values, so only known names are
+ * Theme, accent and density of a playground page, restored from the URL
+ * (`?theme=&accent=&density=`, so a view can be linked) or else from
+ * localStorage. Either may hold stale values, so only known names are
  * restored. Call it during component initialisation (it registers effects).
  */
 export function createAppearance() {
@@ -31,7 +34,29 @@ export function createAppearance() {
     } catch {
       // keep the defaults
     }
+    // Read from location, not the page store: the pages are prerendered.
+    const query = new SvelteURLSearchParams(location.search);
+    const fromUrl = (key: string) => query.get(key) ?? undefined;
+    if (isOneOf(themeNames, fromUrl('theme'))) theme = fromUrl('theme') as ThemeName;
+    const urlAccent = fromUrl('accent');
+    if (urlAccent === 'default' || isOneOf(accentNames, urlAccent)) accent = urlAccent as string;
+    if (isOneOf(densities, fromUrl('density'))) density = fromUrl('density') as string;
     restored = true;
+  });
+
+  // Keep the URL in step, leaving out defaults, so the address bar is shareable.
+  $effect(() => {
+    const params = { theme, accent, density };
+    if (!restored) return;
+    const url = new SvelteURL(location.href);
+    const set = (key: string, value: string, fallback: string) =>
+      value === fallback ? url.searchParams.delete(key) : url.searchParams.set(key, value);
+    set('theme', params.theme, 'neutral');
+    set('accent', params.accent, 'default');
+    set('density', params.density, 'comfortable');
+    // Same page, only the query changes, so there is no route to resolve.
+    // eslint-disable-next-line svelte/no-navigation-without-resolve
+    if (url.href !== location.href) replaceState(url, {});
   });
 
   $effect(() => {
