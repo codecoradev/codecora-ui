@@ -32,7 +32,13 @@
             <div class="seg">
               {#each names as name (name)}
                 <label>
-                  <input type="radio" name="theme-{part}" value={name} bind:group={theme} />
+                  <input
+                    type="radio"
+                    name="theme-{part}"
+                    value={name}
+                    bind:group={theme}
+                    aria-describedby={accessNotes[name] ? `note-${part}-${name}` : undefined}
+                  />
                   <span
                     ><span class="chip" data-theme={name} aria-hidden="true"
                       ><span class="dot"></span></span
@@ -45,7 +51,10 @@
               <ul class="notes">
                 {#each names as name (name)}
                   {#if accessNotes[name]}
-                    <li><strong>{themes[name].label}</strong> {accessNotes[name]}</li>
+                    <li id="note-{part}-{name}">
+                      <strong>{themes[name].label}</strong>
+                      {accessNotes[name]}
+                    </li>
                   {/if}
                 {/each}
               </ul>
