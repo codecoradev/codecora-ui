@@ -34,24 +34,30 @@ export function createAppearance() {
     } catch {
       // keep the defaults
     }
-    // Read from location, not the page store: the pages are prerendered.
+    // Read from location, not the page store: the pages are prerendered. A
+    // linked view (the URL always carries `theme`) wins over the saved one,
+    // and a key it leaves out means that key's default, not the saved value.
     const query = new SvelteURLSearchParams(location.search);
-    const fromUrl = (key: string) => query.get(key) ?? undefined;
-    if (isOneOf(themeNames, fromUrl('theme'))) theme = fromUrl('theme') as ThemeName;
-    const urlAccent = fromUrl('accent');
-    if (urlAccent === 'default' || isOneOf(accentNames, urlAccent)) accent = urlAccent as string;
-    if (isOneOf(densities, fromUrl('density'))) density = fromUrl('density') as string;
+    if (query.has('theme')) {
+      const urlTheme = query.get('theme');
+      const urlAccent = query.get('accent') ?? 'default';
+      const urlDensity = query.get('density') ?? 'comfortable';
+      theme = isOneOf(themeNames, urlTheme) ? urlTheme : 'neutral';
+      accent = urlAccent === 'default' || isOneOf(accentNames, urlAccent) ? urlAccent : 'default';
+      density = isOneOf(densities, urlDensity) ? urlDensity : 'comfortable';
+    }
     restored = true;
   });
 
-  // Keep the URL in step, leaving out defaults, so the address bar is shareable.
+  // Keep the URL in step so the address bar is shareable: `theme` always, the
+  // others only when they differ from their defaults.
   $effect(() => {
     const params = { theme, accent, density };
     if (!restored) return;
     const url = new SvelteURL(location.href);
     const set = (key: string, value: string, fallback: string) =>
       value === fallback ? url.searchParams.delete(key) : url.searchParams.set(key, value);
-    set('theme', params.theme, 'neutral');
+    url.searchParams.set('theme', params.theme);
     set('accent', params.accent, 'default');
     set('density', params.density, 'comfortable');
     // Same page, only the query changes, so there is no route to resolve.
