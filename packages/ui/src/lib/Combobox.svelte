@@ -120,6 +120,9 @@
     color: var(--cc-text);
     font: inherit;
   }
+  :global(.cc-combobox-input::placeholder) {
+    color: var(--cc-text-muted);
+  }
   :global(.cc-combobox-input[aria-invalid='true']) {
     border-color: var(--cc-danger);
     box-shadow: inset 0 0 0 1px var(--cc-danger);
