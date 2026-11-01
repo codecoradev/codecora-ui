@@ -2,8 +2,9 @@
   One theme, showing only what a theme may change: its surfaces, the display
   face, corners, label shape, the filled action, the focus ring and the
   floating shadow.
-  Everything here is a static specimen except the title link and the Use
-  button, so the gallery costs a keyboard user two stops per theme.
+  Everything here is a static specimen except the title link, so the gallery
+  costs a keyboard user one stop per theme; themes are applied from the rail
+  above or the toolbar.
 -->
 <script lang="ts">
   import { resolve } from '$app/paths';
@@ -14,7 +15,7 @@
     type AccentName,
     type ThemeName,
   } from '@codecora/tokens';
-  import { Badge, Button, VisuallyHidden } from '@codecora/ui';
+  import { Badge } from '@codecora/ui';
   import { accessNotes, northStars } from './catalogue.js';
 
   interface Props {
@@ -22,10 +23,9 @@
     accent?: AccentName;
     density?: string;
     current: boolean;
-    onuse: () => void;
   }
 
-  let { name, accent, density, current, onuse }: Props = $props();
+  let { name, accent, density, current }: Props = $props();
 
   // Proof for the Access themes, computed from the theme's own colours.
   const colors = $derived(themes[name].colors);
@@ -88,22 +88,9 @@
     <span class="float">Saved <span class="when">now</span></span>
   </div>
 
-  <footer>
-    <!-- One button that stays put, so focus does not drop when the theme changes. -->
-    <Button
-      variant="secondary"
-      aria-pressed={current}
-      onclick={() => {
-        if (!current) onuse();
-      }}
-    >
-      {#if current}
-        <span>Current theme</span>
-      {:else}
-        <span>Use<VisuallyHidden>&nbsp;{themes[name].label}</VisuallyHidden> theme</span>
-      {/if}
-    </Button>
-  </footer>
+  {#if current}
+    <footer><Badge tone="accent">Current theme</Badge></footer>
+  {/if}
 </article>
 
 <style>
@@ -264,7 +251,5 @@
   }
   footer {
     display: flex;
-    align-items: center;
-    min-height: var(--cc-control-h);
   }
 </style>

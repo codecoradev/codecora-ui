@@ -72,7 +72,6 @@
 <div class="start-row">
   <Button variant="primary" href={resolve('/components')}>Components</Button>
   <Button variant="secondary" href="#start-title">Install</Button>
-  <Button variant="ghost" href={repoUrl} rel="external">GitHub</Button>
 </div>
 
 <LiveStrip {theme} onpick={useTheme} />
@@ -83,7 +82,7 @@
     <p>
       Each tile shows only what its theme changes: surfaces, display face, corners, label shape, the
       filled action, the focus ring and the floating shadow. The accent and density you pick in the
-      toolbar apply to all of them; Access themes show their proof. Open a title for the full page.
+      toolbar apply to all of them; Access themes show their proof. Open a title for its full page.
     </p>
   </div>
   <p class="visually-hidden" aria-live="polite">{announcement}</p>
@@ -93,13 +92,7 @@
         <h3 class="group-title">{group}</h3>
         <div class="grid">
           {#each names as name (name)}
-            <ThemeTile
-              {name}
-              {accent}
-              {density}
-              current={name === theme}
-              onuse={() => useTheme(name)}
-            />
+            <ThemeTile {name} {accent} {density} current={name === theme} />
           {/each}
         </div>
       </div>

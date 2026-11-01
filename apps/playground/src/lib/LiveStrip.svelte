@@ -17,6 +17,35 @@
   const order = groupedThemes().flatMap((g) => g.themes);
   const rail = [...order, ...themeNames.filter((name) => !order.includes(name))];
 
+  // Roving focus: the last focused theme, else the applied one, holds the Tab stop.
+  let focused = $state<ThemeName | undefined>();
+  const focusable = $derived(focused ?? theme);
+  let railEl = $state<HTMLElement>();
+
+  function move(event: KeyboardEvent) {
+    const keys: Record<string, (i: number) => number> = {
+      ArrowRight: (i) => (i + 1) % rail.length,
+      ArrowDown: (i) => (i + 1) % rail.length,
+      ArrowLeft: (i) => (i - 1 + rail.length) % rail.length,
+      ArrowUp: (i) => (i - 1 + rail.length) % rail.length,
+      Home: () => 0,
+      End: () => rail.length - 1,
+    };
+    const step = keys[event.key];
+    if (!step || !railEl) return;
+    event.preventDefault();
+    const next = step(rail.indexOf(focusable));
+    railEl.querySelectorAll<HTMLButtonElement>('.pick')[next]?.focus();
+  }
+
+  // On phones the rail scrolls sideways; keep the applied theme in view.
+  $effect(() => {
+    const index = rail.indexOf(theme);
+    railEl
+      ?.querySelectorAll<HTMLElement>('.pick')
+      [index]?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+  });
+
   let name = $state('ci-deploy');
   let write = $state(true);
 </script>
@@ -24,13 +53,22 @@
 <section class="strip" aria-labelledby="strip-title">
   <h2 id="strip-title" class="title">Pick a theme, watch the components follow</h2>
 
-  <div class="rail" role="group" aria-label="Theme">
+  <!-- A toolbar: one Tab stop, arrows move between themes, Enter or Space applies one. -->
+  <div
+    class="rail"
+    role="toolbar"
+    tabindex="-1"
+    aria-label="Theme"
+    bind:this={railEl}
+    onkeydown={move}
+  >
     {#each rail as option (option)}
       <button
         type="button"
         class="pick"
         aria-pressed={option === theme}
-        title={themes[option].label}
+        tabindex={option === focusable ? 0 : -1}
+        onfocus={() => (focused = option)}
         onclick={() => {
           if (option !== theme) onpick(option);
         }}
@@ -54,7 +92,7 @@
       </Field>
     </div>
     <Switch bind:checked={write} label="Write access" />
-    <Badge tone={write ? 'warning' : 'success'}>{write ? 'Read and write' : 'Read only'}</Badge>
+    <Badge tone={write ? 'accent' : 'neutral'}>{write ? 'Read and write' : 'Read only'}</Badge>
     <Button
       variant="primary"
       onclick={() =>
@@ -164,23 +202,27 @@
     margin: 0;
     font-size: var(--cc-font-size-sm);
   }
-  /* Phones get the glyphs only, two rows of seven-ish; the name is in the title and read out. */
+  /* Phones keep the names in one row that scrolls sideways, faded at the edge so it reads as more. */
   @media (max-width: 47.99rem) {
-    .label {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      overflow: hidden;
-      clip-path: inset(50%);
-      white-space: nowrap;
+    .rail {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      margin-inline: calc(var(--cc-space-4) * -1);
+      padding: var(--cc-space-1) var(--cc-space-4);
+      scroll-snap-type: x proximity;
+      scroll-padding-inline: var(--cc-space-4);
+      scrollbar-width: none;
+      mask-image: linear-gradient(
+        to right,
+        transparent,
+        var(--cc-text) var(--cc-space-4),
+        var(--cc-text) calc(100% - var(--cc-space-8)),
+        transparent
+      );
     }
-    .face {
-      justify-content: center;
-      gap: var(--cc-space-1);
-      padding-inline: var(--cc-space-1);
-    }
-    .face :global(.check) {
-      display: none;
+    .pick {
+      flex: none;
+      scroll-snap-align: start;
     }
   }
 </style>
