@@ -31,6 +31,8 @@ Design tokens and themes for CodeCora products. See the
 - `data-density`: `comfortable` (default, 44 px controls) or `compact` (32 px).
 - Fonts are referenced, not shipped: load Geist, Space Grotesk or JetBrains Mono yourself when a theme names them; the stacks fall back to system fonts.
 
+Motion is the same in every theme: `--cc-duration-instant|fast|normal|slow` (70, 140, 240, 400 ms) and `--cc-ease-out|exit|in-out|spring`. `spring` is a `linear()` curve with a small overshoot, for movement and scale only. Under `prefers-reduced-motion: reduce` every duration is 0 ms and `spring` falls back to `out`. The Tailwind preset exposes the curves as `ease-cc-*`.
+
 Tokens sit in cascade layers (`cc.base` < `cc.theme` < `cc.modifier`), so import order does not matter and unlayered app CSS can still override any token.
 
 ## Text and UI pairs
