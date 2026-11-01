@@ -24,8 +24,8 @@
     .reduce((n, s) => n + s.components.length, 0);
 
   const install = [
-    'bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.2.0/codecora-tokens-0.2.0.tgz',
-    'bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.2.0/codecora-ui-0.2.0.tgz',
+    'bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.3.0/codecora-tokens-0.3.0.tgz',
+    'bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.3.0/codecora-ui-0.3.0.tgz',
   ].join('\n');
 
   const pages = [

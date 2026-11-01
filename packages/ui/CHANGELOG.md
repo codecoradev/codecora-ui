@@ -1,5 +1,15 @@
 # @codecora/ui
 
+## 0.3.0
+
+### Minor Changes
+
+- 1846cd4: Dialog, ConfirmDialog, Sheet, Popover and Toast now animate out as well as in, with exits one step shorter than entries. The centred Dialog and Toast move on `--cc-ease-spring` while their opacity eases. Popover gains an entry animation. Needs the matching `@codecora/tokens` release; with older tokens the new animations are skipped.
+
+### Patch Changes
+
+- 6999016: Combobox colours its placeholder with `--cc-text-muted`, like Input and Textarea, instead of the browser default grey that fell below 4.5:1.
+
 ## 0.2.0
 
 ### Minor Changes

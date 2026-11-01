@@ -8,6 +8,28 @@ changesets (`packages/*/CHANGELOG.md`).
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-11-01
+
+`@codecora/tokens` and `@codecora/ui` 0.3.0. `@codecora/memory`, `@codecora/icons` and `@codecora/brand` stay at 0.1.0. Install from the GitHub Release tarballs (see the README); npm publishing is still pending (#15).
+
+### Added
+
+- `@codecora/tokens`: eight themes, for eleven in all. `neutral-dark` and `uteke-dark` (dark twins), `sepia` (serif reading), `contrast` (7:1 text, heavier rings and icons), `dimmed` (low-glare dark), `slab` (brutalist print: square corners, mono headings, hard offset shadows), `soft` (round corners, rounded sans, thin icons) and `neutral-cvd` (blue success and vermillion danger for red/green colour vision deficiency). Themes gain `twin`, `minText` and an optional `shadow`; `--cc-shadow-popover` and `--cc-shadow-modal` now come from the theme.
+- `@codecora/tokens`: the `orange`, `indigo` and `cyan` accents, each meeting AA on every theme.
+- `@codecora/tokens`: motion tokens. Durations `instant` 70, `fast` 140, `normal` 240 and `slow` 400 ms; curves `out`, `in-out`, `exit` and a `linear()` spring with a small overshoot. Under `prefers-reduced-motion` every duration is 0 ms and the spring falls back to `out`. The Tailwind preset adds the curves.
+- `@codecora/ui`: Dialog, ConfirmDialog, Sheet, Popover and Toast animate out as well as in, with exits one step shorter than entries; the centred Dialog and Toast move on the spring.
+- Playground: an overview at `/` with every theme side by side on real components, the token catalogue at `/tokens`, a `/motion` page with replayable enter and exit, a type and shape specimen per theme, switchers with colour swatches, shareable `?theme=&accent=&density=` links, `aria-current` navigation with a skip link, and a grouped Components index that marks the section in view.
+- README: current install URLs, a quick start, the components by group, every theme and accent, and a note on Uteke Cloud.
+
+### Changed
+
+- The `contrast` theme uses square corners (radius 2, 4 and 6 px).
+
+### Fixed
+
+- `Combobox` colours its placeholder with `--cc-text-muted`; the browser default grey fell below 4.5:1.
+- Playground: the Components page no longer overflows at 375 px (screen-reader text escaped the State matrix scroll box), the dashboard chart labels its days, and the Tokens page no longer claims `VisuallyHidden` is the only component.
+
 ## [0.2.0] - 2026-10-30
 
 `@codecora/tokens` and `@codecora/ui` 0.2.0, and the first release of `@codecora/memory` (0.1.0). `@codecora/icons` and `@codecora/brand` stay at 0.1.0. Install from the GitHub Release tarballs (see the README); npm publishing is still pending (#15).
@@ -58,5 +80,7 @@ First release of `@codecora/tokens`, `@codecora/ui`, `@codecora/icons` and `@cod
 
 - Workflows: the review access token is a step output instead of a job-wide variable, actions are pinned to commit SHAs, the message standard runs from the base branch, and the PR description check requires real content under whole `## What` / `## Why` / `## Testing` headings.
 
-[Unreleased]: https://github.com/codecoradev/codecora-ui/compare/v0.1.0...develop
+[Unreleased]: https://github.com/codecoradev/codecora-ui/compare/v0.3.0...develop
+[0.3.0]: https://github.com/codecoradev/codecora-ui/compare/v0.2.0...v0.3.0
+[0.2.0]: https://github.com/codecoradev/codecora-ui/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/codecoradev/codecora-ui/releases/tag/v0.1.0

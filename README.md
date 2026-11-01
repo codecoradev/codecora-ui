@@ -30,10 +30,10 @@ product fleet and open to any Svelte app.
 
 ## Status
 
-`0.2.0`: `@codecora/tokens` and `@codecora/ui` 0.2.0, `@codecora/memory`
-0.1.0, `@codecora/icons` and `@codecora/brand` 0.1.0. Four new themes and three
-accents are merged and wait for the next release (see
-[CHANGELOG.md](CHANGELOG.md)). Not on npm yet: install from the GitHub Release
+`0.3.0`: `@codecora/tokens` and `@codecora/ui` 0.3.0 (eleven themes, three
+more accents, motion tokens and exit animations; see
+[CHANGELOG.md](CHANGELOG.md)), `@codecora/memory`, `@codecora/icons` and
+`@codecora/brand` 0.1.0. Not on npm yet: install from the GitHub Release
 tarballs below. The API can still change before 1.0.
 
 ## Install
@@ -42,8 +42,8 @@ Each release attaches one tarball per package it ships. The same URL works with
 bun, npm (`npm install <url>`) and pnpm (`pnpm add <url>`):
 
 ```bash
-bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.2.0/codecora-tokens-0.2.0.tgz
-bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.2.0/codecora-ui-0.2.0.tgz
+bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.3.0/codecora-tokens-0.3.0.tgz
+bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.3.0/codecora-ui-0.3.0.tgz
 bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.2.0/codecora-memory-0.1.0.tgz
 bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.1.0/codecora-icons-0.1.0.tgz
 bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.1.0/codecora-brand-0.1.0.tgz
@@ -112,18 +112,18 @@ Each one is shown in every state, theme, accent and density in the playground.
 | Theme | Character |
 |---|---|
 | `neutral` | The default: quiet greys, system-friendly |
-| `neutral-dark` *(next release)* | Dark twin of `neutral` |
+| `neutral-dark` | Dark twin of `neutral` |
 | `uteke` | Editorial light, from [Uteke Cloud](https://uteke.app) |
-| `uteke-dark` *(next release)* | Dark twin of `uteke` |
+| `uteke-dark` | Dark twin of `uteke` |
 | `corin` | Editor dark, from Corin |
-| `sepia` *(next release)* | Serif reading theme |
-| `contrast` *(next release)* | 7:1 text, heavier focus rings and icons |
-| `dimmed` *(next release)* | Low-glare dark: mid-grey surfaces, quieter accents |
-| `slab` *(next release)* | Brutalist print: square corners, mono headings, hard shadows |
-| `soft` *(next release)* | Consumer feel: round corners, rounded sans, thin icons |
-| `neutral-cvd` *(next release)* | `neutral` with blue success and vermillion danger for colour-blind users |
+| `sepia` | Serif reading theme |
+| `contrast` | 7:1 text, heavier focus rings and icons |
+| `dimmed` | Low-glare dark: mid-grey surfaces, quieter accents |
+| `slab` | Brutalist print: square corners, mono headings, hard shadows |
+| `soft` | Consumer feel: round corners, rounded sans, thin icons |
+| `neutral-cvd` | `neutral` with blue success and vermillion danger for colour-blind users |
 
-Accents: `blue`, `green`, `teal`, `violet`, and *(next release)* `orange`, `indigo`, `cyan`.
+Accents: `blue`, `green`, `teal`, `violet`, `orange`, `indigo`, `cyan`.
 Densities: `comfortable` (44 px controls) and `compact` (32 px). Themes are
 attributes, so they nest and mix:
 
@@ -134,9 +134,9 @@ attributes, so they nest and mix:
 </body>
 ```
 
-`neutral-dark`, `uteke-dark`, `sepia`, `contrast`, `dimmed`, `slab`, `soft`,
-`neutral-cvd` and the `orange`, `indigo`
-and `cyan` accents ship in the next release; until then they are on `develop`.
+Motion is part of the tokens too: four durations (`instant` to `slow`) and
+four curves (`out`, `in-out`, `exit`, and a `linear()` spring). Under
+`prefers-reduced-motion` every duration drops to 0 ms.
 
 ## Playground
 
