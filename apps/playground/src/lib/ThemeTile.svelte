@@ -1,8 +1,8 @@
 <!--
   One theme, showing only what a theme may change: the display face, corners,
   label shape, the filled action, the focus ring and the floating shadow.
-  Everything here is a static specimen except the title link and Use button,
-  so the gallery costs a keyboard user two stops per theme.
+  Everything here is a static specimen except the title link and the Use
+  button, so the gallery costs a keyboard user two stops per theme.
 -->
 <script lang="ts">
   import { resolve } from '$app/paths';
@@ -51,13 +51,20 @@
   </div>
 
   <footer>
-    {#if current}
-      <span class="current">Current theme</span>
-    {:else}
-      <Button variant="secondary" onclick={onuse}
-        ><span>Use<VisuallyHidden>&nbsp;{themes[name].label}</VisuallyHidden> theme</span></Button
-      >
-    {/if}
+    <!-- One button that stays put, so focus does not drop when the theme changes. -->
+    <Button
+      variant="secondary"
+      aria-pressed={current}
+      onclick={() => {
+        if (!current) onuse();
+      }}
+    >
+      {#if current}
+        <span>Current theme</span>
+      {:else}
+        <span>Use<VisuallyHidden>&nbsp;{themes[name].label}</VisuallyHidden> theme</span>
+      {/if}
+    </Button>
   </footer>
 </article>
 
@@ -161,10 +168,5 @@
     display: flex;
     align-items: center;
     min-height: var(--cc-control-h);
-  }
-  .current {
-    color: var(--cc-text-muted);
-    font-size: var(--cc-font-size-sm);
-    font-weight: 600;
   }
 </style>

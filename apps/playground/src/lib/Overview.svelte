@@ -4,7 +4,7 @@
 -->
 <script lang="ts">
   import { resolve } from '$app/paths';
-  import type { AccentName, ThemeName } from '@codecora/tokens';
+  import { themes, type AccentName, type ThemeName } from '@codecora/tokens';
   import { Button, CodeBlock, Link } from '@codecora/ui';
   import { catalogue, groupedThemes, repoUrl } from './catalogue.js';
   import NestedDemo from './NestedDemo.svelte';
@@ -18,6 +18,13 @@
   }
 
   let { theme, accent, density, setTheme }: Props = $props();
+
+  // Read out by screen readers when a tile applies its theme.
+  let announcement = $state('');
+  function useTheme(name: ThemeName) {
+    setTheme(name);
+    announcement = `${themes[name].label} theme applied to the playground.`;
+  }
 
   const groups = groupedThemes();
 
@@ -76,6 +83,7 @@
       apply to all of them. Access themes say who they are for.
     </p>
   </div>
+  <p class="visually-hidden" aria-live="polite">{announcement}</p>
   <div class="gallery">
     {#each groups as { group, themes: names } (group)}
       <div class="theme-group">
@@ -87,7 +95,7 @@
               {accent}
               {density}
               current={name === theme}
-              onuse={() => setTheme(name)}
+              onuse={() => useTheme(name)}
             />
           {/each}
         </div>
@@ -187,6 +195,14 @@
     color: var(--cc-text-muted);
   }
   /* One column per group, so every group shows in the first viewport on wide screens. */
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
   .gallery {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(14rem, 100%), 1fr));
