@@ -75,7 +75,7 @@
   <Button variant="ghost" href={repoUrl} rel="external">GitHub</Button>
 </div>
 
-<LiveStrip />
+<LiveStrip {theme} onpick={useTheme} />
 
 <section aria-labelledby="themes-title" class="themes">
   <div class="head">
