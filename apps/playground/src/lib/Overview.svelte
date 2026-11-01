@@ -4,9 +4,10 @@
 -->
 <script lang="ts">
   import { resolve } from '$app/paths';
-  import { themeNames, type AccentName, type ThemeName } from '@codecora/tokens';
-  import { CodeBlock, Link } from '@codecora/ui';
-  import { catalogue, repoUrl } from './catalogue.js';
+  import { themes, type AccentName, type ThemeName } from '@codecora/tokens';
+  import { Button, CodeBlock, Link } from '@codecora/ui';
+  import { catalogue, groupedThemes, repoUrl } from './catalogue.js';
+  import LiveStrip from './LiveStrip.svelte';
   import NestedDemo from './NestedDemo.svelte';
   import ThemeTile from './ThemeTile.svelte';
 
@@ -19,13 +20,22 @@
 
   let { theme, accent, density, setTheme }: Props = $props();
 
+  // Read out by screen readers when a tile applies its theme.
+  let announcement = $state('');
+  function useTheme(name: ThemeName) {
+    setTheme(name);
+    announcement = `${themes[name].label} theme applied to the playground.`;
+  }
+
+  const groups = groupedThemes();
+
   const componentCount = catalogue
     .flatMap((g) => g.sections)
     .reduce((n, s) => n + s.components.length, 0);
 
   const install = [
     'bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.3.0/codecora-tokens-0.3.0.tgz',
-    'bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.3.0/codecora-ui-0.3.0.tgz',
+    'bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.3.1/codecora-ui-0.3.1.tgz',
   ].join('\n');
 
   const pages = [
@@ -59,17 +69,33 @@
   ];
 </script>
 
+<div class="start-row">
+  <Button variant="primary" href={resolve('/components')}>Components</Button>
+  <Button variant="secondary" href="#start-title">Install</Button>
+</div>
+
+<LiveStrip {theme} onpick={useTheme} />
+
 <section aria-labelledby="themes-title" class="themes">
   <div class="head">
     <h2 id="themes-title">Eleven themes, one set of components</h2>
     <p>
-      Each tile below is the same markup with a different <code>data-theme</code>. The accent and
-      density you pick above apply to all of them.
+      Each tile shows only what its theme changes: surfaces, display face, corners, label shape, the
+      filled action, the focus ring and the floating shadow. The accent and density you pick in the
+      toolbar apply to all of them; Access themes show their proof. Open a title for its full page.
     </p>
   </div>
-  <div class="grid">
-    {#each themeNames as name (name)}
-      <ThemeTile {name} {accent} {density} current={name === theme} onuse={() => setTheme(name)} />
+  <p class="visually-hidden" aria-live="polite">{announcement}</p>
+  <div class="gallery">
+    {#each groups as { group, themes: names } (group)}
+      <div class="theme-group">
+        <h3 class="group-title">{group}</h3>
+        <div class="grid">
+          {#each names as name (name)}
+            <ThemeTile {name} {accent} {density} current={name === theme} />
+          {/each}
+        </div>
+      </div>
     {/each}
   </div>
 </section>
@@ -135,6 +161,11 @@
 </section>
 
 <style>
+  .start-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--cc-space-2);
+  }
   section {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
@@ -154,15 +185,43 @@
     margin: 0;
     font-size: var(--cc-font-size-2xl);
   }
+  /* Under 80 characters a line in the body face. */
   .head p {
-    max-width: 65ch;
+    max-width: 56ch;
     margin: 0;
     color: var(--cc-text-muted);
   }
+  /* One column per group, so every group shows in the first viewport on wide screens. */
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(14rem, 100%), 1fr));
+    gap: var(--cc-space-4);
+    align-items: start;
+  }
+  .theme-group {
+    display: grid;
+    gap: var(--cc-space-3);
+    min-width: 0;
+  }
+  .group-title {
+    margin: 0;
+    color: var(--cc-text-muted);
+    font-size: var(--cc-font-size-sm);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
   .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(17rem, 100%), 1fr));
-    gap: var(--cc-space-4);
+    gap: var(--cc-space-3);
   }
   .groups {
     display: grid;

@@ -108,6 +108,10 @@ export function createAppearance() {
     set density(value: string) {
       density = value;
     },
+    /** True once the saved or linked choice is applied; until then <html> carries it. */
+    get restored() {
+      return restored;
+    },
     /** Attribute values for the themed element. */
     get accentName(): AccentName | undefined {
       return accent === 'default' ? undefined : (accent as AccentName);

@@ -8,6 +8,20 @@ changesets (`packages/*/CHANGELOG.md`).
 
 ## [Unreleased]
 
+## [0.3.1] - 2026-11-01
+
+`@codecora/ui` 0.3.1. `@codecora/tokens` stays at 0.3.0, `@codecora/memory`, `@codecora/icons` and `@codecora/brand` at 0.1.0. Install from the GitHub Release tarballs (see the README); npm publishing is still pending (#15).
+
+### Changed
+
+- Playground: the front page opens with a rail of all eleven themes, each drawn in its own theme, above a strip of live components that follow the pick; the rail is one Tab stop (arrows move, Enter applies) and keeps its names on phones. Theme tiles show a strip of their surfaces and drop their Use buttons. The toolbar triggers lead with their values ("Default (teal) · Comfortable"), theme chips show a swatch with Access notes under each, and the dashboard uses the same popovers. `/tokens` opens with an index of the theme pages, which gain previous and next links and a link into the playground; Tokens is current on them. Nav links are 44 px, and "Show the code" reads "Hide the code" when open.
+
+### Fixed
+
+- `@codecora/ui`: CodeBlock says "Copy failed" when the clipboard refuses, selects the code so the keyboard shortcut copies it, and announces it; before, a failed copy reset without a word.
+- `@codecora/ui`: CodeBlock and Kbd turn off font ligatures, so code shows the characters as typed (`<!--` no longer renders as an arrow in themes whose mono font has ligatures).
+- Playground: a saved or linked theme is applied before the first paint, so pages no longer load in the default theme and fade; the phone toolbar fits one row.
+
 ## [0.3.0] - 2026-11-01
 
 `@codecora/tokens` and `@codecora/ui` 0.3.0. `@codecora/memory`, `@codecora/icons` and `@codecora/brand` stay at 0.1.0. Install from the GitHub Release tarballs (see the README); npm publishing is still pending (#15).
@@ -80,7 +94,8 @@ First release of `@codecora/tokens`, `@codecora/ui`, `@codecora/icons` and `@cod
 
 - Workflows: the review access token is a step output instead of a job-wide variable, actions are pinned to commit SHAs, the message standard runs from the base branch, and the PR description check requires real content under whole `## What` / `## Why` / `## Testing` headings.
 
-[Unreleased]: https://github.com/codecoradev/codecora-ui/compare/v0.3.0...develop
+[Unreleased]: https://github.com/codecoradev/codecora-ui/compare/v0.3.1...develop
+[0.3.1]: https://github.com/codecoradev/codecora-ui/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/codecoradev/codecora-ui/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/codecoradev/codecora-ui/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/codecoradev/codecora-ui/releases/tag/v0.1.0

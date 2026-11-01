@@ -1,5 +1,12 @@
 # @codecora/ui
 
+## 0.3.1
+
+### Patch Changes
+
+- 90c102e: CodeBlock and Kbd turn off font ligatures, so code renders the characters as typed in every theme: `<!--`, `->` and `!=` no longer merge into arrows or symbols in fonts with programming ligatures.
+- 6652daf: CodeBlock: when the clipboard refuses, the button reads "Copy failed", the code is selected so the keyboard shortcut copies it, and the status region says so. Before, a failed copy reset to "Copy" without a word.
+
 ## 0.3.0
 
 ### Minor Changes

@@ -1,4 +1,8 @@
-<!-- Preformatted code with a copy button; the page announces the copy politely. -->
+<!--
+  Preformatted code with a copy button; the page announces the copy politely.
+  When the clipboard refuses (no permission, an embedding frame), the code is
+  selected instead, so the platform copy shortcut works, and the failure is said.
+-->
 <script lang="ts">
   import Button from './Button.svelte';
 
@@ -10,32 +14,50 @@
 
   let { code, language }: Props = $props();
 
-  let copied = $state(false);
+  let status = $state<'idle' | 'copied' | 'failed'>('idle');
   let timer: ReturnType<typeof setTimeout> | undefined;
+  let codeEl = $state<HTMLElement>();
+
+  const label = { idle: 'Copy', copied: 'Copied', failed: 'Copy failed' };
+  const message = {
+    idle: '',
+    copied: 'Copied to the clipboard',
+    failed: 'Could not copy. The code is selected; copy it with your keyboard.',
+  };
+
+  function selectCode() {
+    const selection = window.getSelection();
+    if (!codeEl || !selection) return;
+    const range = document.createRange();
+    range.selectNodeContents(codeEl);
+    selection.removeAllRanges();
+    selection.addRange(range);
+  }
 
   async function copy() {
+    clearTimeout(timer);
     try {
       await navigator.clipboard.writeText(code);
-      copied = true;
-      clearTimeout(timer);
-      timer = setTimeout(() => (copied = false), 2000);
+      status = 'copied';
     } catch {
-      copied = false;
+      selectCode();
+      status = 'failed';
     }
+    timer = setTimeout(() => (status = 'idle'), status === 'failed' ? 4000 : 2000);
   }
 </script>
 
 <figure class="cc-code">
   <figcaption>
     <span>{language ?? 'code'}</span>
-    <Button variant="ghost" onclick={copy}>{copied ? 'Copied' : 'Copy'}</Button>
+    <Button variant="ghost" onclick={copy}>{label[status]}</Button>
   </figcaption>
   <!-- A scrollable code block must be keyboard reachable (axe: scrollable-region-focusable). -->
   <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
-  <pre tabindex="0" aria-label={language ? `${language} code` : 'Code'}><code>{code}</code></pre>
-  <span class="live" role="status" aria-live="polite"
-    >{copied ? 'Copied to the clipboard' : ''}</span
-  >
+  <pre tabindex="0" aria-label={language ? `${language} code` : 'Code'}><code bind:this={codeEl}
+      >{code}</code
+    ></pre>
+  <span class="live" role="status" aria-live="polite">{message[status]}</span>
 </figure>
 
 <style>
@@ -61,6 +83,8 @@
     padding: var(--cc-space-3);
     font-family: var(--cc-font-mono);
     font-size: var(--cc-font-size-sm);
+    /* Code shows the characters as typed: no ligature turns <!-- or -> into an arrow. */
+    font-variant-ligatures: none;
   }
   pre:focus-visible {
     outline: var(--cc-focus-width) solid var(--cc-focus);

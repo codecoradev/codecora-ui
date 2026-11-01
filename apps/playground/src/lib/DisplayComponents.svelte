@@ -1,6 +1,9 @@
 <!-- Card, Alert, Avatar, Progress, Separator, Kbd, Link and CodeBlock. -->
 <script lang="ts">
+  import { createModKey } from './platform.svelte.js';
   import { Alert, Avatar, Card, CodeBlock, Kbd, Link, Progress, Separator } from '@codecora/ui';
+
+  const mod = createModKey();
 </script>
 
 <section aria-labelledby="c-display">
@@ -30,14 +33,14 @@
     <Avatar name="Ada Lovelace" />
     <Avatar name="Grace Hopper" size="lg" />
     <Separator orientation="vertical" />
-    <span>Press <Kbd>⌘</Kbd> <Kbd>K</Kbd> to search, <Kbd>Esc</Kbd> to close.</span>
+    <span>Press <Kbd>{mod.value}</Kbd> <Kbd>K</Kbd> to search, <Kbd>Esc</Kbd> to close.</span>
   </div>
 
   <Separator />
 
   <CodeBlock
     language="bash"
-    code="bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.3.0/codecora-ui-0.3.0.tgz"
+    code="bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.3.1/codecora-ui-0.3.1.tgz"
   />
 </section>
 

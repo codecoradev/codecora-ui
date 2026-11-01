@@ -1,5 +1,6 @@
 <!-- Breadcrumb, Accordion, ToggleGroup, Pagination, Popover and DropdownMenu. -->
 <script lang="ts">
+  import { createModKey } from './platform.svelte.js';
   import { Ellipsis, Pencil, Trash } from '@codecora/icons/lucide';
   import {
     Accordion,
@@ -18,6 +19,8 @@
   let view = $state('list');
   let page = $state(3);
   let palette = $state(false);
+
+  const mod = createModKey();
 </script>
 
 <section aria-labelledby="c-nav">
@@ -85,7 +88,7 @@
 
   <div class="row">
     <Button onclick={() => (palette = true)}>Open command palette</Button>
-    <span>or press <Kbd>Ctrl</Kbd> <Kbd>K</Kbd></span>
+    <span>or press <Kbd>{mod.value}</Kbd> <Kbd>K</Kbd></span>
   </div>
   <CommandPalette
     bind:open={palette}

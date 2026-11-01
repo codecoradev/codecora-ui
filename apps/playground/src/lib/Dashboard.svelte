@@ -7,7 +7,7 @@
 -->
 <script lang="ts">
   import { resolve } from '$app/paths';
-  import { themeNames, themes, type ThemeName } from '@codecora/tokens';
+  import { themeNames, themes } from '@codecora/tokens';
   import {
     Activity,
     Funnel,
@@ -35,6 +35,7 @@
     Tooltip,
     toast,
   } from '@codecora/ui';
+  import AppearanceControls from './AppearanceControls.svelte';
   import { createAppearance } from './appearance.svelte.js';
 
   const appearance = createAppearance();
@@ -158,9 +159,9 @@
 
 <div
   class="themed"
-  data-theme={appearance.theme}
-  data-accent={appearance.accentName}
-  data-density={appearance.densityName}
+  data-theme={appearance.restored ? appearance.theme : undefined}
+  data-accent={appearance.restored ? appearance.accentName : undefined}
+  data-density={appearance.restored ? appearance.densityName : undefined}
 >
   <AppShell
     {nav}
@@ -176,17 +177,10 @@
     {#snippet footer({ collapsed })}
       {#if !collapsed}
         <div class="sidebar-foot">
-          <Field label="Theme">
-            {#snippet children(control)}
-              <Select
-                {...control}
-                items={themeNames.map((name) => ({ value: name, label: themes[name].label }))}
-                bind:value={
-                  () => appearance.theme, (value) => (appearance.theme = value as ThemeName)
-                }
-              />
-            {/snippet}
-          </Field>
+          <!-- The same popovers as the playground toolbar. -->
+          <div class="appearance" role="group" aria-label="Appearance">
+            <AppearanceControls {appearance} compact />
+          </div>
           <Field label="Sidebar">
             {#snippet children(control)}
               <Select
@@ -421,11 +415,22 @@
     padding: 0;
     list-style: none;
   }
+  /* minmax(0, 1fr): long trigger values truncate instead of widening the sidebar. */
   .sidebar-foot {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--cc-space-3);
     margin-top: auto;
     font-size: var(--cc-font-size-sm);
+  }
+  .appearance {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--cc-space-2);
+  }
+  .appearance > :global(*) {
+    min-width: 0;
+    max-width: 100%;
   }
   a {
     color: var(--cc-accent);
