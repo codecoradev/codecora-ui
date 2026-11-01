@@ -34,7 +34,7 @@
   const appearance = createAppearance();
 
   const accentLabel = $derived(
-    appearance.accent === 'default' ? 'Theme accent' : appearance.accent,
+    appearance.accent === 'default' ? 'Theme default' : appearance.accent,
   );
 </script>
 
