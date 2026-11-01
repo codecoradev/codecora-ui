@@ -18,6 +18,7 @@
     background: var(--cc-surface-raised);
     color: var(--cc-text);
     font-family: var(--cc-font-mono);
+    font-variant-ligatures: none;
     font-size: var(--cc-font-size-xs);
     line-height: 1.4;
     text-align: center;

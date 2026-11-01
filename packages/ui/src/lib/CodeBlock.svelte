@@ -61,6 +61,8 @@
     padding: var(--cc-space-3);
     font-family: var(--cc-font-mono);
     font-size: var(--cc-font-size-sm);
+    /* Code shows the characters as typed: no ligature turns <!-- or -> into an arrow. */
+    font-variant-ligatures: none;
   }
   pre:focus-visible {
     outline: var(--cc-focus-width) solid var(--cc-focus);
