@@ -87,6 +87,42 @@ export const stark = {
   ink: 'oklch(15% 0 0)',
 } as const;
 
+/** Mid-grey for `dimmed`: a dark that never goes near black (hue 255). */
+export const fog = {
+  crust: 'oklch(23% 0.012 255)',
+  base: 'oklch(27% 0.013 255)',
+  mantle: 'oklch(30% 0.014 255)',
+  hover: 'oklch(34% 0.015 255)',
+  rule: 'oklch(39% 0.015 255)',
+  strong: 'oklch(64% 0.015 255)',
+  muted: 'oklch(77% 0.012 255)',
+  text: 'oklch(88% 0.008 255)',
+} as const;
+
+/** Bone paper and black ink for `slab`: rules are ink, not grey (hue 90). */
+export const bone = {
+  white: 'oklch(100% 0 0)',
+  base: 'oklch(97% 0.006 90)',
+  sunken: 'oklch(93% 0.008 90)',
+  hover: 'oklch(90% 0.01 90)',
+  rule: 'oklch(30% 0.004 90)',
+  strong: 'oklch(18% 0.003 90)',
+  muted: 'oklch(38% 0.006 90)',
+  ink: 'oklch(16% 0.003 90)',
+} as const;
+
+/** Blush paper for `soft`: warm, low-chroma surfaces (hue 30). */
+export const blush = {
+  raised: 'oklch(99.5% 0.004 30)',
+  base: 'oklch(98% 0.008 30)',
+  sunken: 'oklch(95.5% 0.012 30)',
+  hover: 'oklch(93% 0.016 30)',
+  rule: 'oklch(89% 0.018 30)',
+  strong: 'oklch(55% 0.03 30)',
+  muted: 'oklch(46% 0.03 30)',
+  ink: 'oklch(25% 0.025 30)',
+} as const;
+
 /** Accent and status hues tuned for light surfaces: fill, hover fill, text on fill. */
 export const light = {
   blue: ['oklch(50% 0.16 260)', 'oklch(44% 0.16 260)', 'oklch(99% 0.003 260)'],
@@ -113,6 +149,28 @@ export const dark = {
   amber: ['#E89B3C', '#F0B76E', '#0E1015'],
 } as const;
 
+/** Lower-chroma hues for the mid-grey `dimmed` surfaces: fill, hover fill, text on fill. */
+export const lowGlare = {
+  blue: ['oklch(77% 0.1 255)', 'oklch(83% 0.08 255)', fog.crust],
+  green: ['oklch(76% 0.11 155)', 'oklch(82% 0.09 155)', fog.crust],
+  teal: ['oklch(77% 0.08 190)', 'oklch(83% 0.065 190)', fog.crust],
+  violet: ['oklch(78% 0.1 295)', 'oklch(84% 0.08 295)', fog.crust],
+  orange: ['oklch(78% 0.11 55)', 'oklch(84% 0.09 55)', fog.crust],
+  indigo: ['oklch(77% 0.1 275)', 'oklch(83% 0.08 275)', fog.crust],
+  cyan: ['oklch(78% 0.08 215)', 'oklch(84% 0.065 215)', fog.crust],
+  red: ['oklch(75% 0.12 25)', 'oklch(81% 0.1 25)', fog.crust],
+  amber: ['oklch(80% 0.1 75)', 'oklch(86% 0.08 75)', fog.crust],
+} as const;
+
+/**
+ * Status hues for `neutral-cvd`, after Okabe-Ito: success blue and danger
+ * vermillion stay apart for red/green colour vision deficiency.
+ */
+export const cvd = {
+  success: ['oklch(48% 0.13 245)', 'oklch(42% 0.12 245)', 'oklch(99% 0.004 245)'],
+  danger: ['oklch(50% 0.16 40)', 'oklch(44% 0.15 40)', 'oklch(99% 0.004 40)'],
+} as const;
+
 /** Modal scrims (translucent; not part of the contrast check). */
 export const scrim = {
   slate: 'oklch(22% 0.012 260 / 0.45)',
@@ -122,4 +180,7 @@ export const scrim = {
   dusk: 'oklch(10% 0.012 155 / 0.6)',
   sepia: 'oklch(28% 0.03 60 / 0.45)',
   stark: 'oklch(0% 0 0 / 0.6)',
+  fog: 'oklch(12% 0.012 255 / 0.55)',
+  bone: 'oklch(16% 0.003 90 / 0.5)',
+  blush: 'oklch(25% 0.025 30 / 0.35)',
 } as const;
