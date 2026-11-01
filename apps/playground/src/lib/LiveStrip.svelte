@@ -39,10 +39,8 @@
 
   // On phones the rail scrolls sideways; keep the applied theme in view.
   $effect(() => {
-    const index = rail.indexOf(theme);
-    railEl
-      ?.querySelectorAll<HTMLElement>('.pick')
-      [index]?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    const picks = railEl?.querySelectorAll<HTMLElement>('.pick');
+    picks?.[rail.indexOf(theme)]?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
   });
 
   let name = $state('ci-deploy');
