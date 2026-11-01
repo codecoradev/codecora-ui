@@ -29,6 +29,7 @@
   import InputComponents from './InputComponents.svelte';
   import NavigationComponents from './NavigationComponents.svelte';
   import StateMatrix from './StateMatrix.svelte';
+  import Usage from './Usage.svelte';
 
   // The section in view, marked in the index.
   let active = $state('c-matrix');
@@ -150,6 +151,7 @@
         <Spinner label="Loading keys" />
       </div>
     </section>
+    <Usage id="c-buttons" />
 
     <section aria-labelledby="c-forms">
       <h2 id="c-forms">Form fields</h2>
@@ -203,10 +205,13 @@
         </Field>
       </div>
     </section>
+    <Usage id="c-forms" />
 
     <ChoiceControls />
+    <Usage id="c-choice" />
 
     <InputComponents />
+    <Usage id="c-inputs" />
 
     <section aria-labelledby="c-overlays">
       <h2 id="c-overlays">Dialog, ConfirmDialog, Sheet, Toast</h2>
@@ -273,8 +278,10 @@
         {/snippet}
       </Sheet>
     </section>
+    <Usage id="c-overlays" />
 
     <NavigationComponents />
+    <Usage id="c-nav" />
 
     <section aria-labelledby="c-tabs">
       <h2 id="c-tabs">Tabs and Table</h2>
@@ -315,10 +322,13 @@
         {/snippet}
       </Tabs>
     </section>
+    <Usage id="c-tabs" />
 
     <DataTableDemo />
+    <Usage id="c-datatable" />
 
     <DisplayComponents />
+    <Usage id="c-display" />
 
     <section aria-labelledby="c-status">
       <h2 id="c-status">Badge, Skeleton, EmptyState</h2>
@@ -347,6 +357,7 @@
         </EmptyState>
       </div>
     </section>
+    <Usage id="c-status" />
   </div>
 </div>
 

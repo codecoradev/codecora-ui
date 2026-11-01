@@ -97,15 +97,25 @@
     if (id === 'toast') toast.dismiss(toastId);
   }
 
+  // Checked between steps, so Stop closes the open overlay and ends the run.
+  let stopping = false;
+
   async function replay() {
     playing = true;
+    stopping = false;
     for (const { id } of overlays) {
       show(id, true);
       await wait(1200);
       hide(id);
+      if (stopping) break;
       await wait(700);
+      if (stopping) break;
     }
     playing = false;
+  }
+
+  function stop() {
+    stopping = true;
   }
 </script>
 
@@ -126,7 +136,9 @@
   <section aria-labelledby="m-scale">
     <div class="head">
       <h2 id="m-scale">Scale</h2>
-      <Button variant="secondary" onclick={() => (moved = !moved)}>Play</Button>
+      <Button variant="secondary" onclick={() => (moved = !moved)}
+        >{moved ? 'Reset' : 'Play'}</Button
+      >
     </div>
     <p class="lead">
       Durations run with <code>ease-out</code>. Curves run at <code>slow</code> so their shape shows.
@@ -162,6 +174,9 @@
   <section aria-labelledby="m-overlays">
     <div class="head">
       <h2 id="m-overlays">Enter and exit</h2>
+      {#if playing}
+        <Button variant="secondary" onclick={stop}>Stop</Button>
+      {/if}
       <Button variant="primary" disabled={playing} onclick={replay}>
         {playing ? 'Replaying…' : 'Replay all'}
       </Button>
