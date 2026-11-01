@@ -112,14 +112,14 @@ Each one is shown in every state, theme, accent and density in the playground.
 | Theme | Character |
 |---|---|
 | `neutral` | The default: quiet greys, system-friendly |
-| `neutral-dark` | Dark twin of `neutral` |
+| `neutral-dark` *(next release)* | Dark twin of `neutral` |
 | `uteke` | Editorial light, from [Uteke Cloud](https://uteke.app) |
-| `uteke-dark` | Dark twin of `uteke` |
+| `uteke-dark` *(next release)* | Dark twin of `uteke` |
 | `corin` | Editor dark, from Corin |
-| `sepia` | Serif reading theme |
-| `contrast` | 7:1 text, heavier focus rings and icons |
+| `sepia` *(next release)* | Serif reading theme |
+| `contrast` *(next release)* | 7:1 text, heavier focus rings and icons |
 
-Accents: `blue`, `green`, `teal`, `violet`, `orange`, `indigo`, `cyan`.
+Accents: `blue`, `green`, `teal`, `violet`, and *(next release)* `orange`, `indigo`, `cyan`.
 Densities: `comfortable` (44 px controls) and `compact` (32 px). Themes are
 attributes, so they nest and mix:
 
