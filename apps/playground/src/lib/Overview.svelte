@@ -5,7 +5,7 @@
 <script lang="ts">
   import { resolve } from '$app/paths';
   import type { AccentName, ThemeName } from '@codecora/tokens';
-  import { CodeBlock, Link } from '@codecora/ui';
+  import { Button, CodeBlock, Link } from '@codecora/ui';
   import { catalogue, groupedThemes, repoUrl } from './catalogue.js';
   import NestedDemo from './NestedDemo.svelte';
   import ThemeTile from './ThemeTile.svelte';
@@ -60,6 +60,12 @@
     { href: resolve('/brand'), label: 'Brand', text: 'Product marks and favicon sets.' },
   ];
 </script>
+
+<div class="start-row">
+  <Button variant="primary" href="#start-title">Install</Button>
+  <Button variant="secondary" href={resolve('/components')}>Browse components</Button>
+  <Button variant="ghost" href={repoUrl} rel="external">GitHub</Button>
+</div>
 
 <section aria-labelledby="themes-title" class="themes">
   <div class="head">
@@ -148,6 +154,11 @@
 </section>
 
 <style>
+  .start-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--cc-space-2);
+  }
   section {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
