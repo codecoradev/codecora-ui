@@ -1,14 +1,37 @@
 <!--
-  The motion scale and the overlays that use it. Each overlay opens and closes
-  on its own or in one replay; the switch applies what the tokens do under
-  prefers-reduced-motion, so both states can be compared without changing the
-  system setting.
+  The motion scale and the components that use it. Each overlay opens and
+  closes on its own or in one replay; every other component moves as you use
+  it. The switch applies what the tokens do under prefers-reduced-motion, so
+  both states can be compared without changing the system setting.
 -->
 <script lang="ts">
   import { duration, ease } from '@codecora/tokens';
-  import { Button, CodeBlock, Dialog, Popover, Sheet, Switch, Toaster, toast } from '@codecora/ui';
+  import { marks } from '@codecora/brand';
+  import {
+    Accordion,
+    Alert,
+    Avatar,
+    Button,
+    Checkbox,
+    CodeBlock,
+    Combobox,
+    CommandPalette,
+    Dialog,
+    DropdownMenu,
+    Pagination,
+    Popover,
+    Select,
+    Sheet,
+    Slider,
+    Switch,
+    Tabs,
+    Toaster,
+    ToggleGroup,
+    Tooltip,
+    toast,
+  } from '@codecora/ui';
 
-  type Overlay = 'dialog' | 'sheet' | 'popover' | 'toast';
+  type Overlay = 'dialog' | 'sheet' | 'palette' | 'popover' | 'toast';
 
   const overlays: { id: Overlay; name: string; enter: string; exit: string }[] = [
     {
@@ -22,6 +45,12 @@
       name: 'Sheet',
       enter: 'slide normal · ease-out',
       exit: 'slide fast · ease-exit',
+    },
+    {
+      id: 'palette',
+      name: 'CommandPalette',
+      enter: 'fade normal · ease-out, drop slow · spring',
+      exit: 'fade and lift fast · ease-exit',
     },
     {
       id: 'popover',
@@ -51,6 +80,85 @@
   let dialogOpen = $state(false);
   let sheetOpen = $state(false);
   let popoverOpen = $state(false);
+  let paletteOpen = $state(false);
+
+  type Change = { name: string; steps: [string, string][] };
+
+  // What each component does when its state changes, in the order of the cards.
+  const changes: Change[] = [
+    {
+      name: 'Accordion',
+      steps: [
+        ['Open', 'height and fade normal · ease-out'],
+        ['Close', 'fast · ease-exit; chevron turns fast · in-out'],
+      ],
+    },
+    { name: 'Tabs', steps: [['Select', 'underline slides slow · spring']] },
+    {
+      name: 'Tooltip',
+      steps: [
+        ['Enter', 'fade and scale fast · ease-out'],
+        ['Exit', 'instant · ease-exit'],
+      ],
+    },
+    {
+      name: 'DropdownMenu',
+      steps: [
+        ['Enter', 'fade and scale fast · ease-out'],
+        ['Exit', 'instant · ease-exit'],
+      ],
+    },
+    {
+      name: 'Select',
+      steps: [
+        ['Enter', 'fade and scale fast · ease-out'],
+        ['Exit', 'instant · ease-exit'],
+      ],
+    },
+    {
+      name: 'Combobox',
+      steps: [
+        ['Enter', 'fade and scale fast · ease-out'],
+        ['Exit', 'instant · ease-exit'],
+      ],
+    },
+    {
+      name: 'Checkbox',
+      steps: [
+        ['Check', 'fill fast · ease-out, mark slow · spring'],
+        ['Uncheck', 'instant · ease-exit'],
+      ],
+    },
+    {
+      name: 'Slider',
+      steps: [
+        ['Step', 'keyboard steps glide fast · ease-out'],
+        ['Hold', 'thumb grows fast · ease-out; drags never lag'],
+      ],
+    },
+    { name: 'ToggleGroup', steps: [['Change', 'fill and colour fast · ease-out']] },
+    { name: 'Pagination', steps: [['Change', 'fill and colour fast · ease-out']] },
+    { name: 'Avatar', steps: [['Load', 'image fades in normal · ease-out']] },
+    { name: 'Alert', steps: [['Arrive', 'fade and settle normal · ease-out']] },
+  ];
+
+  const plans = [
+    { value: 'free', label: 'Free' },
+    { value: 'team', label: 'Team' },
+    { value: 'business', label: 'Business' },
+  ];
+  const regions = [
+    { value: 'ams', label: 'Amsterdam' },
+    { value: 'fra', label: 'Frankfurt' },
+    { value: 'sin', label: 'Singapore' },
+    { value: 'syd', label: 'Sydney' },
+    { value: 'iad', label: 'Washington' },
+  ];
+  let receipt = $state(true);
+  let quota = $state(40);
+  let page = $state(2);
+  // Bumped by Replay to remount the components that only move on arrival.
+  let arrival = $state(0);
 
   // Run the scale once on arrival so the page never opens on parked dots;
   // skipped when the system asks for reduced motion.
@@ -100,6 +208,7 @@
     if (id === 'dialog') dialogOpen = true;
     if (id === 'sheet') sheetOpen = true;
     if (id === 'popover') popoverOpen = true;
+    if (id === 'palette') paletteOpen = true;
     if (id === 'toast') {
       toastId = toast.show({
         title: 'Key saved',
@@ -113,6 +222,7 @@
     if (id === 'dialog') dialogOpen = false;
     if (id === 'sheet') sheetOpen = false;
     if (id === 'popover') popoverOpen = false;
+    if (id === 'palette') paletteOpen = false;
     if (id === 'toast') toast.dismiss(toastId);
   }
 
@@ -231,6 +341,120 @@
       {/each}
     </ul>
   </section>
+
+  <section aria-labelledby="m-changes">
+    <div class="head">
+      <h2 id="m-changes">State changes</h2>
+      <Button variant="secondary" onclick={() => (arrival += 1)}>Replay arrivals</Button>
+    </div>
+    <p class="lead">
+      Use each one to see it move. Replay arrivals remounts Avatar and Alert, which only move when
+      they appear.
+    </p>
+    <ul class="overlays changes">
+      {#each changes as change (change.name)}
+        <li>
+          <h3>{change.name}</h3>
+          <dl>
+            {#each change.steps as [step, motion] (step)}
+              <dt>{step}</dt>
+              <dd>{motion}</dd>
+            {/each}
+          </dl>
+          <div class="demo">
+            {#if change.name === 'Accordion'}
+              <Accordion
+                items={[
+                  { value: 'scope', label: 'Scopes' },
+                  { value: 'expiry', label: 'Expiry' },
+                ]}
+              >
+                {#snippet panel(value)}
+                  <p class="plain">
+                    {value === 'scope'
+                      ? 'Read, write or admin, per key.'
+                      : 'Keys expire after 90 days unless renewed.'}
+                  </p>
+                {/snippet}
+              </Accordion>
+            {:else if change.name === 'Tabs'}
+              <Tabs
+                label="Key views"
+                items={[
+                  { value: 'active', label: 'Active' },
+                  { value: 'expiring', label: 'Expiring' },
+                  { value: 'revoked', label: 'Revoked' },
+                ]}
+              >
+                {#snippet panel(value)}<p class="plain">Showing {value} keys.</p>{/snippet}
+              </Tabs>
+            {:else if change.name === 'Tooltip'}
+              <div class="row">
+                <Tooltip content="Copy key">
+                  {#snippet trigger({ props })}<Button {...props}>Copy</Button>{/snippet}
+                </Tooltip>
+                <Tooltip content="Rotate key">
+                  {#snippet trigger({ props })}<Button {...props}>Rotate</Button>{/snippet}
+                </Tooltip>
+              </div>
+            {:else if change.name === 'DropdownMenu'}
+              <div class="row">
+                <DropdownMenu
+                  label="Key actions"
+                  items={[
+                    { label: 'Rename', onselect: () => {} },
+                    { label: 'Rotate', onselect: () => {} },
+                    { label: 'Revoke', danger: true, separatorBefore: true, onselect: () => {} },
+                  ]}
+                >
+                  {#snippet trigger({ props })}<Button {...props}>Actions</Button>{/snippet}
+                </DropdownMenu>
+              </div>
+            {:else if change.name === 'Select'}
+              <Select label="Plan" items={plans} placeholder="Choose a plan" />
+            {:else if change.name === 'Combobox'}
+              <Combobox label="Region" items={regions} placeholder="Search regions" />
+            {:else if change.name === 'Checkbox'}
+              <Checkbox bind:checked={receipt} label="Send me a receipt" />
+            {:else if change.name === 'Slider'}
+              <Slider
+                label="Monthly quota"
+                bind:value={quota}
+                step={10}
+                showValue
+                format={(v) => `${v} GB`}
+              />
+            {:else if change.name === 'ToggleGroup'}
+              <div class="row">
+                <ToggleGroup
+                  label="Range"
+                  value="7d"
+                  items={[
+                    { value: '24h', label: '24 h' },
+                    { value: '7d', label: '7 d' },
+                    { value: '30d', label: '30 d' },
+                  ]}
+                />
+              </div>
+            {:else if change.name === 'Pagination'}
+              <Pagination count={40} perPage={10} bind:page />
+            {:else if change.name === 'Avatar'}
+              {#key arrival}
+                <div class="row">
+                  <Avatar name="Uteke" src={marks.uteke.favicons.icon192} size="lg" />
+                  <Avatar name="Ada Lovelace" size="lg" />
+                </div>
+              {/key}
+            {:else if change.name === 'Alert'}
+              {#key arrival}
+                <Alert tone="success" title="Key saved">ci-deploy can now write.</Alert>
+              {/key}
+            {/if}
+          </div>
+        </li>
+      {/each}
+    </ul>
+  </section>
 </div>
 
 <Dialog bind:open={dialogOpen} title="Rename key" description="The name appears in the audit log.">
@@ -244,6 +468,20 @@
     <Button variant="secondary" onclick={() => (sheetOpen = false)}>Close</Button>
   {/snippet}
 </Sheet>
+
+<CommandPalette
+  bind:open={paletteOpen}
+  shortcut=""
+  groups={[
+    {
+      heading: 'Go to',
+      items: [
+        { value: 'keys', label: 'API keys', onselect: () => {} },
+        { value: 'usage', label: 'Usage', onselect: () => {} },
+      ],
+    },
+  ]}
+/>
 
 <Toaster />
 
@@ -337,6 +575,9 @@
     gap: var(--cc-space-4);
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
   }
+  .changes {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  }
   .overlays li {
     display: grid;
     gap: var(--cc-space-3);
@@ -365,5 +606,15 @@
   }
   .plain {
     margin: 0;
+  }
+  .demo {
+    display: grid;
+    width: 100%;
+    margin-top: auto;
+  }
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--cc-space-2);
   }
 </style>

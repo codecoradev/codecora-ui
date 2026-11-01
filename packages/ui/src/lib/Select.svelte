@@ -114,6 +114,12 @@
     color: var(--cc-text);
     box-shadow: var(--cc-shadow-popover);
     font-family: var(--cc-font-sans);
+    transform-origin: var(--bits-select-content-transform-origin);
+    animation: cc-select-in var(--cc-duration-fast) var(--cc-ease-out);
+  }
+  /* bits-ui keeps the list mounted until the exit animation finishes. */
+  :global(.cc-select-content[data-state='closed']) {
+    animation: cc-select-out var(--cc-duration-instant) var(--cc-ease-exit) forwards;
   }
   :global(.cc-select-item) {
     display: flex;
@@ -131,5 +137,22 @@
   :global(.cc-select-item[data-disabled]) {
     opacity: 0.55;
     cursor: not-allowed;
+  }
+  @keyframes cc-select-in {
+    from {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+  }
+  @keyframes cc-select-out {
+    to {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :global(.cc-select-content[data-state]) {
+      animation: none;
+    }
   }
 </style>

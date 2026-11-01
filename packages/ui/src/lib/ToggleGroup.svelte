@@ -49,6 +49,9 @@
     color: var(--cc-text);
     font: inherit;
     cursor: pointer;
+    transition:
+      background-color var(--cc-duration-fast) var(--cc-ease-out),
+      color var(--cc-duration-fast) var(--cc-ease-out);
   }
   :global(.cc-toggle + .cc-toggle) {
     border-inline-start: 1px solid var(--cc-border-strong);
@@ -76,5 +79,10 @@
   :global(.cc-toggle[data-disabled]) {
     opacity: 0.55;
     cursor: not-allowed;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :global(.cc-toggle) {
+      transition: none;
+    }
   }
 </style>

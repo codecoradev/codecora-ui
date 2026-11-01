@@ -22,15 +22,58 @@
   $effect.pre(() => {
     if (value === undefined) value = items[0]?.value;
   });
+
+  // One underline slides to the selected tab. Until it has been measured (and
+  // without JavaScript) the selected tab draws its own border instead.
+  let list = $state<HTMLElement | null>(null);
+  let indicator = $state<{ x: number; width: number } | null>(null);
+  let settled = $state(false);
+
+  function measure() {
+    const active = list?.querySelector<HTMLElement>(':scope > [data-state="active"]');
+    indicator = active ? { x: active.offsetLeft, width: active.offsetWidth } : null;
+  }
+
+  $effect(() => {
+    void value;
+    void items;
+    measure();
+  });
+
+  $effect(() => {
+    if (!list) return;
+    void items;
+    const observer = new ResizeObserver(measure);
+    for (const tab of list.children) observer.observe(tab);
+    // Turn the slide on after the first placement, so the underline does not fly in on load.
+    const frame = requestAnimationFrame(() => (settled = true));
+    return () => {
+      observer.disconnect();
+      cancelAnimationFrame(frame);
+    };
+  });
 </script>
 
 <Tabs.Root bind:value class="cc-tabs">
-  <Tabs.List class="cc-tabs-list" aria-label={label}>
+  <Tabs.List
+    bind:ref={list}
+    class="cc-tabs-list"
+    aria-label={label}
+    data-indicator={indicator ? '' : undefined}
+  >
     {#each items as item (item.value)}
       <Tabs.Trigger value={item.value} disabled={item.disabled} class="cc-tab">
         {item.label}
       </Tabs.Trigger>
     {/each}
+    {#if indicator}
+      <span
+        class={['cc-tab-indicator', settled && 'settled']}
+        style:translate="{indicator.x}px 0"
+        style:scale="{indicator.width} 1"
+        aria-hidden="true"
+      ></span>
+    {/if}
   </Tabs.List>
   {#each items as item (item.value)}
     <Tabs.Content value={item.value} class="cc-tab-panel">{@render panel(item.value)}</Tabs.Content>
@@ -39,6 +82,7 @@
 
 <style>
   :global(.cc-tabs-list) {
+    position: relative;
     display: flex;
     gap: var(--cc-space-1);
     overflow-x: auto;
@@ -64,6 +108,25 @@
     color: var(--cc-text);
     border-bottom-color: var(--cc-accent);
   }
+  :global(.cc-tabs-list[data-indicator] .cc-tab[data-state='active']) {
+    border-bottom-color: transparent;
+  }
+  /* A 1px bar scaled to the tab's width: transform only, so the spring may move it. */
+  .cc-tab-indicator {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 1px;
+    height: 2px;
+    background: var(--cc-accent);
+    transform-origin: left;
+    pointer-events: none;
+  }
+  .cc-tab-indicator.settled {
+    transition:
+      translate var(--cc-duration-slow) var(--cc-ease-spring),
+      scale var(--cc-duration-slow) var(--cc-ease-spring);
+  }
   :global(.cc-tab[data-disabled]) {
     opacity: 0.55;
     cursor: not-allowed;
@@ -82,5 +145,10 @@
   :global(.cc-tab-panel:focus-visible) {
     outline: var(--cc-focus-width) solid var(--cc-focus);
     outline-offset: var(--cc-focus-offset);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cc-tab-indicator.settled {
+      transition: none;
+    }
   }
 </style>

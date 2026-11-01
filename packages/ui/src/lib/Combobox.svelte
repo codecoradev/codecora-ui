@@ -159,6 +159,12 @@
     color: var(--cc-text);
     box-shadow: var(--cc-shadow-popover);
     font-family: var(--cc-font-sans);
+    transform-origin: var(--bits-combobox-content-transform-origin);
+    animation: cc-combobox-in var(--cc-duration-fast) var(--cc-ease-out);
+  }
+  /* bits-ui keeps the list mounted until the exit animation finishes. */
+  :global(.cc-combobox-content[data-state='closed']) {
+    animation: cc-combobox-out var(--cc-duration-instant) var(--cc-ease-exit) forwards;
   }
   :global(.cc-combobox-item) {
     display: flex;
@@ -181,5 +187,22 @@
     margin: 0;
     padding: var(--cc-space-2) var(--cc-control-px);
     color: var(--cc-text-muted);
+  }
+  @keyframes cc-combobox-in {
+    from {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+  }
+  @keyframes cc-combobox-out {
+    to {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :global(.cc-combobox-content[data-state]) {
+      animation: none;
+    }
   }
 </style>
