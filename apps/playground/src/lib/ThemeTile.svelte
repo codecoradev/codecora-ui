@@ -1,6 +1,7 @@
 <!--
-  One theme, showing only what a theme may change: the display face, corners,
-  label shape, the filled action, the focus ring and the floating shadow.
+  One theme, showing only what a theme may change: its surfaces, the display
+  face, corners, label shape, the filled action, the focus ring and the
+  floating shadow.
   Everything here is a static specimen except the title link and the Use
   button, so the gallery costs a keyboard user two stops per theme.
 -->
@@ -48,6 +49,14 @@
     </div>
     <span class="glyph" aria-hidden="true">Aa</span>
   </header>
+
+  <!-- Its surfaces in order, at the control radius: round themes read as pills. -->
+  <div class="surfaces" aria-hidden="true">
+    <span class="surface"></span>
+    <span class="raised"></span>
+    <span class="sunken"></span>
+    <span class="accent"></span>
+  </div>
 
   {#if accessNotes[name]}
     <p class="note">{accessNotes[name]}</p>
@@ -122,12 +131,16 @@
     font-family: var(--cc-font-display);
     font-size: var(--cc-font-size-xl);
   }
+  /* The title opens the theme page, so it looks like a link at rest. */
   h4 a {
     color: inherit;
-    text-decoration: none;
+    text-decoration: underline;
+    text-decoration-color: var(--cc-border-strong);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.2em;
   }
   h4 a:hover {
-    text-decoration: underline;
+    text-decoration-color: currentColor;
   }
   h4 a:focus-visible {
     outline: var(--cc-focus-width) solid var(--cc-focus);
@@ -144,6 +157,29 @@
     font-size: var(--cc-font-size-3xl);
     font-weight: 600;
     line-height: 1;
+  }
+  .surfaces {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--cc-space-1);
+  }
+  .surfaces span {
+    height: 1.75rem;
+    border: 1px solid var(--cc-border);
+    border-radius: var(--cc-radius-md);
+  }
+  .surfaces .surface {
+    background: var(--cc-surface);
+  }
+  .surfaces .raised {
+    background: var(--cc-surface-raised);
+  }
+  .surfaces .sunken {
+    background: var(--cc-surface-sunken);
+  }
+  .surfaces .accent {
+    border-color: var(--cc-accent);
+    background: var(--cc-accent);
   }
   /* The Access proof: measured from the theme, not claimed. */
   .proof {
