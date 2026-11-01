@@ -104,6 +104,10 @@ export const northStars: Record<ThemeName, string> = {
   'uteke-dark': 'The Field Notebook by lamplight',
   sepia: 'The Reading Room',
   contrast: 'High Beam',
+  dimmed: 'Low Light',
+  slab: 'The Proof Sheet',
+  soft: 'The Pebble',
+  'neutral-cvd': 'The Plain Workbench, colour-blind safe',
 };
 
 export const repoUrl = 'https://github.com/codecoradev/codecora-ui';

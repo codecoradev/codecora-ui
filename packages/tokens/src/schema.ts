@@ -9,6 +9,10 @@ export const themeNames = [
   'uteke-dark',
   'sepia',
   'contrast',
+  'dimmed',
+  'slab',
+  'soft',
+  'neutral-cvd',
 ] as const;
 export type ThemeName = (typeof themeNames)[number];
 
@@ -64,6 +68,12 @@ export interface ThemeShape {
   rowMarker: string;
 }
 
+/** Shadows for layers that float above the page; resting surfaces use tone, not shadow. */
+export interface ThemeShadow {
+  popover: string;
+  modal: string;
+}
+
 export interface Theme {
   name: ThemeName;
   label: string;
@@ -75,6 +85,8 @@ export interface Theme {
   font: { sans: string; display: string; mono: string };
   icon: { stroke: string; size: string };
   shape: ThemeShape;
+  /** Floating-layer shadows; omitted, they are soft drops tinted by the scrim. */
+  shadow?: ThemeShadow;
   /** The same brand in the other colour scheme, so an app can follow `prefers-color-scheme`. */
   twin?: ThemeName;
   /** Minimum ratio for body and muted text; 7 for the high-contrast theme, 4.5 otherwise. */
@@ -125,6 +137,8 @@ export const semanticTokens = [
   'focus-width',
   'focus-offset',
   'row-marker',
+  'shadow-popover',
+  'shadow-modal',
   'control-h',
   'control-px',
   'gap',

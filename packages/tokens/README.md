@@ -9,7 +9,7 @@ Design tokens and themes for CodeCora products. See the
 
 1. **Primitive** (`src/palette.ts`, `src/scale.ts`): colour palettes, spacing, type scale, motion. Raw colour literals live here and nowhere else.
 2. **Semantic**: `--cc-surface`, `--cc-text`, `--cc-accent`, `--cc-danger`, `--cc-radius-md`, `--cc-font-sans`, `--cc-control-h`, ... (full list: `semanticTokens`). Components read only these.
-3. **Theme** (`src/themes.ts`): `neutral` (default), `uteke` (editorial light) and `corin` (editor dark); *(next release)* `neutral-dark`, `uteke-dark`, `sepia` (serif reading) and `contrast` (7:1 text).
+3. **Theme** (`src/themes.ts`): `neutral` (default), `uteke` (editorial light) and `corin` (editor dark); *(next release)* `neutral-dark`, `uteke-dark`, `sepia` (serif reading), `contrast` (7:1 text), `dimmed` (low-glare dark), `slab` (brutalist print), `soft` (rounded consumer) and `neutral-cvd` (colour-blind safe status).
 
 ## Use
 
@@ -26,10 +26,10 @@ Design tokens and themes for CodeCora products. See the
 </html>
 ```
 
-- `data-theme`: `neutral`, `uteke`, `corin`; *(next release)* `neutral-dark`, `uteke-dark`, `sepia`, `contrast`. Themes nest per element; a themed element paints its own surface and text colour. Without `data-theme` the page gets `neutral`.
+- `data-theme`: `neutral`, `uteke`, `corin`; *(next release)* `neutral-dark`, `uteke-dark`, `sepia`, `contrast`, `dimmed`, `slab`, `soft`, `neutral-cvd`. Themes nest per element; a themed element paints its own surface and text colour. Without `data-theme` the page gets `neutral`.
 - `data-accent`: `blue`, `green`, `teal`, `violet`; *(next release)* `orange`, `indigo`, `cyan`. Each is tuned per theme. A nested `data-theme` starts again from its own default accent.
 - `data-density`: `comfortable` (default, 44 px controls) or `compact` (32 px).
-- Fonts are referenced, not shipped: load Geist, Space Grotesk or JetBrains Mono yourself when a theme names them; the stacks fall back to system fonts.
+- Fonts are referenced, not shipped: load Geist, Space Grotesk, JetBrains Mono or Nunito yourself when a theme names them; the stacks fall back to system fonts.
 
 Motion is the same in every theme: `--cc-duration-instant|fast|normal|slow` (70, 140, 240, 400 ms) and `--cc-ease-out|exit|in-out|spring`. `spring` is a `linear()` curve with a small overshoot, for movement and scale only. Under `prefers-reduced-motion: reduce` every duration is 0 ms and `spring` falls back to `out`. The Tailwind preset exposes the curves as `ease-cc-*`.
 

@@ -118,6 +118,10 @@ Each one is shown in every state, theme, accent and density in the playground.
 | `corin` | Editor dark, from Corin |
 | `sepia` *(next release)* | Serif reading theme |
 | `contrast` *(next release)* | 7:1 text, heavier focus rings and icons |
+| `dimmed` *(next release)* | Low-glare dark: mid-grey surfaces, quieter accents |
+| `slab` *(next release)* | Brutalist print: square corners, mono headings, hard shadows |
+| `soft` *(next release)* | Consumer feel: round corners, rounded sans, thin icons |
+| `neutral-cvd` *(next release)* | `neutral` with blue success and vermillion danger for colour-blind users |
 
 Accents: `blue`, `green`, `teal`, `violet`, and *(next release)* `orange`, `indigo`, `cyan`.
 Densities: `comfortable` (44 px controls) and `compact` (32 px). Themes are
@@ -130,7 +134,8 @@ attributes, so they nest and mix:
 </body>
 ```
 
-`neutral-dark`, `uteke-dark`, `sepia`, `contrast` and the `orange`, `indigo`
+`neutral-dark`, `uteke-dark`, `sepia`, `contrast`, `dimmed`, `slab`, `soft`,
+`neutral-cvd` and the `orange`, `indigo`
 and `cyan` accents ship in the next release; until then they are on `develop`.
 
 ## Playground

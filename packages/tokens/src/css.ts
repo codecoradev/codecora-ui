@@ -11,12 +11,21 @@ import {
   statusNames,
   type Density,
   type Theme,
+  type ThemeShadow,
 } from './schema.js';
 
 export const LAYERS = '@layer cc.base, cc.theme, cc.modifier;';
 
 /** Elements where a token can change, so derived values must be recomputed there. */
 const SCOPES = ':root, [data-theme], [data-accent]';
+
+/** Soft drops tinted by the theme's scrim, for themes that set no `shadow`. */
+const defaultShadow: ThemeShadow = {
+  popover:
+    '0 var(--cc-space-2) var(--cc-space-6) color-mix(in srgb, var(--cc-scrim) 50%, transparent)',
+  modal:
+    '0 var(--cc-space-4) var(--cc-space-10) color-mix(in srgb, var(--cc-scrim) 60%, transparent)',
+};
 
 type Decls = [name: string, value: string][];
 
@@ -47,18 +56,7 @@ export function baseCss(): string {
       ...prefixed('ease', ease),
       ...densityDecls('comfortable'),
     ]),
-    // Shadows follow the theme's scrim, so they are recomputed wherever a theme changes.
-    block(SCOPES, [
-      ...['accent', ...statusNames].map(soft),
-      [
-        '--cc-shadow-popover',
-        '0 var(--cc-space-2) var(--cc-space-6) color-mix(in srgb, var(--cc-scrim) 50%, transparent)',
-      ],
-      [
-        '--cc-shadow-modal',
-        '0 var(--cc-space-4) var(--cc-space-10) color-mix(in srgb, var(--cc-scrim) 60%, transparent)',
-      ],
-    ]),
+    block(SCOPES, ['accent', ...statusNames].map(soft)),
     `  @media (prefers-reduced-motion: reduce) {\n${block(
       ':root',
       [
@@ -109,6 +107,7 @@ export function themeCss(theme: Theme): string {
     ...prefixed('font', theme.font),
     ...prefixed('icon', theme.icon),
     ...Object.entries(theme.shape).map(([k, v]): [string, string] => [`--cc-${kebab(k)}`, v]),
+    ...prefixed('shadow', { ...(theme.shadow ?? defaultShadow) }),
     // A themed region paints itself, so nested themes show their own surface.
     ['color', 'var(--cc-text)'],
     ['background-color', 'var(--cc-surface)'],
@@ -116,7 +115,8 @@ export function themeCss(theme: Theme): string {
   return `${LAYERS}\n\n${layer('cc.theme', [block(selector, decls)])}`;
 }
 
-const isColor = (t: string) => !/^(radius|font|icon|control|gap|cell|badge|focus-|row)/.test(t);
+const isColor = (t: string) =>
+  !/^(radius|font|icon|control|gap|cell|badge|focus-|row|shadow)/.test(t);
 
 /** Tailwind 4 preset: `bg-cc-surface`, `text-cc-text-muted`, `rounded-cc-md`, `font-cc-mono`. */
 export function tailwindCss(): string {

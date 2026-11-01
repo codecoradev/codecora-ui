@@ -29,6 +29,10 @@ This file holds the rules every theme shares. Each theme records its own colours
 | `uteke-dark` | The Field Notebook by lamplight | [docs/design/uteke-dark.md](docs/design/uteke-dark.md) |
 | `sepia` | The Reading Room | [docs/design/sepia.md](docs/design/sepia.md) |
 | `contrast` | High Beam | [docs/design/contrast.md](docs/design/contrast.md) |
+| `dimmed` | Low Light | [docs/design/dimmed.md](docs/design/dimmed.md) |
+| `slab` | The Proof Sheet | [docs/design/slab.md](docs/design/slab.md) |
+| `soft` | The Pebble | [docs/design/soft.md](docs/design/soft.md) |
+| `neutral-cvd` | The Plain Workbench, colour-blind safe | [docs/design/neutral-cvd.md](docs/design/neutral-cvd.md) |
 
 The token source of truth is `packages/tokens/src` ([README](packages/tokens/README.md)); these files describe it and must not contradict it. Product context lives in [PRODUCT.md](PRODUCT.md).
 
@@ -74,7 +78,7 @@ A 4px-based spacing scale (`--cc-space-1` to `--cc-space-16`). Controls, gaps an
 
 ## Elevation & Depth
 
-Flat by default. Depth comes from tone: sunken, base, raised and hover are small lightness steps. Shadows are for layers that float above the page (popovers, dialogs, toasts), which arrive with the components in M1.
+Flat by default. Depth comes from tone: sunken, base, raised and hover are small lightness steps. Shadows are for layers that float above the page (popovers, dialogs, toasts): `--cc-shadow-popover` and `--cc-shadow-modal`. A theme may set its own (`slab` uses hard ink offsets, `soft` wide faint drops); otherwise they are soft drops tinted by the scrim.
 
 ### Named Rules
 **The Tone Before Shadow Rule.** Separate resting surfaces with surface tokens; use a shadow only when something floats.
