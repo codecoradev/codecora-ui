@@ -65,7 +65,8 @@
         <label>
           <input type="radio" name="accent-{part}" value="default" bind:group={accent} />
           <span
-            ><span class="dot solo" data-theme={theme} aria-hidden="true"></span>Theme default</span
+            ><span class="dot solo" data-theme={theme} aria-hidden="true"></span>Theme default
+            <span class="resolved">({themes[theme].defaultAccent})</span></span
           >
         </label>
         {#each accentNames as name (name)}
@@ -187,6 +188,9 @@
   /* Accent and density names are lower-case tokens; theme labels keep their own case. */
   .cap {
     text-transform: capitalize;
+  }
+  .resolved {
+    font-weight: 400;
   }
   .dot.solo {
     width: 0.75rem;

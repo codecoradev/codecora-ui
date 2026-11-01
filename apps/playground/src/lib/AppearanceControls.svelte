@@ -19,9 +19,12 @@
     compact?: boolean;
   } = $props();
 
-  // "Theme default" names the colour it resolves to, so the trigger always shows a value.
+  // "Theme default" says so and names the colour it resolves to, so a theme
+  // change that moves the accent is visible in the trigger.
   const accentValue = $derived(
-    appearance.accent === 'default' ? themes[appearance.theme].defaultAccent : appearance.accent,
+    appearance.accent === 'default'
+      ? `Default (${themes[appearance.theme].defaultAccent})`
+      : appearance.accent,
   );
 </script>
 
