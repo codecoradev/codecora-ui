@@ -70,7 +70,15 @@
     display: inline-flex;
     align-items: center;
     gap: var(--cc-space-2);
+    max-width: 100%;
+    min-width: 0;
     text-align: left;
+  }
+  .value {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   /* The axis name is a quiet caption before the value. */
   .axis {

@@ -3,6 +3,31 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      // Paint the saved or linked theme before the first frame, so a page
+      // never flashes the default theme. createAppearance() takes over after
+      // hydration; the fixed theme pages set their own and are skipped.
+      (function () {
+        if (location.pathname.indexOf('/themes/') !== -1) return;
+        var root = document.documentElement;
+        var query = new URLSearchParams(location.search);
+        var saved = {};
+        try {
+          saved = JSON.parse(localStorage.getItem('cc-playground') || '{}') || {};
+        } catch (e) {}
+        var linked = query.has('theme');
+        var pick = function (key) {
+          var value = linked ? query.get(key) : saved[key];
+          return typeof value === 'string' && /^[a-z-]+$/.test(value) ? value : null;
+        };
+        var theme = pick('theme');
+        var accent = pick('accent');
+        var density = pick('density');
+        if (theme) root.setAttribute('data-theme', theme);
+        if (accent && accent !== 'default') root.setAttribute('data-accent', accent);
+        if (density && density !== 'comfortable') root.setAttribute('data-density', density);
+      })();
+    </script>
     %sveltekit.head%
   </head>
   <body data-sveltekit-preload-data="hover">

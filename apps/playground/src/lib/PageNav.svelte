@@ -95,8 +95,14 @@
       flex-wrap: nowrap;
       overflow-x: auto;
       margin-inline: calc(var(--cc-space-4) * -1);
-      padding-inline: var(--cc-space-4);
+      padding-inline: var(--cc-space-4) var(--cc-space-10);
       scrollbar-width: none;
+      /* The row fades at the right edge, so the pages past it read as more. */
+      mask-image: linear-gradient(
+        to right,
+        var(--cc-text) calc(100% - var(--cc-space-10)),
+        transparent
+      );
     }
     nav a {
       flex: none;

@@ -36,11 +36,12 @@
   <title>{title} · CodeCora UI playground</title>
 </svelte:head>
 
+<!-- Until the choice is restored, the stage inherits it from <html> (set in app.html), so nothing flashes. -->
 <div
   class="stage"
-  data-theme={appearance.theme}
-  data-accent={appearance.accentName}
-  data-density={appearance.densityName}
+  data-theme={appearance.restored ? appearance.theme : undefined}
+  data-accent={appearance.restored ? appearance.accentName : undefined}
+  data-density={appearance.restored ? appearance.densityName : undefined}
 >
   <a class="skip" href="#content">Skip to content</a>
   <header>
@@ -121,6 +122,16 @@
   }
 
   /* Sticky, so the theme can change from anywhere on a long page. */
+  /* Phones: one row, each trigger shrinks and truncates its value. */
+  @media (max-width: 30rem) {
+    .toolbar {
+      flex-wrap: nowrap;
+    }
+    .toolbar > :global(*) {
+      flex: 1 1 0;
+      min-width: 0;
+    }
+  }
   .toolbar {
     position: sticky;
     top: 0;

@@ -159,9 +159,9 @@
 
 <div
   class="themed"
-  data-theme={appearance.theme}
-  data-accent={appearance.accentName}
-  data-density={appearance.densityName}
+  data-theme={appearance.restored ? appearance.theme : undefined}
+  data-accent={appearance.restored ? appearance.accentName : undefined}
+  data-density={appearance.restored ? appearance.densityName : undefined}
 >
   <AppShell
     {nav}
