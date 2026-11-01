@@ -63,7 +63,7 @@
 
 <div class="start-row">
   <Button variant="primary" href="#start-title">Install</Button>
-  <Button variant="secondary" href={resolve('/components')}>Browse components</Button>
+  <Button variant="secondary" href={resolve('/components')}>Components</Button>
   <Button variant="ghost" href={repoUrl} rel="external">GitHub</Button>
 </div>
 
@@ -71,26 +71,29 @@
   <div class="head">
     <h2 id="themes-title">Eleven themes, one set of components</h2>
     <p>
-      Each tile below is the same markup with a different <code>data-theme</code>. The accent and
-      density you pick under More apply to all of them. Access themes say who they are for.
+      Each tile shows only what its theme changes: display face, corners, label shape, the filled
+      action, the focus ring and the floating shadow. The accent and density you pick in the toolbar
+      apply to all of them. Access themes say who they are for.
     </p>
   </div>
-  {#each groups as { group, themes: names } (group)}
-    <div class="theme-group">
-      <h3 class="group-title">{group}</h3>
-      <div class="grid">
-        {#each names as name (name)}
-          <ThemeTile
-            {name}
-            {accent}
-            {density}
-            current={name === theme}
-            onuse={() => setTheme(name)}
-          />
-        {/each}
+  <div class="gallery">
+    {#each groups as { group, themes: names } (group)}
+      <div class="theme-group">
+        <h3 class="group-title">{group}</h3>
+        <div class="grid">
+          {#each names as name (name)}
+            <ThemeTile
+              {name}
+              {accent}
+              {density}
+              current={name === theme}
+              onuse={() => setTheme(name)}
+            />
+          {/each}
+        </div>
       </div>
-    </div>
-  {/each}
+    {/each}
+  </div>
 </section>
 
 <section aria-labelledby="nest-title">
@@ -183,9 +186,17 @@
     margin: 0;
     color: var(--cc-text-muted);
   }
+  /* One column per group, so every group shows in the first viewport on wide screens. */
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(14rem, 100%), 1fr));
+    gap: var(--cc-space-4);
+    align-items: start;
+  }
   .theme-group {
     display: grid;
     gap: var(--cc-space-3);
+    min-width: 0;
   }
   .group-title {
     margin: 0;
@@ -197,8 +208,7 @@
   }
   .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(17rem, 100%), 1fr));
-    gap: var(--cc-space-4);
+    gap: var(--cc-space-3);
   }
   .groups {
     display: grid;

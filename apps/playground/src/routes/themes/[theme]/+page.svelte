@@ -16,7 +16,13 @@
   <header>
     <PageNav />
     <h1>{themes[data.theme].label} theme</h1>
-    <a href={resolve('/tokens')}>Back to the tokens page</a>
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <ol>
+        <li><a href={resolve('/')}>Overview</a></li>
+        <li><a href={resolve('/tokens')}>Tokens</a></li>
+        <li aria-current="page">{themes[data.theme].label}</li>
+      </ol>
+    </nav>
   </header>
   <main>
     <Catalogue theme={data.theme} />
@@ -37,6 +43,25 @@
     display: grid;
     gap: var(--cc-space-3);
     padding-bottom: var(--cc-space-8);
+  }
+  .crumbs ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--cc-space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: var(--cc-text-muted);
+    font-size: var(--cc-font-size-sm);
+  }
+  .crumbs li + li::before {
+    content: '/';
+    margin-right: var(--cc-space-2);
+  }
+  .crumbs a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 1.5rem;
   }
   h1 {
     font-size: var(--cc-font-size-3xl);
