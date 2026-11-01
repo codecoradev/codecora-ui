@@ -6,7 +6,13 @@
 -->
 <script lang="ts">
   import { resolve } from '$app/paths';
-  import { themes, type AccentName, type ThemeName } from '@codecora/tokens';
+  import {
+    contrastRatio,
+    parseColor,
+    themes,
+    type AccentName,
+    type ThemeName,
+  } from '@codecora/tokens';
   import { Badge, Button, VisuallyHidden } from '@codecora/ui';
   import { accessNotes, northStars } from './catalogue.js';
 
@@ -19,6 +25,11 @@
   }
 
   let { name, accent, density, current, onuse }: Props = $props();
+
+  // Proof for the Access themes, computed from the theme's own colours.
+  const colors = $derived(themes[name].colors);
+  const ratio = (a: string, b: string) => contrastRatio(parseColor(a), parseColor(b)).toFixed(1);
+  const lightness = (value: string) => /oklch\(\s*([\d.]+)%/.exec(value)?.[1];
 </script>
 
 <article
@@ -40,6 +51,24 @@
 
   {#if accessNotes[name]}
     <p class="note">{accessNotes[name]}</p>
+  {/if}
+  {#if name === 'contrast'}
+    <p class="proof">
+      Text <strong class="num">{ratio(colors.text, colors.surface)}:1</strong>, muted text
+      <strong class="num">{ratio(colors.textMuted, colors.surface)}:1</strong> on the page
+    </p>
+  {:else if name === 'neutral-cvd'}
+    <p class="proof pairs">
+      <span class="pair"><span class="fill success" aria-hidden="true"></span>Success is blue</span>
+      <span class="pair"
+        ><span class="fill danger" aria-hidden="true"></span>Danger is vermillion</span
+      >
+    </p>
+  {:else if name === 'dimmed'}
+    <p class="proof">
+      Page at <strong class="num">{lightness(colors.surface) ?? '?'}%</strong> lightness, text
+      <strong class="num">{ratio(colors.text, colors.surface)}:1</strong>: no white on black
+    </p>
   {/if}
 
   <div class="specimen" aria-hidden="true">
@@ -115,6 +144,39 @@
     font-size: var(--cc-font-size-3xl);
     font-weight: 600;
     line-height: 1;
+  }
+  /* The Access proof: measured from the theme, not claimed. */
+  .proof {
+    margin: 0;
+    padding: var(--cc-space-2) var(--cc-space-3);
+    border-radius: var(--cc-radius-md);
+    background: var(--cc-surface-sunken);
+    font-size: var(--cc-font-size-sm);
+  }
+  .proof.pairs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--cc-space-1) var(--cc-space-3);
+  }
+  .num {
+    font-family: var(--cc-font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+  .pair {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--cc-space-2);
+  }
+  .fill {
+    width: 1rem;
+    height: 1rem;
+    border-radius: var(--cc-radius-sm);
+  }
+  .fill.success {
+    background: var(--cc-success);
+  }
+  .fill.danger {
+    background: var(--cc-danger);
   }
   .specimen {
     display: flex;
