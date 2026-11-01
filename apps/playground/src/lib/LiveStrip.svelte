@@ -24,10 +24,9 @@
 
   function move(event: KeyboardEvent) {
     const keys: Record<string, (i: number) => number> = {
+      // A horizontal toolbar: Left and Right only, so Up and Down stay with the page.
       ArrowRight: (i) => (i + 1) % rail.length,
-      ArrowDown: (i) => (i + 1) % rail.length,
       ArrowLeft: (i) => (i - 1 + rail.length) % rail.length,
-      ArrowUp: (i) => (i - 1 + rail.length) % rail.length,
       Home: () => 0,
       End: () => rail.length - 1,
     };
@@ -59,6 +58,7 @@
     role="toolbar"
     tabindex="-1"
     aria-label="Theme"
+    aria-orientation="horizontal"
     bind:this={railEl}
     onkeydown={move}
   >
