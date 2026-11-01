@@ -33,3 +33,41 @@ describe('component token usage', () => {
     });
   }
 });
+
+// Motion reads the scale: a literal duration or curve would skip reduced motion.
+// Endless loops (spinners, skeletons) keep their own pace and are exempt.
+const motion = /(?:^|[\s;{])(transition|animation)\s*:\s*([^;]+);/g;
+
+describe('component motion', () => {
+  for (const file of sources(ui)) {
+    const source = readFileSync(file, 'utf8');
+    const declarations = [...source.matchAll(motion)].map((m) => ({ prop: m[1]!, value: m[2]! }));
+    if (declarations.length === 0) continue;
+    const name = file.slice(ui.length + 1);
+
+    it(`${name} times motion with duration and easing tokens`, () => {
+      const literal = declarations
+        .filter(({ value }) => value !== 'none' && !/\binfinite\b/.test(value))
+        .flatMap(({ value }) => value.split(/,(?![^(]*\))/))
+        .filter((part) => !/var\(--cc-duration-/.test(part) || !/var\(--cc-ease-/.test(part));
+      expect(literal).toEqual([]);
+    });
+
+    it(`${name} springs only movement, never opacity or colour`, () => {
+      const offending = declarations.flatMap(({ prop, value }) =>
+        value
+          .split(/,(?![^(]*\))/)
+          .filter((part) => part.includes('--cc-ease-spring'))
+          .filter((part) => {
+            const target = part.trim().split(/\s+/)[0]!;
+            if (prop === 'transition') return !/^(transform|translate|scale|rotate)$/.test(target);
+            const frames = source.match(
+              new RegExp(`@keyframes ${target}\\s*\\{[\\s\\S]*?\\n  \\}`),
+            );
+            return !frames || /opacity|color|background/.test(frames[0]);
+          }),
+      );
+      expect(offending).toEqual([]);
+    });
+  }
+});

@@ -49,6 +49,11 @@
       label: 'Tokens',
       text: 'Colour roles, type, radius, spacing and contrast pairs per theme.',
     },
+    {
+      href: resolve('/motion'),
+      label: 'Motion',
+      text: 'Durations and easings, with enter and exit replayed.',
+    },
     { href: resolve('/icons'), label: 'Icons', text: 'Lucide and Phosphor, sized by the theme.' },
     { href: resolve('/brand'), label: 'Brand', text: 'Product marks and favicon sets.' },
   ];

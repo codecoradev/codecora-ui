@@ -26,8 +26,12 @@ export const fontSize = {
 
 export const leading = { tight: '1.2', normal: '1.5' } as const;
 
-/** Durations drop to 0ms under `prefers-reduced-motion: reduce`. */
-export const duration = { fast: '140ms', normal: '240ms' } as const;
+/**
+ * Durations drop to 0ms under `prefers-reduced-motion: reduce`. Entries take
+ * `normal` (`slow` for a spring), exits one step shorter, hovers `fast` or
+ * `instant`.
+ */
+export const duration = { instant: '70ms', fast: '140ms', normal: '240ms', slow: '400ms' } as const;
 /** Stacking order, lowest first; components read these instead of numbers. */
 export const layer = {
   sticky: '40',
@@ -39,7 +43,34 @@ export const layer = {
   skip: '90',
 } as const;
 
-export const ease = { out: 'cubic-bezier(0.22, 1, 0.36, 1)' } as const;
+/**
+ * Step response of a damped spring (damping ratio `zeta`, natural frequency
+ * `omega` per animation length), sampled into a CSS `linear()` curve. The
+ * last point is pinned to 1 so the animation ends at rest.
+ */
+export function spring(zeta: number, omega: number, segments = 20): string {
+  const damped = omega * Math.sqrt(1 - zeta * zeta);
+  const at = (t: number) =>
+    1 -
+    Math.exp(-zeta * omega * t) *
+      (Math.cos(damped * t) + ((zeta * omega) / damped) * Math.sin(damped * t));
+  const points = Array.from({ length: segments + 1 }, (_, i) =>
+    i === segments ? 1 : Number(at(i / segments).toFixed(3)),
+  );
+  return `linear(${points.join(', ')})`;
+}
+
+/**
+ * `out` for entries, `exit` for leaving, `in-out` for movement between two
+ * resting places. `spring` overshoots by about 5% and is for movement and
+ * scale only, never opacity or colour; reduced motion swaps it for `out`.
+ */
+export const ease = {
+  out: 'cubic-bezier(0.22, 1, 0.36, 1)',
+  'in-out': 'cubic-bezier(0.33, 0, 0.67, 1)',
+  exit: 'cubic-bezier(0.4, 0, 1, 1)',
+  spring: spring(0.7, 10),
+} as const;
 
 /**
  * Sizes that `data-density` switches. Comfortable keeps the 44 px touch

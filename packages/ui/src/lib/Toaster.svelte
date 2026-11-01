@@ -6,6 +6,17 @@
   import Glyph from './internal/Glyph.svelte';
   import VisuallyHidden from './VisuallyHidden.svelte';
   import { toast, toasts } from './toast.svelte.js';
+
+  /**
+   * Keeps a dismissed toast on screen while its CSS exit animation runs; the
+   * length comes from the duration token, so reduced motion removes it at once.
+   */
+  function leave(node: HTMLElement) {
+    node.dataset.state = 'closed';
+    const value = getComputedStyle(node).getPropertyValue('--cc-duration-fast').trim();
+    const ms = parseFloat(value) * (value.endsWith('ms') ? 1 : 1000);
+    return { duration: Number.isFinite(ms) ? ms : 0 };
+  }
 </script>
 
 <section class="cc-toaster" aria-label="Notifications">
@@ -13,6 +24,8 @@
     <!-- Hover or focus pauses the countdown (WCAG 2.2.1): the element is not interactive itself. -->
     <div
       class="cc-toast cc-toast-{item.tone}"
+      data-state={toasts.items.includes(item) ? 'open' : 'closed'}
+      out:leave
       role={item.tone === 'danger' ? 'alert' : 'status'}
       onmouseenter={() => toast.pause(item.id, 'hover')}
       onmouseleave={() => toast.resume(item.id, 'hover')}
@@ -62,7 +75,14 @@
     box-shadow: var(--cc-shadow-popover);
     font-family: var(--cc-font-sans);
     pointer-events: auto;
-    animation: cc-toast-in var(--cc-duration-normal) var(--cc-ease-out);
+    /* Opacity eases; only the movement springs. */
+    animation:
+      cc-toast-fade var(--cc-duration-normal) var(--cc-ease-out),
+      cc-toast-in var(--cc-duration-slow) var(--cc-ease-spring);
+  }
+  .cc-toast[data-state='closed'] {
+    pointer-events: none;
+    animation: cc-toast-out var(--cc-duration-fast) var(--cc-ease-exit) forwards;
   }
   .dot {
     flex: none;
@@ -116,14 +136,25 @@
     outline: var(--cc-focus-width) solid var(--cc-focus);
     outline-offset: var(--cc-focus-offset);
   }
+  @keyframes cc-toast-fade {
+    from {
+      opacity: 0;
+    }
+  }
   @keyframes cc-toast-in {
     from {
+      transform: translateY(var(--cc-space-3));
+    }
+  }
+  @keyframes cc-toast-out {
+    to {
       opacity: 0;
       transform: translateY(var(--cc-space-2));
     }
   }
   @media (prefers-reduced-motion: reduce) {
-    .cc-toast {
+    .cc-toast,
+    .cc-toast[data-state] {
       animation: none;
     }
   }
