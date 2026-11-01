@@ -415,8 +415,10 @@
     padding: 0;
     list-style: none;
   }
+  /* minmax(0, 1fr): long trigger values truncate instead of widening the sidebar. */
   .sidebar-foot {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--cc-space-3);
     margin-top: auto;
     font-size: var(--cc-font-size-sm);
@@ -425,6 +427,10 @@
     display: flex;
     flex-wrap: wrap;
     gap: var(--cc-space-2);
+  }
+  .appearance > :global(*) {
+    min-width: 0;
+    max-width: 100%;
   }
   a {
     color: var(--cc-accent);
