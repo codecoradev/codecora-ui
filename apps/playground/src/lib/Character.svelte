@@ -4,7 +4,7 @@
 -->
 <script lang="ts">
   import { themes, type ThemeName } from '@codecora/tokens';
-  import { Badge } from '@codecora/ui';
+  import { Badge, CodeBlock } from '@codecora/ui';
   import { northStars } from './catalogue.js';
 
   let { theme }: { theme: ThemeName } = $props();
@@ -15,6 +15,14 @@
     'ui-monospace': 'System mono',
   };
   const t = $derived(themes[theme]);
+  // Split so the Svelte parser does not read it as the end of this block.
+  const closeScript = '</' + 'script>';
+  const setup = $derived(`<script>
+  import '@codecora/tokens/tokens.css';
+${closeScript}
+
+<!-- the whole app, or any element -->
+<html data-theme="${theme}">`);
   const faces = $derived([
     { role: 'Display', family: first(t.font.display) },
     { role: 'Text', family: first(t.font.sans) },
@@ -61,6 +69,10 @@
       Icon stroke <span class="num">{t.icon.stroke}</span> · focus ring
       <span class="num">{t.shape.focusWidth}</span> · {t.colorScheme} scheme
     </p>
+  </div>
+  <div class="setup">
+    <p class="facts">Use this theme</p>
+    <CodeBlock code={setup} language="svelte" />
   </div>
 </div>
 
@@ -160,6 +172,11 @@
     margin: 0;
     color: var(--cc-text-muted);
     font-size: var(--cc-font-size-sm);
+  }
+  .setup {
+    display: grid;
+    gap: var(--cc-space-2);
+    grid-column: 1 / -1;
   }
   @media (min-width: 64rem) {
     .character {

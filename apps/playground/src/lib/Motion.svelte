@@ -6,7 +6,7 @@
 -->
 <script lang="ts">
   import { duration, ease } from '@codecora/tokens';
-  import { Button, Dialog, Popover, Sheet, Switch, Toaster, toast } from '@codecora/ui';
+  import { Button, CodeBlock, Dialog, Popover, Sheet, Switch, Toaster, toast } from '@codecora/ui';
 
   type Overlay = 'dialog' | 'sheet' | 'popover' | 'toast';
 
@@ -51,6 +51,25 @@
   let dialogOpen = $state(false);
   let sheetOpen = $state(false);
   let popoverOpen = $state(false);
+
+  // Run the scale once on arrival so the page never opens on parked dots;
+  // skipped when the system asks for reduced motion.
+  $effect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const timer = setTimeout(() => (moved = true), 400);
+    return () => clearTimeout(timer);
+  });
+
+  const snippet = `.panel {
+  transition:
+    opacity var(--cc-duration-normal) var(--cc-ease-out),
+    transform var(--cc-duration-slow) var(--cc-ease-spring);
+}
+.panel[data-state='closed'] {
+  transition-duration: var(--cc-duration-fast);
+  transition-timing-function: var(--cc-ease-exit);
+}
+/* Under prefers-reduced-motion the tokens are 0ms and the spring is ease-out. */`;
 
   $effect(() => {
     const query = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -143,6 +162,10 @@
     <p class="lead">
       Durations run with <code>ease-out</code>. Curves run at <code>slow</code> so their shape shows.
     </p>
+    <details class="usage">
+      <summary>Use the tokens</summary>
+      <CodeBlock code={snippet} language="css" />
+    </details>
     <ul class="tracks">
       {#each Object.entries(duration) as [step, value] (step)}
         <li>
@@ -225,6 +248,25 @@
 <Toaster />
 
 <style>
+  .usage summary {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding-inline: var(--cc-space-3);
+    border: 1px solid var(--cc-border-strong);
+    border-radius: var(--cc-radius-md);
+    background: var(--cc-surface-raised);
+    font-size: var(--cc-font-size-sm);
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .usage[open] summary {
+    margin-bottom: var(--cc-space-3);
+  }
+  .usage summary:focus-visible {
+    outline: var(--cc-focus-width) solid var(--cc-focus);
+    outline-offset: var(--cc-focus-offset);
+  }
   .motion {
     display: grid;
     gap: var(--cc-space-10);
