@@ -15,7 +15,10 @@
       {#each themeNames as name (name)}
         <label>
           <input type="radio" name="theme" value={name} bind:group={theme} />
-          <span>{themes[name].label}</span>
+          <span
+            ><span class="chip" data-theme={name} aria-hidden="true"><span class="dot"></span></span
+            >{themes[name].label}</span
+          >
         </label>
       {/each}
     </div>
@@ -26,12 +29,15 @@
     <div class="seg">
       <label>
         <input type="radio" name="accent" value="default" bind:group={accent} />
-        <span>Theme default</span>
+        <span
+          ><span class="chip" data-theme={theme} aria-hidden="true"><span class="dot"></span></span
+          >Theme default</span
+        >
       </label>
       {#each accentNames as name (name)}
         <label>
           <input type="radio" name="accent" value={name} bind:group={accent} />
-          <span>{name}</span>
+          <span><span class="dot solo" data-accent={name} aria-hidden="true"></span>{name}</span>
         </label>
       {/each}
     </div>
@@ -85,7 +91,7 @@
     margin: 0;
     cursor: pointer;
   }
-  span {
+  label > span {
     display: inline-flex;
     max-width: 100%;
     align-items: center;
@@ -97,7 +103,33 @@
     text-transform: capitalize;
     background: var(--cc-surface-raised);
   }
-  label:hover span {
+  /* A theme chip paints that theme's surface with its default accent inside. */
+  .chip {
+    font-style: normal;
+    display: inline-grid;
+    place-items: center;
+    flex: none;
+    width: 1.125rem;
+    height: 1.125rem;
+    margin-right: var(--cc-space-2);
+    border: 1px solid var(--cc-border-strong);
+    border-radius: var(--cc-radius-pill);
+    background: var(--cc-surface);
+  }
+  .dot {
+    display: block;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: var(--cc-radius-pill);
+    background: var(--cc-accent);
+  }
+  .dot.solo {
+    width: 0.75rem;
+    height: 0.75rem;
+    margin-right: var(--cc-space-2);
+    box-shadow: 0 0 0 1px var(--cc-surface-raised);
+  }
+  label:hover > span {
     background: var(--cc-surface-hover);
   }
   /* Checked changes fill, text colour and weight. */

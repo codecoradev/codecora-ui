@@ -446,7 +446,7 @@
   h1 {
     margin: 0;
     font-family: var(--cc-font-display);
-    font-size: var(--cc-font-size-xl);
+    font-size: var(--cc-font-size-2xl);
   }
   .actions {
     display: flex;
