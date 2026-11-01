@@ -38,6 +38,7 @@
     { href: resolve('/samples'), label: 'Samples' },
     { href: resolve('/dashboard'), label: 'Dashboard' },
     { href: resolve('/tokens'), label: 'Tokens' },
+    { href: resolve('/motion'), label: 'Motion' },
     { href: resolve('/icons'), label: 'Icons' },
     { href: resolve('/brand'), label: 'Brand' },
   ];

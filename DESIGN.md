@@ -87,12 +87,28 @@ Flat by default. Depth comes from tone: sunken, base, raised and hover are small
 
 Radius comes from the theme: `--cc-radius-sm` for inline pieces (kbd, code), `--cc-radius-md` for controls and cards, `--cc-radius-lg` for dialogs and sheets, `--cc-radius-pill` for badges and chips.
 
+## Motion
+
+Motion is global: one scale for every theme, because a theme changes the face, not the behaviour. Motion tells where something came from or went; it never decorates.
+
+- **Durations:** `--cc-duration-instant` 70ms (small exits, hover), `fast` 140ms (state changes, exits), `normal` 240ms (entries), `slow` 400ms (spring movement).
+- **Easings:** `--cc-ease-out` for entries, `--cc-ease-exit` for leaving, `--cc-ease-in-out` for movement between two resting places, `--cc-ease-spring` (a sampled `linear()` curve, about 5% overshoot) for movement and scale.
+- **Overlays:** Dialog, Sheet, Popover and Toast animate in and out; exits run one step shorter than entries, with `ease-exit`.
+- **Reduced motion:** under `prefers-reduced-motion: reduce` every duration is 0ms and `--cc-ease-spring` falls back to `--cc-ease-out`; components also drop their keyframes. Endless loops (Spinner, Skeleton) slow down or stop.
+
+### Named Rules
+**The Spring Moves, Never Fades Rule.** `--cc-ease-spring` drives `transform`, `translate`, `scale` or `rotate` only. Opacity and colour overshooting would flash, so they use `ease-out` in a separate animation alongside the spring.
+
+**The Shorter Exit Rule.** Closing is never slower than opening: an exit takes the next shorter duration than its entry.
+
+**The Token Timing Rule.** Every transition and animation reads a duration token and an easing token; a literal would ignore reduced motion. The tokens usage test enforces both rules.
+
 ## Components
 
 Components arrive in M1 (`@codecora/ui`). The shared behaviour they must follow:
 
 - **Focus:** a 2px `--cc-focus` outline offset 2px on `:focus-visible`, on every interactive element.
-- **Motion:** state changes use `--cc-duration-fast` with `--cc-ease-out`; durations drop to 0ms under `prefers-reduced-motion`.
+- **Motion:** state changes use `--cc-duration-fast` with `--cc-ease-out`; overlays follow the Motion section above.
 - **Icons:** stroke and size come from `--cc-icon-stroke` and `--cc-icon-size`.
 - **Selected states** change at least two things (for example fill and weight), never colour alone.
 

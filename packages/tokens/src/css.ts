@@ -59,7 +59,10 @@ export function baseCss(): string {
     block(SCOPES, ['accent', ...statusNames].map(soft)),
     `  @media (prefers-reduced-motion: reduce) {\n${block(
       ':root',
-      Object.keys(duration).map((k) => [`--cc-duration-${k}`, '0ms']),
+      [
+        ...Object.keys(duration).map((k): [string, string] => [`--cc-duration-${k}`, '0ms']),
+        ['--cc-ease-spring', 'var(--cc-ease-out)'],
+      ],
       '    ',
     )}\n  }`,
   ]);
@@ -124,7 +127,7 @@ export function tailwindCss(): string {
     ...semanticTokens
       .filter((t) => /^(radius|font)-/.test(t))
       .map((t): [string, string] => [`--${t.replace('-', '-cc-')}`, `var(--cc-${t})`]),
-    ['--ease-cc-out', 'var(--cc-ease-out)'],
+    ...Object.keys(ease).map((k): [string, string] => [`--ease-cc-${k}`, `var(--cc-ease-${k})`]),
   ];
   // `inline` makes utilities read the variables, so nested themes repaint.
   return `${block('@theme inline', decls, '')}\n`;
