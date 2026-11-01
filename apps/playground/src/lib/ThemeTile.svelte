@@ -1,8 +1,10 @@
 <!--
-  One theme, showing only what a theme may change: the display face, corners,
-  label shape, the filled action, the focus ring and the floating shadow.
-  Everything here is a static specimen except the title link and the Use
-  button, so the gallery costs a keyboard user two stops per theme.
+  One theme, showing only what a theme may change: its surfaces, the display
+  face, corners, label shape, the filled action, the focus ring and the
+  floating shadow.
+  Everything here is a static specimen except the title link, so the gallery
+  costs a keyboard user one stop per theme; themes are applied from the rail
+  above or the toolbar.
 -->
 <script lang="ts">
   import { resolve } from '$app/paths';
@@ -13,7 +15,7 @@
     type AccentName,
     type ThemeName,
   } from '@codecora/tokens';
-  import { Badge, Button, VisuallyHidden } from '@codecora/ui';
+  import { Badge } from '@codecora/ui';
   import { accessNotes, northStars } from './catalogue.js';
 
   interface Props {
@@ -21,10 +23,9 @@
     accent?: AccentName;
     density?: string;
     current: boolean;
-    onuse: () => void;
   }
 
-  let { name, accent, density, current, onuse }: Props = $props();
+  let { name, accent, density, current }: Props = $props();
 
   // Proof for the Access themes, computed from the theme's own colours.
   const colors = $derived(themes[name].colors);
@@ -48,6 +49,14 @@
     </div>
     <span class="glyph" aria-hidden="true">Aa</span>
   </header>
+
+  <!-- Its surfaces in order, at the control radius: round themes read as pills. -->
+  <div class="surfaces" aria-hidden="true">
+    <span class="surface"></span>
+    <span class="raised"></span>
+    <span class="sunken"></span>
+    <span class="accent"></span>
+  </div>
 
   {#if accessNotes[name]}
     <p class="note">{accessNotes[name]}</p>
@@ -79,22 +88,9 @@
     <span class="float">Saved <span class="when">now</span></span>
   </div>
 
-  <footer>
-    <!-- One button that stays put, so focus does not drop when the theme changes. -->
-    <Button
-      variant="secondary"
-      aria-pressed={current}
-      onclick={() => {
-        if (!current) onuse();
-      }}
-    >
-      {#if current}
-        <span>Current theme</span>
-      {:else}
-        <span>Use<VisuallyHidden>&nbsp;{themes[name].label}</VisuallyHidden> theme</span>
-      {/if}
-    </Button>
-  </footer>
+  {#if current}
+    <footer><Badge tone="accent">Current theme</Badge></footer>
+  {/if}
 </article>
 
 <style>
@@ -122,12 +118,16 @@
     font-family: var(--cc-font-display);
     font-size: var(--cc-font-size-xl);
   }
+  /* The title opens the theme page, so it looks like a link at rest. */
   h4 a {
     color: inherit;
-    text-decoration: none;
+    text-decoration: underline;
+    text-decoration-color: var(--cc-border-strong);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.2em;
   }
   h4 a:hover {
-    text-decoration: underline;
+    text-decoration-color: currentColor;
   }
   h4 a:focus-visible {
     outline: var(--cc-focus-width) solid var(--cc-focus);
@@ -144,6 +144,29 @@
     font-size: var(--cc-font-size-3xl);
     font-weight: 600;
     line-height: 1;
+  }
+  .surfaces {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--cc-space-1);
+  }
+  .surfaces span {
+    height: 1.75rem;
+    border: 1px solid var(--cc-border);
+    border-radius: var(--cc-radius-md);
+  }
+  .surfaces .surface {
+    background: var(--cc-surface);
+  }
+  .surfaces .raised {
+    background: var(--cc-surface-raised);
+  }
+  .surfaces .sunken {
+    background: var(--cc-surface-sunken);
+  }
+  .surfaces .accent {
+    border-color: var(--cc-accent);
+    background: var(--cc-accent);
   }
   /* The Access proof: measured from the theme, not claimed. */
   .proof {
@@ -228,7 +251,5 @@
   }
   footer {
     display: flex;
-    align-items: center;
-    min-height: var(--cc-control-h);
   }
 </style>

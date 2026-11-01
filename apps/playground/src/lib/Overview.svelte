@@ -7,6 +7,7 @@
   import { themes, type AccentName, type ThemeName } from '@codecora/tokens';
   import { Button, CodeBlock, Link } from '@codecora/ui';
   import { catalogue, groupedThemes, repoUrl } from './catalogue.js';
+  import LiveStrip from './LiveStrip.svelte';
   import NestedDemo from './NestedDemo.svelte';
   import ThemeTile from './ThemeTile.svelte';
 
@@ -69,18 +70,19 @@
 </script>
 
 <div class="start-row">
-  <Button variant="primary" href="#start-title">Install</Button>
-  <Button variant="secondary" href={resolve('/components')}>Components</Button>
-  <Button variant="ghost" href={repoUrl} rel="external">GitHub</Button>
+  <Button variant="primary" href={resolve('/components')}>Components</Button>
+  <Button variant="secondary" href="#start-title">Install</Button>
 </div>
+
+<LiveStrip {theme} onpick={useTheme} />
 
 <section aria-labelledby="themes-title" class="themes">
   <div class="head">
     <h2 id="themes-title">Eleven themes, one set of components</h2>
     <p>
-      Each tile shows only what its theme changes: display face, corners, label shape, the filled
-      action, the focus ring and the floating shadow. The accent and density you pick in the toolbar
-      apply to all of them. Access themes say who they are for.
+      Each tile shows only what its theme changes: surfaces, display face, corners, label shape, the
+      filled action, the focus ring and the floating shadow. The accent and density you pick in the
+      toolbar apply to all of them; Access themes show their proof. Open a title for its full page.
     </p>
   </div>
   <p class="visually-hidden" aria-live="polite">{announcement}</p>
@@ -90,13 +92,7 @@
         <h3 class="group-title">{group}</h3>
         <div class="grid">
           {#each names as name (name)}
-            <ThemeTile
-              {name}
-              {accent}
-              {density}
-              current={name === theme}
-              onuse={() => useTheme(name)}
-            />
+            <ThemeTile {name} {accent} {density} current={name === theme} />
           {/each}
         </div>
       </div>
@@ -189,8 +185,9 @@
     margin: 0;
     font-size: var(--cc-font-size-2xl);
   }
+  /* Under 80 characters a line in the body face. */
   .head p {
-    max-width: 65ch;
+    max-width: 56ch;
     margin: 0;
     color: var(--cc-text-muted);
   }
