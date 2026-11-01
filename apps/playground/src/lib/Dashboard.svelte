@@ -116,6 +116,14 @@
 
   // Calls per day for the last 14 days; the chart and its text summary share it.
   const daily = [420, 510, 480, 620, 700, 380, 340, 690, 760, 810, 770, 900, 640, 880];
+  // Fixed dates, so screenshots stay the same from day to day.
+  const days = daily.map((_, i) =>
+    new Date(Date.UTC(2026, 9, 19 + i)).toLocaleDateString('en-GB', {
+      day: 'numeric',
+      month: 'short',
+      timeZone: 'UTC',
+    }),
+  );
   const peak = Math.max(...daily);
   const total = daily.reduce((a, b) => a + b, 0);
 
@@ -237,29 +245,37 @@
           <h2 id="chart-title">Calls per day</h2>
           <p class="muted">Last 14 days, {total.toLocaleString('en')} calls in total</p>
         </div>
-        <svg
-          class="chart"
-          viewBox="0 0 560 160"
-          role="img"
-          aria-label="Bar chart of daily API calls over 14 days. Lowest {Math.min(
-            ...daily,
-          )}, highest {peak}."
-          preserveAspectRatio="none"
-        >
-          {#each [0, 1, 2, 3] as i (i)}
-            <line x1="0" x2="560" y1={i * 40 + 0.5} y2={i * 40 + 0.5} class="grid" />
-          {/each}
-          {#each daily as value, i (i)}
-            <rect
-              x={i * 40 + 8}
-              y={160 - (value / peak) * 150}
-              width="24"
-              height={(value / peak) * 150}
-              rx="3"
-              class="bar"
-            />
-          {/each}
-        </svg>
+        <div class="chart">
+          <svg
+            viewBox="0 0 560 160"
+            role="img"
+            aria-label="Bar chart of daily API calls from {days[0]} to {days[
+              days.length - 1
+            ]}. Lowest {Math.min(...daily)}, highest {peak}."
+            preserveAspectRatio="none"
+          >
+            {#each [0, 1, 2, 3] as i (i)}
+              <line x1="0" x2="560" y1={i * 40 + 0.5} y2={i * 40 + 0.5} class="grid" />
+            {/each}
+            {#each daily as value, i (i)}
+              <rect
+                x={i * 40 + 8}
+                y={160 - (value / peak) * 150}
+                width="24"
+                height={(value / peak) * 150}
+                rx="3"
+                class="bar"
+              >
+                <title>{days[i]}: {value.toLocaleString('en')} calls</title>
+              </rect>
+            {/each}
+          </svg>
+          <ol class="days" aria-hidden="true">
+            {#each days as day (day)}
+              <li>{day}</li>
+            {/each}
+          </ol>
+        </div>
       </section>
 
       <section aria-labelledby="keys-title" class="panel">
@@ -430,7 +446,7 @@
   h1 {
     margin: 0;
     font-family: var(--cc-font-display);
-    font-size: var(--cc-font-size-xl);
+    font-size: var(--cc-font-size-2xl);
   }
   .actions {
     display: flex;
@@ -517,12 +533,34 @@
     width: min(18rem, 100%);
   }
   .chart {
-    width: 100%;
-    height: 10rem;
+    display: grid;
+    gap: var(--cc-space-2);
     padding: var(--cc-space-3);
     border: 1px solid var(--cc-border);
     border-radius: var(--cc-radius-md);
     background: var(--cc-surface-raised);
+  }
+  .chart svg {
+    width: 100%;
+    height: 10rem;
+  }
+  /* One label per bar, in the same 14 columns as the bars; every other one on phones. */
+  .days {
+    display: grid;
+    grid-template-columns: repeat(14, minmax(0, 1fr));
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: var(--cc-text-muted);
+    font-size: var(--cc-font-size-xs);
+    font-variant-numeric: tabular-nums;
+    text-align: center;
+    white-space: nowrap;
+  }
+  @media (max-width: 47.99rem) {
+    .days li:nth-child(even) {
+      visibility: hidden;
+    }
   }
   .grid {
     stroke: var(--cc-border);

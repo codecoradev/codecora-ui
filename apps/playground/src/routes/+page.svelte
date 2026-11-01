@@ -1,13 +1,13 @@
 <script lang="ts">
-  import Catalogue from '../lib/Catalogue.svelte';
+  import Overview from '../lib/Overview.svelte';
   import Stage from '../lib/Stage.svelte';
 </script>
 
 <Stage
-  title="CodeCora UI"
-  lead="Tokens, themes and components for CodeCora products. Pick a theme, accent and density; everything below follows."
+  title="One frame, many faces"
+  lead="CodeCora UI: design tokens, eleven mixable themes and accessible Svelte 5 components on bits-ui. Pick a theme, accent and density; everything follows."
 >
-  {#snippet children({ theme, accent })}
-    <Catalogue {theme} {accent} />
+  {#snippet children({ theme, accent, density, setTheme })}
+    <Overview {theme} {accent} {density} {setTheme} />
   {/snippet}
 </Stage>

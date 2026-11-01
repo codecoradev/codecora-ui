@@ -122,6 +122,10 @@
     background: var(--cc-scrim);
     animation: cc-fade var(--cc-duration-normal) var(--cc-ease-out);
   }
+  /* bits-ui keeps closing content mounted until its animations finish. Exits run one step shorter. */
+  :global(.cc-modal-overlay[data-state='closed']) {
+    animation: cc-fade-out var(--cc-duration-fast) var(--cc-ease-exit) forwards;
+  }
   :global(.cc-modal) {
     position: fixed;
     z-index: var(--cc-layer-modal);
@@ -138,6 +142,9 @@
     font-family: var(--cc-font-sans);
     animation: cc-rise var(--cc-duration-normal) var(--cc-ease-out);
   }
+  :global(.cc-modal[data-state='closed']) {
+    animation: cc-rise-out var(--cc-duration-fast) var(--cc-ease-exit) forwards;
+  }
   :global(.cc-modal:focus-visible) {
     outline: var(--cc-focus-width) solid var(--cc-focus);
     outline-offset: -2px;
@@ -149,7 +156,13 @@
     max-height: calc(100dvh - 2 * var(--cc-space-4));
     transform: translate(-50%, -50%);
     border-radius: var(--cc-radius-lg);
-    animation-name: cc-pop;
+    /* Opacity eases; only the movement springs. */
+    animation:
+      cc-fade var(--cc-duration-normal) var(--cc-ease-out),
+      cc-pop var(--cc-duration-slow) var(--cc-ease-spring);
+  }
+  :global(.cc-modal-center[data-state='closed']) {
+    animation: cc-pop-out var(--cc-duration-fast) var(--cc-ease-exit) forwards;
   }
   :global(.cc-modal-right),
   :global(.cc-modal-left) {
@@ -157,7 +170,11 @@
     bottom: 0;
     width: min(26rem, 100vw);
     align-content: start;
-    animation-name: cc-slide-x;
+    animation: cc-slide-x var(--cc-duration-normal) var(--cc-ease-out);
+  }
+  :global(.cc-modal-right[data-state='closed']),
+  :global(.cc-modal-left[data-state='closed']) {
+    animation: cc-slide-x-out var(--cc-duration-fast) var(--cc-ease-exit) forwards;
   }
   :global(.cc-modal-right) {
     right: 0;
@@ -240,14 +257,29 @@
       opacity: 0;
     }
   }
+  @keyframes cc-fade-out {
+    to {
+      opacity: 0;
+    }
+  }
   @keyframes cc-pop {
     from {
+      transform: translate(-50%, calc(-50% + var(--cc-space-3))) scale(0.97);
+    }
+  }
+  @keyframes cc-pop-out {
+    to {
       opacity: 0;
-      transform: translate(-50%, calc(-50% + var(--cc-space-2)));
+      transform: translate(-50%, calc(-50% + var(--cc-space-2))) scale(0.98);
     }
   }
   @keyframes cc-slide-x {
     from {
+      transform: translateX(var(--cc-slide-from, 100%));
+    }
+  }
+  @keyframes cc-slide-x-out {
+    to {
       transform: translateX(var(--cc-slide-from, 100%));
     }
   }
@@ -256,9 +288,14 @@
       transform: translateY(100%);
     }
   }
+  @keyframes cc-rise-out {
+    to {
+      transform: translateY(100%);
+    }
+  }
   @media (prefers-reduced-motion: reduce) {
-    :global(.cc-modal-overlay),
-    :global(.cc-modal) {
+    :global(.cc-modal-overlay[data-state]),
+    :global(.cc-modal[data-state]) {
       animation: none;
     }
   }

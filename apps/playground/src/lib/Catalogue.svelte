@@ -1,6 +1,8 @@
 <script lang="ts">
+  import { resolve } from '$app/paths';
   import { VisuallyHidden } from '@codecora/ui';
-  import type { AccentName, ThemeName } from '@codecora/tokens';
+  import { themes, type AccentName, type ThemeName } from '@codecora/tokens';
+  import Character from './Character.svelte';
   import ContrastTable from './ContrastTable.svelte';
   import NestedDemo from './NestedDemo.svelte';
   import Samples from './Samples.svelte';
@@ -9,6 +11,15 @@
 
   let { theme, accent }: { theme: ThemeName; accent?: AccentName } = $props();
 </script>
+
+<section aria-labelledby="character">
+  <h2 id="character">The face of {themes[theme].label}</h2>
+  <p class="lead">
+    What a theme may change: fonts, corners, label shape, icon stroke and focus ring. Structure and
+    accessibility stay the same in every theme.
+  </p>
+  <Character {theme} />
+</section>
 
 <section aria-labelledby="colors">
   <h2 id="colors">Colour roles</h2>
@@ -30,8 +41,12 @@
 </section>
 
 <section aria-labelledby="components">
-  <h2 id="components">Components</h2>
-  <p class="lead">Everything <code>@codecora/ui</code> exports today.</p>
+  <h2 id="components">Utilities</h2>
+  <p class="lead">
+    Every <code>@codecora/ui</code> component is on the
+    <a href={resolve('/components')}>Components page</a>. This one has no look of its own, so it is
+    shown here.
+  </p>
   <dl>
     <dt><code>VisuallyHidden</code></dt>
     <dd>

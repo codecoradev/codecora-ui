@@ -65,8 +65,9 @@ export function checkTheme(theme: Theme, accentName: AccentName = theme.defaultA
 
   const pairs: [fg: string, bg: string, min: number][] = [];
   const surfaces = ['surface', 'surfaceRaised', 'surfaceSunken'];
-  for (const bg of [...surfaces, 'surfaceHover', 'accentSoft']) pairs.push(['text', bg, 4.5]);
-  for (const bg of surfaces) pairs.push(['textMuted', bg, 4.5], ['borderStrong', bg, 3]);
+  const minText = theme.minText ?? 4.5;
+  for (const bg of [...surfaces, 'surfaceHover', 'accentSoft']) pairs.push(['text', bg, minText]);
+  for (const bg of surfaces) pairs.push(['textMuted', bg, minText], ['borderStrong', bg, 3]);
   for (const bg of ['surface', 'surfaceRaised']) pairs.push(['accent', bg, 4.5], ['focus', bg, 3]);
   pairs.push(['accentText', 'accent', 4.5], ['accentText', 'accentHover', 4.5]);
   for (const s of statusNames)

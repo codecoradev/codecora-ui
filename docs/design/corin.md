@@ -104,7 +104,7 @@ Blue-black layers with a single teal and bright status signals.
 - **Starlight** (`text`) and **Dusk Grey** (`text-muted`): body and secondary text.
 
 ### Named Rules
-**The Teal Means Act Rule.** Teal marks what the user can do. Blue and violet stay available as accents through `data-accent`, never as a second action colour on the same screen.
+**The Teal Means Act Rule.** Teal marks what the user can do. The other accents stay available through `data-accent`, never as a second action colour on the same screen.
 
 **The Lightening Hover Rule.** On dark surfaces, hover states get lighter, not darker.
 
