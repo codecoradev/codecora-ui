@@ -3,13 +3,13 @@
 Design tokens and themes for CodeCora products. See the
 [repository README](../../README.md) and [docs/architecture.md](../../docs/architecture.md).
 
-> Status: pre-release (M0), first published as `0.1.0` once the npm scope exists.
+> Status: `0.2.0`, installed from the GitHub Release tarballs until the npm scope exists (see the repository README).
 
 ## Tiers
 
 1. **Primitive** (`src/palette.ts`, `src/scale.ts`): colour palettes, spacing, type scale, motion. Raw colour literals live here and nowhere else.
 2. **Semantic**: `--cc-surface`, `--cc-text`, `--cc-accent`, `--cc-danger`, `--cc-radius-md`, `--cc-font-sans`, `--cc-control-h`, ... (full list: `semanticTokens`). Components read only these.
-3. **Theme** (`src/themes.ts`): `neutral` (default), `uteke` (editorial light), `corin` (editor dark).
+3. **Theme** (`src/themes.ts`): `neutral` (default), `neutral-dark`, `uteke` (editorial light), `uteke-dark`, `corin` (editor dark), `sepia` (serif reading) and `contrast` (7:1 text).
 
 ## Use
 
@@ -26,8 +26,8 @@ Design tokens and themes for CodeCora products. See the
 </html>
 ```
 
-- `data-theme`: `neutral`, `uteke`, `corin`. Themes nest per element; a themed element paints its own surface and text colour. Without `data-theme` the page gets `neutral`.
-- `data-accent`: `blue`, `green`, `teal`, `violet`, each tuned per theme. A nested `data-theme` starts again from its own default accent.
+- `data-theme`: `neutral`, `neutral-dark`, `uteke`, `uteke-dark`, `corin`, `sepia`, `contrast`. Themes nest per element; a themed element paints its own surface and text colour. Without `data-theme` the page gets `neutral`.
+- `data-accent`: `blue`, `green`, `teal`, `violet`, `orange`, `indigo`, `cyan`, each tuned per theme. A nested `data-theme` starts again from its own default accent.
 - `data-density`: `comfortable` (default, 44 px controls) or `compact` (32 px).
 - Fonts are referenced, not shipped: load Geist, Space Grotesk or JetBrains Mono yourself when a theme names them; the stacks fall back to system fonts.
 
