@@ -4,8 +4,9 @@
 -->
 <script lang="ts">
   import { themes, type AccentName, type ThemeName } from '@codecora/tokens';
-  import { Badge, Button, Input, Progress, Switch, VisuallyHidden } from '@codecora/ui';
-  import { northStars } from './catalogue.js';
+  import { resolve } from '$app/paths';
+  import { Badge, Button, Input, Switch, VisuallyHidden } from '@codecora/ui';
+  import { accessNotes, northStars } from './catalogue.js';
 
   interface Props {
     name: ThemeName;
@@ -26,9 +27,17 @@
   aria-labelledby="tile-{name}"
 >
   <header>
-    <h3 id="tile-{name}">{themes[name].label}</h3>
-    <p>{northStars[name]}</p>
+    <div>
+      <h4 id="tile-{name}">
+        <a href={resolve('/themes/[theme]', { theme: name })}>{themes[name].label}</a>
+      </h4>
+      <p>{northStars[name]}</p>
+    </div>
+    <span class="glyph" aria-hidden="true">Aa</span>
   </header>
+  {#if accessNotes[name]}
+    <p class="note">{accessNotes[name]}</p>
+  {/if}
 
   <div class="specimen">
     <p class="sample">Memory synced 2 min ago.</p>
@@ -38,7 +47,7 @@
       <Badge tone="warning">Expiring</Badge>
       <Badge tone="danger">Revoked</Badge>
     </div>
-    <Progress label="Quota" value={62} showValue />
+    <p class="float">Saved to memory <span class="when">now</span></p>
     <Switch label="Sync on save" checked id="switch-{name}" />
   </div>
 
@@ -47,7 +56,7 @@
       <span class="current">Current theme</span>
     {:else}
       <Button variant="secondary" onclick={onuse}
-        >Use<VisuallyHidden>&nbsp;{themes[name].label}</VisuallyHidden> theme</Button
+        ><span>Use<VisuallyHidden>&nbsp;{themes[name].label}</VisuallyHidden> theme</span></Button
       >
     {/if}
     <Button variant="primary">Save</Button>
@@ -65,10 +74,57 @@
     border-radius: var(--cc-radius-lg);
   }
   header {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: var(--cc-space-3);
+  }
+  header > div {
     display: grid;
     gap: var(--cc-space-1);
   }
-  h3 {
+  h4 a {
+    color: inherit;
+    text-decoration: none;
+  }
+  h4 a:hover {
+    text-decoration: underline;
+  }
+  h4 a:focus-visible {
+    outline: var(--cc-focus-width) solid var(--cc-focus);
+    outline-offset: var(--cc-focus-offset);
+  }
+  .glyph {
+    font-family: var(--cc-font-display);
+    font-size: var(--cc-font-size-3xl);
+    font-weight: 600;
+    line-height: 1;
+  }
+  .note {
+    margin: 0;
+    color: var(--cc-text-muted);
+    font-size: var(--cc-font-size-sm);
+  }
+  /* A floating layer: the theme's own shadow and large radius. */
+  .float {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--cc-space-2);
+    margin: 0;
+    padding: var(--cc-space-3);
+    border: 1px solid var(--cc-border);
+    border-radius: var(--cc-radius-lg);
+    background: var(--cc-surface-raised);
+    box-shadow: var(--cc-shadow-popover);
+    font-size: var(--cc-font-size-sm);
+  }
+  .when {
+    color: var(--cc-text-muted);
+    font-family: var(--cc-font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+  h4 {
     margin: 0;
     font-family: var(--cc-font-display);
     font-size: var(--cc-font-size-xl);

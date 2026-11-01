@@ -1,6 +1,6 @@
 // What the playground shows, shared by the overview and the Components page.
 
-import type { ThemeName } from '@codecora/tokens';
+import { themeNames, type ThemeName } from '@codecora/tokens';
 
 /** One section of the Components page and the components it demonstrates. */
 export interface CatalogueSection {
@@ -108,6 +108,28 @@ export const northStars: Record<ThemeName, string> = {
   slab: 'The Proof Sheet',
   soft: 'The Pebble',
   'neutral-cvd': 'The Plain Workbench, colour-blind safe',
+};
+
+/** Themes as the playground groups them; Access themes say who they are for. */
+export const themeGroups: { group: string; themes: ThemeName[] }[] = [
+  { group: 'Product', themes: ['neutral', 'uteke', 'corin'] },
+  { group: 'Dark', themes: ['neutral-dark', 'uteke-dark'] },
+  { group: 'Access', themes: ['contrast', 'neutral-cvd', 'dimmed'] },
+  { group: 'Character', themes: ['sepia', 'slab', 'soft'] },
+];
+
+/** The groups with any theme they leave out under Other, so a new theme still shows. */
+export function groupedThemes() {
+  const listed = new Set(themeGroups.flatMap((g) => g.themes));
+  const rest = themeNames.filter((name) => !listed.has(name));
+  return rest.length ? [...themeGroups, { group: 'Other', themes: rest }] : themeGroups;
+}
+
+/** Who an Access theme is for, shown next to it. */
+export const accessNotes: Partial<Record<ThemeName, string>> = {
+  contrast: 'For low vision and bright rooms: 7:1 text, heavier rings.',
+  'neutral-cvd': 'For red/green colour blindness: status in blue and vermillion.',
+  dimmed: 'For light sensitivity and long evenings: low glare.',
 };
 
 export const repoUrl = 'https://github.com/codecoradev/codecora-ui';

@@ -4,9 +4,9 @@
 -->
 <script lang="ts">
   import { resolve } from '$app/paths';
-  import { themeNames, type AccentName, type ThemeName } from '@codecora/tokens';
+  import type { AccentName, ThemeName } from '@codecora/tokens';
   import { CodeBlock, Link } from '@codecora/ui';
-  import { catalogue, repoUrl } from './catalogue.js';
+  import { catalogue, groupedThemes, repoUrl } from './catalogue.js';
   import NestedDemo from './NestedDemo.svelte';
   import ThemeTile from './ThemeTile.svelte';
 
@@ -18,6 +18,8 @@
   }
 
   let { theme, accent, density, setTheme }: Props = $props();
+
+  const groups = groupedThemes();
 
   const componentCount = catalogue
     .flatMap((g) => g.sections)
@@ -64,14 +66,25 @@
     <h2 id="themes-title">Eleven themes, one set of components</h2>
     <p>
       Each tile below is the same markup with a different <code>data-theme</code>. The accent and
-      density you pick above apply to all of them.
+      density you pick under More apply to all of them. Access themes say who they are for.
     </p>
   </div>
-  <div class="grid">
-    {#each themeNames as name (name)}
-      <ThemeTile {name} {accent} {density} current={name === theme} onuse={() => setTheme(name)} />
-    {/each}
-  </div>
+  {#each groups as { group, themes: names } (group)}
+    <div class="theme-group">
+      <h3 class="group-title">{group}</h3>
+      <div class="grid">
+        {#each names as name (name)}
+          <ThemeTile
+            {name}
+            {accent}
+            {density}
+            current={name === theme}
+            onuse={() => setTheme(name)}
+          />
+        {/each}
+      </div>
+    </div>
+  {/each}
 </section>
 
 <section aria-labelledby="nest-title">
@@ -158,6 +171,18 @@
     max-width: 65ch;
     margin: 0;
     color: var(--cc-text-muted);
+  }
+  .theme-group {
+    display: grid;
+    gap: var(--cc-space-3);
+  }
+  .group-title {
+    margin: 0;
+    color: var(--cc-text-muted);
+    font-size: var(--cc-font-size-sm);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
   }
   .grid {
     display: grid;
