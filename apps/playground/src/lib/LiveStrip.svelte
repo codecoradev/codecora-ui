@@ -37,10 +37,18 @@
     railEl.querySelectorAll<HTMLButtonElement>('.pick')[next]?.focus();
   }
 
-  // On phones the rail scrolls sideways; keep the applied theme in view.
+  // On phones the rail scrolls sideways; keep the applied theme in view by
+  // scrolling the rail alone, never the page, and only when it overflows.
   $effect(() => {
-    const picks = railEl?.querySelectorAll<HTMLElement>('.pick');
-    picks?.[rail.indexOf(theme)]?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    const index = rail.indexOf(theme);
+    if (!railEl || railEl.scrollWidth <= railEl.clientWidth) return;
+    const pick = railEl.querySelectorAll<HTMLElement>('.pick')[index];
+    if (!pick) return;
+    const left = pick.offsetLeft;
+    const right = left + pick.offsetWidth;
+    if (left < railEl.scrollLeft || right > railEl.scrollLeft + railEl.clientWidth) {
+      railEl.scrollLeft = Math.max(0, left - (railEl.clientWidth - pick.offsetWidth) / 2);
+    }
   });
 
   let name = $state('ci-deploy');
@@ -121,7 +129,9 @@
     margin: 0;
     font-size: var(--cc-font-size-md);
   }
+  /* Positioned, so each button's offsetLeft is measured from the rail. */
   .rail {
+    position: relative;
     display: flex;
     flex-wrap: wrap;
     gap: var(--cc-space-2);
