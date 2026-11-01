@@ -29,36 +29,29 @@
         {#each groups as { group, themes: names } (group)}
           <div class="group" role="group" aria-labelledby="sw-{part}-{group}">
             <p class="group-name" id="sw-{part}-{group}">{group}</p>
-            <div class="seg">
+            <!-- Access chips stack, each with its note right under it. -->
+            <div class={group === 'Access' ? 'stack' : 'seg'}>
               {#each names as name (name)}
-                <label>
-                  <input
-                    type="radio"
-                    name="theme-{part}"
-                    value={name}
-                    bind:group={theme}
-                    aria-describedby={accessNotes[name] ? `note-${part}-${name}` : undefined}
-                  />
-                  <span
-                    ><span class="chip" data-theme={name} aria-hidden="true"
-                      ><span class="dot"></span></span
-                    >{themes[name].label}</span
-                  >
-                </label>
+                <div class="item">
+                  <label>
+                    <input
+                      type="radio"
+                      name="theme-{part}"
+                      value={name}
+                      bind:group={theme}
+                      aria-describedby={accessNotes[name] ? `note-${part}-${name}` : undefined}
+                    />
+                    <span
+                      ><span class="chip" data-theme={name} aria-hidden="true"></span>{themes[name]
+                        .label}</span
+                    >
+                  </label>
+                  {#if accessNotes[name]}
+                    <p class="note" id="note-{part}-{name}">{accessNotes[name]}</p>
+                  {/if}
+                </div>
               {/each}
             </div>
-            {#if group === 'Access'}
-              <ul class="notes">
-                {#each names as name (name)}
-                  {#if accessNotes[name]}
-                    <li id="note-{part}-{name}">
-                      <strong>{themes[name].label}</strong>
-                      {accessNotes[name]}
-                    </li>
-                  {/if}
-                {/each}
-              </ul>
-            {/if}
           </div>
         {/each}
       </div>
@@ -72,15 +65,18 @@
         <label>
           <input type="radio" name="accent-{part}" value="default" bind:group={accent} />
           <span
-            ><span class="chip" data-theme={theme} aria-hidden="true"
-              ><span class="dot"></span></span
-            >Theme default</span
+            ><span class="dot solo" data-theme={theme} aria-hidden="true"></span>Theme default
+            <span class="resolved">({themes[theme].defaultAccent})</span></span
           >
         </label>
         {#each accentNames as name (name)}
           <label>
             <input type="radio" name="accent-{part}" value={name} bind:group={accent} />
-            <span><span class="dot solo" data-accent={name} aria-hidden="true"></span>{name}</span>
+            <span
+              ><span class="dot solo" data-accent={name} aria-hidden="true"></span><span class="cap"
+                >{name}</span
+              ></span
+            >
           </label>
         {/each}
       </div>
@@ -92,7 +88,7 @@
         {#each densities as name (name)}
           <label>
             <input type="radio" name="density-{part}" value={name} bind:group={density} />
-            <span>{name}</span>
+            <span><span class="cap">{name}</span></span>
           </label>
         {/each}
       </div>
@@ -133,19 +129,15 @@
     color: var(--cc-text-muted);
     font-size: var(--cc-font-size-xs);
   }
-  .notes {
+  .stack {
     display: grid;
-    gap: 0.125rem;
-    max-width: 60ch;
-    margin: var(--cc-space-1) 0 0;
-    padding: 0;
-    list-style: none;
+    gap: var(--cc-space-2);
+  }
+  .note {
+    max-width: 40ch;
+    margin: var(--cc-space-1) 0 0 var(--cc-space-3);
     color: var(--cc-text-muted);
     font-size: var(--cc-font-size-xs);
-  }
-  .notes strong {
-    color: var(--cc-text);
-    font-weight: 600;
   }
   .seg {
     display: flex;
@@ -171,28 +163,34 @@
     border: 1px solid var(--cc-border-strong);
     border-radius: var(--cc-radius-pill);
     font-size: var(--cc-font-size-sm);
-    text-transform: capitalize;
     background: var(--cc-surface-raised);
   }
-  /* A theme chip paints that theme's surface with its default accent inside. */
+  /* A theme chip is a mini swatch of that theme: surface, sunken, accent, at its own radius. */
   .chip {
-    font-style: normal;
-    display: inline-grid;
-    place-items: center;
     flex: none;
-    width: 1.125rem;
+    width: 1.75rem;
     height: 1.125rem;
     margin-right: var(--cc-space-2);
     border: 1px solid var(--cc-border-strong);
-    border-radius: var(--cc-radius-pill);
-    background: var(--cc-surface);
+    border-radius: var(--cc-radius-sm);
+    background: linear-gradient(
+      90deg,
+      var(--cc-surface) 0 34%,
+      var(--cc-surface-sunken) 34% 67%,
+      var(--cc-accent) 67%
+    );
   }
   .dot {
     display: block;
-    width: 0.5rem;
-    height: 0.5rem;
     border-radius: var(--cc-radius-pill);
     background: var(--cc-accent);
+  }
+  /* Accent and density names are lower-case tokens; theme labels keep their own case. */
+  .cap {
+    text-transform: capitalize;
+  }
+  .resolved {
+    font-weight: 400;
   }
   .dot.solo {
     width: 0.75rem;
