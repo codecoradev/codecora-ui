@@ -210,7 +210,9 @@
     max-width: 60ch;
     color: var(--cc-text-muted);
   }
+  /* Positioned, so absolutely placed screen-reader text stays inside the scroll box. */
   .scroll {
+    position: relative;
     overflow-x: auto;
   }
   .matrix {

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { resolve } from '$app/paths';
   import { VisuallyHidden } from '@codecora/ui';
   import type { AccentName, ThemeName } from '@codecora/tokens';
   import ContrastTable from './ContrastTable.svelte';
@@ -30,8 +31,12 @@
 </section>
 
 <section aria-labelledby="components">
-  <h2 id="components">Components</h2>
-  <p class="lead">Everything <code>@codecora/ui</code> exports today.</p>
+  <h2 id="components">Utilities</h2>
+  <p class="lead">
+    Every <code>@codecora/ui</code> component is on the
+    <a href={resolve('/components')}>Components page</a>. This one has no look of its own, so it is
+    shown here.
+  </p>
   <dl>
     <dt><code>VisuallyHidden</code></dt>
     <dd>
