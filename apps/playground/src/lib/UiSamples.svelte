@@ -114,13 +114,21 @@
     { label: 'Invite a teammate', done: false },
   ];
   const progress = steps.filter((s) => s.done).length;
+
+  const sourceUrl =
+    'https://github.com/codecoradev/codecora-ui/blob/develop/apps/playground/src/lib/UiSamples.svelte';
 </script>
+
+<p class="source">
+  Every screen below is built from <code>@codecora/ui</code> components and tokens only.
+  <Link href={sourceUrl} external>Read the source on GitHub</Link>
+</p>
 
 <section aria-labelledby="s-login">
   <h2 id="s-login">Sign in</h2>
   <div class="frame center">
     <Card class="narrow">
-      {#snippet header()}Sign in to Uteke{/snippet}
+      {#snippet header()}Sign in to your workspace{/snippet}
       <form
         class="stack"
         novalidate
@@ -367,6 +375,11 @@
 <Toaster />
 
 <style>
+  .source {
+    max-width: 65ch;
+    margin: 0 0 var(--cc-space-6);
+    color: var(--cc-text-muted);
+  }
   section {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
