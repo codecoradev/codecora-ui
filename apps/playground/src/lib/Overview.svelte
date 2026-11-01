@@ -56,7 +56,7 @@
 
 <section aria-labelledby="themes-title" class="themes">
   <div class="head">
-    <h2 id="themes-title">Seven themes, one set of components</h2>
+    <h2 id="themes-title">Eleven themes, one set of components</h2>
     <p>
       Each tile below is the same markup with a different <code>data-theme</code>. The accent and
       density you pick above apply to all of them.
