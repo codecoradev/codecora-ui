@@ -4,11 +4,12 @@
   import { usage } from './usage.js';
 
   let { id }: { id: string } = $props();
+  let open = $state(false);
 </script>
 
 {#if usage[id]}
-  <details class="usage">
-    <summary>Show the code</summary>
+  <details class="usage" bind:open>
+    <summary>{open ? 'Hide the code' : 'Show the code'}</summary>
     <CodeBlock code={usage[id]} language="svelte" />
   </details>
 {/if}
