@@ -25,9 +25,9 @@ typography:
   mono:
     fontFamily: "ui-monospace, 'SF Mono', Menlo, Consolas, monospace"
 rounded:
-  sm: "3px"
-  md: "6px"
-  lg: "8px"
+  sm: "2px"
+  md: "4px"
+  lg: "6px"
   pill: "999px"
 ---
 
@@ -53,10 +53,10 @@ Colour scheme: light. Default accent: `blue`; every accent in `accentNames` is a
 
 ## Shapes
 
-Radius 3px for inline pieces, 6px for controls and cards, 8px for dialogs, pill for chips.
+Radius 2px for inline pieces, 4px for controls and cards, 6px for dialogs, pill for chips: square corners read as edges, so nothing about a control's outline is soft.
 
 ### Shape hooks
 
-- Badge: 3px corners, uppercase with 0.06em tracking.
+- Badge: 2px corners, uppercase with 0.06em tracking.
 - Focus ring: 3px, offset 2px.
 - Selected table row: accent tint with a 4px bar.

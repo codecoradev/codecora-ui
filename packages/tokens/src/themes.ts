@@ -281,7 +281,8 @@ const contrast: Theme = {
   },
   accents: accents(light),
   defaultAccent: 'blue',
-  radius: { sm: '3px', md: '6px', lg: '8px', pill: '999px' },
+  // Square corners read as edges: nothing about a control's outline is soft.
+  radius: { sm: '2px', md: '4px', lg: '6px', pill: '999px' },
   font: { sans: systemSans, display: systemSans, mono: systemMono },
   icon: { stroke: '2.25', size: '1.25rem' },
   shape: {
