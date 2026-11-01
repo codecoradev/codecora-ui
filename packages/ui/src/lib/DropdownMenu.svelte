@@ -65,6 +65,12 @@
     color: var(--cc-text);
     box-shadow: var(--cc-shadow-popover);
     font-family: var(--cc-font-sans);
+    transform-origin: var(--bits-dropdown-menu-content-transform-origin);
+    animation: cc-menu-in var(--cc-duration-fast) var(--cc-ease-out);
+  }
+  /* bits-ui keeps the menu mounted until the exit animation finishes. */
+  :global(.cc-menu[data-state='closed']) {
+    animation: cc-menu-out var(--cc-duration-instant) var(--cc-ease-exit) forwards;
   }
   :global(.cc-menu-item) {
     display: flex;
@@ -89,5 +95,22 @@
     height: 1px;
     margin: var(--cc-space-1) 0;
     background: var(--cc-border);
+  }
+  @keyframes cc-menu-in {
+    from {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+  }
+  @keyframes cc-menu-out {
+    to {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :global(.cc-menu[data-state]) {
+      animation: none;
+    }
   }
 </style>

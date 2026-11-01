@@ -59,5 +59,17 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    /* bits-ui shows the image once it has loaded; it fades in over the initials' place. */
+    animation: cc-avatar-in var(--cc-duration-normal) var(--cc-ease-out);
+  }
+  @keyframes cc-avatar-in {
+    from {
+      opacity: 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :global(.cc-avatar .img) {
+      animation: none;
+    }
   }
 </style>

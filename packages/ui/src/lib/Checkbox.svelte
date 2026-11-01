@@ -60,8 +60,9 @@
     aria-invalid={invalid || undefined}
     class="cc-box"
   >
-    {#snippet children({ checked, indeterminate })}
-      {#if indeterminate}<Glyph name="minus" />{:else if checked}<Glyph name="check" />{/if}
+    {#snippet children({ indeterminate })}
+      <!-- The check stays in the DOM while unchecked, hidden, so checking it can animate. -->
+      {#if indeterminate}<Glyph name="minus" />{:else}<Glyph name="check" />{/if}
     {/snippet}
   </Checkbox.Root>
   <div class={labelHidden ? 'text hidden' : 'text'}>
@@ -90,11 +91,25 @@
     background: var(--cc-surface-raised);
     color: var(--cc-accent-text);
     cursor: pointer;
+    transition:
+      background-color var(--cc-duration-fast) var(--cc-ease-out),
+      border-color var(--cc-duration-fast) var(--cc-ease-out);
   }
+  /* Opacity eases; only the scale springs. Unchecking takes the shorter exit. */
   :global(.cc-box :where(svg)) {
     width: 1rem;
     height: 1rem;
     stroke-width: 3;
+    transition:
+      opacity var(--cc-duration-fast) var(--cc-ease-out),
+      scale var(--cc-duration-slow) var(--cc-ease-spring);
+  }
+  :global(.cc-box[data-state='unchecked'] :where(svg)) {
+    opacity: 0;
+    scale: 0.5;
+    transition:
+      opacity var(--cc-duration-instant) var(--cc-ease-exit),
+      scale var(--cc-duration-instant) var(--cc-ease-exit);
   }
   :global(.cc-box[data-state='checked']),
   :global(.cc-box[data-state='indeterminate']) {
@@ -136,5 +151,11 @@
   [data-disabled] label {
     cursor: not-allowed;
     color: var(--cc-text-muted);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :global(.cc-box),
+    :global(.cc-box[data-state] :where(svg)) {
+      transition: none;
+    }
   }
 </style>

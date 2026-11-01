@@ -81,6 +81,7 @@
     height: 100%;
     border-radius: var(--cc-radius-pill);
     background: var(--cc-accent);
+    transition: right var(--cc-duration-fast) var(--cc-ease-out);
   }
   :global(.cc-slider .thumb) {
     display: block;
@@ -90,6 +91,18 @@
     border-radius: var(--cc-radius-pill);
     background: var(--cc-surface-raised);
     cursor: grab;
+    /* Keyboard steps glide; a drag follows the pointer with no lag. */
+    transition:
+      left var(--cc-duration-fast) var(--cc-ease-out),
+      scale var(--cc-duration-fast) var(--cc-ease-out);
+  }
+  :global(.cc-slider .thumb[data-active]) {
+    scale: 1.15;
+    cursor: grabbing;
+    transition: scale var(--cc-duration-fast) var(--cc-ease-out);
+  }
+  :global(.cc-slider .track:has(.thumb[data-active]) .range) {
+    transition: none;
   }
   :global(.cc-slider .thumb:focus-visible) {
     outline: var(--cc-focus-width) solid var(--cc-focus);
@@ -100,5 +113,11 @@
   }
   :global(.cc-slider .track[data-disabled] .thumb) {
     cursor: not-allowed;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :global(.cc-slider .range),
+    :global(.cc-slider .thumb[data-orientation]) {
+      transition: none;
+    }
   }
 </style>

@@ -36,6 +36,7 @@
     border-radius: var(--cc-radius-md);
     background: var(--cc-surface-sunken);
     color: var(--cc-text);
+    animation: cc-alert-in var(--cc-duration-normal) var(--cc-ease-out);
   }
   .cc-alert-accent {
     border-color: var(--cc-accent);
@@ -75,5 +76,17 @@
   }
   .message {
     font-size: var(--cc-font-size-sm);
+  }
+  /* Arrives where it stays: a short settle into place, no spring in the reading flow. */
+  @keyframes cc-alert-in {
+    from {
+      opacity: 0;
+      transform: translateY(calc(-1 * var(--cc-space-1)));
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cc-alert {
+      animation: none;
+    }
   }
 </style>
