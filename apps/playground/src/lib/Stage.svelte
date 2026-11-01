@@ -2,12 +2,12 @@
   Page frame of the interactive playground pages: page navigation, title, a
   sticky appearance toolbar (theme in one popover, accent and density in
   another; restored from the URL or localStorage), a themed stage that wraps
-  the content, and a footer with the fixed theme pages. `panel` shows every
-  switcher inline instead, for the Tokens page.
+  the content, and a footer with the fixed theme pages.
 -->
 <script lang="ts">
   import { resolve } from '$app/paths';
   import { themeNames, themes, type AccentName, type ThemeName } from '@codecora/tokens';
+  import { ChevronDown } from '@codecora/icons/lucide';
   import { Button, Popover } from '@codecora/ui';
   import type { Snippet } from 'svelte';
   import { createAppearance } from './appearance.svelte.js';
@@ -17,7 +17,6 @@
   interface Props {
     title: string;
     lead: string;
-    panel?: boolean;
     children: Snippet<
       [
         {
@@ -30,7 +29,7 @@
     >;
   }
 
-  let { title, lead, panel = false, children }: Props = $props();
+  let { title, lead, children }: Props = $props();
 
   const appearance = createAppearance();
 
@@ -57,48 +56,46 @@
       <h1>{title}</h1>
       <p>{lead}</p>
     </div>
+  </header>
 
-    {#if panel}
+  <div class="toolbar" role="region" aria-label="Appearance">
+    <Popover label="Theme">
+      {#snippet trigger({ props })}
+        <Button {...props} variant="secondary">
+          <span class="trigger"
+            ><span class="swatch" data-theme={appearance.theme} aria-hidden="true"></span><span
+              ><span class="prefix">Theme:&nbsp;</span>{themes[appearance.theme].label}</span
+            ><ChevronDown class="chev" aria-hidden="true" /></span
+          >
+        </Button>
+      {/snippet}
       <Switchers
+        part="theme"
         bind:theme={appearance.theme}
         bind:accent={appearance.accent}
         bind:density={appearance.density}
       />
-    {/if}
-  </header>
-
-  {#if !panel}
-    <div class="toolbar" role="region" aria-label="Appearance">
-      <Popover label="Theme">
-        {#snippet trigger({ props })}
-          <Button {...props} variant="secondary">
-            <span class="chip" data-theme={appearance.theme} aria-hidden="true"
-              ><span class="dot"></span></span
-            >Theme: {themes[appearance.theme].label}
-          </Button>
-        {/snippet}
-        <Switchers
-          part="theme"
-          bind:theme={appearance.theme}
-          bind:accent={appearance.accent}
-          bind:density={appearance.density}
-        />
-      </Popover>
-      <Popover label="Accent and density">
-        {#snippet trigger({ props })}
-          <Button {...props} variant="ghost"
-            ><span>More: <span class="cap">{accentLabel}</span>, {appearance.density}</span></Button
+    </Popover>
+    <Popover label="Accent and density">
+      {#snippet trigger({ props })}
+        <Button {...props} variant="secondary">
+          <span class="trigger"
+            ><span class="swatch solid" aria-hidden="true"></span><span
+              >Accent · Density<span class="detail"
+                >: <span class="cap">{accentLabel}</span>, {appearance.density}</span
+              ></span
+            ><ChevronDown class="chev" aria-hidden="true" /></span
           >
-        {/snippet}
-        <Switchers
-          part="more"
-          bind:theme={appearance.theme}
-          bind:accent={appearance.accent}
-          bind:density={appearance.density}
-        />
-      </Popover>
-    </div>
-  {/if}
+        </Button>
+      {/snippet}
+      <Switchers
+        part="more"
+        bind:theme={appearance.theme}
+        bind:accent={appearance.accent}
+        bind:density={appearance.density}
+      />
+    </Popover>
+  </div>
 
   <main id="content" tabindex="-1">
     {@render children({
@@ -178,22 +175,43 @@
     background: var(--cc-surface);
     border-bottom: 1px solid var(--cc-border);
   }
-  .chip {
-    display: inline-grid;
-    place-items: center;
-    flex: none;
-    width: 1.125rem;
-    height: 1.125rem;
-    margin-right: var(--cc-space-1);
-    border: 1px solid var(--cc-border-strong);
-    border-radius: var(--cc-radius-pill);
-    background: var(--cc-surface);
+  .trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--cc-space-2);
+    text-align: left;
   }
-  .dot {
-    width: 0.5rem;
-    height: 0.5rem;
-    border-radius: var(--cc-radius-pill);
+  /* On phones the second trigger names its job; the current values live in the popover. */
+  @media (max-width: 30rem) {
+    .detail {
+      display: none;
+    }
+    /* Still read out; the swatch says "theme" to the eye. */
+    .prefix {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+  }
+  /* A theme swatch: its surface and accent split on the diagonal. */
+  .swatch {
+    flex: none;
+    width: 1rem;
+    height: 1rem;
+    border: 1px solid var(--cc-border-strong);
+    border-radius: var(--cc-radius-sm);
+    background: linear-gradient(135deg, var(--cc-surface) 50%, var(--cc-accent) 50%);
+  }
+  .swatch.solid {
     background: var(--cc-accent);
+  }
+  .trigger :global(.chev) {
+    width: 1rem;
+    height: 1rem;
+    stroke-width: var(--cc-icon-stroke);
   }
   .cap {
     text-transform: capitalize;
