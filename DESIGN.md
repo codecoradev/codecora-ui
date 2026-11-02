@@ -74,7 +74,7 @@ Each theme names three families: `--cc-font-sans` (UI and body), `--cc-font-disp
 
 ## Layout
 
-A 4px-based spacing scale (`--cc-space-1` to `--cc-space-16`). Controls, gaps and table cells take their size from the density tokens (`--cc-control-h`, `--cc-control-px`, `--cc-gap`, `--cc-cell-py`, `--cc-cell-px`), never from hard-coded values. Every component works at 375px wide without horizontal scrolling.
+A 4px-based spacing scale (`--cc-space-1` to `--cc-space-16`). Controls, gaps and table cells take their size from the density tokens (`--cc-control-h`, `--cc-control-px`, `--cc-control-py`, `--cc-gap`, `--cc-cell-py`, `--cc-cell-px`), never from hard-coded values. Every component works at 375px wide without horizontal scrolling.
 
 ## Elevation & Depth
 

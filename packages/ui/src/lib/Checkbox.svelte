@@ -77,7 +77,7 @@
     align-items: flex-start;
     gap: var(--cc-space-3);
     min-height: var(--cc-control-h);
-    padding-block: var(--cc-space-2);
+    padding-block: var(--cc-control-py);
   }
   :global(.cc-box) {
     display: inline-grid;

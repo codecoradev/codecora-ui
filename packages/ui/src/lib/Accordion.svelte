@@ -66,7 +66,7 @@
     gap: var(--cc-space-3);
     width: 100%;
     min-height: var(--cc-control-h);
-    padding: var(--cc-space-2) var(--cc-control-px);
+    padding: var(--cc-control-py) var(--cc-control-px);
     border: 0;
     background: none;
     color: var(--cc-text);
