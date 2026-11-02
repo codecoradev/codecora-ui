@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "shadcn-svelte registry build registry.json --output dist/r",
+    "build": "bun build.ts && shadcn-svelte registry build dist/registry.json --output dist/r",
     "check": "svelte-check --tsconfig ./tsconfig.json --fail-on-warnings",
     "test": "vitest run"
   },

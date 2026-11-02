@@ -2,6 +2,7 @@ import { existsSync, readFileSync } from 'node:fs';
 // Source, not dist: release.yml runs the tests before the packages are built.
 import { shadcnBridge } from '../packages/tokens/src/index.js';
 import { describe, expect, it } from 'vitest';
+import { withTheme } from './theme.js';
 
 interface Item {
   name: string;
@@ -25,22 +26,22 @@ describe('registry', () => {
     for (const name of names) expect(name).toMatch(/^cc-[a-z-]+$/);
   });
 
-  it('theme item writes the same map as @codecora/tokens/shadcn.css, in light and dark', () => {
+  it('theme item gets the bridge map from @codecora/tokens, in light and dark', () => {
     const expected = Object.fromEntries(
       Object.entries(shadcnBridge).map(([k, v]) => [k, `var(--cc-${v})`]),
     );
-    expect(theme?.cssVars?.light).toEqual(expected);
-    expect(theme?.cssVars?.dark).toEqual(expected);
+    const built = withTheme(registry, '0.4.0').items.find((item) => item.name === 'cc-theme');
+    expect(built?.cssVars?.light).toEqual(expected);
+    expect(built?.cssVars?.dark).toEqual(expected);
   });
 
-  it('theme item asks for the current @codecora/tokens minor', () => {
-    // The theme item has no files to detect it from, so registry.json names it.
-    // After a tokens release, update the range in registry.json.
-    const { version } = JSON.parse(
-      readFileSync(new URL('../packages/tokens/package.json', import.meta.url), 'utf8'),
-    ) as { version: string };
-    const minor = version.split('.').slice(0, 2).join('.');
-    expect(theme?.dependencies).toEqual([`@codecora/tokens@^${minor}.0`]);
+  it('theme item asks for the tokens version it is built with', () => {
+    // A minor bump (0.4.0 -> 0.5.0) moves the range with it; ^0.4.0 would exclude 0.5.0.
+    for (const version of ['0.4.0', '0.5.0', '1.2.3']) {
+      const built = withTheme(registry, version).items.find((item) => item.name === 'cc-theme');
+      expect(built?.dependencies).toEqual([`@codecora/tokens@^${version}`]);
+    }
+    expect(theme?.dependencies, 'registry.json leaves the range to build.ts').toBeUndefined();
   });
 
   it('every block installs the theme and points at files that exist', () => {

@@ -72,14 +72,15 @@ class, so add it next to a dark `data-theme`.
 ## Develop
 
 ```bash
-bun run build   # shadcn-svelte registry build -> dist/r/*.json
+bun run build   # build.ts, then shadcn-svelte registry build -> dist/r/*.json
 bun run check   # svelte-check on the blocks
-bun run test    # registry.json shape, bridge map in sync with @codecora/tokens
+bun run test    # registry.json shape and the generated cc-theme item
 ```
 
 `registry.json` lists the items. The build reads each block's imports to fill
 in `dependencies` (workspace versions become `^x.y.z` ranges). The theme item
-has no files, so its `@codecora/tokens` range is written by hand; a test fails
-when it falls behind the tokens package. The playground serves `dist/r` through
-a prerendered `/r/[item].json` route, so the root `bun run build` builds this
-workspace before the apps.
+has no files to read, so `build.ts` fills it in first (`theme.ts`): the light
+and dark variables from `shadcnBridge` and the `@codecora/tokens` range from
+the tokens package version. A tokens release therefore needs no edit here. The
+playground serves `dist/r` through a prerendered `/r/[item].json` route, so the
+root `bun run build` builds this workspace before the apps.
