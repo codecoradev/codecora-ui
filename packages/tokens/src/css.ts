@@ -10,6 +10,7 @@ import {
   semanticTokens,
   statusNames,
   type Density,
+  type SemanticToken,
   type Theme,
   type ThemeShadow,
 } from './schema.js';
@@ -133,38 +134,51 @@ export function tailwindCss(): string {
   return `${block('@theme inline', decls, '')}\n`;
 }
 
+/**
+ * shadcn-svelte variables (without `--`) and the CodeCora token each one reads.
+ * The registry's theme item writes the same map into an app's `:root` and `.dark`.
+ */
+export const shadcnBridge: Readonly<Record<string, SemanticToken>> = {
+  background: 'surface',
+  foreground: 'text',
+  card: 'surface-raised',
+  'card-foreground': 'text',
+  popover: 'surface-raised',
+  'popover-foreground': 'text',
+  primary: 'accent',
+  'primary-foreground': 'accent-text',
+  secondary: 'surface-sunken',
+  'secondary-foreground': 'text',
+  muted: 'surface-sunken',
+  'muted-foreground': 'text-muted',
+  accent: 'surface-hover',
+  'accent-foreground': 'text',
+  destructive: 'danger',
+  'destructive-foreground': 'danger-text',
+  border: 'border',
+  input: 'border-strong',
+  ring: 'focus',
+  radius: 'radius-md',
+  'chart-1': 'accent',
+  'chart-2': 'success',
+  'chart-3': 'warning',
+  'chart-4': 'danger',
+  'chart-5': 'text-muted',
+  sidebar: 'surface-sunken',
+  'sidebar-foreground': 'text',
+  'sidebar-primary': 'accent',
+  'sidebar-primary-foreground': 'accent-text',
+  'sidebar-accent': 'surface-hover',
+  'sidebar-accent-foreground': 'text',
+  'sidebar-border': 'border',
+  'sidebar-ring': 'focus',
+};
+
 /** shadcn-svelte variables mapped onto CodeCora tokens. */
 export function shadcnCss(): string {
-  const map: Record<string, string> = {
-    background: 'surface',
-    foreground: 'text',
-    card: 'surface-raised',
-    'card-foreground': 'text',
-    popover: 'surface-raised',
-    'popover-foreground': 'text',
-    primary: 'accent',
-    'primary-foreground': 'accent-text',
-    secondary: 'surface-sunken',
-    'secondary-foreground': 'text',
-    muted: 'surface-sunken',
-    'muted-foreground': 'text-muted',
-    accent: 'surface-hover',
-    'accent-foreground': 'text',
-    destructive: 'danger',
-    'destructive-foreground': 'danger-text',
-    border: 'border',
-    input: 'border-strong',
-    ring: 'focus',
-    radius: 'radius-md',
-    sidebar: 'surface-sunken',
-    'sidebar-foreground': 'text',
-    'sidebar-primary': 'accent',
-    'sidebar-primary-foreground': 'accent-text',
-    'sidebar-accent': 'surface-hover',
-    'sidebar-accent-foreground': 'text',
-    'sidebar-border': 'border',
-    'sidebar-ring': 'focus',
-  };
-  const decls = Object.entries(map).map(([k, v]): [string, string] => [`--${k}`, `var(--cc-${v})`]);
+  const decls = Object.entries(shadcnBridge).map(([k, v]): [string, string] => [
+    `--${k}`,
+    `var(--cc-${v})`,
+  ]);
   return `${LAYERS}\n\n${layer('cc.base', [block(SCOPES, decls)])}`;
 }

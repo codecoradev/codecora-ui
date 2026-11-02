@@ -93,6 +93,11 @@ Phosphor or your own set.
 
 Dependencies point one way: `memory -> ui -> tokens`.
 
+Apps on shadcn-svelte can also pull blocks (login, settings, dashboard shell,
+data table) and a theme bridge from the [registry](registry), served by the
+playground build at `/r/<item>.json`:
+`npx shadcn-svelte@latest add <playground-host>/r/cc-login.json`.
+
 ## Components
 
 | Group | Components |

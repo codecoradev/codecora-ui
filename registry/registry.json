@@ -1,0 +1,148 @@
+{
+  "$schema": "https://shadcn-svelte.com/schema/registry.json",
+  "name": "codecora",
+  "homepage": "https://github.com/codecoradev/codecora-ui",
+  "items": [
+    {
+      "name": "cc-theme",
+      "type": "registry:theme",
+      "title": "CodeCora theme bridge",
+      "description": "Installs @codecora/tokens and points the shadcn-svelte variables at --cc-* tokens, so shadcn components follow data-theme, data-accent and data-density.",
+      "dependencies": ["@codecora/tokens@^0.4.0"],
+      "registryDependencies": [],
+      "files": [],
+      "css": {
+        "@import \"@codecora/tokens/tokens.css\"": {},
+        "@import \"@codecora/tokens/shadcn.css\"": {}
+      },
+      "cssVars": {
+        "theme": {
+          "font-sans": "var(--cc-font-sans)",
+          "font-mono": "var(--cc-font-mono)"
+        },
+        "light": {
+          "background": "var(--cc-surface)",
+          "foreground": "var(--cc-text)",
+          "card": "var(--cc-surface-raised)",
+          "card-foreground": "var(--cc-text)",
+          "popover": "var(--cc-surface-raised)",
+          "popover-foreground": "var(--cc-text)",
+          "primary": "var(--cc-accent)",
+          "primary-foreground": "var(--cc-accent-text)",
+          "secondary": "var(--cc-surface-sunken)",
+          "secondary-foreground": "var(--cc-text)",
+          "muted": "var(--cc-surface-sunken)",
+          "muted-foreground": "var(--cc-text-muted)",
+          "accent": "var(--cc-surface-hover)",
+          "accent-foreground": "var(--cc-text)",
+          "destructive": "var(--cc-danger)",
+          "destructive-foreground": "var(--cc-danger-text)",
+          "border": "var(--cc-border)",
+          "input": "var(--cc-border-strong)",
+          "ring": "var(--cc-focus)",
+          "radius": "var(--cc-radius-md)",
+          "chart-1": "var(--cc-accent)",
+          "chart-2": "var(--cc-success)",
+          "chart-3": "var(--cc-warning)",
+          "chart-4": "var(--cc-danger)",
+          "chart-5": "var(--cc-text-muted)",
+          "sidebar": "var(--cc-surface-sunken)",
+          "sidebar-foreground": "var(--cc-text)",
+          "sidebar-primary": "var(--cc-accent)",
+          "sidebar-primary-foreground": "var(--cc-accent-text)",
+          "sidebar-accent": "var(--cc-surface-hover)",
+          "sidebar-accent-foreground": "var(--cc-text)",
+          "sidebar-border": "var(--cc-border)",
+          "sidebar-ring": "var(--cc-focus)"
+        },
+        "dark": {
+          "background": "var(--cc-surface)",
+          "foreground": "var(--cc-text)",
+          "card": "var(--cc-surface-raised)",
+          "card-foreground": "var(--cc-text)",
+          "popover": "var(--cc-surface-raised)",
+          "popover-foreground": "var(--cc-text)",
+          "primary": "var(--cc-accent)",
+          "primary-foreground": "var(--cc-accent-text)",
+          "secondary": "var(--cc-surface-sunken)",
+          "secondary-foreground": "var(--cc-text)",
+          "muted": "var(--cc-surface-sunken)",
+          "muted-foreground": "var(--cc-text-muted)",
+          "accent": "var(--cc-surface-hover)",
+          "accent-foreground": "var(--cc-text)",
+          "destructive": "var(--cc-danger)",
+          "destructive-foreground": "var(--cc-danger-text)",
+          "border": "var(--cc-border)",
+          "input": "var(--cc-border-strong)",
+          "ring": "var(--cc-focus)",
+          "radius": "var(--cc-radius-md)",
+          "chart-1": "var(--cc-accent)",
+          "chart-2": "var(--cc-success)",
+          "chart-3": "var(--cc-warning)",
+          "chart-4": "var(--cc-danger)",
+          "chart-5": "var(--cc-text-muted)",
+          "sidebar": "var(--cc-surface-sunken)",
+          "sidebar-foreground": "var(--cc-text)",
+          "sidebar-primary": "var(--cc-accent)",
+          "sidebar-primary-foreground": "var(--cc-accent-text)",
+          "sidebar-accent": "var(--cc-surface-hover)",
+          "sidebar-accent-foreground": "var(--cc-text)",
+          "sidebar-border": "var(--cc-border)",
+          "sidebar-ring": "var(--cc-focus)"
+        }
+      }
+    },
+    {
+      "name": "cc-login",
+      "type": "registry:block",
+      "title": "Login form",
+      "description": "Sign-in card with email, password, remember me, progress and error states.",
+      "registryDependencies": ["local:cc-theme"],
+      "files": [
+        {
+          "path": "blocks/login/login-form.svelte",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "cc-settings",
+      "type": "registry:block",
+      "title": "Settings page",
+      "description": "Profile, notifications and danger-zone tabs with one save button and a confirm dialog.",
+      "registryDependencies": ["local:cc-theme"],
+      "files": [
+        {
+          "path": "blocks/settings/settings-page.svelte",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "cc-dashboard-shell",
+      "type": "registry:block",
+      "title": "Dashboard shell",
+      "description": "AppShell with sidebar, mobile drawer and bottom bar, and a page header with actions.",
+      "registryDependencies": ["local:cc-theme"],
+      "files": [
+        {
+          "path": "blocks/dashboard-shell/dashboard-shell.svelte",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "cc-data-table",
+      "type": "registry:block",
+      "title": "Data table",
+      "description": "Searchable, filterable, sortable and paged table with row selection and a bulk action.",
+      "registryDependencies": ["local:cc-theme"],
+      "files": [
+        {
+          "path": "blocks/data-table/data-table.svelte",
+          "type": "registry:component"
+        }
+      ]
+    }
+  ]
+}

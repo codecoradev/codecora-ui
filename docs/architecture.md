@@ -88,7 +88,8 @@ Skeleton, Spinner.
 
 - npmjs.com `@codecora/*`, published from GitHub Actions with provenance,
   versioned with changesets (semver per package).
-- shadcn-svelte registry JSON served with the playground build.
+- shadcn-svelte registry JSON served with the playground build at `/r/<item>.json`
+  (`registry/`: blocks on `@codecora/ui` and the `cc-theme` bridge item).
 - A read-only mirror on the team's internal forge.
 
 ## Quality gates (CI)
