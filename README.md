@@ -30,7 +30,7 @@ product fleet and open to any Svelte app.
 
 ## Status
 
-`0.5.0`: `@codecora/tokens` 0.5.0 (chart colours in the shadcn bridge) and
+`0.5.1`: `@codecora/tokens` 0.5.1 (chart colours in the shadcn bridge, the `gaira` theme) and
 `@codecora/memory` 0.2.0 (the memory browser components), with `@codecora/ui`
 0.4.0 and `@codecora/icons` and `@codecora/brand` 0.1.0; a shadcn-svelte
 registry ships with the playground (see [CHANGELOG.md](CHANGELOG.md)). Not on npm yet: install from the GitHub Release
@@ -42,7 +42,7 @@ Each release attaches one tarball per package it ships. The same URL works with
 bun, npm (`npm install <url>`) and pnpm (`pnpm add <url>`):
 
 ```bash
-bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.5.0/codecora-tokens-0.5.0.tgz
+bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.5.1/codecora-tokens-0.5.1.tgz
 bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.4.0/codecora-ui-0.4.0.tgz
 bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.5.0/codecora-memory-0.2.0.tgz
 bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.1.0/codecora-icons-0.1.0.tgz
