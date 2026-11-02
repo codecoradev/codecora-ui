@@ -4,7 +4,7 @@ name: Release
 # provenance after a release PR (develop -> main) merges. Versions are set
 # beforehand by a maintainer with changesets (`bun run version-packages`).
 #
-# `verify` runs on every trigger with read-only rights: test, build and a pack
+# `verify` runs on every trigger with read-only rights: build, test and a pack
 # dry run. `publish` holds the elevated rights and runs only on main, only
 # when the repository variable NPM_PUBLISH_ENABLED is "true" (set once the
 # @codecora scope exists and trusts this workflow, #15), only in the
@@ -47,10 +47,11 @@ jobs:
       - name: Install
         run: bun install --frozen-lockfile
 
-      - name: Test and build
+      # Build first: package tests import their workspace dependencies' dist.
+      - name: Build and test
         run: |
-          bun run test
           bun run build:packages
+          bun run test
 
       - name: Pack dry run
         run: bash scripts/publish.sh --dry-run
