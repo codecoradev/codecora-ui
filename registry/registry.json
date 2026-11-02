@@ -1,0 +1,77 @@
+{
+  "$schema": "https://shadcn-svelte.com/schema/registry.json",
+  "name": "codecora",
+  "homepage": "https://github.com/codecoradev/codecora-ui",
+  "items": [
+    {
+      "name": "cc-theme",
+      "type": "registry:theme",
+      "title": "CodeCora theme bridge",
+      "description": "Installs @codecora/tokens and points the shadcn-svelte variables at --cc-* tokens, so shadcn components follow data-theme, data-accent and data-density.",
+      "registryDependencies": [],
+      "files": [],
+      "css": {
+        "@import \"@codecora/tokens/tokens.css\"": {},
+        "@import \"@codecora/tokens/shadcn.css\"": {}
+      },
+      "cssVars": {
+        "theme": {
+          "font-sans": "var(--cc-font-sans)",
+          "font-mono": "var(--cc-font-mono)"
+        }
+      }
+    },
+    {
+      "name": "cc-login",
+      "type": "registry:block",
+      "title": "Login form",
+      "description": "Sign-in card with email, password, remember me, progress and error states.",
+      "registryDependencies": ["local:cc-theme"],
+      "files": [
+        {
+          "path": "blocks/login/login-form.svelte",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "cc-settings",
+      "type": "registry:block",
+      "title": "Settings page",
+      "description": "Profile, notifications and danger-zone tabs with one save button and a confirm dialog.",
+      "registryDependencies": ["local:cc-theme"],
+      "files": [
+        {
+          "path": "blocks/settings/settings-page.svelte",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "cc-dashboard-shell",
+      "type": "registry:block",
+      "title": "Dashboard shell",
+      "description": "AppShell with sidebar, mobile drawer and bottom bar, and a page header with actions.",
+      "registryDependencies": ["local:cc-theme"],
+      "files": [
+        {
+          "path": "blocks/dashboard-shell/dashboard-shell.svelte",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "cc-data-table",
+      "type": "registry:block",
+      "title": "Data table",
+      "description": "Searchable, filterable, sortable and paged table with row selection and a bulk action.",
+      "registryDependencies": ["local:cc-theme"],
+      "files": [
+        {
+          "path": "blocks/data-table/data-table.svelte",
+          "type": "registry:component"
+        }
+      ]
+    }
+  ]
+}

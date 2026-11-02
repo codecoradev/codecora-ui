@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { LAYERS, baseCss, shadcnCss, tailwindCss, themeCss } from './css.js';
+import { LAYERS, baseCss, shadcnBridge, shadcnCss, tailwindCss, themeCss } from './css.js';
 import { duration, ease, spring } from './scale.js';
 import { accentNames, semanticTokens, themeNames } from './schema.js';
 import { themes } from './themes.js';
@@ -86,5 +86,10 @@ describe('integrations', () => {
     expect(css).toContain('--primary: var(--cc-accent);');
     expect(css).toContain('--ring: var(--cc-focus);');
     expect(css).toContain(':root, [data-theme], [data-accent] {');
+  });
+
+  it('shadcn bridge covers the chart and sidebar variables shadcn-svelte writes', () => {
+    for (const name of ['chart-1', 'chart-5', 'sidebar', 'sidebar-ring'])
+      expect(shadcnCss()).toContain(`--${name}: var(--cc-${shadcnBridge[name]});`);
   });
 });

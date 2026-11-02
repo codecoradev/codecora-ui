@@ -10,14 +10,14 @@ Read before changing anything:
 
 ## Repo layout
 
-bun workspaces (`packages/*`, `apps/*`). Today: `packages/tokens`, `packages/ui`, `packages/icons`, `packages/brand`, `packages/memory` and `apps/playground` (token catalogue, components, icons, brand and admin dashboard sample, with theme, accent and density switchers); the other packages land with their issues.
+bun workspaces (`packages/*`, `registry`, `apps/*`). Today: `packages/tokens`, `packages/ui`, `packages/icons`, `packages/brand`, `packages/memory`, `registry` and `apps/playground` (token catalogue, components, icons, brand and admin dashboard sample, with theme, accent and density switchers); the other packages land with their issues.
 
 - `packages/tokens` — `@codecora/tokens`: primitive, semantic and theme tokens; CSS, TS, Tailwind 4 preset, shadcn bridge
 - `packages/ui` — `@codecora/ui`: Svelte 5 components on bits-ui, plain CSS on semantic tokens
 - `packages/icons` — `@codecora/icons`: icon contract, Lucide default, Phosphor adapter
 - `packages/brand` — `@codecora/brand`: product marks and favicon sets
 - `packages/memory` — `@codecora/memory`: Uteke domain layer (client, transports, capabilities, memory components)
-- `registry/` — shadcn-svelte registry items (blocks, templates)
+- `registry/` — `@codecora/registry` (private): shadcn-svelte registry items (`cc-theme` bridge, blocks on `@codecora/ui`), built to `dist/r` and served by the playground at `/r/<item>.json`
 - `apps/playground` — SvelteKit catalogue of every component in every theme
 - `scripts/` — `hooks/` (pre-commit, commit-msg), `setup-hooks.sh`, `message-standard.sh`
 - Root config — `tsconfig.base.json` (strict TS 6, extended by every workspace), `eslint.config.js`, `.prettierrc` (Markdown is not formatted), `.changeset/` (per-package versions, base branch `develop`)

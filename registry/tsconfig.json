@@ -1,0 +1,5 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": { "noEmit": true },
+  "include": ["blocks/**/*.ts", "blocks/**/*.svelte", "*.ts", "*.js"]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "@codecora/registry",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "bun build.ts && shadcn-svelte registry build dist/registry.json --output dist/r",
+    "check": "svelte-check --tsconfig ./tsconfig.json --fail-on-warnings",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@codecora/ui": "workspace:^",
+    "@lucide/svelte": "^1.64.0"
+  },
+  "devDependencies": {
+    "shadcn-svelte": "1.7.2"
+  }
+}

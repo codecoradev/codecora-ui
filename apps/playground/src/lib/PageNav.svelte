@@ -9,6 +9,8 @@
     { href: resolve('/components'), label: 'Components' },
     { href: resolve('/samples'), label: 'Samples' },
     { href: resolve('/dashboard'), label: 'Dashboard' },
+    { href: resolve('/memory'), label: 'Memory' },
+    { href: resolve('/registry'), label: 'Registry' },
     // The fixed theme pages sit under Tokens.
     { href: resolve('/tokens'), label: 'Tokens', under: resolve('/').replace(/\/?$/, '/themes/') },
     { href: resolve('/motion'), label: 'Motion' },

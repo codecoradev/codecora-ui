@@ -1,7 +1,7 @@
 {
   "name": "@codecora/memory",
-  "version": "0.1.0",
-  "description": "Uteke domain layer for CodeCora products: a MemoryClient with HTTP (uteke-serve, Uteke Cloud) and Tauri transports, and capabilities that say what a backend supports",
+  "version": "0.2.0",
+  "description": "Uteke domain layer for CodeCora products: a MemoryClient with HTTP (uteke-serve, Uteke Cloud) and Tauri transports, capabilities that say what a backend supports, and the memory browser components",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
@@ -23,13 +23,19 @@
     "!dist/**/*.test.*",
     "!dist/contract.*"
   ],
-  "sideEffects": false,
+  "sideEffects": [
+    "**/*.css"
+  ],
   "scripts": {
     "build": "svelte-package -i src/lib -o dist && publint",
-    "check": "tsc --noEmit -p tsconfig.json",
+    "check": "svelte-check --tsconfig ./tsconfig.json --fail-on-warnings",
     "test": "vitest run"
   },
   "peerDependencies": {
+    "@codecora/ui": "workspace:^",
     "svelte": "^5.33.0"
+  },
+  "devDependencies": {
+    "@codecora/ui": "workspace:*"
   }
 }

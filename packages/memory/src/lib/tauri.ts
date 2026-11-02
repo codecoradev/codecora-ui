@@ -164,6 +164,13 @@ export function createTauriClient({
       assertSupported(capabilities, 'rooms', 'rooms', kind);
       return rows(await invoke('uteke_rooms', {})).map(toRoom);
     },
+    async roomMemories(roomId, params) {
+      assertSupported(capabilities, 'rooms', 'roomMemories', kind);
+      // Corin's command has no namespace filter; it reads the room across namespaces.
+      return rows(
+        await invoke('uteke_room_memories', { roomId, limit: params?.limit ?? null }),
+      ).map(toMemory);
+    },
     async exportJsonl() {
       throw new UnsupportedError('export', kind);
     },

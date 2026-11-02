@@ -22,4 +22,4 @@ an explicit maintainer decision recorded here.
 
 - Internal mirror: read-only pull mirror of this repo (maintainer action).
 - npm: claim the `@codecora` organisation on npmjs.com and enable trusted publishing for the repo.
-- Registry host for shadcn blocks (for example `ui.codecora.dev/r/*.json`, served from the playground build).
+- Registry host for shadcn blocks: the playground build serves `/r/*.json` since #14; it still needs a public host (for example `ui.codecora.dev`).

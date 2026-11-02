@@ -55,7 +55,7 @@ The `-soft` tints (`accent-soft`, `danger-soft`, ...) are mixed with `--cc-surfa
 @import '@codecora/tokens/shadcn.css'; /* --background, --primary, --ring, ... read --cc-* */
 ```
 
-With the shadcn bridge, remove the colour variables shadcn wrote into your `app.css`: unlayered declarations there would override the bridge.
+With the shadcn bridge, remove the colour variables shadcn wrote into your `app.css`: unlayered declarations there would override the bridge. The `cc-theme` item of the [registry](../../registry) does this for you: it rewrites those variables in `:root` and `.dark` to read `--cc-*`. The map, chart and sidebar variables included, is exported as `shadcnBridge`.
 
 ## TypeScript
 

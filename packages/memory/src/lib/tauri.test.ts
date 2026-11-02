@@ -79,6 +79,13 @@ describe('Tauri client', () => {
     expect(invoke).toHaveBeenCalledWith('memory_update', { id: 'abc', pinned: true });
   });
 
+  it('reads a room through uteke_room_memories', async () => {
+    const invoke = fake({ uteke_room_memories: [row] });
+    const memories = await createTauriClient({ invoke }).roomMemories('ui-room', { limit: 5 });
+    expect(memories[0]!.id).toBe('abc');
+    expect(invoke).toHaveBeenCalledWith('uteke_room_memories', { roomId: 'ui-room', limit: 5 });
+  });
+
   it('reports export and import as unsupported', async () => {
     const client = createTauriClient({ invoke: fake({}) });
     expect(client.capabilities).toMatchObject({ export: false, import: false, graph: false });

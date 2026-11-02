@@ -8,6 +8,17 @@ changesets (`packages/*/CHANGELOG.md`).
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-11-02
+
+`@codecora/tokens` 0.5.0 and `@codecora/memory` 0.2.0. `@codecora/ui` stays at 0.4.0, `@codecora/icons` and `@codecora/brand` at 0.1.0. Install from the GitHub Release tarballs (see the README); npm publishing is still pending (#15).
+
+### Added
+
+- `@codecora/tokens`: the shadcn bridge maps `--chart-1` to `--chart-5` (accent, success, warning, danger, muted text), so charts in shadcn-svelte apps follow the theme. The map is exported as `shadcnBridge`.
+- `@codecora/memory`: memory browser components on `@codecora/ui`. `MemoryList` has search, tag and room filters, keyboard rows and paging; `MemoryDetail` has pin, edit and delete with confirmation; `MemoryEditor` works on its own too. They share state through `MemoryBrowser` and hide what the backend's capabilities lack (no room filter on Uteke Cloud). The client gains `roomMemories`, and `createInMemoryClient` runs the components without a server. `@codecora/ui` (^0.4.0) is now a peer dependency.
+- Registry: a shadcn-svelte registry served by the playground at `/r/<item>.json`, with the `cc-theme` bridge item and four blocks (login, settings, dashboard shell, data table). `shadcn-svelte add <site>/r/<item>.json` installs them.
+- Playground: a Registry page with one install command per item, and a Memory page that runs the memory browser over sample uteke-serve, Uteke Cloud and desktop backends, or a live uteke-serve.
+
 ## [0.4.0] - 2026-11-02
 
 `@codecora/tokens` and `@codecora/ui` 0.4.0. `@codecora/memory`, `@codecora/icons` and `@codecora/brand` stay at 0.1.0. Install from the GitHub Release tarballs (see the README); npm publishing is still pending (#15).
@@ -107,7 +118,8 @@ First release of `@codecora/tokens`, `@codecora/ui`, `@codecora/icons` and `@cod
 
 - Workflows: the review access token is a step output instead of a job-wide variable, actions are pinned to commit SHAs, the message standard runs from the base branch, and the PR description check requires real content under whole `## What` / `## Why` / `## Testing` headings.
 
-[Unreleased]: https://github.com/codecoradev/codecora-ui/compare/v0.4.0...develop
+[Unreleased]: https://github.com/codecoradev/codecora-ui/compare/v0.5.0...develop
+[0.5.0]: https://github.com/codecoradev/codecora-ui/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/codecoradev/codecora-ui/compare/v0.3.1...v0.4.0
 [0.3.1]: https://github.com/codecoradev/codecora-ui/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/codecoradev/codecora-ui/compare/v0.2.0...v0.3.0

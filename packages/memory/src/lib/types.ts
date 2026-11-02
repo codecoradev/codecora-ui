@@ -40,6 +40,14 @@ export interface MemoryPatch {
   pinned?: boolean;
 }
 
+/** What MemoryEditor hands back: cleaned content and tags, and a type for a new memory. */
+export interface MemoryDraft {
+  content: string;
+  tags: string[];
+  /** Only for a new memory; an existing memory keeps its type. */
+  type?: string;
+}
+
 export interface ListParams {
   namespace?: string;
   tag?: string;
