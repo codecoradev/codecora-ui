@@ -8,16 +8,17 @@
   },
   "workspaces": [
     "packages/*",
+    "registry",
     "apps/*"
   ],
   "scripts": {
     "prepare": "bash scripts/setup-hooks.sh",
     "build:packages": "bun run --filter './packages/*' build",
-    "build": "bun run build:packages && bun run --filter './apps/*' build",
-    "check": "bun run build:packages && bun run --filter './packages/*' --filter './apps/*' check",
-    "test": "bun run --filter './packages/*' --filter './apps/*' test",
+    "build": "bun run build:packages && bun run --filter './registry' build && bun run --filter './apps/*' build",
+    "check": "bun run build:packages && bun run --filter './packages/*' --filter './registry' --filter './apps/*' check",
+    "test": "bun run --filter './packages/*' --filter './registry' --filter './apps/*' test",
     "contrast": "bun run --filter './packages/tokens' contrast",
-    "detect": "impeccable detect packages/ui/src apps/playground/src",
+    "detect": "impeccable detect packages/ui/src registry/blocks apps/playground/src",
     "lint": "prettier --check . && eslint .",
     "format": "prettier --write .",
     "changeset": "changeset",
