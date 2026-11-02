@@ -89,7 +89,7 @@ Phosphor or your own set.
 | [`@codecora/ui`](packages/ui) | 42 Svelte 5 components on bits-ui, plain CSS on semantic tokens | `@codecora/tokens`, `bits-ui` |
 | [`@codecora/icons`](packages/icons) | `Icon` wrapper that follows each theme's size and stroke, a curated Lucide set and a Phosphor adapter | `@lucide/svelte`, `phosphor-svelte` (optional peers) |
 | [`@codecora/brand`](packages/brand) | Product marks and favicon sets (Uteke, Corin, Gatehouse) as files and Svelte components | nothing |
-| [`@codecora/memory`](packages/memory) | Uteke domain layer: typed `MemoryClient` over uteke-serve, Uteke Cloud and Tauri, with per-backend capabilities | `@codecora/ui` (components only) |
+| [`@codecora/memory`](packages/memory) | Uteke domain layer: typed `MemoryClient` over uteke-serve, Uteke Cloud and Tauri, with per-backend capabilities, and the memory browser components (`MemoryList`, `MemoryDetail`, `MemoryEditor`) | `@codecora/ui` (peer) |
 
 Dependencies point one way: `memory -> ui -> tokens`.
 

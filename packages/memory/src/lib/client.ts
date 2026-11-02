@@ -50,6 +50,8 @@ export interface MemoryClient {
   tags(params?: { namespace?: string }): Promise<TagCount[]>;
   stats(): Promise<Stats>;
   rooms(): Promise<Room[]>;
+  /** Memories filed in a room, newest first. */
+  roomMemories(roomId: string, params?: { namespace?: string; limit?: number }): Promise<Memory[]>;
   readonly docs: DocsClient;
   /** All memories as JSON lines. */
   exportJsonl(params?: { namespace?: string }): Promise<string>;

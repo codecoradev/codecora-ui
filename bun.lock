@@ -33,6 +33,7 @@
       "dependencies": {
         "@codecora/brand": "workspace:*",
         "@codecora/icons": "workspace:*",
+        "@codecora/memory": "workspace:*",
         "@codecora/tokens": "workspace:*",
         "@codecora/ui": "workspace:*",
       },
@@ -74,7 +75,11 @@
     "packages/memory": {
       "name": "@codecora/memory",
       "version": "0.1.0",
+      "devDependencies": {
+        "@codecora/ui": "workspace:*",
+      },
       "peerDependencies": {
+        "@codecora/ui": "workspace:^",
         "svelte": "^5.33.0",
       },
     },

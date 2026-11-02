@@ -230,6 +230,11 @@ export function createHttpClient(options: HttpClientOptions): MemoryClient {
       assertSupported(capabilities, 'rooms', 'rooms', kind);
       return rows(await json('GET', '/room/list')).map(toRoom);
     },
+    async roomMemories(roomId, params) {
+      assertSupported(capabilities, 'rooms', 'roomMemories', kind);
+      const query = { room_id: roomId, namespace: params?.namespace, limit: params?.limit };
+      return rows(await json('GET', '/room/memories', { query })).map(toMemory);
+    },
     async exportJsonl(params) {
       assertSupported(capabilities, 'export', 'export', kind);
       return text('GET', '/export', { query: { namespace: params?.namespace } });

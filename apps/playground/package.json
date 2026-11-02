@@ -11,6 +11,7 @@
   "dependencies": {
     "@codecora/brand": "workspace:*",
     "@codecora/icons": "workspace:*",
+    "@codecora/memory": "workspace:*",
     "@codecora/tokens": "workspace:*",
     "@codecora/ui": "workspace:*"
   },

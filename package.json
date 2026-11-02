@@ -18,7 +18,7 @@
     "check": "bun run build:packages && bun run --filter './packages/*' --filter './registry' --filter './apps/*' check",
     "test": "bun run --filter './packages/*' --filter './registry' --filter './apps/*' test",
     "contrast": "bun run --filter './packages/tokens' contrast",
-    "detect": "impeccable detect packages/ui/src registry/blocks apps/playground/src",
+    "detect": "impeccable detect packages/ui/src packages/memory/src registry/blocks apps/playground/src",
     "lint": "prettier --check . && eslint .",
     "format": "prettier --write .",
     "changeset": "changeset",
