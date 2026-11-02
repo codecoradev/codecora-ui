@@ -30,9 +30,9 @@ product fleet and open to any Svelte app.
 
 ## Status
 
-`0.3.1`: `@codecora/ui` 0.3.1 (CodeBlock copy and ligature fixes) and
-`@codecora/tokens` 0.3.0 (eleven themes, three more accents, motion tokens and
-exit animations; see [CHANGELOG.md](CHANGELOG.md)), `@codecora/memory`,
+`0.4.0`: `@codecora/tokens` and `@codecora/ui` 0.4.0 (motion on every component
+that still cut between states, and a `--cc-control-py` density token so compact
+rows are 32 px; see [CHANGELOG.md](CHANGELOG.md)), `@codecora/memory`,
 `@codecora/icons` and `@codecora/brand` 0.1.0. Not on npm yet: install from the GitHub Release
 tarballs below. The API can still change before 1.0.
 
@@ -42,8 +42,8 @@ Each release attaches one tarball per package it ships. The same URL works with
 bun, npm (`npm install <url>`) and pnpm (`pnpm add <url>`):
 
 ```bash
-bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.3.0/codecora-tokens-0.3.0.tgz
-bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.3.1/codecora-ui-0.3.1.tgz
+bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.4.0/codecora-tokens-0.4.0.tgz
+bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.4.0/codecora-ui-0.4.0.tgz
 bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.2.0/codecora-memory-0.1.0.tgz
 bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.1.0/codecora-icons-0.1.0.tgz
 bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.1.0/codecora-brand-0.1.0.tgz
