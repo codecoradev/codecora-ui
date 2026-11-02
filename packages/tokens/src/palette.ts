@@ -40,6 +40,21 @@ export const night = {
   text: '#E6E9EF',
 } as const;
 
+/**
+ * Near-black ink for `gaira`, from gaira `web/src/app.css` and its logo
+ * (`#0E1110` is the ink that sits on volt). A faint green cast, hue ~160.
+ */
+export const ink = {
+  crust: '#0A0C0B',
+  base: '#0E1110',
+  mantle: '#151917',
+  hover: '#222826',
+  rule: '#2A302D',
+  strong: '#6B736F',
+  muted: '#959E99',
+  text: '#E8ECEA',
+} as const;
+
 /** Cool graphite for `neutral-dark`: the neutral hue (260) after dark. */
 export const graphite = {
   crust: 'oklch(14% 0.008 260)',
@@ -149,6 +164,9 @@ export const dark = {
   amber: ['#E89B3C', '#F0B76E', '#0E1015'],
 } as const;
 
+/** gaira's volt accent: fill, hover fill, ink on the fill (white on volt fails AA). */
+export const volt = ['#D4FF3A', '#E2FF7A', '#0E1110'] as const;
+
 /** Lower-chroma hues for the mid-grey `dimmed` surfaces: fill, hover fill, text on fill. */
 export const lowGlare = {
   blue: ['oklch(77% 0.1 255)', 'oklch(83% 0.08 255)', fog.crust],
@@ -174,6 +192,7 @@ export const cvd = {
 /** Modal scrims (translucent; not part of the contrast check). */
 export const scrim = {
   slate: 'oklch(22% 0.012 260 / 0.45)',
+  ink: 'rgb(10 12 11 / 0.6)',
   paper: 'oklch(21% 0.015 155 / 0.45)',
   night: 'rgb(10 12 16 / 0.6)',
   graphite: 'oklch(10% 0.008 260 / 0.6)',

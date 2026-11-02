@@ -7,6 +7,7 @@ import {
   dusk,
   fog,
   graphite,
+  ink,
   light,
   lowGlare,
   night,
@@ -15,6 +16,7 @@ import {
   sepia as sepiaPaper,
   slate,
   stark,
+  volt,
 } from './palette.js';
 import type { AccentColors, AccentName, Theme, ThemeName } from './schema.js';
 
@@ -161,6 +163,52 @@ const corin: Theme = {
     badgeFont: 'var(--cc-font-mono)',
     focusWidth: '2px',
     focusOffset: '1px',
+    rowMarker: '2px',
+  },
+};
+
+/**
+ * gaira's console: ink surfaces, the volt accent on actions and focus, Inter
+ * and JetBrains Mono. Volt rides the `green` accent slot so `data-accent`
+ * keeps working; ink is the text on every fill.
+ */
+const gaira: Theme = {
+  name: 'gaira',
+  label: 'Gaira',
+  colorScheme: 'dark',
+  colors: {
+    surface: ink.base,
+    surfaceRaised: ink.mantle,
+    surfaceSunken: ink.crust,
+    surfaceHover: ink.hover,
+    border: ink.rule,
+    borderStrong: ink.strong,
+    text: ink.text,
+    textMuted: ink.muted,
+    danger: dark.red[0],
+    dangerText: ink.base,
+    success: dark.teal[0],
+    successText: ink.base,
+    warning: dark.amber[0],
+    warningText: ink.base,
+    scrim: scrim.ink,
+  },
+  accents: accents({ ...dark, green: volt }),
+  defaultAccent: 'green',
+  radius: { sm: '4px', md: '8px', lg: '12px', pill: '999px' },
+  font: {
+    sans: `'Inter Variable', 'Inter', ${systemSans}`,
+    display: `'Inter Variable', 'Inter', ${systemSans}`,
+    mono: `'JetBrains Mono Variable', ${jetbrainsMono}`,
+  },
+  icon: { stroke: '1.75', size: '1.25rem' },
+  shape: {
+    badgeRadius: 'var(--cc-radius-sm)',
+    badgeCase: 'none',
+    badgeTracking: '0',
+    badgeFont: 'var(--cc-font-sans)',
+    focusWidth: '2px',
+    focusOffset: '2px',
     rowMarker: '2px',
   },
 };
@@ -458,4 +506,5 @@ export const themes: Record<ThemeName, Theme> = {
   slab,
   soft,
   'neutral-cvd': neutralCvd,
+  gaira,
 };
