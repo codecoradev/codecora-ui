@@ -141,6 +141,7 @@ export const semanticTokens = [
   'shadow-modal',
   'control-h',
   'control-px',
+  'control-py',
   'gap',
   'cell-py',
   'cell-px',

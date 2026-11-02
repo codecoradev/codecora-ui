@@ -68,6 +68,10 @@
     font: inherit;
     font-variant-numeric: tabular-nums;
     cursor: pointer;
+    transition:
+      background-color var(--cc-duration-fast) var(--cc-ease-out),
+      color var(--cc-duration-fast) var(--cc-ease-out),
+      border-color var(--cc-duration-fast) var(--cc-ease-out);
   }
   :global(.cc-page:hover) {
     background: var(--cc-surface-hover);
@@ -89,5 +93,10 @@
     min-width: 1.5rem;
     text-align: center;
     color: var(--cc-text-muted);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :global(.cc-page) {
+      transition: none;
+    }
   }
 </style>

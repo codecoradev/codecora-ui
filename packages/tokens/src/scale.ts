@@ -75,15 +75,25 @@ export const ease = {
 /**
  * Sizes that `data-density` switches. Comfortable keeps the 44 px touch
  * target; compact is for pointer-dense tools and stays above the 24 px
- * minimum of WCAG 2.5.8.
+ * minimum of WCAG 2.5.8. `controlPy` is the block padding of rows whose
+ * label can wrap (choices, accordion triggers): one 24 px line lands on
+ * `controlH` in both densities.
  */
 export const density: Record<
   Density,
-  { controlH: string; controlPx: string; gap: string; cellPy: string; cellPx: string }
+  {
+    controlH: string;
+    controlPx: string;
+    controlPy: string;
+    gap: string;
+    cellPy: string;
+    cellPx: string;
+  }
 > = {
   comfortable: {
     controlH: '2.75rem',
     controlPx: '0.875rem',
+    controlPy: '0.5rem',
     gap: '0.75rem',
     cellPy: '0.625rem',
     cellPx: '0.75rem',
@@ -91,6 +101,7 @@ export const density: Record<
   compact: {
     controlH: '2rem',
     controlPx: '0.625rem',
+    controlPy: '0.25rem',
     gap: '0.5rem',
     cellPy: '0.375rem',
     cellPx: '0.5rem',

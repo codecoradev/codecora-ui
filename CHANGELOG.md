@@ -8,6 +8,19 @@ changesets (`packages/*/CHANGELOG.md`).
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-11-02
+
+`@codecora/tokens` and `@codecora/ui` 0.4.0. `@codecora/memory`, `@codecora/icons` and `@codecora/brand` stay at 0.1.0. Install from the GitHub Release tarballs (see the README); npm publishing is still pending (#15).
+
+### Added
+
+- `@codecora/tokens`: a fifth density token, `--cc-control-py`, for the block padding of rows whose label can wrap: 0.5rem at comfortable, 0.25rem at compact.
+- `@codecora/ui`: motion for the components that still cut between states, on the existing motion tokens. Tooltip, DropdownMenu, Select and Combobox fade and scale in from their trigger and out on close; CommandPalette drops in like Dialog; Accordion panels open to their measured height; the Tabs underline slides; Checkbox fills and its check springs in; Slider steps glide; ToggleGroup and Pagination ease their fill; Avatar images and Alert fade in. Under `prefers-reduced-motion` all of it is instant.
+
+### Fixed
+
+- `@codecora/ui`: at compact density, Checkbox, RadioGroup, Switch and Accordion rows are 32 px like every other control (they stopped at 36 to 40 px because of a fixed block padding). Comfortable is unchanged.
+
 ## [0.3.1] - 2026-11-01
 
 `@codecora/ui` 0.3.1. `@codecora/tokens` stays at 0.3.0, `@codecora/memory`, `@codecora/icons` and `@codecora/brand` at 0.1.0. Install from the GitHub Release tarballs (see the README); npm publishing is still pending (#15).
@@ -94,7 +107,8 @@ First release of `@codecora/tokens`, `@codecora/ui`, `@codecora/icons` and `@cod
 
 - Workflows: the review access token is a step output instead of a job-wide variable, actions are pinned to commit SHAs, the message standard runs from the base branch, and the PR description check requires real content under whole `## What` / `## Why` / `## Testing` headings.
 
-[Unreleased]: https://github.com/codecoradev/codecora-ui/compare/v0.3.1...develop
+[Unreleased]: https://github.com/codecoradev/codecora-ui/compare/v0.4.0...develop
+[0.4.0]: https://github.com/codecoradev/codecora-ui/compare/v0.3.1...v0.4.0
 [0.3.1]: https://github.com/codecoradev/codecora-ui/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/codecoradev/codecora-ui/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/codecoradev/codecora-ui/compare/v0.1.0...v0.2.0

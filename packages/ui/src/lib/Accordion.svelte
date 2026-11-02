@@ -39,8 +39,9 @@
           <Glyph name="chevron-down" />
         </Accordion.Trigger>
       </Accordion.Header>
-      <Accordion.Content class="cc-accordion-content">{@render panel(item.value)}</Accordion.Content
-      >
+      <Accordion.Content class="cc-accordion-content">
+        <div class="body">{@render panel(item.value)}</div>
+      </Accordion.Content>
     </Accordion.Item>
   {/each}
 </Accordion.Root>
@@ -65,7 +66,7 @@
     gap: var(--cc-space-3);
     width: 100%;
     min-height: var(--cc-control-h);
-    padding: var(--cc-space-2) var(--cc-control-px);
+    padding: var(--cc-control-py) var(--cc-control-px);
     border: 0;
     background: none;
     color: var(--cc-text);
@@ -85,11 +86,49 @@
     color: var(--cc-text-muted);
     cursor: not-allowed;
   }
+  :global(.cc-accordion-trigger .cc-glyph) {
+    transition: transform var(--cc-duration-fast) var(--cc-ease-in-out);
+  }
   :global(.cc-accordion-trigger[data-state='open'] .cc-glyph) {
     transform: rotate(180deg);
   }
+  /* The panel opens to the height bits-ui measures; padding sits inside so it clips cleanly. */
   :global(.cc-accordion-content) {
-    padding: 0 var(--cc-control-px) var(--cc-space-4);
+    overflow: hidden;
     color: var(--cc-text);
+    animation: cc-accordion-open var(--cc-duration-normal) var(--cc-ease-out);
+  }
+  /* bits-ui keeps the panel mounted until the exit animation finishes. */
+  :global(.cc-accordion-content[data-state='closed']) {
+    animation: cc-accordion-close var(--cc-duration-fast) var(--cc-ease-exit) forwards;
+  }
+  .body {
+    padding: 0 var(--cc-control-px) var(--cc-space-4);
+  }
+  @keyframes cc-accordion-open {
+    from {
+      height: 0;
+      opacity: 0;
+    }
+    to {
+      height: var(--bits-accordion-content-height);
+    }
+  }
+  @keyframes cc-accordion-close {
+    from {
+      height: var(--bits-accordion-content-height);
+    }
+    to {
+      height: 0;
+      opacity: 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :global(.cc-accordion-content[data-state]) {
+      animation: none;
+    }
+    :global(.cc-accordion-trigger .cc-glyph) {
+      transition: none;
+    }
   }
 </style>

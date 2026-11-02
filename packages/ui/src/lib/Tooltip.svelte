@@ -42,5 +42,28 @@
     font-family: var(--cc-font-sans);
     font-size: var(--cc-font-size-sm);
     line-height: var(--cc-leading-tight);
+    transform-origin: var(--bits-tooltip-content-transform-origin);
+    animation: cc-tooltip-in var(--cc-duration-fast) var(--cc-ease-out);
+  }
+  /* bits-ui keeps the tooltip mounted until the exit animation finishes. */
+  :global(.cc-tooltip[data-state='closed']) {
+    animation: cc-tooltip-out var(--cc-duration-instant) var(--cc-ease-exit) forwards;
+  }
+  @keyframes cc-tooltip-in {
+    from {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+  }
+  @keyframes cc-tooltip-out {
+    to {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :global(.cc-tooltip[data-state]) {
+      animation: none;
+    }
   }
 </style>

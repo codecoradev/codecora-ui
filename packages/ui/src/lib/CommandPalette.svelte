@@ -105,6 +105,11 @@
     inset: 0;
     z-index: var(--cc-layer-overlay);
     background: var(--cc-scrim);
+    animation: cc-palette-fade var(--cc-duration-normal) var(--cc-ease-out);
+  }
+  /* bits-ui keeps closing content mounted until its animations finish. Exits run one step shorter. */
+  :global(.cc-palette-overlay[data-state='closed']) {
+    animation: cc-palette-fade-out var(--cc-duration-fast) var(--cc-ease-exit) forwards;
   }
   :global(.cc-palette) {
     position: fixed;
@@ -120,6 +125,13 @@
     color: var(--cc-text);
     box-shadow: var(--cc-shadow-modal);
     font-family: var(--cc-font-sans);
+    /* Opacity eases; only the movement springs. */
+    animation:
+      cc-palette-fade var(--cc-duration-normal) var(--cc-ease-out),
+      cc-palette-pop var(--cc-duration-slow) var(--cc-ease-spring);
+  }
+  :global(.cc-palette[data-state='closed']) {
+    animation: cc-palette-pop-out var(--cc-duration-fast) var(--cc-ease-exit) forwards;
   }
   :global(.cc-palette-title) {
     position: absolute;
@@ -178,5 +190,32 @@
     padding: var(--cc-space-4) var(--cc-control-px);
     color: var(--cc-text-muted);
     text-align: center;
+  }
+  @keyframes cc-palette-fade {
+    from {
+      opacity: 0;
+    }
+  }
+  @keyframes cc-palette-fade-out {
+    to {
+      opacity: 0;
+    }
+  }
+  @keyframes cc-palette-pop {
+    from {
+      transform: translate(-50%, calc(-1 * var(--cc-space-2))) scale(0.97);
+    }
+  }
+  @keyframes cc-palette-pop-out {
+    to {
+      opacity: 0;
+      transform: translate(-50%, calc(-1 * var(--cc-space-1))) scale(0.98);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :global(.cc-palette-overlay[data-state]),
+    :global(.cc-palette[data-state]) {
+      animation: none;
+    }
   }
 </style>
