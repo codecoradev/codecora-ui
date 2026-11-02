@@ -52,6 +52,14 @@
         (status === 'all' || row.status === status),
     ),
   );
+  // A new filter starts on page 1 and keeps only the selected rows still shown,
+  // so the bulk action never touches rows the user cannot see.
+  function filtered() {
+    page = 1;
+    const shown = new Set(visible.map((row) => row.id));
+    selected = selected.filter((id) => shown.has(id));
+  }
+
   const tone = { Active: 'success', Paused: 'warning', Failed: 'danger' } as const;
   const columns = [
     { key: 'name', label: 'Name', sortable: true },
@@ -81,8 +89,13 @@
           type="search"
           aria-label="Filter by name"
           placeholder="Filter by name"
-          bind:value={query}
-          oninput={() => (page = 1)}
+          bind:value={
+            () => query,
+            (next) => {
+              query = String(next ?? '');
+              filtered();
+            }
+          }
         />
         <Select
           label="Status"
@@ -96,7 +109,7 @@
             () => status,
             (next) => {
               status = next;
-              page = 1;
+              filtered();
             }
           }
         />
