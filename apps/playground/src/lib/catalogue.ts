@@ -108,11 +108,12 @@ export const northStars: Record<ThemeName, string> = {
   slab: 'The Proof Sheet',
   soft: 'The Pebble',
   'neutral-cvd': 'The Plain Workbench, colour-blind safe',
+  gaira: 'The Volt Console',
 };
 
 /** Themes as the playground groups them; Access themes say who they are for. */
 export const themeGroups: { group: string; themes: ThemeName[] }[] = [
-  { group: 'Product', themes: ['neutral', 'uteke', 'corin'] },
+  { group: 'Product', themes: ['neutral', 'uteke', 'corin', 'gaira'] },
   { group: 'Dark', themes: ['neutral-dark', 'uteke-dark'] },
   { group: 'Access', themes: ['contrast', 'neutral-cvd', 'dimmed'] },
   { group: 'Character', themes: ['sepia', 'slab', 'soft'] },

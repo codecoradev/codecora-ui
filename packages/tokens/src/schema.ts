@@ -13,6 +13,7 @@ export const themeNames = [
   'slab',
   'soft',
   'neutral-cvd',
+  'gaira',
 ] as const;
 export type ThemeName = (typeof themeNames)[number];
 
