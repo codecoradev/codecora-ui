@@ -54,6 +54,22 @@ describe('HTTP client requests', () => {
     });
   });
 
+  it('reads a room with GET /room/memories and its query', async () => {
+    const fetch = mockFetch(() => [raw]);
+    const client = createHttpClient({ baseUrl: 'http://srv', fetch });
+    const memories = await client.roomMemories('ui-room', { limit: 5 });
+    expect(memories[0]).toMatchObject({ id: 'abc', memoryType: 'decision' });
+    expect(fetch.mock.calls[0]![0]).toBe('http://srv/room/memories?room_id=ui-room&limit=5');
+    expect((fetch.mock.calls[0]![1] as RequestInit).method).toBe('GET');
+  });
+
+  it('refuses a room read on Uteke Cloud before any request', async () => {
+    const fetch = mockFetch(() => []);
+    const client = createHttpClient({ baseUrl: 'https://cloud', kind: 'cloud', fetch });
+    await expect(client.roomMemories('r')).rejects.toBeInstanceOf(UnsupportedError);
+    expect(fetch).not.toHaveBeenCalled();
+  });
+
   it('builds query strings and skips undefined values', async () => {
     const fetch = mockFetch(() => [{ name: 'a', count: 2 }]);
     const client = createHttpClient({ baseUrl: 'http://srv', fetch });

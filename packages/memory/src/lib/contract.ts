@@ -107,6 +107,7 @@ export function runContract(
       const client = make();
       if (!client.capabilities.rooms) return;
       expect(Array.isArray(await client.rooms())).toBe(true);
+      expect(await client.roomMemories(`${tag}-no-such-room`, { limit: 5 })).toEqual([]);
     });
 
     it('exports and imports JSON lines', async () => {

@@ -81,6 +81,27 @@ describe.skipIf(!SERVE)('uteke-serve', () => {
     expect((await noKey().health()).status).toBe('ok');
     await expect(noKey().list()).rejects.toMatchObject({ status: 401 });
   });
+
+  it('lists the memories filed in a room', async () => {
+    // The client has no room writes, so the room and its memory go in through the API.
+    const room = `contract-room-${Math.random().toString(36).slice(2, 8)}`;
+    const post = (path: string, body: unknown) =>
+      fetch(`http://127.0.0.1:${port}${path}`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${TOKEN}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+    expect((await post('/room/create', { room_id: room, title: 'Contract room' })).ok).toBe(true);
+    expect((await post('/room/remember', { room_id: room, content: `Filed in ${room}` })).ok).toBe(
+      true,
+    );
+
+    const client = make();
+    expect((await client.rooms()).some((r) => r.id === room)).toBe(true);
+    const memories = await client.roomMemories(room, { limit: 10 });
+    expect(memories.map((m) => m.content)).toContain(`Filed in ${room}`);
+    expect(memories[0]!.id).not.toBe('');
+  });
 });
 
 const CLOUD_URL = process.env.UTEKE_CLOUD_URL;

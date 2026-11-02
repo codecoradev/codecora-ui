@@ -1,8 +1,9 @@
 # @codecora/memory
 
 The Uteke domain layer for CodeCora products: one `MemoryClient` over every
-Uteke backend, with `Capabilities` that say what a backend supports. It has no
-UI and no dependency besides Svelte (the memory components come next, #11).
+Uteke backend, with `Capabilities` that say what a backend supports, and the
+memory browser components built on `@codecora/ui` (a peer dependency, with
+`@codecora/tokens` CSS loaded by the app).
 
 ```ts
 import { createHttpClient } from '@codecora/memory';
@@ -17,6 +18,43 @@ const id = await local.remember({ content: 'Use bun workspaces', tags: ['project
 const hits = await local.search('workspaces', { limit: 5 });
 if (local.capabilities.rooms) await local.rooms();
 ```
+
+## Memory browser
+
+`MemoryList`, `MemoryDetail` and `MemoryEditor` share one `MemoryBrowser`, so
+the list, the selection and the edits stay in step. Lay them out as your app
+needs (two panes, or the detail in a `Sheet` on small screens).
+
+```svelte
+<script lang="ts">
+  import { MemoryBrowser, MemoryDetail, MemoryList, createHttpClient } from '@codecora/memory';
+
+  const browser = new MemoryBrowser(createHttpClient({ baseUrl: '/api' }), { pageSize: 50 });
+</script>
+
+<div class="panes">
+  <MemoryList {browser} />
+  <MemoryDetail {browser} />
+</div>
+```
+
+- **MemoryList**: search, tag and room filters, rows with type, tags and date,
+  arrow keys between rows, "Load more" for the plain and tag lists, and empty,
+  loading and error states. A query uses `search`, which uteke-serve answers
+  by matching words and does not count as a recall.
+- **MemoryDetail**: the selected memory with pin, edit and delete (confirmed
+  in a `ConfirmDialog`), and the editor for a new memory. New memories are
+  saved with `author: 'human'`.
+- **MemoryEditor**: content, tags (comma separated) and, for a new memory, the
+  type; usable on its own through `onsave`.
+
+Capabilities decide what is offered: no room filter on Uteke Cloud, no
+namespace on a backend where namespaces are deprecated, no edit or pin where
+the backend lacks them.
+
+`createInMemoryClient({ memories, rooms, kind })` keeps memories in the page.
+It imitates the capabilities of `kind` and is meant for demos, stories and
+tests; its search matches words.
 
 ## Transports
 
@@ -38,7 +76,7 @@ calling it anyway throws `UnsupportedError` before any request.
 | Capability                                                       | uteke-serve | Uteke Cloud | Tauri |
 | ---------------------------------------------------------------- | :---------: | :---------: | :---: |
 | update, pin, recall, search, tags, stats, documents              |     yes     |     yes     |  yes  |
-| rooms                                                            |     yes     |     no      |  yes  |
+| rooms, roomMemories                                              |     yes     |     no      |  yes  |
 | export, import                                                   |     yes     |     yes     |  no   |
 | namespaces                                                       |    full     | deprecated  | full  |
 | graph, lifecycle, dream, orphans (reserved, no client method yet) |     yes     |     no      |  no   |
