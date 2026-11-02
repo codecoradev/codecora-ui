@@ -30,10 +30,10 @@ product fleet and open to any Svelte app.
 
 ## Status
 
-`0.4.0`: `@codecora/tokens` and `@codecora/ui` 0.4.0 (motion on every component
-that still cut between states, and a `--cc-control-py` density token so compact
-rows are 32 px; see [CHANGELOG.md](CHANGELOG.md)), `@codecora/memory`,
-`@codecora/icons` and `@codecora/brand` 0.1.0. Not on npm yet: install from the GitHub Release
+`0.5.0`: `@codecora/tokens` 0.5.0 (chart colours in the shadcn bridge) and
+`@codecora/memory` 0.2.0 (the memory browser components), with `@codecora/ui`
+0.4.0 and `@codecora/icons` and `@codecora/brand` 0.1.0; a shadcn-svelte
+registry ships with the playground (see [CHANGELOG.md](CHANGELOG.md)). Not on npm yet: install from the GitHub Release
 tarballs below. The API can still change before 1.0.
 
 ## Install
@@ -42,9 +42,9 @@ Each release attaches one tarball per package it ships. The same URL works with
 bun, npm (`npm install <url>`) and pnpm (`pnpm add <url>`):
 
 ```bash
-bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.4.0/codecora-tokens-0.4.0.tgz
+bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.5.0/codecora-tokens-0.5.0.tgz
 bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.4.0/codecora-ui-0.4.0.tgz
-bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.2.0/codecora-memory-0.1.0.tgz
+bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.5.0/codecora-memory-0.2.0.tgz
 bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.1.0/codecora-icons-0.1.0.tgz
 bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.1.0/codecora-brand-0.1.0.tgz
 ```

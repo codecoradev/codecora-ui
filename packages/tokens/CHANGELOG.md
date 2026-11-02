@@ -1,5 +1,11 @@
 # @codecora/tokens
 
+## 0.5.0
+
+### Minor Changes
+
+- beeba37: The shadcn bridge maps `--chart-1` to `--chart-5` (accent, success, warning, danger, muted text), so charts in shadcn-svelte apps follow the theme. The map is exported as `shadcnBridge`; the registry's `cc-theme` item writes the same map into an app's `:root` and `.dark`.
+
 ## 0.4.0
 
 ### Minor Changes
