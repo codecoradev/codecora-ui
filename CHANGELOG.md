@@ -8,6 +8,27 @@ changesets (`packages/*/CHANGELOG.md`).
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-11-03
+
+`@codecora/tokens` 0.6.0, `@codecora/ui` 0.5.0 and `@codecora/memory` 0.3.0. `@codecora/icons` and `@codecora/brand` stay at 0.1.0. Install from the GitHub Release tarballs (see the README); npm publishing is still pending (#15).
+
+### Added
+
+- `@codecora/tokens`: the `corin-light` theme, Corin's warm-paper light palette as the light twin of `corin` (same teal, radii, fonts and shape hooks). It passes WCAG AA for every accent. Corin's own light red, green, amber and muted border fail AA, so those four are darkened at Corin's hue angles; `docs/design/corin-light.md` lists them (#130, closes #129).
+- `@codecora/memory`: `createPortalClient` for pages on the Uteke Cloud portal (browse, search, open, edit, pin and forget the signed-in user's own memories, plus rooms and tags, through `/portal/*`), and a `create` capability: the portal has no create route, so `MemoryList` and `MemoryBrowser` hide "New memory" there and `remember` throws `UnsupportedError` (#125, refs #10).
+- Registry: three blocks, `cc-console-overview` (console frame with a user menu, breadcrumb and search header, and tabs), `cc-resource-detail` (detail page with a split primary button, a grouped list with row menus, and a segmented tool list) and `cc-status-panel` (status card with a stat strip and a why / what-to-do panel). The registry has seven blocks now (#134, #135, #136).
+
+### Changed
+
+- `@codecora/ui`: `Table` (and so `DataTable`) is a labelled, focusable scroll region only while it overflows sideways, so a table that fits adds no tab stop. Tests that expected `role="region"` and `tabindex="0"` on every table need a table that overflows (#127, closes #124).
+- `@codecora/ui`: `AppShell`'s top bar is a `<header>`, the banner landmark, next to `<main>`. A shell without a `header` snippet hides its bare top bar on a wide screen (on a phone it stays for the menu button), so a header-less shell no longer shows an empty strip (#137, closes #128).
+- `@codecora/memory`: `capabilitiesFor('cloud')` now has rooms, which Uteke Cloud supports. The API client reads room memories answered as `{ memories }` and shows the `message` of a Cloud error. `@codecora/ui` (`^0.5.0`) is the peer dependency (#125).
+- `@codecora/tokens`: `corin` names `corin-light` as its `twin` (#130).
+
+### Fixed
+
+- `@codecora/ui`: `Tabs` no longer draw a vertical scrollbar next to the tab list when every tab fits, where scrollbars are always shown (#126, closes #123).
+
 ## [0.5.1] - 2026-11-02
 
 `@codecora/tokens` 0.5.1. `@codecora/memory` stays at 0.2.0, `@codecora/ui` at 0.4.0, `@codecora/icons` and `@codecora/brand` at 0.1.0. Install from the GitHub Release tarballs (see the README); npm publishing is still pending (#15).
@@ -130,7 +151,8 @@ First release of `@codecora/tokens`, `@codecora/ui`, `@codecora/icons` and `@cod
 
 - Workflows: the review access token is a step output instead of a job-wide variable, actions are pinned to commit SHAs, the message standard runs from the base branch, and the PR description check requires real content under whole `## What` / `## Why` / `## Testing` headings.
 
-[Unreleased]: https://github.com/codecoradev/codecora-ui/compare/v0.5.1...develop
+[Unreleased]: https://github.com/codecoradev/codecora-ui/compare/v0.6.0...develop
+[0.6.0]: https://github.com/codecoradev/codecora-ui/compare/v0.5.1...v0.6.0
 [0.5.1]: https://github.com/codecoradev/codecora-ui/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/codecoradev/codecora-ui/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/codecoradev/codecora-ui/compare/v0.3.1...v0.4.0
