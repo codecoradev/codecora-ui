@@ -13,6 +13,7 @@ and changes them.
 | `cc-dashboard-shell` | block | `dashboard-shell.svelte`: AppShell sidebar (drawer and bottom bar on phones) and a page header |
 | `cc-console-overview` | block | `console-overview.svelte`: console frame with a user menu, a breadcrumb and search header, a title row, tabs and a page body |
 | `cc-resource-detail` | block | `resource-detail.svelte`: back link, header with a split primary button, grouped list with row menus, segmented tool list with search and a callout |
+| `cc-status-panel` | block | `status-panel.svelte`: status card with a tinted icon, an action, a stat strip and a why / what-to-do panel |
 | `cc-data-table` | block | `data-table.svelte`: search, status filter, sorting, selection with a bulk action, paging |
 
 Every block depends on `@codecora/ui` and installs `cc-theme` first. Blocks use
