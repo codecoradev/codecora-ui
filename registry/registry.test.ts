@@ -52,6 +52,7 @@ describe('registry', () => {
       'cc-login',
       'cc-resource-detail',
       'cc-settings',
+      'cc-status-panel',
     ]);
     for (const block of blocks) {
       expect(block.registryDependencies).toContain('local:cc-theme');

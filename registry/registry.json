@@ -87,6 +87,19 @@
       ]
     },
     {
+      "name": "cc-status-panel",
+      "type": "registry:block",
+      "title": "Status panel",
+      "description": "Status card with a tinted icon, an action, a strip of labelled stats and a why / what-to-do panel; the tone sets the icon and tint.",
+      "registryDependencies": ["local:cc-theme"],
+      "files": [
+        {
+          "path": "blocks/status-panel/status-panel.svelte",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "cc-data-table",
       "type": "registry:block",
       "title": "Data table",
