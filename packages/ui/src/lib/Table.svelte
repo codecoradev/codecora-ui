@@ -1,6 +1,7 @@
 <!--
   Styles a native <table> you write inside it. The wrapper scrolls sideways on
-  narrow screens and is focusable so keyboard users can scroll it.
+  narrow screens and, only while it overflows, is a labelled focusable region so
+  keyboard users can scroll it; a table that fits adds no tab stop.
 -->
 <script lang="ts">
   import type { Snippet } from 'svelte';
@@ -12,11 +13,37 @@
   }
 
   let { label, children }: Props = $props();
+
+  let wrap = $state<HTMLElement>();
+  let overflowing = $state(false);
+
+  // A scroll region has to be reachable by keyboard (WCAG 2.1.1), but only while
+  // there is something to scroll. Until it is measured (and without JavaScript) the
+  // wrapper is a plain element, and the caption names the table. One pixel of slack
+  // absorbs sub-pixel rounding.
+  $effect(() => {
+    if (!wrap) return;
+    const element = wrap;
+    const measure = () => {
+      overflowing = element.scrollWidth - element.clientWidth > 1;
+    };
+    measure();
+    // The wrapper changes with the viewport, the table with its rows and columns.
+    const observer = new ResizeObserver(measure);
+    observer.observe(element);
+    for (const child of element.children) observer.observe(child);
+    return () => observer.disconnect();
+  });
 </script>
 
-<!-- A focusable scroll region lets keyboard users scroll a wide table. -->
 <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
-<div class="cc-table-wrap" role="region" aria-label={label} tabindex="0">
+<div
+  class="cc-table-wrap"
+  bind:this={wrap}
+  role={overflowing ? 'region' : undefined}
+  aria-label={overflowing ? label : undefined}
+  tabindex={overflowing ? 0 : undefined}
+>
   <table class="cc-table">
     <caption class="cc-table-caption">{label}</caption>
     {@render children()}
