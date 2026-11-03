@@ -118,7 +118,7 @@ export class MemoryBrowser {
   }
 
   create() {
-    this.mode = 'new';
+    if (this.capabilities.create) this.mode = 'new';
   }
 
   cancel() {

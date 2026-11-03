@@ -5,6 +5,8 @@ export type BackendKind = 'uteke-serve' | 'cloud' | 'tauri';
  * capability is false throws `UnsupportedError` instead of failing at the server.
  */
 export interface Capabilities {
+  /** Write a new memory. Off where memories only arrive from agents (the Uteke Cloud portal). */
+  create: boolean;
   update: boolean;
   pin: boolean;
   recall: boolean;
@@ -24,6 +26,7 @@ export interface Capabilities {
 }
 
 const all: Capabilities = {
+  create: true,
   update: true,
   pin: true,
   recall: true,
@@ -42,8 +45,8 @@ const all: Capabilities = {
 };
 
 /**
- * Defaults per backend. Uteke Cloud has no graph, lifecycle, dream, orphans or
- * rooms, and namespaces are deprecated there. The Tauri client covers the core
+ * Defaults per backend. Uteke Cloud has no graph, lifecycle, dream or orphans,
+ * and namespaces are deprecated there. The Tauri client covers the core
  * operations only; export and import go through other desktop commands.
  */
 export function capabilitiesFor(kind: BackendKind): Capabilities {
@@ -53,7 +56,6 @@ export function capabilitiesFor(kind: BackendKind): Capabilities {
     case 'cloud':
       return {
         ...all,
-        rooms: false,
         namespaces: 'deprecated',
         graph: false,
         lifecycle: false,
