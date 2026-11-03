@@ -41,6 +41,21 @@ export const night = {
 } as const;
 
 /**
+ * Warm paper for `corin-light`, from Corin `DESIGN.md` (light palette B). Two
+ * departures: `crust` is the sunken step below `base`, and `overlay` is darker
+ * than Corin's #A39A85 so control borders reach 3:1.
+ */
+export const warmPaper = {
+  crust: '#F3EEE3',
+  base: '#FBF8F1',
+  mantle: '#FFFDF8',
+  surface0: '#E7E0D2',
+  overlay: '#8A826D',
+  subtext: '#6E6650',
+  text: '#2E2A1F',
+} as const;
+
+/**
  * Near-black ink for `gaira`, from gaira `web/src/app.css` and its logo
  * (`#0E1110` is the ink that sits on volt). A faint green cast, hue ~160.
  */
@@ -164,6 +179,18 @@ export const dark = {
   amber: ['#E89B3C', '#F0B76E', '#0E1015'],
 } as const;
 
+/**
+ * Corin's light teal, hover and text on fill. Corin's own light red, green and
+ * amber (#C25B4E, #3E9B6C, #C07A3A) are 2.8 to 4.0:1 as text, so the status hues keep
+ * Corin's hue angles at the lightness the other light themes use for AA.
+ */
+export const paperHues = {
+  teal: ['#0E7C74', '#0A6660', '#FFFDF8'],
+  red: ['oklch(51% 0.15 30)', 'oklch(45% 0.14 30)', 'oklch(99% 0.004 30)'],
+  green: ['oklch(48% 0.115 157)', 'oklch(42% 0.105 157)', 'oklch(98% 0.006 157)'],
+  amber: ['oklch(49% 0.1 65)', 'oklch(43% 0.09 65)', 'oklch(99% 0.004 65)'],
+} as const;
+
 /** gaira's volt accent: fill, hover fill, ink on the fill (white on volt fails AA). */
 export const volt = ['#D4FF3A', '#E2FF7A', '#0E1110'] as const;
 
@@ -195,6 +222,7 @@ export const scrim = {
   ink: 'rgb(10 12 11 / 0.6)',
   paper: 'oklch(21% 0.015 155 / 0.45)',
   night: 'rgb(10 12 16 / 0.6)',
+  warm: 'oklch(24% 0.02 85 / 0.45)',
   graphite: 'oklch(10% 0.008 260 / 0.6)',
   dusk: 'oklch(10% 0.012 155 / 0.6)',
   sepia: 'oklch(28% 0.03 60 / 0.45)',

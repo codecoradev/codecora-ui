@@ -11,12 +11,14 @@ import {
   light,
   lowGlare,
   night,
+  paperHues,
   paper,
   scrim,
   sepia as sepiaPaper,
   slate,
   stark,
   volt,
+  warmPaper,
 } from './palette.js';
 import type { AccentColors, AccentName, Theme, ThemeName } from './schema.js';
 
@@ -152,6 +154,7 @@ const corin: Theme = {
   },
   accents: accents(dark),
   defaultAccent: 'teal',
+  twin: 'corin-light',
   radius: { sm: '5px', md: '10px', lg: '14px', pill: '999px' },
   font: { sans: systemSans, display: systemSans, mono: jetbrainsMono },
   icon: { stroke: '1.75', size: '1.25rem' },
@@ -165,6 +168,36 @@ const corin: Theme = {
     focusOffset: '1px',
     rowMarker: '2px',
   },
+};
+
+/**
+ * Corin by day: warm paper surfaces and the same teal, shape and fonts as `corin`.
+ * Status hues are Corin's hue angles at AA lightness (see `paperHues`).
+ */
+const corinLight: Theme = {
+  ...corin,
+  name: 'corin-light',
+  label: 'Corin light',
+  colorScheme: 'light',
+  colors: {
+    surface: warmPaper.base,
+    surfaceRaised: warmPaper.mantle,
+    surfaceSunken: warmPaper.crust,
+    surfaceHover: warmPaper.surface0,
+    border: warmPaper.surface0,
+    borderStrong: warmPaper.overlay,
+    text: warmPaper.text,
+    textMuted: warmPaper.subtext,
+    danger: paperHues.red[0],
+    dangerText: paperHues.red[2],
+    success: paperHues.green[0],
+    successText: paperHues.green[2],
+    warning: paperHues.amber[0],
+    warningText: paperHues.amber[2],
+    scrim: scrim.warm,
+  },
+  accents: accents({ ...light, teal: paperHues.teal }),
+  twin: 'corin',
 };
 
 /**
@@ -498,6 +531,7 @@ export const themes: Record<ThemeName, Theme> = {
   neutral,
   uteke,
   corin,
+  'corin-light': corinLight,
   'neutral-dark': neutralDark,
   'uteke-dark': utekeDark,
   sepia,
