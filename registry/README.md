@@ -11,6 +11,7 @@ and changes them.
 | `cc-login` | block | `login-form.svelte`: sign-in card with validation, progress and an error alert |
 | `cc-settings` | block | `settings-page.svelte`: profile, notifications and danger-zone tabs, save and delete confirm |
 | `cc-dashboard-shell` | block | `dashboard-shell.svelte`: AppShell sidebar (drawer and bottom bar on phones) and a page header |
+| `cc-console-overview` | block | `console-overview.svelte`: console frame with a user menu, a breadcrumb and search header, a title row, tabs and a page body |
 | `cc-data-table` | block | `data-table.svelte`: search, status filter, sorting, selection with a bulk action, paging |
 
 Every block depends on `@codecora/ui` and installs `cc-theme` first. Blocks use
