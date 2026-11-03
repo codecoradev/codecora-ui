@@ -63,11 +63,34 @@ describe('HTTP client requests', () => {
     expect((fetch.mock.calls[0]![1] as RequestInit).method).toBe('GET');
   });
 
-  it('refuses a room read on Uteke Cloud before any request', async () => {
+  it('refuses a room read before any request when the backend has no rooms', async () => {
     const fetch = mockFetch(() => []);
-    const client = createHttpClient({ baseUrl: 'https://cloud', kind: 'cloud', fetch });
+    const client = createHttpClient({
+      baseUrl: 'https://cloud',
+      kind: 'cloud',
+      capabilities: { rooms: false },
+      fetch,
+    });
     await expect(client.roomMemories('r')).rejects.toBeInstanceOf(UnsupportedError);
     expect(fetch).not.toHaveBeenCalled();
+  });
+
+  it('reads Uteke Cloud room memories, which come inside { memories }', async () => {
+    const fetch = mockFetch(() => ({ memories: [raw] }));
+    const client = createHttpClient({ baseUrl: 'https://cloud', kind: 'cloud', fetch });
+    expect((await client.roomMemories('r'))[0]).toMatchObject({ id: 'abc' });
+  });
+
+  it('shows the message of a Uteke Cloud error, not only its code', async () => {
+    const fetch = mockFetch(
+      () => ({ error: 'csrf_failed', message: 'cross-site request refused' }),
+      403,
+    );
+    const client = createHttpClient({ baseUrl: 'https://cloud', kind: 'cloud', fetch });
+    await expect(client.forget('abc')).rejects.toMatchObject({
+      status: 403,
+      message: expect.stringContaining('cross-site request refused'),
+    });
   });
 
   it('builds query strings and skips undefined values', async () => {
@@ -175,10 +198,11 @@ describe('HTTP client errors', () => {
 });
 
 describe('capabilities', () => {
-  it('Uteke Cloud has no rooms, graph, lifecycle, dream or orphans and deprecated namespaces', () => {
+  it('Uteke Cloud has rooms but no graph, lifecycle, dream or orphans, and deprecated namespaces', () => {
     const cloud = capabilitiesFor('cloud');
     expect(cloud).toMatchObject({
-      rooms: false,
+      rooms: true,
+      create: true,
       graph: false,
       lifecycle: false,
       dream: false,
@@ -196,20 +220,24 @@ describe('capabilities', () => {
 
   it('a missing capability throws UnsupportedError before any request', async () => {
     const fetch = mockFetch(() => []);
-    const client = createHttpClient({ baseUrl: 'http://srv', kind: 'cloud', fetch });
+    const client = createHttpClient({
+      baseUrl: 'http://srv',
+      capabilities: { rooms: false, create: false },
+      fetch,
+    });
     await expect(client.rooms()).rejects.toBeInstanceOf(UnsupportedError);
+    await expect(client.remember({ content: 'x' })).rejects.toBeInstanceOf(UnsupportedError);
     expect(fetch).not.toHaveBeenCalled();
   });
 
   it('options can override the defaults', async () => {
     const client = createHttpClient({
       baseUrl: 'http://srv',
-      kind: 'cloud',
-      capabilities: { rooms: true },
+      capabilities: { rooms: false },
       fetch: mockFetch(() => []),
     });
-    expect(client.capabilities.rooms).toBe(true);
-    expect(await client.rooms()).toEqual([]);
+    expect(client.capabilities.rooms).toBe(false);
+    await expect(client.rooms()).rejects.toBeInstanceOf(UnsupportedError);
   });
 
   it('plain-name namespaces from older servers still normalise', async () => {

@@ -121,6 +121,12 @@ describe('MemoryBrowser', () => {
     expect(browser.selectedId).toBe('a');
   });
 
+  it('does not start a new memory on a backend that cannot create one', () => {
+    const browser = new MemoryBrowser(createInMemoryClient({ capabilities: { create: false } }));
+    browser.create();
+    expect(browser.mode).toBe('view');
+  });
+
   it('does not enter edit mode on a backend without updates', async () => {
     const browser = new MemoryBrowser(
       createInMemoryClient({

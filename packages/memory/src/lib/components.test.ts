@@ -5,12 +5,13 @@ import { createInMemoryClient } from './inmemory.js';
 import MemoryDetail from './MemoryDetail.svelte';
 import MemoryEditor from './MemoryEditor.svelte';
 import MemoryList from './MemoryList.svelte';
-import type { BackendKind } from './capabilities.js';
+import type { BackendKind, Capabilities } from './capabilities.js';
 
-const browserFor = (kind: BackendKind = 'uteke-serve') =>
+const browserFor = (kind: BackendKind = 'uteke-serve', capabilities: Partial<Capabilities> = {}) =>
   new MemoryBrowser(
     createInMemoryClient({
       kind,
+      capabilities,
       memories: [
         { id: 'a', content: 'Use bun workspaces', tags: ['project:ui'] },
         { id: 'b', content: 'Squash merge to develop', tags: ['project:ui', 'git'], pinned: true },
@@ -66,9 +67,24 @@ describe('MemoryList', () => {
     expect(await screen.findByRole('combobox', { name: 'Filter by room' })).toBeInTheDocument();
     unmount();
 
-    render(MemoryList, { browser: browserFor('cloud') });
+    render(MemoryList, { browser: browserFor('uteke-serve', { rooms: false }) });
     expect(await screen.findByRole('combobox', { name: 'Filter by tag' })).toBeInTheDocument();
     expect(screen.queryByRole('combobox', { name: 'Filter by room' })).toBeNull();
+  });
+
+  it('offers no New memory where the backend cannot create one', async () => {
+    const { unmount } = render(MemoryList, { browser: browserFor('cloud', { create: false }) });
+    await screen.findByRole('list', { name: 'Memories' });
+    expect(screen.queryByRole('button', { name: 'New memory' })).toBeNull();
+    unmount();
+
+    const empty = new MemoryBrowser(
+      createInMemoryClient({ kind: 'cloud', capabilities: { create: false } }),
+    );
+    render(MemoryList, { browser: empty });
+    expect(await screen.findByText('No memories yet')).toBeInTheDocument();
+    expect(screen.getByText('Memories your agents save show up here.')).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'New memory' })).toBeNull();
   });
 
   it('reports a failed load with a retry', async () => {
