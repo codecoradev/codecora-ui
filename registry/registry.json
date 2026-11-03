@@ -74,6 +74,19 @@
       ]
     },
     {
+      "name": "cc-resource-detail",
+      "type": "registry:block",
+      "title": "Resource detail",
+      "description": "Detail page: back link, header with a split primary button, a grouped list with row menus, and a segmented tool list with search and a callout.",
+      "registryDependencies": ["local:cc-theme"],
+      "files": [
+        {
+          "path": "blocks/resource-detail/resource-detail.svelte",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "cc-data-table",
       "type": "registry:block",
       "title": "Data table",

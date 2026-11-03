@@ -50,6 +50,7 @@ describe('registry', () => {
       'cc-dashboard-shell',
       'cc-data-table',
       'cc-login',
+      'cc-resource-detail',
       'cc-settings',
     ]);
     for (const block of blocks) {
