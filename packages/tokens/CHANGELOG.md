@@ -1,5 +1,11 @@
 # @codecora/tokens
 
+## 0.5.1
+
+### Patch Changes
+
+- 1d3d4b8: New `gaira` theme: ink surfaces, the volt accent (`#D4FF3A`, in the `green` accent slot) with ink text on every fill, teal success, Inter and JetBrains Mono. Dark only.
+
 ## 0.5.0
 
 ### Minor Changes

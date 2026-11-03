@@ -8,6 +8,18 @@ changesets (`packages/*/CHANGELOG.md`).
 
 ## [Unreleased]
 
+## [0.5.1] - 2026-11-02
+
+`@codecora/tokens` 0.5.1. `@codecora/memory` stays at 0.2.0, `@codecora/ui` at 0.4.0, `@codecora/icons` and `@codecora/brand` at 0.1.0. Install from the GitHub Release tarballs (see the README); npm publishing is still pending (#15).
+
+### Added
+
+- `@codecora/tokens`: the `gaira` theme. Ink surfaces, the volt accent (`#D4FF3A`, in the `green` accent slot) with ink text on every fill, teal success, Inter and JetBrains Mono; dark only. Released as a patch at the maintainer's request (#117, closes #115).
+
+### Changed
+
+- Release workflow: the packages are built before the verify job runs the tests (#120).
+
 ## [0.5.0] - 2026-11-02
 
 `@codecora/tokens` 0.5.0 and `@codecora/memory` 0.2.0. `@codecora/ui` stays at 0.4.0, `@codecora/icons` and `@codecora/brand` at 0.1.0. Install from the GitHub Release tarballs (see the README); npm publishing is still pending (#15).
@@ -118,7 +130,8 @@ First release of `@codecora/tokens`, `@codecora/ui`, `@codecora/icons` and `@cod
 
 - Workflows: the review access token is a step output instead of a job-wide variable, actions are pinned to commit SHAs, the message standard runs from the base branch, and the PR description check requires real content under whole `## What` / `## Why` / `## Testing` headings.
 
-[Unreleased]: https://github.com/codecoradev/codecora-ui/compare/v0.5.0...develop
+[Unreleased]: https://github.com/codecoradev/codecora-ui/compare/v0.5.1...develop
+[0.5.1]: https://github.com/codecoradev/codecora-ui/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/codecoradev/codecora-ui/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/codecoradev/codecora-ui/compare/v0.3.1...v0.4.0
 [0.3.1]: https://github.com/codecoradev/codecora-ui/compare/v0.3.0...v0.3.1
