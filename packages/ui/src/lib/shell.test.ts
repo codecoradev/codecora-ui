@@ -114,6 +114,29 @@ describe('AppShell', () => {
     await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
   });
 
+  it('puts the top bar in one banner landmark, beside the main landmark and not inside it', () => {
+    const header = createRawSnippet(() => ({ render: () => '<h1>Reports</h1>' }));
+    const brand = createRawSnippet(() => ({ render: () => '<span>Acme</span>' }));
+    const { container } = render(AppShell, { nav: groups, header, brand, children: page });
+    const banner = screen.getByRole('banner');
+    expect(screen.getAllByRole('banner')).toHaveLength(1);
+    expect(within(banner).getByRole('heading', { name: 'Reports' })).toBeInTheDocument();
+    expect(within(banner).getByRole('button', { name: 'Open navigation' })).toBeInTheDocument();
+    expect(within(banner).getByText('Acme')).toBeInTheDocument();
+    // Top level: not inside the main landmark, the sidebar or the navigation.
+    expect(banner.closest('main, aside, nav')).toBeNull();
+    expect(screen.getByRole('main')).not.toContainElement(banner);
+    expect(container.querySelectorAll('main')).toHaveLength(1);
+  });
+
+  it('keeps the banner for the menu button without a header, and marks it bare', () => {
+    render(AppShell, { nav: groups, children: page });
+    const banner = screen.getByRole('banner');
+    expect(within(banner).getByRole('button', { name: 'Open navigation' })).toBeInTheDocument();
+    // A wide screen hides a bare bar, so it is not an empty landmark there.
+    expect(banner).toHaveClass('bare');
+  });
+
   it('applies the sidebar theme to the sidebar region and the drawer only', async () => {
     const { container } = render(AppShell, { nav: groups, sidebarTheme: 'corin', children: page });
     expect(container.querySelector('aside')).toHaveAttribute('data-theme', 'corin');
