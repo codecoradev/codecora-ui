@@ -7,6 +7,7 @@ export { default as MemoryDetail } from './MemoryDetail.svelte';
 export { default as MemoryEditor } from './MemoryEditor.svelte';
 export { default as MemoryList } from './MemoryList.svelte';
 export { createInMemoryClient, type InMemoryClientOptions } from './inmemory.js';
+export { createPortalClient, type PortalClientOptions } from './portal.js';
 export { createTauriClient, type Invoke, type TauriClientOptions } from './tauri.js';
 export type {
   Doc,

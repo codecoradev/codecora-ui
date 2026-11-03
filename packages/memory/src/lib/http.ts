@@ -3,6 +3,7 @@ import type { DocsClient, MemoryClient } from './client.js';
 import { MemoryError } from './errors.js';
 import {
   compact,
+  memoryRows,
   rows,
   toDoc,
   toHit,
@@ -14,6 +15,7 @@ import {
   toTags,
 } from './normalize.js';
 import { assertSupported } from './support.js';
+import { createRequester } from './transport.js';
 import type { Doc, DocHit } from './types.js';
 
 export interface HttpClientOptions {
@@ -33,24 +35,6 @@ export interface HttpClientOptions {
   capabilities?: Partial<Capabilities>;
 }
 
-/** Plain http is fine on this machine; anywhere else a Bearer key needs TLS. */
-function isInsecureRemote(base: string): boolean {
-  if (!/^http:\/\//i.test(base)) return false;
-  try {
-    const host = new URL(base).hostname.toLowerCase();
-    return !(
-      host === 'localhost' ||
-      host.endsWith('.localhost') ||
-      host === '127.0.0.1' ||
-      host === '[::1]'
-    );
-  } catch {
-    return true;
-  }
-}
-
-type Query = Record<string, string | number | boolean | undefined>;
-
 /**
  * Client for the uteke-serve REST API, which Uteke Cloud mirrors for the core
  * endpoints. Authentication is a Bearer token or the portal session cookie.
@@ -58,80 +42,7 @@ type Query = Record<string, string | number | boolean | undefined>;
 export function createHttpClient(options: HttpClientOptions): MemoryClient {
   const kind = options.kind ?? 'uteke-serve';
   const capabilities: Capabilities = { ...capabilitiesFor(kind), ...options.capabilities };
-  const base = options.baseUrl.replace(/\/+$/, '');
-  if (options.apiKey && isInsecureRemote(base)) {
-    throw new MemoryError(
-      'baseUrl uses plain http for a remote host; the API key would travel unencrypted. Use https.',
-      'invalid',
-    );
-  }
-  const doFetch = options.fetch ?? ((...args: Parameters<typeof fetch>) => fetch(...args));
-
-  async function send(
-    method: string,
-    path: string,
-    opts: { query?: Query; body?: unknown } = {},
-  ): Promise<Response> {
-    const search = new URLSearchParams();
-    for (const [key, value] of Object.entries(opts.query ?? {})) {
-      if (value !== undefined) search.set(key, String(value));
-    }
-    const qs = search.toString();
-    const href = base + path + (qs ? `?${qs}` : '');
-    // Headers is case-insensitive, so a caller's own "authorization" cannot sit next to ours.
-    const headers = new Headers(options.headers);
-    if (!headers.has('Accept')) headers.set('Accept', 'application/json');
-    if (options.apiKey) headers.set('Authorization', `Bearer ${options.apiKey}`);
-    if (opts.body !== undefined) headers.set('Content-Type', 'application/json');
-
-    let response: Response;
-    try {
-      response = await doFetch(href, {
-        method,
-        headers,
-        credentials: options.credentials,
-        body: opts.body === undefined ? undefined : JSON.stringify(opts.body),
-      });
-    } catch (cause) {
-      throw new MemoryError(
-        `${method} ${path}: ${cause instanceof Error ? cause.message : 'network error'}`,
-        'network',
-      );
-    }
-    if (!response.ok) {
-      const text = await response.text().catch(() => '');
-      let message = text;
-      try {
-        const parsed = JSON.parse(text) as { error?: unknown };
-        if (typeof parsed.error === 'string') message = parsed.error;
-      } catch {
-        // not JSON: keep the text
-      }
-      throw new MemoryError(
-        `${method} ${path}: ${message || response.statusText}`,
-        'http',
-        response.status,
-      );
-    }
-    return response;
-  }
-
-  /** JSON body, or undefined for an empty answer (204 or no content); bad JSON is a MemoryError. */
-  const json = async <T = unknown>(
-    method: string,
-    path: string,
-    opts?: { query?: Query; body?: unknown },
-  ) => {
-    const raw = await (await send(method, path, opts)).text();
-    if (raw.trim() === '') return undefined as T;
-    try {
-      return JSON.parse(raw) as T;
-    } catch {
-      throw new MemoryError(`${method} ${path}: the server did not answer with JSON`, 'invalid');
-    }
-  };
-  const text = async (method: string, path: string, opts?: { query?: Query; body?: unknown }) =>
-    (await send(method, path, opts)).text();
+  const { json, text } = createRequester(options);
 
   const docs: DocsClient = {
     async list(params) {
@@ -184,6 +95,7 @@ export function createHttpClient(options: HttpClientOptions): MemoryClient {
       return toMemory(await json('GET', '/memory', { query: { id } }));
     },
     async remember(input) {
+      assertSupported(capabilities, 'create', 'remember', kind);
       const body = compact({ ...input });
       const created = await json<{ id?: unknown }>('POST', '/remember', { body });
       if (typeof created?.id !== 'string') {
@@ -233,7 +145,7 @@ export function createHttpClient(options: HttpClientOptions): MemoryClient {
     async roomMemories(roomId, params) {
       assertSupported(capabilities, 'rooms', 'roomMemories', kind);
       const query = { room_id: roomId, namespace: params?.namespace, limit: params?.limit };
-      return rows(await json('GET', '/room/memories', { query })).map(toMemory);
+      return memoryRows(await json('GET', '/room/memories', { query })).map(toMemory);
     },
     async exportJsonl(params) {
       assertSupported(capabilities, 'export', 'export', kind);

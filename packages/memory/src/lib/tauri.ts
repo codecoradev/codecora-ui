@@ -105,6 +105,7 @@ export function createTauriClient({
       return toMemory(await invoke('get_memory', { id }));
     },
     async remember(input) {
+      assertSupported(capabilities, 'create', 'remember', kind);
       return invoke<string>('remember', {
         content: input.content,
         tags: input.tags ?? [],

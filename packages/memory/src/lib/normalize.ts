@@ -21,6 +21,12 @@ const strings = (v: unknown): string[] =>
 /** A list answer as rows: anything else (an empty body, an error shape) is no rows. */
 export const rows = (value: unknown): Raw[] => (Array.isArray(value) ? (value as Raw[]) : []);
 
+/** Memory rows as an array, or inside `{ memories }` as Uteke Cloud answers some routes. */
+export const memoryRows = (value: unknown): Raw[] =>
+  rows(
+    value && typeof value === 'object' && !Array.isArray(value) ? (value as Raw).memories : value,
+  );
+
 /** Server and desktop memory rows (snake_case, fields sometimes missing) to the domain model. */
 export function toMemory(raw: Raw): Memory {
   return {
@@ -91,6 +97,41 @@ export function toRoom(raw: Raw): Room {
     updatedAt: strOrNull(raw.updated_at),
   };
 }
+
+const obj = (v: unknown): Raw =>
+  v && typeof v === 'object' && !Array.isArray(v) ? (v as Raw) : {};
+
+/** The Uteke Cloud portal's room list: `{ rooms: [{ room_id, title, description, memory_count }] }`. */
+export function toPortalRooms(value: unknown): Room[] {
+  return rows(obj(value).rooms).map((raw) => ({
+    id: str(raw.room_id),
+    title: strOrNull(raw.title),
+    namespace: 'default',
+    createdAt: strOrNull(raw.created_at),
+    updatedAt: null,
+  }));
+}
+
+/** The portal's memory facets: tags come as `{ tag, count }`. */
+export function toPortalTags(value: unknown): TagCount[] {
+  return rows(obj(value).tags).map((row) => ({ name: str(row.tag), count: num(row.count) }));
+}
+
+/** The portal overview's `storage` block plus the tag count from the facets. */
+export function toPortalStats(overview: unknown, tags: TagCount[]): Stats {
+  const storage = obj(obj(overview).storage);
+  return {
+    totalMemories: num(storage.memories),
+    uniqueTags: tags.length,
+    dbSizeBytes: num(storage.bytes),
+  };
+}
+
+/** One memory out of a portal detail answer `{ memory, rooms, provenance }`. */
+export const toPortalMemory = (detail: unknown): Memory => {
+  const raw = obj(detail);
+  return toMemory(obj(raw.memory ?? raw));
+};
 
 export function toDoc(raw: Raw): Doc {
   return {

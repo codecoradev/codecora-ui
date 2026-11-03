@@ -60,13 +60,31 @@ tests; its search matches words.
 
 | Transport                 | Use it for                           | Notes                                                                                  |
 | ------------------------- | ------------------------------------ | -------------------------------------------------------------------------------------- |
-| `createHttpClient`        | uteke-serve and Uteke Cloud          | Bearer token, or `credentials: 'include'` for the Cloud portal session                 |
+| `createHttpClient`        | uteke-serve and Uteke Cloud (API)    | Bearer token: the uteke-serve auth token or a Cloud API key                            |
+| `createPortalClient`      | pages on the Uteke Cloud portal      | the signed-in user's own memories through `/portal/*`; session cookie or portal bearer |
 | `createTauriClient`       | the Corin desktop app                | pass Tauri's `invoke`; the command names come from Corin and are checked in #13        |
 
-The Uteke Cloud portal session needs a session-scoped data route on the Cloud
-side (tracked in the Uteke Cloud project). Until it exists, a browser app
-cannot read Cloud memories without an API key; the client already supports it
-through `baseUrl` and `credentials: 'include'`.
+### Uteke Cloud in the browser
+
+Uteke Cloud's API sends no CORS headers, so a page on another origin cannot call
+it. A page served next to it (the portal, or an app behind the same proxy) uses
+`createPortalClient` with the session cookie:
+
+```ts
+import { createPortalClient } from '@codecora/memory';
+
+const client = createPortalClient({ baseUrl: '/api/v2' }); // routes under /portal
+```
+
+The portal routes have their own shapes, which the client maps: lists come as
+`{ memories, total }`, search takes a `keyword` or `meaning` mode (`recall` is the
+meaning search, and Cloud answers with a keyword search when its vector index is
+off), and search results carry no score, so every hit scores 0. Writes need the
+portal's CSRF check, so the page must be on the portal's own origin.
+
+Not offered through the portal client, and reported as unsupported: creating a
+memory (agents write those, so a UI hides "New memory"), documents, export and
+import. For those, use `createHttpClient` with a Cloud API key from a server.
 
 ## Capabilities
 
@@ -75,11 +93,14 @@ calling it anyway throws `UnsupportedError` before any request.
 
 | Capability                                                       | uteke-serve | Uteke Cloud | Tauri |
 | ---------------------------------------------------------------- | :---------: | :---------: | :---: |
-| update, pin, recall, search, tags, stats, documents              |     yes     |     yes     |  yes  |
-| rooms, roomMemories                                              |     yes     |     no      |  yes  |
+| create, update, pin, recall, search, tags, stats, documents      |     yes     |     yes     |  yes  |
+| rooms, roomMemories                                              |     yes     |     yes     |  yes  |
 | export, import                                                   |     yes     |     yes     |  no   |
 | namespaces                                                       |    full     | deprecated  | full  |
 | graph, lifecycle, dream, orphans (reserved, no client method yet) |     yes     |     no      |  no   |
+
+The Uteke Cloud column is its API (`createHttpClient`). `createPortalClient` turns
+create, documents, export and import off.
 
 ## Keys and TLS
 

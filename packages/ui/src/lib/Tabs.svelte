@@ -86,6 +86,10 @@
     display: flex;
     gap: var(--cc-space-1);
     overflow-x: auto;
+    /* The tabs sit 1px over the list's border (margin-bottom: -1px), which would
+       make the list scroll vertically too, and draw a scrollbar where they are
+       always shown. The underline is inside the box, so nothing is lost. */
+    overflow-y: hidden;
     border-bottom: 1px solid var(--cc-border);
   }
   :global(.cc-tab) {

@@ -46,10 +46,13 @@ describe('registry', () => {
 
   it('every block installs the theme and points at files that exist', () => {
     expect(blocks.map((b) => b.name).sort()).toEqual([
+      'cc-console-overview',
       'cc-dashboard-shell',
       'cc-data-table',
       'cc-login',
+      'cc-resource-detail',
       'cc-settings',
+      'cc-status-panel',
     ]);
     for (const block of blocks) {
       expect(block.registryDependencies).toContain('local:cc-theme');

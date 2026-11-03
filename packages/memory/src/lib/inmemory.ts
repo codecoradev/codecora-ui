@@ -137,6 +137,7 @@ export function createInMemoryClient(options: InMemoryClientOptions = {}): Memor
       return find(id);
     },
     async remember(input) {
+      assertSupported(capabilities, 'create', 'remember', kind);
       const memory = fill({
         content: input.content,
         tags: input.tags,

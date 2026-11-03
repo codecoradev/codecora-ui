@@ -30,11 +30,14 @@ product fleet and open to any Svelte app.
 
 ## Status
 
-`0.5.1`: `@codecora/tokens` 0.5.1 (chart colours in the shadcn bridge, the `gaira` theme) and
-`@codecora/memory` 0.2.0 (the memory browser components), with `@codecora/ui`
-0.4.0 and `@codecora/icons` and `@codecora/brand` 0.1.0; a shadcn-svelte
-registry ships with the playground (see [CHANGELOG.md](CHANGELOG.md)). Not on npm yet: install from the GitHub Release
-tarballs below. The API can still change before 1.0.
+`0.6.0`: `@codecora/tokens` 0.6.0 (the `corin-light` theme, the `gaira` theme and
+chart colours in the shadcn bridge), `@codecora/ui` 0.5.0 (a table that is a scroll
+region only while it overflows, an `AppShell` banner landmark and a Tabs fix) and
+`@codecora/memory` 0.3.0 (the Uteke Cloud portal client and the memory browser
+components), with `@codecora/icons` and `@codecora/brand` 0.1.0; a shadcn-svelte
+registry with seven blocks ships with the playground (see [CHANGELOG.md](CHANGELOG.md)).
+Not on npm yet: install from the GitHub Release tarballs below. The API can still
+change before 1.0.
 
 ## Install
 
@@ -42,9 +45,9 @@ Each release attaches one tarball per package it ships. The same URL works with
 bun, npm (`npm install <url>`) and pnpm (`pnpm add <url>`):
 
 ```bash
-bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.5.1/codecora-tokens-0.5.1.tgz
-bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.4.0/codecora-ui-0.4.0.tgz
-bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.5.0/codecora-memory-0.2.0.tgz
+bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.6.0/codecora-tokens-0.6.0.tgz
+bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.6.0/codecora-ui-0.5.0.tgz
+bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.6.0/codecora-memory-0.3.0.tgz
 bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.1.0/codecora-icons-0.1.0.tgz
 bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.1.0/codecora-brand-0.1.0.tgz
 ```
@@ -89,12 +92,12 @@ Phosphor or your own set.
 | [`@codecora/ui`](packages/ui) | 42 Svelte 5 components on bits-ui, plain CSS on semantic tokens | `@codecora/tokens`, `bits-ui` |
 | [`@codecora/icons`](packages/icons) | `Icon` wrapper that follows each theme's size and stroke, a curated Lucide set and a Phosphor adapter | `@lucide/svelte`, `phosphor-svelte` (optional peers) |
 | [`@codecora/brand`](packages/brand) | Product marks and favicon sets (Uteke, Corin, Gatehouse) as files and Svelte components | nothing |
-| [`@codecora/memory`](packages/memory) | Uteke domain layer: typed `MemoryClient` over uteke-serve, Uteke Cloud and Tauri, with per-backend capabilities, and the memory browser components (`MemoryList`, `MemoryDetail`, `MemoryEditor`) | `@codecora/ui` (peer) |
+| [`@codecora/memory`](packages/memory) | Uteke domain layer: typed `MemoryClient` over uteke-serve, Uteke Cloud (API and portal) and Tauri, with per-backend capabilities, and the memory browser components (`MemoryList`, `MemoryDetail`, `MemoryEditor`) | `@codecora/ui` (peer) |
 
 Dependencies point one way: `memory -> ui -> tokens`.
 
 Apps on shadcn-svelte can also pull blocks (login, settings, dashboard shell,
-data table) and a theme bridge from the [registry](registry), served by the
+console overview, resource detail, status panel, data table) and a theme bridge from the [registry](registry), served by the
 playground build at `/r/<item>.json`:
 `npx shadcn-svelte@latest add <playground-host>/r/cc-login.json`.
 
@@ -121,6 +124,7 @@ Each one is shown in every state, theme, accent and density in the playground.
 | `uteke` | Editorial light, from [Uteke Cloud](https://uteke.app) |
 | `uteke-dark` | Dark twin of `uteke` |
 | `corin` | Editor dark, from Corin |
+| `corin-light` | Light twin of `corin`: warm paper, same teal |
 | `gaira` | Volt on ink, from gaira; dark only |
 | `sepia` | Serif reading theme |
 | `contrast` | 7:1 text, heavier focus rings and icons |

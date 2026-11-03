@@ -32,15 +32,21 @@
     {
       value: 'cloud',
       label: 'Sample: Uteke Cloud',
-      description: 'No rooms; namespaces are hidden.',
+      description: 'Through the portal: rooms, no namespaces, and no New memory.',
     },
     { value: 'tauri', label: 'Sample: desktop app', description: 'The Corin desktop commands.' },
     { value: 'live', label: 'Live uteke-serve', description: 'Connect to a server you run.' },
   ];
 
+  // The Cloud portal has no route to create a memory, so the sample hides New memory too.
   const sample = (kind: BackendKind) =>
     new MemoryBrowser(
-      createInMemoryClient({ kind, memories: sampleMemories, rooms: sampleRooms }),
+      createInMemoryClient({
+        kind,
+        capabilities: kind === 'cloud' ? { create: false } : {},
+        memories: sampleMemories,
+        rooms: sampleRooms,
+      }),
       { pageSize: 20 },
     );
 

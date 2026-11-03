@@ -92,10 +92,16 @@
   }
 </script>
 
+{#snippet newMemory()}
+  <Button variant="primary" onclick={() => browser.create()}>New memory</Button>
+{/snippet}
+
 <section class="cc-memory-list" aria-labelledby="{uid}-title">
   <header>
     <h2 id="{uid}-title" class="title">{label}</h2>
-    <Button variant="secondary" onclick={() => browser.create()}>New memory</Button>
+    {#if caps.create}
+      <Button variant="secondary" onclick={() => browser.create()}>New memory</Button>
+    {/if}
   </header>
 
   <div class="filters" role="search">
@@ -145,12 +151,11 @@
     {:else}
       <EmptyState
         title="No memories yet"
-        description="Memories your agents and you save show up here."
-      >
-        {#snippet action()}
-          <Button variant="primary" onclick={() => browser.create()}>New memory</Button>
-        {/snippet}
-      </EmptyState>
+        description={caps.create
+          ? 'Memories your agents and you save show up here.'
+          : 'Memories your agents save show up here.'}
+        action={caps.create ? newMemory : undefined}
+      />
     {/if}
   {:else}
     <ul class="rows" bind:this={list} aria-label={label} aria-busy={browser.loading}>

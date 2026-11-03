@@ -1,5 +1,16 @@
 # @codecora/ui
 
+## 0.5.0
+
+### Minor Changes
+
+- d063cf4: `Table` (and so `DataTable`) is a labelled, focusable scroll region only while it overflows sideways, so a table that fits adds no tab stop. It is measured with a ResizeObserver, so it follows the viewport and the rows; until then, and without JavaScript, the wrapper is a plain element and the `<caption>` names the table. Tests that expected `role="region"` and `tabindex="0"` on every table need a table that overflows (#124).
+
+### Patch Changes
+
+- 298ede5: `AppShell`'s top bar is a `<header>` (the banner landmark), so the menu button, the mobile brand and the `header` snippet are inside a landmark and axe's `region` rule no longer fails on a phone-width page. It sits next to `<main>`, not inside it. A shell without a `header` snippet hides its bare top bar on a wide screen, so there is no empty landmark; on a phone it stays for the menu button (#128).
+- 996cc0f: Tabs no longer draw a vertical scrollbar next to the tab list when every tab fits. The tabs sit 1px over the list's border, which made the list scroll vertically too; `overflow-y: hidden` removes that, and horizontal scrolling still works when the tabs do not fit (#123).
+
 ## 0.4.0
 
 ### Minor Changes

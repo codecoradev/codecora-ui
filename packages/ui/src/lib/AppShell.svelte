@@ -77,7 +77,8 @@
   </aside>
 
   <div class="body">
-    <div class="topbar">
+    <!-- The banner landmark: the menu button, the mobile brand and the page header sit inside it. -->
+    <header class={['topbar', !header && 'bare']}>
       <span class="menu">
         <IconButton
           icon={MenuIcon}
@@ -88,7 +89,7 @@
       </span>
       {#if brand}<span class="mobile-brand">{@render brand({ collapsed: false })}</span>{/if}
       {#if header}<div class="header">{@render header()}</div>{/if}
-    </div>
+    </header>
 
     <main id="{uid}-main" tabindex="-1">{@render children()}</main>
   </div>
@@ -260,6 +261,10 @@
     }
     .topbar {
       padding-inline: var(--cc-space-8);
+    }
+    /* Without a page header the bar holds nothing on a wide screen: no empty landmark. */
+    .topbar.bare {
+      display: none;
     }
     .header {
       flex: 1;

@@ -61,6 +61,45 @@
       ]
     },
     {
+      "name": "cc-console-overview",
+      "type": "registry:block",
+      "title": "Console overview",
+      "description": "Developer console frame: sidebar with a user menu, a breadcrumb and search header, a title row, tabs and a page body.",
+      "registryDependencies": ["local:cc-theme"],
+      "files": [
+        {
+          "path": "blocks/console-overview/console-overview.svelte",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "cc-resource-detail",
+      "type": "registry:block",
+      "title": "Resource detail",
+      "description": "Detail page: back link, header with a split primary button, a grouped list with row menus, and a segmented tool list with search and a callout.",
+      "registryDependencies": ["local:cc-theme"],
+      "files": [
+        {
+          "path": "blocks/resource-detail/resource-detail.svelte",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "cc-status-panel",
+      "type": "registry:block",
+      "title": "Status panel",
+      "description": "Status card with a tinted icon, an action, a strip of labelled stats and a why / what-to-do panel; the tone sets the icon and tint.",
+      "registryDependencies": ["local:cc-theme"],
+      "files": [
+        {
+          "path": "blocks/status-panel/status-panel.svelte",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "cc-data-table",
       "type": "registry:block",
       "title": "Data table",
