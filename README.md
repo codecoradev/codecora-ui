@@ -121,6 +121,7 @@ Each one is shown in every state, theme, accent and density in the playground.
 | `uteke` | Editorial light, from [Uteke Cloud](https://uteke.app) |
 | `uteke-dark` | Dark twin of `uteke` |
 | `corin` | Editor dark, from Corin |
+| `corin-light` | Light twin of `corin`: warm paper, same teal |
 | `gaira` | Volt on ink, from gaira; dark only |
 | `sepia` | Serif reading theme |
 | `contrast` | 7:1 text, heavier focus rings and icons |

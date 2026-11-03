@@ -74,7 +74,7 @@ components:
 
 # Design System: CodeCora UI, corin theme
 
-The shared rules every theme follows live in the root [DESIGN.md](../../DESIGN.md). This file records what `corin` sets on top of them. Source: Corin's `DESIGN.md` (dark palette), used as a reference (D10). The colour tokens in the frontmatter mirror `packages/tokens/src/themes.ts`, and a unit test fails when the two drift.
+The shared rules every theme follows live in the root [DESIGN.md](../../DESIGN.md). This file records what `corin` sets on top of them. Source: Corin's `DESIGN.md` (dark palette), used as a reference (D10). The colour tokens in the frontmatter mirror `packages/tokens/src/themes.ts`, and a unit test fails when the two drift. Its light twin is [`corin-light`](corin-light.md).
 
 ## Overview
 

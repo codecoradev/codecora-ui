@@ -5,6 +5,7 @@ export const themeNames = [
   'neutral',
   'uteke',
   'corin',
+  'corin-light',
   'neutral-dark',
   'uteke-dark',
   'sepia',
