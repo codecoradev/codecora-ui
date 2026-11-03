@@ -46,6 +46,7 @@ describe('registry', () => {
 
   it('every block installs the theme and points at files that exist', () => {
     expect(blocks.map((b) => b.name).sort()).toEqual([
+      'cc-console-overview',
       'cc-dashboard-shell',
       'cc-data-table',
       'cc-login',
