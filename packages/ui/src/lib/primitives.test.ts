@@ -1,5 +1,5 @@
-import { fireEvent, render, screen } from '@testing-library/svelte';
-import { describe, expect, it, vi } from 'vitest';
+import { fireEvent, render, screen, waitFor } from '@testing-library/svelte';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import Badge from './Badge.svelte';
 import Button from './Button.svelte';
 import EmptyState from './EmptyState.svelte';
@@ -148,14 +148,67 @@ describe('Badge, Spinner, Skeleton, EmptyState', () => {
 });
 
 describe('Table', () => {
-  it('is a named, focusable scroll region around a captioned table', () => {
-    const rows = createRawSnippet(() => ({
-      render: () => '<thead><tr><th>Name</th></tr></thead><tbody><tr><td>Ada</td></tr></tbody>',
-    }));
+  const rows = createRawSnippet(() => ({
+    render: () => '<thead><tr><th>Name</th></tr></thead><tbody><tr><td>Ada</td></tr></tbody>',
+  }));
+
+  /** jsdom has no layout: give every element these widths, as a browser would measure them. */
+  function widths(scrollWidth: number, clientWidth: number) {
+    vi.spyOn(Element.prototype, 'clientWidth', 'get').mockReturnValue(clientWidth);
+    return vi.spyOn(Element.prototype, 'scrollWidth', 'get').mockReturnValue(scrollWidth);
+  }
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+    vi.unstubAllGlobals();
+  });
+
+  it('names the table by its caption and adds no tab stop while it fits (desktop)', () => {
+    widths(960, 960);
+    render(Table, { label: 'Members', children: rows });
+    expect(screen.getByRole('table', { name: 'Members' })).toBeInTheDocument();
+    expect(screen.getByRole('columnheader', { name: 'Name' })).toBeInTheDocument();
+    expect(screen.queryByRole('region')).toBeNull();
+    expect(document.querySelector('[tabindex]')).toBeNull();
+  });
+
+  it('is a labelled, focusable scroll region while it overflows (375px)', () => {
+    widths(620, 343);
     render(Table, { label: 'Members', children: rows });
     const region = screen.getByRole('region', { name: 'Members' });
     expect(region).toHaveAttribute('tabindex', '0');
-    expect(screen.getByRole('table', { name: 'Members' })).toBeInTheDocument();
-    expect(screen.getByRole('columnheader', { name: 'Name' })).toBeInTheDocument();
+    expect(region).toContainElement(screen.getByRole('table', { name: 'Members' }));
+  });
+
+  it('ignores a pixel of rounding', () => {
+    widths(344, 343);
+    render(Table, { label: 'Members', children: rows });
+    expect(screen.queryByRole('region')).toBeNull();
+  });
+
+  it('follows the size: a table that starts to overflow becomes a region, and back', async () => {
+    const callbacks: (() => void)[] = [];
+    vi.stubGlobal(
+      'ResizeObserver',
+      class {
+        constructor(callback: () => void) {
+          callbacks.push(callback);
+        }
+        observe() {}
+        unobserve() {}
+        disconnect() {}
+      },
+    );
+    const scrollWidth = widths(960, 960);
+    render(Table, { label: 'Members', children: rows });
+    expect(screen.queryByRole('region')).toBeNull();
+
+    scrollWidth.mockReturnValue(1200);
+    callbacks.forEach((callback) => callback());
+    expect(await screen.findByRole('region', { name: 'Members' })).toHaveAttribute('tabindex', '0');
+
+    scrollWidth.mockReturnValue(960);
+    callbacks.forEach((callback) => callback());
+    await waitFor(() => expect(screen.queryByRole('region')).toBeNull());
   });
 });
