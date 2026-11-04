@@ -1,5 +1,16 @@
 # @codecora/tokens
 
+## 0.7.0
+
+### Minor Changes
+
+- 5aa4d30: A press token: `--cc-press-scale` (0.98), exported as `press` (`press.scale`). A pressed control scales to it, and under `prefers-reduced-motion` it is 1, so a press changes nothing there (#143).
+- 936b05c: New `tagfold` theme, the identity of the tagfold stock-photo tagging client: near-black slate that steps up in tone, one mint accent (`#7EE0A3`, dark ink on every fill, riding the `green` accent slot like gaira's volt) that is also the success colour, amber and red for status only, 9px controls and 12px cards, system fonts with mono badges. Dark only. `border-strong` is a lighter `#70708A` than tagfold's own `#4A4A57`, which is 1.9:1 on the well and fails the 3:1 a control boundary needs; `docs/design/tagfold.md` says so (#140).
+
+### Patch Changes
+
+- 23b4ee5: Fixes from the first real-browser axe scan. `@codecora/tokens`: the contrast check now also covers accent text on its own tint and on a sunken surface (badges, the current nav item, links in wells), and two themes failed it: `corin-light` has a slightly darker teal (`#0B6D66`, was `#0E7C74`, 4.0:1 on its tint) and `sepia` has a darker blue accent. `@codecora/ui`: a `Table` that scrolls names its region "<label> (scrollable)" instead of repeating the label, so a heading or section with the same words no longer makes two landmarks with one name; the new `regionLabel` prop sets another name (#141).
+
 ## 0.6.0
 
 ### Minor Changes
