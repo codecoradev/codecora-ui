@@ -21,7 +21,7 @@ bun workspaces (`packages/*`, `registry`, `apps/*`). Today: `packages/tokens`, `
 - `apps/playground` — SvelteKit catalogue of every component in every theme
 - `scripts/` — `hooks/` (pre-commit, commit-msg), `setup-hooks.sh`, `message-standard.sh`
 - Root config — `tsconfig.base.json` (strict TS 6, extended by every workspace), `eslint.config.js`, `.prettierrc` (Markdown is not formatted), `.changeset/` (per-package versions, base branch `develop`)
-- `.github/` — PR template, issue forms, workflows (`ci.yml`: the Gates job, a mirror of the local gates; `pr-checks.yml`: branch naming, PR description, Conventional Commits title, message standard; `cora-review.yml`: automated review; `release.yml`: npm publishing)
+- `.github/` — PR template, issue forms, workflows (`ci.yml`: the Gates job, a mirror of the local gates; `pr-checks.yml`: branch naming, PR description, Conventional Commits title, message standard; `cora-review.yml`: automated review; `release.yml`: npm publishing; `pages.yml`: builds the playground under the repo base path, smoke-tests it and, on `develop`, deploys it to GitHub Pages)
 
 Boundaries that reviews enforce:
 

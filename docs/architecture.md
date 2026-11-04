@@ -90,6 +90,7 @@ Skeleton, Spinner.
   versioned with changesets (semver per package).
 - shadcn-svelte registry JSON served with the playground build at `/r/<item>.json`
   (`registry/`: blocks on `@codecora/ui` and the `cc-theme` bridge item).
+- The playground as a static site on GitHub Pages (`pages.yml`, built under the repository base path, deployed from `develop` once `PAGES_ENABLED` is set), so every theme and component can be looked at without a clone.
 - A read-only mirror on the team's internal forge.
 
 ## Quality gates (CI)
