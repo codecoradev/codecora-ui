@@ -56,6 +56,23 @@ export const warmPaper = {
 } as const;
 
 /**
+ * Near-black slate with a faint violet cast (hue ~285) for `tagfold`, from
+ * tagfold `docs/DESIGN.md`. Layers get lighter step by step: tone, not shadow.
+ * `strong` is lighter than tagfold's #4A4A57, which is 1.9:1 on `crust` (a control
+ * boundary needs 3:1).
+ */
+export const fold = {
+  base: '#101014',
+  mantle: '#17171D',
+  crust: '#1E1E26',
+  hover: '#23232B',
+  rule: '#2A2A34',
+  strong: '#70708A',
+  muted: '#9A9AA8',
+  text: '#ECECF1',
+} as const;
+
+/**
  * Near-black ink for `gaira`, from gaira `web/src/app.css` and its logo
  * (`#0E1110` is the ink that sits on volt). A faint green cast, hue ~160.
  */
@@ -203,6 +220,15 @@ export const sepiaBlue = [
   'oklch(99% 0.003 260)',
 ] as const;
 
+/** tagfold's mint accent: fill, hover fill, dark ink on the fill; it is also its success colour. */
+export const mint = ['#7EE0A3', '#A9ECBF', '#0C1510'] as const;
+
+/** tagfold's red and amber: fill and the dark text on it. */
+export const foldStatus = {
+  danger: ['#EF7B7B', '#2A0D0D'],
+  warning: ['#F0B45C', '#241A08'],
+} as const;
+
 /** gaira's volt accent: fill, hover fill, ink on the fill (white on volt fails AA). */
 export const volt = ['#D4FF3A', '#E2FF7A', '#0E1110'] as const;
 
@@ -232,6 +258,7 @@ export const cvd = {
 export const scrim = {
   slate: 'oklch(22% 0.012 260 / 0.45)',
   ink: 'rgb(10 12 11 / 0.6)',
+  fold: 'rgb(8 8 12 / 0.66)',
   paper: 'oklch(21% 0.015 155 / 0.45)',
   night: 'rgb(10 12 16 / 0.6)',
   warm: 'oklch(24% 0.02 85 / 0.45)',

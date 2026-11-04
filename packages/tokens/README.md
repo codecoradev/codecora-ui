@@ -9,7 +9,7 @@ Design tokens and themes for CodeCora products. See the
 
 1. **Primitive** (`src/palette.ts`, `src/scale.ts`): colour palettes, spacing, type scale, motion. Raw colour literals live here and nowhere else.
 2. **Semantic**: `--cc-surface`, `--cc-text`, `--cc-accent`, `--cc-danger`, `--cc-radius-md`, `--cc-font-sans`, `--cc-control-h`, ... (full list: `semanticTokens`). Components read only these.
-3. **Theme** (`src/themes.ts`): `neutral` (default), `uteke` (editorial light), `corin` (editor dark), `corin-light` (its warm-paper twin), `neutral-dark`, `uteke-dark`, `sepia` (serif reading), `contrast` (7:1 text), `dimmed` (low-glare dark), `slab` (brutalist print), `soft` (rounded consumer), `neutral-cvd` (colour-blind safe status) and `gaira` (volt on ink, dark only).
+3. **Theme** (`src/themes.ts`): `neutral` (default), `uteke` (editorial light), `corin` (editor dark), `corin-light` (its warm-paper twin), `neutral-dark`, `uteke-dark`, `sepia` (serif reading), `contrast` (7:1 text), `dimmed` (low-glare dark), `slab` (brutalist print), `soft` (rounded consumer), `neutral-cvd` (colour-blind safe status) `gaira` (volt on ink, dark only) and `tagfold` (mint on slate, dark only).
 
 ## Use
 
@@ -26,7 +26,7 @@ Design tokens and themes for CodeCora products. See the
 </html>
 ```
 
-- `data-theme`: `neutral`, `uteke`, `corin`, `corin-light`, `neutral-dark`, `uteke-dark`, `sepia`, `contrast`, `dimmed`, `slab`, `soft`, `neutral-cvd`, `gaira`. Themes nest per element; a themed element paints its own surface and text colour. Without `data-theme` the page gets `neutral`.
+- `data-theme`: `neutral`, `uteke`, `corin`, `corin-light`, `neutral-dark`, `uteke-dark`, `sepia`, `contrast`, `dimmed`, `slab`, `soft`, `neutral-cvd`, `gaira`, `tagfold`. Themes nest per element; a themed element paints its own surface and text colour. Without `data-theme` the page gets `neutral`.
 - `data-accent`: `blue`, `green`, `teal`, `violet`, `orange`, `indigo`, `cyan`. Each is tuned per theme. A nested `data-theme` starts again from its own default accent.
 - `data-density`: `comfortable` (default, 44 px controls) or `compact` (32 px).
 - Fonts are referenced, not shipped: load Geist, Space Grotesk, JetBrains Mono or Nunito yourself when a theme names them; the stacks fall back to system fonts.
