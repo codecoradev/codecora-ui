@@ -7,6 +7,9 @@ product fleet and open to any Svelte app.
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![Release](https://img.shields.io/github/v/release/codecoradev/codecora-ui)](https://github.com/codecoradev/codecora-ui/releases)
 [![Svelte 5](https://img.shields.io/badge/svelte-5-ff3e00.svg)](https://svelte.dev)
+[![Live playground](https://img.shields.io/badge/playground-live-3fb950.svg)](https://codecoradev.github.io/codecora-ui/)
+
+**[Open the live playground](https://codecoradev.github.io/codecora-ui/)**: every component in every theme, with the theme, accent and density switchers. It is built from `develop`, so it shows the latest work.
 
 ![Components page, uteke theme](docs/assets/screenshots/components-uteke.png)
 
