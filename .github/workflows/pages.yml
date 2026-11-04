@@ -1,0 +1,97 @@
+name: Pages
+
+# Publishes the playground as a static site on GitHub Pages, at
+# https://<owner>.github.io/<repo>/, on every push to develop. A pull request
+# only builds it under the same base path and smoke-tests it, so a change that
+# breaks links or assets there fails before the merge.
+#
+# The deploy job needs Pages to be enabled once in the repository settings,
+# with "GitHub Actions" as the source. Until then the build still runs and the
+# deploy job fails at the deployment step.
+on:
+  push:
+    branches: [develop]
+  pull_request:
+    branches: [develop, main]
+    paths:
+      - apps/playground/**
+      - packages/**
+      - registry/**
+      - bun.lock
+      - package.json
+      - .github/workflows/pages.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  # A project site lives under /<repo>; the playground reads this at build time.
+  BASE_PATH: /${{ github.event.repository.name }}
+
+jobs:
+  build:
+    name: Build (base path)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version-file: package.json
+
+      - name: Install
+        run: bun install --frozen-lockfile
+
+      - name: Build (packages, registry, playground)
+        run: bun run build
+
+      - name: Smoke test under the base path
+        run: |
+          # Every absolute link and asset in the built pages must sit under the base path.
+          stray=$(grep -rhoE '(href|src)="/[^"]*"' --include='*.html' apps/playground/build | grep -v "=\"$BASE_PATH/" || true)
+          if [ -n "$stray" ]; then
+            echo "::error::links outside $BASE_PATH:"; echo "$stray" | sort -u | head -10; exit 1
+          fi
+          bun run --cwd apps/playground preview --port 4173 --strictPort &
+          trap 'kill $(jobs -p)' EXIT
+          url="http://localhost:4173${BASE_PATH}"
+          for _ in $(seq 1 30); do curl -sf "$url/" -o /dev/null && break; sleep 1; done
+          for path in / /components /themes/neutral /themes/tagfold /memory /registry /r/index.json /r/cc-theme.json; do
+            curl -sf "$url$path" -o /dev/null || { echo "::error::$path is not served under $BASE_PATH"; exit 1; }
+          done
+          status=$(curl -s -o /dev/null -w '%{http_code}' "$url/no-such-page")
+          test "$status" = 404 || { echo "::error::an unknown page answers $status, not 404"; exit 1; }
+
+      - name: Upload the site
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: apps/playground/build
+
+  deploy:
+    name: Deploy
+    if: github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
