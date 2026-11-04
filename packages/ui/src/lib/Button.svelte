@@ -81,7 +81,12 @@
     cursor: pointer;
     transition:
       background-color var(--cc-duration-fast) var(--cc-ease-out),
-      border-color var(--cc-duration-fast) var(--cc-ease-out);
+      border-color var(--cc-duration-fast) var(--cc-ease-out),
+      scale var(--cc-duration-instant) var(--cc-ease-out);
+  }
+  /* A press gives a little: it shrinks to --cc-press-scale (1 under reduced motion). */
+  .cc-button:not(:disabled, [aria-disabled='true']):active {
+    scale: var(--cc-press-scale);
   }
   .cc-button:focus-visible {
     outline: var(--cc-focus-width) solid var(--cc-focus);

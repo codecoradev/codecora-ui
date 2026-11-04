@@ -21,6 +21,9 @@
     background: var(--cc-surface-raised);
     color: var(--cc-text);
     font: inherit;
+    transition:
+      border-color var(--cc-duration-fast) var(--cc-ease-out),
+      box-shadow var(--cc-duration-fast) var(--cc-ease-out);
   }
   .cc-input::placeholder {
     color: var(--cc-text-muted);
@@ -36,5 +39,10 @@
   .cc-input[aria-invalid='true'] {
     border-color: var(--cc-danger);
     box-shadow: inset 0 0 0 1px var(--cc-danger);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cc-input {
+      transition: none;
+    }
   }
 </style>

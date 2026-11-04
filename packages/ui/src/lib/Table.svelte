@@ -98,6 +98,11 @@
   .cc-table :global(tbody tr:last-child > *) {
     border-bottom: 0;
   }
+  .cc-table :global(tbody tr) {
+    transition:
+      background-color var(--cc-duration-fast) var(--cc-ease-out),
+      box-shadow var(--cc-duration-fast) var(--cc-ease-out);
+  }
   .cc-table :global(tbody tr:hover) {
     background: var(--cc-surface-hover);
   }
@@ -105,6 +110,11 @@
   .cc-table :global(tbody tr[aria-selected='true']) {
     background: var(--cc-accent-soft);
     box-shadow: inset var(--cc-row-marker) 0 0 var(--cc-accent);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cc-table :global(tbody tr) {
+      transition: none;
+    }
   }
   .cc-table :global(.num) {
     text-align: right;

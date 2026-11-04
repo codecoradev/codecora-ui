@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "playwright test a11y.spec.ts",
+    "test": "playwright test a11y.spec.ts motion.spec.ts",
     "check": "tsc --noEmit -p tsconfig.json",
     "test:visual": "playwright test visual.spec.ts"
   },
