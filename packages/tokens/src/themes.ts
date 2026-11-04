@@ -10,12 +10,14 @@ import {
   ink,
   light,
   lowGlare,
+  mint,
   night,
   paperHues,
   paper,
   scrim,
   sepia as sepiaPaper,
   slate,
+  slateDark,
   stark,
   volt,
   warmPaper,
@@ -239,6 +241,48 @@ const gaira: Theme = {
     badgeRadius: 'var(--cc-radius-sm)',
     badgeCase: 'none',
     badgeTracking: '0',
+    badgeFont: 'var(--cc-font-sans)',
+    focusWidth: '2px',
+    focusOffset: '2px',
+    rowMarker: '2px',
+  },
+};
+
+/**
+ * tagfold's darkroom tool: slate surfaces, one mint accent on action and
+ * focus, system fonts, flat. Mint rides the `green` accent slot so
+ * `data-accent` keeps working.
+ */
+const tagfold: Theme = {
+  name: 'tagfold',
+  label: 'Tagfold',
+  colorScheme: 'dark',
+  colors: {
+    surface: slateDark.base,
+    surfaceRaised: slateDark.mantle,
+    surfaceSunken: slateDark.crust,
+    surfaceHover: slateDark.hover,
+    border: slateDark.rule,
+    borderStrong: slateDark.strong,
+    text: slateDark.text,
+    textMuted: slateDark.muted,
+    danger: '#EF7B7B',
+    dangerText: '#2A0D0D',
+    success: mint[0],
+    successText: '#0C1510',
+    warning: '#F0B45C',
+    warningText: '#241A08',
+    scrim: 'rgb(8 8 12 / 0.66)',
+  },
+  accents: accents({ ...dark, green: mint }),
+  defaultAccent: 'green',
+  radius: { sm: '9px', md: '9px', lg: '12px', pill: '999px' },
+  font: { sans: systemSans, display: systemSans, mono: systemMono },
+  icon: { stroke: '2', size: '1.25rem' },
+  shape: {
+    badgeRadius: 'var(--cc-radius-pill)',
+    badgeCase: 'none',
+    badgeTracking: '0.01em',
     badgeFont: 'var(--cc-font-sans)',
     focusWidth: '2px',
     focusOffset: '2px',
@@ -541,4 +585,5 @@ export const themes: Record<ThemeName, Theme> = {
   soft,
   'neutral-cvd': neutralCvd,
   gaira,
+  tagfold,
 };

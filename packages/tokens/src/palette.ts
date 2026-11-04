@@ -70,6 +70,25 @@ export const ink = {
   text: '#E8ECEA',
 } as const;
 
+/**
+ * Near-black slate for `tagfold`, from tagfold `src/lib/design/app.css` (the
+ * audited fase 0-4 tokens). Slightly blue hue (~255) with a faint cast of the
+ * mint accent on hover; each layer a small step apart.
+ */
+export const slateDark = {
+  crust: '#0C0C10',
+  base: '#101014',
+  mantle: '#17171D',
+  hover: '#23232B',
+  rule: '#2A2A34',
+  strong: '#6A6A78',
+  muted: '#9A9AA8',
+  text: '#ECECF1',
+} as const;
+
+/** tagfold's mint accent: fill, hover fill, ink on the fill. */
+export const mint = ['#7EE0A3', '#A9ECBF', '#0C1510'] as const;
+
 /** Cool graphite for `neutral-dark`: the neutral hue (260) after dark. */
 export const graphite = {
   crust: 'oklch(14% 0.008 260)',

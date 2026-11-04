@@ -126,6 +126,7 @@ Each one is shown in every state, theme, accent and density in the playground.
 | `corin` | Editor dark, from Corin |
 | `corin-light` | Light twin of `corin`: warm paper, same teal |
 | `gaira` | Volt on ink, from gaira; dark only |
+| `tagfold` | Mint on slate, from tagfold; dark only |
 | `sepia` | Serif reading theme |
 | `contrast` | 7:1 text, heavier focus rings and icons |
 | `dimmed` | Low-glare dark: mid-grey surfaces, quieter accents |

@@ -34,6 +34,7 @@ This file holds the rules every theme shares. Each theme records its own colours
 | `slab` | The Proof Sheet | [docs/design/slab.md](docs/design/slab.md) |
 | `soft` | The Pebble | [docs/design/soft.md](docs/design/soft.md) |
 | `neutral-cvd` | The Plain Workbench, colour-blind safe | [docs/design/neutral-cvd.md](docs/design/neutral-cvd.md) |
+| `tagfold` | The Darkroom Tool | [docs/design/tagfold.md](docs/design/tagfold.md) |
 
 The token source of truth is `packages/tokens/src` ([README](packages/tokens/README.md)); these files describe it and must not contradict it. Product context lives in [PRODUCT.md](PRODUCT.md).
 
