@@ -5,11 +5,14 @@ import {
   cvd,
   dark,
   dusk,
+  fold,
+  foldStatus,
   fog,
   graphite,
   ink,
   light,
   lowGlare,
+  mint,
   night,
   paperHues,
   sepiaBlue,
@@ -241,6 +244,50 @@ const gaira: Theme = {
     badgeCase: 'none',
     badgeTracking: '0',
     badgeFont: 'var(--cc-font-sans)',
+    focusWidth: '2px',
+    focusOffset: '2px',
+    rowMarker: '2px',
+  },
+};
+
+/**
+ * tagfold's tool: near-black slate that steps up in tone instead of casting
+ * shadows, one mint accent, 9px controls and 12px cards, system fonts. Mint
+ * rides the `green` accent slot so `data-accent` keeps working, and is the
+ * success colour too; amber and red are only for status.
+ */
+const tagfold: Theme = {
+  name: 'tagfold',
+  label: 'Tagfold',
+  colorScheme: 'dark',
+  colors: {
+    surface: fold.base,
+    surfaceRaised: fold.mantle,
+    surfaceSunken: fold.crust,
+    surfaceHover: fold.hover,
+    border: fold.rule,
+    borderStrong: fold.strong,
+    text: fold.text,
+    textMuted: fold.muted,
+    danger: foldStatus.danger[0],
+    dangerText: foldStatus.danger[1],
+    success: mint[0],
+    successText: mint[2],
+    warning: foldStatus.warning[0],
+    warningText: foldStatus.warning[1],
+    scrim: scrim.fold,
+  },
+  accents: accents({ ...dark, green: mint }),
+  defaultAccent: 'green',
+  radius: { sm: '9px', md: '9px', lg: '12px', pill: '999px' },
+  font: { sans: systemSans, display: systemSans, mono: systemMono },
+  icon: { stroke: '1.75', size: '1.25rem' },
+  // Counts and tags read as data: mono badges, tabular figures.
+  shape: {
+    badgeRadius: 'var(--cc-radius-sm)',
+    badgeCase: 'none',
+    badgeTracking: '0',
+    badgeFont: 'var(--cc-font-mono)',
     focusWidth: '2px',
     focusOffset: '2px',
     rowMarker: '2px',
@@ -542,4 +589,5 @@ export const themes: Record<ThemeName, Theme> = {
   soft,
   'neutral-cvd': neutralCvd,
   gaira,
+  tagfold,
 };
