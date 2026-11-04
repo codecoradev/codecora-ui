@@ -2,7 +2,16 @@
 // base (primitives, derived tints) < theme < modifier (data-density,
 // data-accent). Unlayered app CSS still overrides any token.
 import { SOFT_WEIGHT } from './contrast.js';
-import { density, duration, ease, fontSize, layer as layers, leading, space } from './scale.js';
+import {
+  density,
+  duration,
+  ease,
+  fontSize,
+  layer as layers,
+  leading,
+  press,
+  space,
+} from './scale.js';
 import {
   accentNames,
   densities,
@@ -55,6 +64,7 @@ export function baseCss(): string {
       ...prefixed('duration', duration),
       ...prefixed('layer', layers),
       ...prefixed('ease', ease),
+      ...prefixed('press', press),
       ...densityDecls('comfortable'),
     ]),
     block(SCOPES, ['accent', ...statusNames].map(soft)),
@@ -63,6 +73,7 @@ export function baseCss(): string {
       [
         ...Object.keys(duration).map((k): [string, string] => [`--cc-duration-${k}`, '0ms']),
         ['--cc-ease-spring', 'var(--cc-ease-out)'],
+        ['--cc-press-scale', '1'],
       ],
       '    ',
     )}\n  }`,

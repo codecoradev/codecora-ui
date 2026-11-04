@@ -1,0 +1,15 @@
+{
+  "name": "@codecora/e2e",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "playwright test a11y.spec.ts motion.spec.ts",
+    "check": "tsc --noEmit -p tsconfig.json",
+    "test:visual": "playwright test visual.spec.ts"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
+    "@codecora/tokens": "workspace:*",
+    "@playwright/test": "1.62.0"
+  }
+}

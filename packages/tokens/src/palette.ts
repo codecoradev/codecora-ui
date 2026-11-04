@@ -56,6 +56,23 @@ export const warmPaper = {
 } as const;
 
 /**
+ * Near-black slate with a faint violet cast (hue ~285) for `tagfold`, from
+ * tagfold `docs/DESIGN.md`. Layers get lighter step by step: tone, not shadow.
+ * `strong` is lighter than tagfold's #4A4A57, which is 1.9:1 on `crust` (a control
+ * boundary needs 3:1).
+ */
+export const fold = {
+  base: '#101014',
+  mantle: '#17171D',
+  crust: '#1E1E26',
+  hover: '#23232B',
+  rule: '#2A2A34',
+  strong: '#70708A',
+  muted: '#9A9AA8',
+  text: '#ECECF1',
+} as const;
+
+/**
  * Near-black ink for `gaira`, from gaira `web/src/app.css` and its logo
  * (`#0E1110` is the ink that sits on volt). A faint green cast, hue ~160.
  */
@@ -180,15 +197,36 @@ export const dark = {
 } as const;
 
 /**
- * Corin's light teal, hover and text on fill. Corin's own light red, green and
+ * Corin's light teal, hover and text on fill. The fill is a shade darker than
+ * Corin's own #0E7C74, which is 4.0:1 as text on its tint and 4.4:1 on a sunken
+ * surface (found by a real-browser axe scan). Corin's own light red, green and
  * amber (#C25B4E, #3E9B6C, #C07A3A) are 2.8 to 4.0:1 as text, so the status hues keep
  * Corin's hue angles at the lightness the other light themes use for AA.
  */
 export const paperHues = {
-  teal: ['#0E7C74', '#0A6660', '#FFFDF8'],
+  teal: ['#0B6D66', '#07564F', '#FFFDF8'],
   red: ['oklch(51% 0.15 30)', 'oklch(45% 0.14 30)', 'oklch(99% 0.004 30)'],
   green: ['oklch(48% 0.115 157)', 'oklch(42% 0.105 157)', 'oklch(98% 0.006 157)'],
   amber: ['oklch(49% 0.1 65)', 'oklch(43% 0.09 65)', 'oklch(99% 0.004 65)'],
+} as const;
+
+/**
+ * Blue for `sepia`: the shared light blue is 4.4:1 as text on its own tint over
+ * the warm paper, so this one is a step darker.
+ */
+export const sepiaBlue = [
+  'oklch(47% 0.16 260)',
+  'oklch(41% 0.16 260)',
+  'oklch(99% 0.003 260)',
+] as const;
+
+/** tagfold's mint accent: fill, hover fill, dark ink on the fill; it is also its success colour. */
+export const mint = ['#7EE0A3', '#A9ECBF', '#0C1510'] as const;
+
+/** tagfold's red and amber: fill and the dark text on it. */
+export const foldStatus = {
+  danger: ['#EF7B7B', '#2A0D0D'],
+  warning: ['#F0B45C', '#241A08'],
 } as const;
 
 /** gaira's volt accent: fill, hover fill, ink on the fill (white on volt fails AA). */
@@ -220,6 +258,7 @@ export const cvd = {
 export const scrim = {
   slate: 'oklch(22% 0.012 260 / 0.45)',
   ink: 'rgb(10 12 11 / 0.6)',
+  fold: 'rgb(8 8 12 / 0.66)',
   paper: 'oklch(21% 0.015 155 / 0.45)',
   night: 'rgb(10 12 16 / 0.6)',
   warm: 'oklch(24% 0.02 85 / 0.45)',

@@ -7,12 +7,18 @@
   import type { Snippet } from 'svelte';
 
   interface Props {
-    /** Names the table; shown to assistive technology and as the scroll region label. */
+    /** Names the table; shown to assistive technology and as the caption. */
     label: string;
+    /**
+     * Names the scroll region while the table overflows. Defaults to the label plus
+     * "(scrollable)", so it differs from a heading or section that carries the same
+     * words (landmarks on a page need distinct names).
+     */
+    regionLabel?: string;
     children: Snippet;
   }
 
-  let { label, children }: Props = $props();
+  let { label, regionLabel, children }: Props = $props();
 
   let wrap = $state<HTMLElement>();
   let overflowing = $state(false);
@@ -41,7 +47,7 @@
   class="cc-table-wrap"
   bind:this={wrap}
   role={overflowing ? 'region' : undefined}
-  aria-label={overflowing ? label : undefined}
+  aria-label={overflowing ? (regionLabel ?? `${label} (scrollable)`) : undefined}
   tabindex={overflowing ? 0 : undefined}
 >
   <table class="cc-table">
@@ -92,6 +98,11 @@
   .cc-table :global(tbody tr:last-child > *) {
     border-bottom: 0;
   }
+  .cc-table :global(tbody tr) {
+    transition:
+      background-color var(--cc-duration-fast) var(--cc-ease-out),
+      box-shadow var(--cc-duration-fast) var(--cc-ease-out);
+  }
   .cc-table :global(tbody tr:hover) {
     background: var(--cc-surface-hover);
   }
@@ -99,6 +110,11 @@
   .cc-table :global(tbody tr[aria-selected='true']) {
     background: var(--cc-accent-soft);
     box-shadow: inset var(--cc-row-marker) 0 0 var(--cc-accent);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cc-table :global(tbody tr) {
+      transition: none;
+    }
   }
   .cc-table :global(.num) {
     text-align: right;

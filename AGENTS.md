@@ -21,7 +21,7 @@ bun workspaces (`packages/*`, `registry`, `apps/*`). Today: `packages/tokens`, `
 - `apps/playground` — SvelteKit catalogue of every component in every theme
 - `scripts/` — `hooks/` (pre-commit, commit-msg), `setup-hooks.sh`, `message-standard.sh`
 - Root config — `tsconfig.base.json` (strict TS 6, extended by every workspace), `eslint.config.js`, `.prettierrc` (Markdown is not formatted), `.changeset/` (per-package versions, base branch `develop`)
-- `.github/` — PR template, issue forms, workflows (`ci.yml`: the Gates job, a mirror of the local gates; `pr-checks.yml`: branch naming, PR description, Conventional Commits title, message standard; `cora-review.yml`: automated review; `release.yml`: npm publishing)
+- `.github/` — PR template, issue forms, workflows (`ci.yml`: the Gates job, a mirror of the local gates; `pr-checks.yml`: branch naming, PR description, Conventional Commits title, message standard; `cora-review.yml`: automated review; `release.yml`: npm publishing; `pages.yml`: builds the playground under the repo base path, smoke-tests it and, on `develop`, deploys it to GitHub Pages)
 
 Boundaries that reviews enforce:
 
@@ -59,7 +59,7 @@ merge → cleanup → release (bump + CHANGELOG + tag). 1 issue = 1 branch = 1 P
 1. **Activate the hooks once per clone:** `bash scripts/setup-hooks.sh` (sets `core.hooksPath=scripts/hooks`; `bun install` does it through `prepare`).
 2. **Review every commit** before it is made: run the agent review flow on `git diff --staged` (prepare, answer, finalize at severity `major`), or `cora review --staged --ci --severity major` by hand. Major or critical findings block the commit. A tool error or a missing verdict is not a pass: retry, or review file by file. Quote the verdict in the PR `## Testing`.
 3. Never `git commit --no-verify` past a finding (emergency only, and say why in the PR). False positives get fixed by rewording or restructuring, not by bypassing.
-4. **Local gates** (mirror of CI): `bun install --frozen-lockfile`, `bun run check` (builds the packages, then `svelte-check` in every workspace), `bun run test`, `bun run build`, `bun run lint`, `bun run contrast` (WCAG AA for every theme and accent; the same check runs in `bun run test`), `bun run detect` (impeccable detector on component and playground sources).
+4. **Local gates** (mirror of CI): `bun install --frozen-lockfile`, `bun run check` (builds the packages, then `svelte-check` in every workspace), `bun run test`, `bun run build`, `bun run lint`, `bun run contrast` (WCAG AA for every theme and accent; the same check runs in `bun run test`), `bun run detect` (impeccable detector on component and playground sources), and, after `bun run build`, `bun run e2e` (axe in a real browser on every theme and page; see `e2e/README.md`; needs Chromium once: `cd e2e && bunx playwright install chromium`).
 5. A change to a published `@codecora/*` package adds a changeset (`bun run changeset`).
 
 ## Tooling

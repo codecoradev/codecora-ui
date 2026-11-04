@@ -32,6 +32,12 @@ export const leading = { tight: '1.2', normal: '1.5' } as const;
  * `instant`.
  */
 export const duration = { instant: '70ms', fast: '140ms', normal: '240ms', slow: '400ms' } as const;
+/**
+ * Press feedback: a pressed button scales to this. Reduced motion sets it to 1,
+ * so the press changes nothing there.
+ */
+export const press = { scale: '0.98' } as const;
+
 /** Stacking order, lowest first; components read these instead of numbers. */
 export const layer = {
   sticky: '40',

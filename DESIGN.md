@@ -26,6 +26,7 @@ This file holds the rules every theme shares. Each theme records its own colours
 | `uteke` | The Field Notebook | [docs/design/uteke.md](docs/design/uteke.md) |
 | `corin` | The Night Console | [docs/design/corin.md](docs/design/corin.md) |
 | `corin-light` | The Paper Console | [docs/design/corin-light.md](docs/design/corin-light.md) |
+| `tagfold` | The Light Table | [docs/design/tagfold.md](docs/design/tagfold.md) |
 | `neutral-dark` | The Plain Workbench after dark | [docs/design/neutral-dark.md](docs/design/neutral-dark.md) |
 | `uteke-dark` | The Field Notebook by lamplight | [docs/design/uteke-dark.md](docs/design/uteke-dark.md) |
 | `sepia` | The Reading Room | [docs/design/sepia.md](docs/design/sepia.md) |
@@ -96,7 +97,8 @@ Motion is global: one scale for every theme, because a theme changes the face, n
 - **Easings:** `--cc-ease-out` for entries, `--cc-ease-exit` for leaving, `--cc-ease-in-out` for movement between two resting places, `--cc-ease-spring` (a sampled `linear()` curve, about 5% overshoot) for movement and scale.
 - **Overlays:** Dialog, Sheet, CommandPalette, Popover, Tooltip, DropdownMenu, Select, Combobox and Toast animate in and out; exits run one step shorter than entries, with `ease-exit`. Accordion panels open and close the same way.
 - **State changes:** fills and colours (Checkbox, ToggleGroup, Pagination) ease over `fast`; movement and scale (the Tabs underline sliding, the Checkbox mark popping in) spring over `slow`.
-- **Reduced motion:** under `prefers-reduced-motion: reduce` every duration is 0ms and `--cc-ease-spring` falls back to `--cc-ease-out`; components also drop their keyframes. Endless loops (Spinner, Skeleton) slow down or stop.
+- **Press:** a pressed Button or IconButton shrinks to `--cc-press-scale` (0.98) in `--cc-duration-instant`. It is 1 under reduced motion, so the press changes nothing there.
+- **Reduced motion:** under `prefers-reduced-motion: reduce` every duration is 0ms, `--cc-ease-spring` falls back to `--cc-ease-out` and `--cc-press-scale` is 1; components also drop their keyframes. Endless loops (Spinner, Skeleton) slow down or stop.
 
 ### Named Rules
 **The Spring Moves, Never Fades Rule.** `--cc-ease-spring` drives `transform`, `translate`, `scale` or `rotate` only. Opacity and colour overshooting would flash, so they use `ease-out` in a separate animation alongside the spring.

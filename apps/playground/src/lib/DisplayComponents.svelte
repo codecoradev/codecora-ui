@@ -40,7 +40,7 @@
 
   <CodeBlock
     language="bash"
-    code="bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.6.0/codecora-ui-0.5.0.tgz"
+    code="bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.7.0/codecora-ui-0.6.0.tgz"
   />
 </section>
 

@@ -41,7 +41,12 @@
     border: 1px solid transparent;
     border-radius: var(--cc-radius-md);
     cursor: pointer;
-    transition: background-color var(--cc-duration-fast) var(--cc-ease-out);
+    transition:
+      background-color var(--cc-duration-fast) var(--cc-ease-out),
+      scale var(--cc-duration-instant) var(--cc-ease-out);
+  }
+  .cc-icon-button:not(:disabled):active {
+    scale: var(--cc-press-scale);
   }
   .cc-icon-button:focus-visible {
     outline: var(--cc-focus-width) solid var(--cc-focus);

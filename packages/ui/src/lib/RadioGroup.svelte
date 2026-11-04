@@ -98,6 +98,7 @@
     border-radius: var(--cc-radius-pill);
     background: var(--cc-surface-raised);
     cursor: pointer;
+    transition: border-color var(--cc-duration-fast) var(--cc-ease-out);
   }
   :global(.cc-radio[data-state='checked']) {
     border-color: var(--cc-accent);
@@ -119,6 +120,28 @@
     height: 0.625rem;
     border-radius: var(--cc-radius-pill);
     background: var(--cc-accent);
+    /* Opacity eases; only the scale springs. The dot is gone the moment it is unchecked. */
+    animation:
+      cc-dot-fade var(--cc-duration-fast) var(--cc-ease-out),
+      cc-dot-pop var(--cc-duration-slow) var(--cc-ease-spring);
+  }
+  @keyframes cc-dot-fade {
+    from {
+      opacity: 0;
+    }
+  }
+  @keyframes cc-dot-pop {
+    from {
+      scale: 0.4;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :global(.cc-radio) {
+      transition: none;
+    }
+    .dot {
+      animation: none;
+    }
   }
   .text {
     display: grid;
