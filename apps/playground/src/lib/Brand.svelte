@@ -56,7 +56,9 @@
 
 <section aria-labelledby="b-usage">
   <h2 id="b-usage">Using it</h2>
-  <pre><code
+  <!-- A scrollable code block must be keyboard reachable (axe: scrollable-region-focusable). -->
+  <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+  <pre tabindex="0" aria-label="Brand package usage"><code
       >{`import { Mark, Favicons } from '@codecora/brand';
 
 <Favicons product="uteke" />   // in the root layout

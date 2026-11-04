@@ -180,16 +180,28 @@ export const dark = {
 } as const;
 
 /**
- * Corin's light teal, hover and text on fill. Corin's own light red, green and
+ * Corin's light teal, hover and text on fill. The fill is a shade darker than
+ * Corin's own #0E7C74, which is 4.0:1 as text on its tint and 4.4:1 on a sunken
+ * surface (found by a real-browser axe scan). Corin's own light red, green and
  * amber (#C25B4E, #3E9B6C, #C07A3A) are 2.8 to 4.0:1 as text, so the status hues keep
  * Corin's hue angles at the lightness the other light themes use for AA.
  */
 export const paperHues = {
-  teal: ['#0E7C74', '#0A6660', '#FFFDF8'],
+  teal: ['#0B6D66', '#07564F', '#FFFDF8'],
   red: ['oklch(51% 0.15 30)', 'oklch(45% 0.14 30)', 'oklch(99% 0.004 30)'],
   green: ['oklch(48% 0.115 157)', 'oklch(42% 0.105 157)', 'oklch(98% 0.006 157)'],
   amber: ['oklch(49% 0.1 65)', 'oklch(43% 0.09 65)', 'oklch(99% 0.004 65)'],
 } as const;
+
+/**
+ * Blue for `sepia`: the shared light blue is 4.4:1 as text on its own tint over
+ * the warm paper, so this one is a step darker.
+ */
+export const sepiaBlue = [
+  'oklch(47% 0.16 260)',
+  'oklch(41% 0.16 260)',
+  'oklch(99% 0.003 260)',
+] as const;
 
 /** gaira's volt accent: fill, hover fill, ink on the fill (white on volt fails AA). */
 export const volt = ['#D4FF3A', '#E2FF7A', '#0E1110'] as const;

@@ -295,7 +295,7 @@
       >
         {#snippet panel(value)}
           {#if value === 'keys'}
-            <Table label="API keys">
+            <Table label="Keys in a tab">
               <thead>
                 <tr
                   ><th scope="col">Name</th><th scope="col">Scope</th><th scope="col">Status</th><th

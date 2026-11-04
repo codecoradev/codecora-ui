@@ -1,0 +1,14 @@
+{
+  "name": "@codecora/e2e",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "playwright test",
+    "check": "tsc --noEmit -p tsconfig.json"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
+    "@codecora/tokens": "workspace:*",
+    "@playwright/test": "1.62.0"
+  }
+}

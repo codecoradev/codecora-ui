@@ -171,7 +171,10 @@
   <h2 id="s-settings">Settings</h2>
   <div class="frame">
     <div class="stack wide">
-      <Breadcrumb items={[{ label: 'Workspace', href: '#s-settings' }, { label: 'Settings' }]} />
+      <Breadcrumb
+        label="Settings breadcrumb"
+        items={[{ label: 'Workspace', href: '#s-settings' }, { label: 'Settings' }]}
+      />
       <Card>
         {#snippet header()}Memory{/snippet}
         <div class="stack">
@@ -269,7 +272,10 @@
   <h2 id="s-keys">Data table</h2>
   <div class="frame">
     <div class="stack">
-      <Breadcrumb items={[{ label: 'Workspace', href: '#s-keys' }, { label: 'API keys' }]} />
+      <Breadcrumb
+        label="Keys breadcrumb"
+        items={[{ label: 'Workspace', href: '#s-keys' }, { label: 'API keys' }]}
+      />
       <DataTable
         label="API keys"
         rowKey={(k: Key) => k.id}

@@ -35,7 +35,7 @@
 
   <!-- A scrollable region must be reachable by keyboard (axe: scrollable-region-focusable). -->
   <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
-  <div class="scroll" role="region" aria-label="State matrix" tabindex="0">
+  <div class="scroll" role="region" aria-label="Matrix of component states" tabindex="0">
     <table class="matrix">
       <thead>
         <tr>
@@ -178,7 +178,8 @@
 
   <details>
     <summary>Props</summary>
-    <pre><code
+    <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+    <pre tabindex="0" aria-label="Component props"><code
         >{`<Button variant="primary|secondary|ghost|danger" icon={Icon} loading loadingLabel="Saving" href disabled />
 <IconButton icon={Icon} label="Required, names the action" variant disabled />
 <Field label description error required>

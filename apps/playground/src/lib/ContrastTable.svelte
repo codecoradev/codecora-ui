@@ -18,7 +18,9 @@
   {/if}
 </p>
 
-<div class="scroll">
+<!-- A scrollable region must be reachable by keyboard (axe: scrollable-region-focusable). -->
+<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+<div class="scroll" role="region" aria-label="Table of contrast ratios" tabindex="0">
   <table>
     <thead>
       <tr>

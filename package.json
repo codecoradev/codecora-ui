@@ -9,20 +9,22 @@
   "workspaces": [
     "packages/*",
     "registry",
-    "apps/*"
+    "apps/*",
+    "e2e"
   ],
   "scripts": {
     "prepare": "bash scripts/setup-hooks.sh",
     "build:packages": "bun run --filter './packages/*' build",
     "build": "bun run build:packages && bun run --filter './registry' build && bun run --filter './apps/*' build",
-    "check": "bun run build:packages && bun run --filter './packages/*' --filter './registry' --filter './apps/*' check",
+    "check": "bun run build:packages && bun run --filter './packages/*' --filter './registry' --filter './apps/*' --filter './e2e' check",
     "test": "bun run --filter './packages/*' --filter './registry' --filter './apps/*' test",
     "contrast": "bun run --filter './packages/tokens' contrast",
     "detect": "impeccable detect packages/ui/src packages/memory/src registry/blocks apps/playground/src",
     "lint": "prettier --check . && eslint .",
     "format": "prettier --write .",
     "changeset": "changeset",
-    "version-packages": "changeset version"
+    "version-packages": "changeset version",
+    "e2e": "bun run --filter './e2e' test"
   },
   "devDependencies": {
     "@changesets/cli": "^3.0.3",
