@@ -97,5 +97,5 @@ Skeleton, Spinner.
 `svelte-check`, unit tests (vitest), contrast check per theme, impeccable
 detector, build of every package and the playground, and an axe scan of the
 built playground in a real browser (every theme and page at 1280 px and 375 px,
-`e2e/`). Visual snapshots of the playground in every theme at desktop and
-375 px are planned (#142).
+`e2e/`), plus screenshots of every theme's page and of the component and
+dashboard pages in a few themes against committed baselines.
