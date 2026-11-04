@@ -24,7 +24,8 @@
     "format": "prettier --write .",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "e2e": "bun run --filter './e2e' test"
+    "e2e": "bun run --filter './e2e' test",
+    "e2e:visual": "bun run --filter './e2e' test:visual"
   },
   "devDependencies": {
     "@changesets/cli": "^3.0.3",
