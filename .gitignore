@@ -8,3 +8,7 @@ dist/
 .env.*
 !.env.example
 .cora/
+
+# Playwright
+test-results/
+playwright-report/

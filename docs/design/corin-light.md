@@ -16,8 +16,8 @@ colors:
   success-text: "oklch(98% 0.006 157)"
   warning: "oklch(49% 0.1 65)"
   warning-text: "oklch(99% 0.004 65)"
-  accent: "#0E7C74"
-  accent-hover: "#0A6660"
+  accent: "#0B6D66"
+  accent-hover: "#07564F"
   accent-text: "#FFFDF8"
 typography:
   display:
@@ -105,7 +105,8 @@ Cream paper with a single deep teal and muted status signals.
 
 ### Departures from Corin's light palette
 
-Every surface, text and teal fill is Corin's own (the hover teal and the label colour on it are derived, since Corin has none). Four values are not, because Corin's do not pass WCAG AA:
+Every surface and text value is Corin's own, and the teal is Corin's hue a shade darker (the hover teal and the label colour on it are derived, since Corin has none). Five values are not Corin's, because Corin's do not pass WCAG AA:
+- `accent` `#0B6D66` replaces Corin's teal `#0E7C74`, which is 4.0:1 as text on its own tint (badges, the current nav item) and 4.4:1 on a sunken surface, both under 4.5:1. A real-browser axe scan found it.
 - `border-strong` `#8A826D` replaces Corin's `overlay` `#A39A85`, which is 2.6:1 on the page (needs 3:1 for a control boundary).
 - `danger` is `oklch(51% 0.15 30)` instead of `#C25B4E` (4.0:1 as text on the page, 3.4:1 on its own tint).
 - `success` is `oklch(48% 0.115 157)` instead of `#3E9B6C` (3.2:1 and 2.8:1).

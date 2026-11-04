@@ -69,6 +69,9 @@ export function checkTheme(theme: Theme, accentName: AccentName = theme.defaultA
   for (const bg of [...surfaces, 'surfaceHover', 'accentSoft']) pairs.push(['text', bg, minText]);
   for (const bg of surfaces) pairs.push(['textMuted', bg, minText], ['borderStrong', bg, 3]);
   for (const bg of ['surface', 'surfaceRaised']) pairs.push(['accent', bg, 4.5], ['focus', bg, 3]);
+  // Accent text also lands on tinted and sunken surfaces: badges and the current
+  // nav item sit on accentSoft, links in wells and code blocks on surfaceSunken.
+  pairs.push(['accent', 'accentSoft', 4.5], ['accent', 'surfaceSunken', 4.5]);
   pairs.push(['accentText', 'accent', 4.5], ['accentText', 'accentHover', 4.5]);
   for (const s of statusNames)
     pairs.push(

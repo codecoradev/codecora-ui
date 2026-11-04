@@ -175,9 +175,20 @@ describe('Table', () => {
   it('is a labelled, focusable scroll region while it overflows (375px)', () => {
     widths(620, 343);
     render(Table, { label: 'Members', children: rows });
-    const region = screen.getByRole('region', { name: 'Members' });
+    const region = screen.getByRole('region', { name: 'Members (scrollable)' });
     expect(region).toHaveAttribute('tabindex', '0');
     expect(region).toContainElement(screen.getByRole('table', { name: 'Members' }));
+  });
+
+  it('names the region apart from the table, or as the app says', () => {
+    widths(620, 343);
+    const { unmount } = render(Table, { label: 'Members', children: rows });
+    // The table keeps its own name, so a heading "Members" does not clash with the region.
+    expect(screen.getByRole('table', { name: 'Members' })).toBeInTheDocument();
+    expect(screen.getByRole('region', { name: 'Members (scrollable)' })).toBeInTheDocument();
+    unmount();
+    render(Table, { label: 'Members', regionLabel: 'Anggota, bisa digulir', children: rows });
+    expect(screen.getByRole('region', { name: 'Anggota, bisa digulir' })).toBeInTheDocument();
   });
 
   it('ignores a pixel of rounding', () => {
@@ -205,7 +216,10 @@ describe('Table', () => {
 
     scrollWidth.mockReturnValue(1200);
     callbacks.forEach((callback) => callback());
-    expect(await screen.findByRole('region', { name: 'Members' })).toHaveAttribute('tabindex', '0');
+    expect(await screen.findByRole('region', { name: 'Members (scrollable)' })).toHaveAttribute(
+      'tabindex',
+      '0',
+    );
 
     scrollWidth.mockReturnValue(960);
     callbacks.forEach((callback) => callback());
