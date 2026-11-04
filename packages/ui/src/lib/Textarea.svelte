@@ -28,6 +28,9 @@
     font: inherit;
     line-height: var(--cc-leading-normal);
     resize: vertical;
+    transition:
+      border-color var(--cc-duration-fast) var(--cc-ease-out),
+      box-shadow var(--cc-duration-fast) var(--cc-ease-out);
   }
   .cc-textarea::placeholder {
     color: var(--cc-text-muted);
@@ -43,5 +46,10 @@
   .cc-textarea[aria-invalid='true'] {
     border-color: var(--cc-danger);
     box-shadow: inset 0 0 0 1px var(--cc-danger);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cc-textarea {
+      transition: none;
+    }
   }
 </style>

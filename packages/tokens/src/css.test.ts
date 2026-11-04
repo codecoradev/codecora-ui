@@ -33,6 +33,9 @@ describe('base.css', () => {
     const reduced = css.slice(css.indexOf('@media (prefers-reduced-motion: reduce)'));
     for (const k of Object.keys(duration)) expect(reduced).toContain(`--cc-duration-${k}: 0ms;`);
     expect(reduced).toContain('--cc-ease-spring: var(--cc-ease-out);');
+    // A press is scale, not time, so reduced motion turns it off by making it 1.
+    expect(css).toContain('--cc-press-scale: 0.98;');
+    expect(reduced).toContain('--cc-press-scale: 1;');
   });
 });
 

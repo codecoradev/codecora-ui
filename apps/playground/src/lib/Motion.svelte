@@ -7,6 +7,7 @@
 <script lang="ts">
   import { duration, ease } from '@codecora/tokens';
   import { marks } from '@codecora/brand';
+  import { Trash } from '@codecora/icons/lucide';
   import {
     Accordion,
     Alert,
@@ -18,12 +19,17 @@
     CommandPalette,
     Dialog,
     DropdownMenu,
+    Field,
+    IconButton,
+    Input,
     Pagination,
     Popover,
+    RadioGroup,
     Select,
     Sheet,
     Slider,
     Switch,
+    Table,
     Tabs,
     Toaster,
     ToggleGroup,
@@ -81,11 +87,20 @@
   let sheetOpen = $state(false);
   let popoverOpen = $state(false);
   let paletteOpen = $state(false);
+  let planChoice = $state('team');
+  let invalid = $state(false);
 
   type Change = { name: string; steps: [string, string][] };
 
   // What each component does when its state changes, in the order of the cards.
   const changes: Change[] = [
+    {
+      name: 'Button',
+      steps: [
+        ['Press', 'scales to --cc-press-scale instant · ease-out; reduced motion keeps it at 1'],
+        ['Hover', 'fill fast · ease-out'],
+      ],
+    },
     {
       name: 'Accordion',
       steps: [
@@ -140,6 +155,10 @@
     { name: 'Pagination', steps: [['Change', 'fill and colour fast · ease-out']] },
     { name: 'Avatar', steps: [['Load', 'image fades in normal · ease-out']] },
     { name: 'Alert', steps: [['Arrive', 'fade and settle normal · ease-out']] },
+    { name: 'RadioGroup', steps: [['Select', 'dot fades fast · ease-out, scales slow · spring']] },
+    { name: 'Field', steps: [['Error', 'fade and settle normal · ease-out']] },
+    { name: 'Input', steps: [['Invalid', 'border and ring fast · ease-out']] },
+    { name: 'Table', steps: [['Row', 'hover and selection fill fast · ease-out']] },
   ];
 
   const plans = [
@@ -192,10 +211,16 @@
   $effect(() => {
     if (!reduce) return;
     const root = document.documentElement.style;
-    const names = [...Object.keys(duration).map((k) => `--cc-duration-${k}`), '--cc-ease-spring'];
-    for (const name of names) {
-      root.setProperty(name, name === '--cc-ease-spring' ? 'var(--cc-ease-out)' : '0ms');
-    }
+    const names = [
+      ...Object.keys(duration).map((k) => `--cc-duration-${k}`),
+      '--cc-ease-spring',
+      '--cc-press-scale',
+    ];
+    const reduced: Record<string, string> = {
+      '--cc-ease-spring': 'var(--cc-ease-out)',
+      '--cc-press-scale': '1',
+    };
+    for (const name of names) root.setProperty(name, reduced[name] ?? '0ms');
     return () => names.forEach((name) => root.removeProperty(name));
   });
 
@@ -449,6 +474,40 @@
               {#key arrival}
                 <Alert tone="success" title="Key saved">ci-deploy can now write.</Alert>
               {/key}
+            {:else if change.name === 'Button'}
+              <div class="row">
+                <Button variant="primary">Press and hold</Button>
+                <Button variant="secondary">Cancel</Button>
+                <IconButton icon={Trash} label="Delete" />
+              </div>
+            {:else if change.name === 'RadioGroup'}
+              <RadioGroup label="Plan" items={plans} bind:value={planChoice} />
+            {:else if change.name === 'Field'}
+              {#key arrival}
+                <Field label="Email" error="Enter an address like ada@example.com">
+                  {#snippet children(control)}
+                    <Input {...control} value="not-an-email" />
+                  {/snippet}
+                </Field>
+              {/key}
+            {:else if change.name === 'Input'}
+              <div class="row">
+                <Input aria-label="Key name" value="ci-deploy" {invalid} />
+                <Button variant="secondary" onclick={() => (invalid = !invalid)}>
+                  {invalid ? 'Clear error' : 'Mark invalid'}
+                </Button>
+              </div>
+            {:else if change.name === 'Table'}
+              <Table label="Keys to hover">
+                <thead>
+                  <tr><th scope="col">Name</th><th scope="col">Scope</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>ci-deploy</td><td>read, write</td></tr>
+                  <tr data-selected="true"><td>dashboard</td><td>read</td></tr>
+                  <tr><td>old-importer</td><td>read</td></tr>
+                </tbody>
+              </Table>
             {/if}
           </div>
         </li>

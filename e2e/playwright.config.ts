@@ -34,7 +34,12 @@ export default defineConfig({
   },
   projects: [
     { name: 'desktop', use: { viewport: { width: 1280, height: 800 } } },
-    { name: 'mobile', use: { viewport: { width: 375, height: 812 } } },
+    {
+      name: 'mobile',
+      use: { viewport: { width: 375, height: 812 } },
+      // Computed styles are the same at every width.
+      testIgnore: 'motion.spec.ts',
+    },
   ],
   webServer: {
     command: `bun run --cwd ../apps/playground preview --port ${port} --strictPort`,

@@ -96,7 +96,8 @@ Motion is global: one scale for every theme, because a theme changes the face, n
 - **Easings:** `--cc-ease-out` for entries, `--cc-ease-exit` for leaving, `--cc-ease-in-out` for movement between two resting places, `--cc-ease-spring` (a sampled `linear()` curve, about 5% overshoot) for movement and scale.
 - **Overlays:** Dialog, Sheet, CommandPalette, Popover, Tooltip, DropdownMenu, Select, Combobox and Toast animate in and out; exits run one step shorter than entries, with `ease-exit`. Accordion panels open and close the same way.
 - **State changes:** fills and colours (Checkbox, ToggleGroup, Pagination) ease over `fast`; movement and scale (the Tabs underline sliding, the Checkbox mark popping in) spring over `slow`.
-- **Reduced motion:** under `prefers-reduced-motion: reduce` every duration is 0ms and `--cc-ease-spring` falls back to `--cc-ease-out`; components also drop their keyframes. Endless loops (Spinner, Skeleton) slow down or stop.
+- **Press:** a pressed Button or IconButton shrinks to `--cc-press-scale` (0.98) in `--cc-duration-instant`. It is 1 under reduced motion, so the press changes nothing there.
+- **Reduced motion:** under `prefers-reduced-motion: reduce` every duration is 0ms, `--cc-ease-spring` falls back to `--cc-ease-out` and `--cc-press-scale` is 1; components also drop their keyframes. Endless loops (Spinner, Skeleton) slow down or stop.
 
 ### Named Rules
 **The Spring Moves, Never Fades Rule.** `--cc-ease-spring` drives `transform`, `translate`, `scale` or `rotate` only. Opacity and colour overshooting would flash, so they use `ease-out` in a separate animation alongside the spring.

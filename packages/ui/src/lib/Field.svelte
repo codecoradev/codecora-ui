@@ -76,6 +76,19 @@
     align-items: start;
     gap: var(--cc-space-1);
     color: var(--cc-danger);
+    animation: cc-error-in var(--cc-duration-normal) var(--cc-ease-out);
+  }
+  /* Arrives where it stays, like Alert: a short settle, no spring in the reading flow. */
+  @keyframes cc-error-in {
+    from {
+      opacity: 0;
+      transform: translateY(calc(-1 * var(--cc-space-1)));
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .error {
+      animation: none;
+    }
   }
   .error :global(.cc-glyph) {
     margin-top: 0.15em;
