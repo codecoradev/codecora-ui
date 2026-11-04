@@ -8,6 +8,27 @@ changesets (`packages/*/CHANGELOG.md`).
 
 ## [Unreleased]
 
+## [0.7.0] - 2026-11-04
+
+`@codecora/tokens` 0.7.0, `@codecora/ui` 0.6.0 and `@codecora/memory` 0.3.1. `@codecora/icons` and `@codecora/brand` stay at 0.1.0. Install from the GitHub Release tarballs (see the README); npm publishing is still pending (#15).
+
+### Added
+
+- `@codecora/tokens`: the `tagfold` theme, near-black slate with one mint accent (`#7EE0A3`, dark ink on every fill) that is also the success colour; dark only. `border-strong` is a lighter `#70708A` than tagfold's own so a control boundary keeps 3:1; `docs/design/tagfold.md` says so (#148, closes #140).
+- `@codecora/tokens`: a press token, `--cc-press-scale` (0.98, exported as `press`), which is 1 under `prefers-reduced-motion` (#146).
+- A safety net for the playground: an axe scan in a real browser on every theme and page, computed-style checks of the motion, and Linux screenshot baselines, as the CI jobs "Accessibility (axe)" and "Visual snapshots" (#144, #145).
+- The playground builds under a base path and is published to GitHub Pages on `develop` once the repository variable `PAGES_ENABLED` is `true` (#150, closes #149).
+
+### Changed
+
+- `@codecora/ui`: motion for the states that still cut between states, on the motion tokens and instant under reduced motion: `Button` and `IconButton` shrink while pressed; the `RadioGroup` dot springs in; a `Field` error fades in; `Table` and `DataTable` rows ease hover and selection; `Input` and `Textarea` ease the border and the invalid ring (#146, closes #143).
+- `@codecora/memory`: `@codecora/ui` `^0.6.0` is the peer dependency (#146).
+
+### Fixed
+
+- `@codecora/tokens`: the contrast check also covers accent text on its own tint and on a sunken surface, and two themes failed it: `corin-light` has a darker teal (`#0B6D66`) and `sepia` a darker blue accent (#144).
+- `@codecora/ui`: a scrolling `Table` names its region "<label> (scrollable)", so a heading with the same words no longer makes two landmarks with one name; the new `regionLabel` prop sets another name (#144).
+
 ## [0.6.0] - 2026-11-03
 
 `@codecora/tokens` 0.6.0, `@codecora/ui` 0.5.0 and `@codecora/memory` 0.3.0. `@codecora/icons` and `@codecora/brand` stay at 0.1.0. Install from the GitHub Release tarballs (see the README); npm publishing is still pending (#15).

@@ -1,5 +1,13 @@
 # @codecora/memory
 
+## 0.3.1
+
+### Patch Changes
+
+- Updated dependencies [23b4ee5]
+- Updated dependencies [5aa4d30]
+  - @codecora/ui@0.6.0
+
 ## 0.3.0
 
 ### Minor Changes

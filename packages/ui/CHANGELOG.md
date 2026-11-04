@@ -1,5 +1,15 @@
 # @codecora/ui
 
+## 0.6.0
+
+### Minor Changes
+
+- 5aa4d30: Motion for the states that still cut between states, on the motion tokens and instant under reduced motion: `Button` and `IconButton` shrink to `--cc-press-scale` while pressed; the `RadioGroup` dot fades in and springs to size and its ring changes colour smoothly; a `Field` error fades in and settles; `Table` and `DataTable` rows ease their hover and selection fill; `Input` and `Textarea` ease the border and the invalid ring. The playground Motion page shows each one (#143).
+
+### Patch Changes
+
+- 23b4ee5: Fixes from the first real-browser axe scan. `@codecora/tokens`: the contrast check now also covers accent text on its own tint and on a sunken surface (badges, the current nav item, links in wells), and two themes failed it: `corin-light` has a slightly darker teal (`#0B6D66`, was `#0E7C74`, 4.0:1 on its tint) and `sepia` has a darker blue accent. `@codecora/ui`: a `Table` that scrolls names its region "<label> (scrollable)" instead of repeating the label, so a heading or section with the same words no longer makes two landmarks with one name; the new `regionLabel` prop sets another name (#141).
+
 ## 0.5.0
 
 ### Minor Changes

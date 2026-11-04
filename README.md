@@ -30,14 +30,12 @@ product fleet and open to any Svelte app.
 
 ## Status
 
-`0.6.0`: `@codecora/tokens` 0.6.0 (the `corin-light` theme, the `gaira` theme and
-chart colours in the shadcn bridge), `@codecora/ui` 0.5.0 (a table that is a scroll
-region only while it overflows, an `AppShell` banner landmark and a Tabs fix) and
-`@codecora/memory` 0.3.0 (the Uteke Cloud portal client and the memory browser
-components), with `@codecora/icons` and `@codecora/brand` 0.1.0; a shadcn-svelte
-registry with seven blocks ships with the playground (see [CHANGELOG.md](CHANGELOG.md)).
-Not on npm yet: install from the GitHub Release tarballs below. The API can still
-change before 1.0.
+`0.7.0`: `@codecora/tokens` 0.7.0 (the `tagfold` theme and a press token),
+`@codecora/ui` 0.6.0 (press, radio, field, table and input motion) and
+`@codecora/memory` 0.3.1, with `@codecora/icons` and `@codecora/brand` 0.1.0; a
+shadcn-svelte registry with seven blocks ships with the playground (see
+[CHANGELOG.md](CHANGELOG.md)). Not on npm yet: install from the GitHub Release
+tarballs below. The API can still change before 1.0.
 
 ## Install
 
@@ -45,9 +43,9 @@ Each release attaches one tarball per package it ships. The same URL works with
 bun, npm (`npm install <url>`) and pnpm (`pnpm add <url>`):
 
 ```bash
-bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.6.0/codecora-tokens-0.6.0.tgz
-bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.6.0/codecora-ui-0.5.0.tgz
-bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.6.0/codecora-memory-0.3.0.tgz
+bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.7.0/codecora-tokens-0.7.0.tgz
+bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.7.0/codecora-ui-0.6.0.tgz
+bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.7.0/codecora-memory-0.3.1.tgz
 bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.1.0/codecora-icons-0.1.0.tgz
 bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.1.0/codecora-brand-0.1.0.tgz
 ```
