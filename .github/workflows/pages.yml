@@ -5,9 +5,10 @@ name: Pages
 # only builds it under the same base path and smoke-tests it, so a change that
 # breaks links or assets there fails before the merge.
 #
-# The deploy job needs Pages to be enabled once in the repository settings,
-# with "GitHub Actions" as the source. Until then the build still runs and the
-# deploy job fails at the deployment step.
+# Deploying needs two one-time steps by a maintainer: Pages enabled in the
+# repository settings with "GitHub Actions" as the source, and the repository
+# variable PAGES_ENABLED set to "true". Until then the build still runs and the
+# deploy job is skipped, so develop stays green.
 on:
   push:
     branches: [develop]
@@ -82,7 +83,7 @@ jobs:
 
   deploy:
     name: Deploy
-    if: github.event_name != 'pull_request'
+    if: github.event_name != 'pull_request' && vars.PAGES_ENABLED == 'true'
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 10
