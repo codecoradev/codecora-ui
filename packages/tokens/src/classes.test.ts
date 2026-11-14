@@ -309,14 +309,29 @@ const palette =
 /** A transition-[…] value that only lists properties, which is not a value to tokenise. */
 const propertyList = /^transition-\[[a-z-]+(,[a-z-]+)*\]$/;
 /**
- * Arbitrary values that are layout, not design decisions: CSS-wide keywords
- * (`font-[inherit]`) and lengths relative to the viewport or the parent
- * (`max-h-[85dvh]`, `w-[50%]`). Colours, rem/px sizes and times still need a token.
+ * Arbitrary values that are layout, not design decisions. CSS-wide keywords
+ * (`font-[inherit]`, `max-h-[none]`) are fine anywhere; lengths relative to
+ * the viewport or the parent (`max-h-[85dvh]`, `w-[50%]`) only on sizing and
+ * position utilities. Type, spacing, radius, colour and time still need a token.
  */
-const layoutValue =
-  /^(inherit|initial|unset|revert|auto|none|currentColor|\d+(\.\d+)?(dvh|svh|lvh|vh|dvw|svw|lvw|vw|%))$/;
+const keywordValue = /^(inherit|initial|unset|revert|auto|none|currentcolor)$/i;
+const relativeLength = /^\d+(\.\d+)?(dvh|svh|lvh|vh|dvw|svw|lvw|vw|%)$/;
+const layoutUtility =
+  /^-?(w|h|min-w|min-h|max-w|max-h|size|inset|inset-x|inset-y|top|right|bottom|left|start|end|translate|translate-x|translate-y|basis)-\[/;
+const layoutProperty =
+  /^\[(width|height|min-width|min-height|max-width|max-height|inset|top|right|bottom|left|translate|flex-basis):/;
+
 const springOnly =
   /^transition-(transform|\[(transform|translate|scale|rotate)(,(transform|translate|scale|rotate))*\])$/;
+
+/** True when an arbitrary value needs no token by the rules above. */
+function layoutValue(u: string, inner: string): boolean {
+  // A typed value (`length:85dvh`) or an arbitrary property (`[font:inherit]`);
+  // a custom property (`[--cc-radius:50%]`) keeps its name, so it never matches.
+  const value = inner.startsWith('--') ? inner : inner.replace(/^[a-z-]+:/, '');
+  if (keywordValue.test(value)) return true;
+  return relativeLength.test(value) && (layoutUtility.test(u) || layoutProperty.test(u));
+}
 
 /** Rule violations in one element's class list (a group of strings); `file` is relative to the repo. */
 export function violations(classList: string | string[], file: string, timing = true): string[] {
@@ -328,12 +343,11 @@ export function violations(classList: string | string[], file: string, timing = 
     if (palette.test(u))
       out.push(`${t}: palette colour, use a theme role (bg-primary, text-muted-foreground)`);
     const value = u.match(/-\[(.*)\]$/) ?? u.match(/^\[(.*)\]$/);
-    const inner = value?.[1]?.replace(/^[a-z-]+:/, '');
     if (
       value &&
       !value[1]!.includes('var(--') &&
       !propertyList.test(u) &&
-      !layoutValue.test(inner ?? '')
+      !layoutValue(u, value[1]!)
     )
       out.push(`${t}: arbitrary value without a token, use a theme key or [prop:var(--token)]`);
     if (/^(duration|delay)-\d+$/.test(u))
@@ -369,7 +383,13 @@ describe('class lint rules', () => {
     ['bg-[#fff]', 'arbitrary'],
     ['w-[13px]', 'arbitrary'],
     ['mt-[0.4em]', 'arbitrary'],
-    ['text-[currentcolor] bg-[rgb(0_0_0)]', 'arbitrary'],
+    ['bg-[rgb(0_0_0)]', 'arbitrary'],
+    ['text-[2vw]', 'arbitrary'],
+    ['p-[5vw]', 'arbitrary'],
+    ['rounded-[50%]', 'arbitrary'],
+    ['leading-[150%]', 'arbitrary'],
+    ['[font-size:2vw]', 'arbitrary'],
+    ['[--cc-radius:50%]', 'arbitrary'],
     ['duration-150 ease-enter transition-colors', 'literal duration'],
     ['transition-colors duration-fast ease-out', 'Tailwind curve'],
     ['transition-colors duration-fast', 'easing token'],
@@ -390,7 +410,7 @@ describe('class lint rules', () => {
     'motion-reduce:transition-none',
     'transition-[background-color,border-color] duration-fast ease-enter',
     'data-[state=open]:[&_svg]:rotate-180',
-    'max-h-[85dvh] font-[inherit] w-[50%] [font:inherit]',
+    'max-h-[85dvh] font-[inherit] w-[50%] [font:inherit] text-[currentcolor] top-[50%] -translate-x-[50%] [max-height:85dvh]',
   ])('accepts %s', (s) => {
     expect(violations(s, 'packages/ui/src/lib/X.svelte')).toEqual([]);
   });
