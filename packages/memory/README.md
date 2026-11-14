@@ -21,6 +21,17 @@ if (local.capabilities.rooms) await local.rooms();
 
 ## Memory browser
 
+The components are written with Tailwind 4 utilities (D13). Your app's CSS
+needs Tailwind and the CodeCora theme, and must list the component sources so
+Tailwind generates their classes:
+
+```css
+@import 'tailwindcss';
+@import '@codecora/tokens/theme.css';
+@import '@codecora/ui/source.css';
+@import '@codecora/memory/source.css';
+```
+
 `MemoryList`, `MemoryDetail` and `MemoryEditor` share one `MemoryBrowser`, so
 the list, the selection and the edits stay in step. Lay them out as your app
 needs (two panes, or the detail in a `Sheet` on small screens).

@@ -84,6 +84,13 @@ variable of the same name the themes declare (`--radius-md: var(--radius-md)`). 
 nothing and can go. You can also delete the `:root` and `.dark` blocks
 altogether.
 
+Those `--radius-md: var(--radius-md)` lines resolve in the page, where
+`theme.css` declares the variable on `:root` and every `[data-theme]`. Inside a
+shadow root (a web component that loads the app's CSS itself), nothing
+declares them on `:host`, so `rounded-md` and `font-mono` fall back to
+nothing there: delete those lines from `@theme inline` if you render
+components in a shadow root.
+
 After that, shadcn components and the blocks follow `data-theme`,
 `data-accent` and `data-density` on any element, nested regions (a dark
 sidebar, a preview card) included. shadcn's

@@ -38,6 +38,11 @@ describe('cn with the CodeCora theme names', () => {
     expect(cn('font-inherit text-sm', 'font-sans')).toBe('font-inherit text-sm font-sans');
   });
 
+  it('replaces a max width with the measure keys', () => {
+    expect(cn('max-w-md', 'max-w-measure')).toBe('max-w-measure');
+    expect(cn('max-w-description', 'max-w-prose')).toBe('max-w-prose');
+  });
+
   it('keeps a line height beside a later font size, as Tailwind 4 renders it', () => {
     expect(cn('leading-heading text-lg')).toBe('leading-heading text-lg');
     expect(cn('font-display leading-heading m-0 text-lg font-bold')).toContain('leading-heading');

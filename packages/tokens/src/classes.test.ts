@@ -515,6 +515,34 @@ describe('migrated files', () => {
     };
   });
 
+  it('reads only variables that something declares', () => {
+    // theme.css, Tailwind's own theme and internals, bits-ui, the playground's
+    // own --pg-* globals and properties a file declares itself.
+    const require = createRequire(import.meta.url);
+    const tw = dirname(require.resolve('tailwindcss/package.json'));
+    const declaredIn = (css: string) => [...css.matchAll(/(--[\w-]+)\s*:/g)].map((m) => m[1]!);
+    const playgroundCss = join(root, 'apps/playground/src/lib/playground.css');
+    const declared = new Set([
+      ...declaredIn(tailwindThemeCss()),
+      ...declaredIn(readFileSync(join(tw, 'theme.css'), 'utf8')),
+      ...declaredIn(readFileSync(playgroundCss, 'utf8')),
+    ]);
+    const allowed = (name: string) =>
+      declared.has(name) || /^--(tw|bits|spacing$|text-[\w-]+$|default-)/.test(name);
+    const unknown = files.flatMap((file) => {
+      const source = readFileSync(file, 'utf8');
+      const own = new Set(declaredIn(source));
+      return (
+        [...source.matchAll(/var\((--[\w-]+)/g)]
+          .map((m) => m[1]!)
+          // A name built at run time (`var(--radius-${size})`) ends in `-`: not checkable here.
+          .filter((name) => !name.endsWith('-') && !allowed(name) && !own.has(name))
+          .map((name) => `${relative(root, file)}: ${name}`)
+      );
+    });
+    expect(unknown).toEqual([]);
+  });
+
   it('knows Tailwind and theme classes and rejects a typo', () => {
     for (const t of [
       'p-4',

@@ -14,6 +14,7 @@ export const twMergeExtension = {
     shadow: ['popover', 'modal'],
     ease: ['enter', 'exit', 'move', 'spring'],
     leading: ['heading'],
+    container: ['description', 'measure'],
   },
   classGroups: {
     duration: [{ duration: ['instant', 'fast', 'normal', 'slow'] }],
