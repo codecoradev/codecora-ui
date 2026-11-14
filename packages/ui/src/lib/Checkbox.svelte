@@ -72,7 +72,7 @@
       'focus-visible:outline-ring focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)]',
       'data-disabled:cursor-not-allowed data-disabled:opacity-55',
       // The mark: opacity eases, only the scale springs. Unchecking takes the shorter exit.
-      '[&_svg]:[transition:opacity_var(--cc-duration-fast)_var(--cc-ease-out),scale_var(--cc-duration-slow)_var(--cc-ease-spring)]',
+      '[&_svg]:[transition:opacity_var(--cc-duration-fast)_var(--ease-enter),scale_var(--cc-duration-slow)_var(--ease-spring)]',
       'data-[state=unchecked]:[&_svg]:scale-50 data-[state=unchecked]:[&_svg]:opacity-0',
       'data-[state=unchecked]:[&_svg]:duration-instant data-[state=unchecked]:[&_svg]:ease-exit',
       'motion-reduce:data-[state]:[&_svg]:transition-none',
@@ -89,10 +89,7 @@
       class="group-data-disabled/choice:text-muted-foreground cursor-pointer group-data-disabled/choice:cursor-not-allowed"
       >{label}</label
     >
-    {#if description}<p
-        id={hintId}
-        class="text-muted-foreground m-0 text-[length:var(--cc-font-size-sm)]"
-      >
+    {#if description}<p id={hintId} class="text-muted-foreground m-0 text-sm leading-[inherit]">
         {description}
       </p>{/if}
   </div>

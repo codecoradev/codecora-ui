@@ -125,7 +125,7 @@
       <Card>
         <div class="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <h2 class="m-0 text-[length:var(--cc-font-size-md)]">Build with the API</h2>
+            <h2 class="leading-heading m-0 text-base">Build with the API</h2>
             <p class="text-muted-foreground mx-0 mt-1 mb-0">
               Add this to your product, keeping full control of your data, tools and logic.
             </p>
@@ -172,7 +172,7 @@
             <span class="grid min-w-0">
               <span class="truncate">{user.name}</span>
               {#if user.detail}
-                <span class="text-muted-foreground truncate text-[length:var(--cc-font-size-sm)]">
+                <span class="text-muted-foreground truncate text-sm leading-[inherit]">
                   {user.detail}
                 </span>
               {/if}
@@ -198,7 +198,7 @@
 
   <div class="grid gap-4 p-6 max-md:p-4">
     <div class="flex flex-wrap items-center justify-between gap-3">
-      <h1 class="text-[length:var(--cc-font-size-xl)]">{title}</h1>
+      <h1 class="leading-heading text-xl">{title}</h1>
       <div class="flex flex-wrap gap-2">{@render actions?.()}</div>
     </div>
     <Tabs label="{title} sections" items={tabs} bind:value={tab} panel={tabPanel} />

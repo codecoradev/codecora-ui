@@ -34,7 +34,7 @@
       sideOffset={6}
       role="dialog"
       aria-label={label}
-      class="cc-popover z-popover border-border bg-popover text-foreground shadow-popover animate-popover-in data-[state=closed]:animate-popover-out max-w-[min(22rem,calc(100vw-2*var(--cc-space-4)))] origin-[var(--bits-popover-content-transform-origin)] rounded-md border p-4 font-sans motion-reduce:animate-none motion-reduce:data-[state=closed]:animate-none"
+      class="cc-popover z-popover border-border bg-popover text-foreground shadow-popover animate-popover-in data-[state=closed]:animate-popover-out max-w-[min(22rem,calc(100vw-2*calc(var(--spacing)*4)))] origin-[var(--bits-popover-content-transform-origin)] rounded-md border p-4 font-sans motion-reduce:animate-none motion-reduce:data-[state=closed]:animate-none"
     >
       {@render children()}
     </Popover.Content>

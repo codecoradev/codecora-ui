@@ -70,7 +70,7 @@
 </script>
 
 <section class="cc-data-table grid grid-cols-1 gap-4" aria-label={title}>
-  <h2 class="text-[length:var(--cc-font-size-lg)]">{title}</h2>
+  <h2 class="leading-heading text-lg">{title}</h2>
   <DataTable
     label={title}
     {columns}

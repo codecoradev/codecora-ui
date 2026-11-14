@@ -59,9 +59,9 @@
   <!-- Styles the cells you write; a selected row (data-selected or aria-selected) is tinted and marked. -->
   <table
     class={[
-      'cc-table w-full border-collapse text-[length:var(--cc-font-size-md)]',
+      'cc-table w-full border-collapse text-base leading-[inherit]',
       '[&_:is(th,td)]:border-border [&_:is(th,td)]:px-cell-x [&_:is(th,td)]:py-cell-y [&_:is(th,td)]:border-b [&_:is(th,td)]:text-left [&_:is(th,td)]:align-middle',
-      '[&_thead_th]:bg-muted [&_thead_th]:text-muted-foreground [&_thead_th]:text-[length:var(--cc-font-size-sm)] [&_thead_th]:font-semibold [&_thead_th]:whitespace-nowrap',
+      '[&_thead_th]:bg-muted [&_thead_th]:text-muted-foreground [&_thead_th]:text-sm [&_thead_th]:leading-[inherit] [&_thead_th]:font-semibold [&_thead_th]:whitespace-nowrap',
       '[&_tbody_tr:last-child>*]:border-b-0',
       '[&_tbody_tr]:duration-fast [&_tbody_tr]:ease-enter [&_tbody_tr]:transition-[background-color,box-shadow] motion-reduce:[&_tbody_tr]:transition-none',
       '[&_tbody_tr:hover]:bg-accent',

@@ -67,7 +67,7 @@
 
   {#snippet header()}
     <div class="cc-dashboard-header flex w-full flex-wrap items-center justify-between gap-3">
-      <h1 class="text-[length:var(--cc-font-size-lg)]">{title}</h1>
+      <h1 class="leading-heading text-lg">{title}</h1>
       <div class="flex gap-2">
         {#if actions}
           {@render actions()}

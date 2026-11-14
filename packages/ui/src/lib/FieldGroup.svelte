@@ -35,20 +35,17 @@
 </script>
 
 <fieldset class="cc-fieldgroup m-0 grid min-w-0 gap-1 border-0 p-0" aria-describedby={describedby}>
-  <legend class="mb-1 p-0 text-[length:var(--cc-font-size-sm)] font-medium">
+  <legend class="mb-1 p-0 text-sm leading-[inherit] font-medium">
     {legend}{#if required}<span class="text-destructive" aria-hidden="true"> *</span>{/if}
   </legend>
-  {#if description}<p
-      id="{uid}-hint"
-      class="text-muted-foreground m-0 text-[length:var(--cc-font-size-sm)]"
-    >
+  {#if description}<p id="{uid}-hint" class="text-muted-foreground m-0 text-sm leading-[inherit]">
       {description}
     </p>{/if}
   {@render children({ 'aria-describedby': describedby, invalid: Boolean(error), required })}
   {#if error}
     <p
       id="{uid}-error"
-      class="error text-destructive m-0 flex items-center gap-1 text-[length:var(--cc-font-size-sm)] [--cc-icon-size:var(--cc-space-4)]"
+      class="error text-destructive m-0 flex items-center gap-1 text-sm leading-[inherit] [--cc-icon-size:calc(var(--spacing)*4)]"
     >
       <Glyph name="alert" /><VisuallyHidden>Error:</VisuallyHidden>
       {error}

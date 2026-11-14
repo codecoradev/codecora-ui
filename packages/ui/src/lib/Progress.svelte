@@ -16,7 +16,7 @@
 </script>
 
 <div class="cc-progress grid gap-1">
-  <div class="flex justify-between text-[length:var(--cc-font-size-sm)]">
+  <div class="flex justify-between text-sm leading-[inherit]">
     <span>{label}</span>
     {#if showValue}<span class="text-muted-foreground font-mono tabular-nums">{percent}%</span>{/if}
   </div>

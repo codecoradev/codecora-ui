@@ -51,7 +51,7 @@
 
 <figure class={cn('cc-code border-border bg-muted m-0 rounded-md border', className)}>
   <figcaption
-    class="border-border text-muted-foreground flex items-center justify-between border-b py-1 pr-2 pl-3 font-mono text-[length:var(--cc-font-size-xs)]"
+    class="border-border text-muted-foreground flex items-center justify-between border-b py-1 pr-2 pl-3 font-mono text-xs leading-[inherit]"
   >
     <span>{language ?? 'code'}</span>
     <Button variant="ghost" onclick={copy}>{label[status]}</Button>
@@ -59,7 +59,7 @@
   <!-- A scrollable code block must be keyboard reachable (axe: scrollable-region-focusable). -->
   <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
   <pre
-    class="ligatures-none focus-visible:outline-ring m-0 overflow-x-auto p-3 font-mono text-[length:var(--cc-font-size-sm)] focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:-outline-offset-2"
+    class="ligatures-none focus-visible:outline-ring m-0 overflow-x-auto p-3 font-mono text-sm leading-[inherit] focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:-outline-offset-2"
     tabindex="0"
     aria-label={language ? `${language} code` : 'Code'}><code bind:this={codeEl}>{code}</code></pre>
   <span class="sr-only m-0" role="status" aria-live="polite">{message[status]}</span>

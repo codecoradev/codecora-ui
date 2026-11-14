@@ -101,7 +101,7 @@
     <span class="min-w-0 flex-1 truncate">{item.label}</span>
   {/if}
   {#if item.badge !== undefined && !collapsed}<span
-      class="bg-primary-soft text-primary rounded-full px-2 text-[length:var(--cc-font-size-xs)] tabular-nums"
+      class="bg-primary-soft text-primary rounded-full px-2 text-xs leading-[inherit] tabular-nums"
       >{item.badge}</span
     >{/if}
 {/snippet}
@@ -114,7 +114,7 @@
     className,
   )}
 >
-  {#if brand}<div class="font-display px-2 py-1 text-[length:var(--cc-font-size-lg)] font-semibold">
+  {#if brand}<div class="font-display px-2 py-1 text-lg leading-[inherit] font-semibold">
       {@render brand({ collapsed })}
     </div>{/if}
 
@@ -124,7 +124,7 @@
         {#if group.label && !collapsed}
           <!-- 0.04em of the label's text size. -->
           <p
-            class="text-muted-foreground m-0 px-3 text-[length:var(--cc-font-size-xs)] font-semibold tracking-[calc(var(--cc-font-size-xs)*0.04)] uppercase"
+            class="text-muted-foreground m-0 px-3 text-xs leading-[inherit] font-semibold tracking-[calc(var(--text-xs)*0.04)] uppercase"
             id="{uid}-g{g}"
           >
             {group.label}
@@ -150,7 +150,7 @@
     {/each}
   </nav>
 
-  {#if footer}<div class="mt-auto w-full text-[length:var(--cc-font-size-sm)]">
+  {#if footer}<div class="mt-auto w-full text-sm leading-[inherit]">
       {@render footer({ collapsed })}
     </div>{/if}
 

@@ -29,7 +29,7 @@
       <Tooltip.Content
         {side}
         sideOffset={6}
-        class="cc-tooltip z-tooltip bg-foreground text-background animate-popover-in data-[state=closed]:animate-popover-out max-w-72 origin-[var(--bits-tooltip-content-transform-origin)] rounded-sm px-2 py-1 font-sans text-sm leading-[var(--cc-leading-tight)] motion-reduce:animate-none motion-reduce:data-[state=closed]:animate-none"
+        class="cc-tooltip z-tooltip bg-foreground text-background animate-popover-in data-[state=closed]:animate-popover-out leading-heading max-w-72 origin-[var(--bits-tooltip-content-transform-origin)] rounded-sm px-2 py-1 font-sans text-sm motion-reduce:animate-none motion-reduce:data-[state=closed]:animate-none"
         >{content}</Tooltip.Content
       >
     </Tooltip.Portal>

@@ -6,9 +6,9 @@
     base: 'cc-avatar bg-muted text-foreground inset-ring-border inline-flex flex-none items-center justify-center overflow-hidden rounded-full font-semibold inset-ring select-none',
     variants: {
       size: {
-        sm: 'size-6 text-[length:var(--cc-font-size-xs)]',
-        md: 'size-9 text-[length:var(--cc-font-size-sm)]',
-        lg: 'size-14 text-[length:var(--cc-font-size-lg)]',
+        sm: 'size-6 text-xs leading-[inherit]',
+        md: 'size-9 text-sm leading-[inherit]',
+        lg: 'size-14 text-lg leading-[inherit]',
       },
     },
   });

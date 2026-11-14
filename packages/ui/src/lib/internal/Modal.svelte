@@ -18,7 +18,7 @@
       placement: {
         // Opacity eases; only the movement springs.
         center:
-          'cc-modal-center animate-dialog-in data-[state=closed]:animate-dialog-out top-1/2 left-1/2 max-h-[calc(100dvh-2*var(--cc-space-4))] w-[min(32rem,calc(100vw-2*var(--cc-space-4)))] -translate-1/2 rounded-lg border',
+          'cc-modal-center animate-dialog-in data-[state=closed]:animate-dialog-out top-1/2 left-1/2 max-h-[calc(100dvh-2*calc(var(--spacing)*4))] w-[min(32rem,calc(100vw-2*calc(var(--spacing)*4)))] -translate-1/2 rounded-lg border',
         right:
           'cc-modal-right animate-sheet-right-in data-[state=closed]:animate-sheet-right-out inset-y-0 right-0 max-h-dvh w-[min(calc(var(--spacing)*104),100vw)] border-l',
         left: 'cc-modal-left animate-sheet-left-in data-[state=closed]:animate-sheet-left-out inset-y-0 left-0 max-h-dvh w-[min(calc(var(--spacing)*104),100vw)] border-r',
@@ -97,9 +97,7 @@
 
 {#snippet header(Title: typeof Dialog.Title, close: boolean)}
   <header class="cc-modal-header flex items-start justify-between gap-3">
-    <Title
-      class="cc-modal-title font-display m-0 flex items-center gap-2 text-lg leading-[var(--cc-leading-tight)]"
-    >
+    <Title class="cc-modal-title font-display leading-heading m-0 flex items-center gap-2 text-lg">
       {#if tone === 'danger'}<span class="cc-modal-mark text-destructive inline-flex"
           ><Glyph name="alert" /></span
         >{/if}

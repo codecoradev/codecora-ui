@@ -68,7 +68,7 @@
 
 <form class="cc-settings grid w-full max-w-160 gap-6" onsubmit={save}>
   <header>
-    <h1 class="text-[length:var(--cc-font-size-xl)]">Settings</h1>
+    <h1 class="leading-heading text-xl">Settings</h1>
     <p class="text-muted-foreground">Changes apply after you save.</p>
   </header>
 
@@ -120,7 +120,7 @@
             class="border-destructive flex flex-wrap items-center justify-between gap-4 rounded-md border p-4"
           >
             <div>
-              <h2 class="text-[length:var(--cc-font-size-md)]">Delete account</h2>
+              <h2 class="leading-heading text-base">Delete account</h2>
               <p class="text-muted-foreground">
                 Removes the account and everything in it. This cannot be undone.
               </p>
