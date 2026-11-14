@@ -23,7 +23,17 @@ export const twMergeExtension = {
   },
 };
 
-const twMerge = extendTailwindMerge({ extend: twMergeExtension });
+/**
+ * In Tailwind 4 `leading-*` sets `--tw-leading`, which every `text-*` size
+ * reads first, so a line height wins over a later font size whatever their
+ * order. tailwind-merge's default drops the earlier `leading-*`; this keeps it.
+ * A size with its own line height (`text-lg/7`) still replaces it.
+ */
+export const twMergeOverride = {
+  conflictingClassGroups: { 'font-size': [] as const },
+};
+
+const twMerge = extendTailwindMerge({ extend: twMergeExtension, override: twMergeOverride });
 
 /**
  * Joins class values and resolves Tailwind conflicts, last one wins:

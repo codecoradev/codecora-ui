@@ -38,6 +38,14 @@ describe('cn with the CodeCora theme names', () => {
     expect(cn('font-inherit text-sm', 'font-sans')).toBe('font-inherit text-sm font-sans');
   });
 
+  it('keeps a line height beside a later font size, as Tailwind 4 renders it', () => {
+    expect(cn('leading-heading text-lg')).toBe('leading-heading text-lg');
+    expect(cn('font-display leading-heading m-0 text-lg font-bold')).toContain('leading-heading');
+    expect(cn('text-sm leading-[inherit]', 'text-lg')).toBe('leading-[inherit] text-lg');
+    expect(cn('leading-heading', 'text-lg/7')).toBe('text-lg/7');
+    expect(cn('leading-heading', 'leading-normal')).toBe('leading-normal');
+  });
+
   it('keeps colour and size utilities apart', () => {
     expect(cn('text-muted-foreground', 'text-sm')).toBe('text-muted-foreground text-sm');
     expect(cn('shadow-popover', 'shadow-primary')).toBe('shadow-popover shadow-primary');
