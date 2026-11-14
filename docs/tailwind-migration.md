@@ -67,9 +67,9 @@ Non-colour tokens use Tailwind's own theme namespaces wherever one exists:
 | `radius-sm|md|lg`, `radius-pill` | `--radius-sm|md|lg` (+ `--radius` = md) | `rounded-md`, `rounded-full` |
 | `font-sans|display|mono` | `--font-sans|display|mono` | `font-display` |
 | `space-1..16` (4 px) | `--spacing: 0.25rem` (same scale) | `p-4`, `gap-2` |
-| `font-size-*` | `--text-*` | `text-sm` |
+| `font-size-*` | Tailwind's default `--text-*` scale (decided 2026-11-14): `xs`, `sm`, `base`, `lg` unchanged; `xl` 1.25rem, `2xl` 1.5rem, `3xl` 1.875rem (from 1.375, 1.75, 2.25) | `text-sm`, `text-xl` |
 | `shadow-popover|modal` | `--shadow-popover|modal` | `shadow-popover` |
-| `ease-out|exit|in-out|spring` | `--ease-*` | `ease-spring` |
+| `ease-out|exit|in-out|spring` | new names, Tailwind's own curves untouched (decided 2026-11-14): `--ease-enter`, `--ease-exit`, `--ease-move`, `--ease-spring` | `ease-enter`, `ease-spring` |
 | `control-h|px|py`, `cell-py|px`, `gap` | `--spacing-control`, `--spacing-control-x|y`, `--spacing-cell-x|y`, `--spacing-stack`, switched by `data-density` | `h-control px-control-x` |
 | `duration-*`, layers (z-index) | no Tailwind namespace: `@utility` | `duration-fast`, `z-popover` |
 | `icon-size`, `icon-stroke`, `focus-width|offset`, badge shape hooks | variables kept, read through `--spacing-icon` or `[stroke-width:var(--icon-stroke)]` | `size-icon` |
@@ -139,13 +139,17 @@ One issue and one PR per phase (batches may split further).
 - Apps that override `--cc-*` tokens rename the overrides with the table
   above while the aliases still exist (phases 2 to 9).
 
+## Decided
+
+- **Type scale (2026-11-14):** Tailwind's defaults. `text-xl`, `text-2xl` and
+  `text-3xl` match the Tailwind docs; headings get slightly smaller, and the
+  baselines are re-approved where a migrated component shows it.
+- **Easing names (2026-11-14):** new names, so Tailwind's `ease-out` and
+  `ease-in-out` keep their documented curves: `ease-enter` (entries, the
+  CodeCora `out`), `ease-exit`, `ease-move` (between two resting places, the
+  CodeCora `in-out`) and `ease-spring`.
+
 ## Open points
 
-- **Type scale:** keep the CodeCora sizes on Tailwind's names (`text-xl` =
-  1.375rem instead of Tailwind's 1.25rem) or take Tailwind's defaults and
-  accept slightly smaller headings. Decide before phase 2.
-- **Easing names:** `ease-out` and `ease-in-out` override Tailwind's defaults
-  with the CodeCora curves; the alternative is new names (`ease-enter`).
-  Decide before phase 2.
 - The impeccable detector must understand Tailwind sources; check before
   phase 4.
