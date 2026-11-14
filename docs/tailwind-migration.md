@@ -64,15 +64,15 @@ Non-colour tokens use Tailwind's own theme namespaces wherever one exists:
 
 | Today | Tailwind | Utility |
 |---|---|---|
-| `radius-sm|md|lg`, `radius-pill` | `--radius-sm|md|lg` (+ `--radius` = md) | `rounded-md`, `rounded-full` |
-| `font-sans|display|mono` | `--font-sans|display|mono` | `font-display` |
+| `radius-sm/md/lg`, `radius-pill` | `--radius-sm/md/lg` (+ `--radius` = md) | `rounded-md`, `rounded-full` |
+| `font-sans/display/mono` | `--font-sans/display/mono` | `font-display` |
 | `space-1..16` (4 px) | `--spacing: 0.25rem` (same scale) | `p-4`, `gap-2` |
 | `font-size-*` | Tailwind's default `--text-*` scale (decided 2026-11-14): `xs`, `sm`, `base`, `lg` unchanged; `xl` 1.25rem, `2xl` 1.5rem, `3xl` 1.875rem (from 1.375, 1.75, 2.25) | `text-sm`, `text-xl` |
-| `shadow-popover|modal` | `--shadow-popover|modal` | `shadow-popover` |
-| `ease-out|exit|in-out|spring` | new names, Tailwind's own curves untouched (decided 2026-11-14): `--ease-enter`, `--ease-exit`, `--ease-move`, `--ease-spring` | `ease-enter`, `ease-spring` |
-| `control-h|px|py`, `cell-py|px`, `gap` | `--spacing-control`, `--spacing-control-x|y`, `--spacing-cell-x|y`, `--spacing-stack`, switched by `data-density` | `h-control px-control-x` |
+| `shadow-popover/modal` | `--shadow-popover/modal` | `shadow-popover` |
+| `ease-out/exit/in-out/spring` | new names, Tailwind's own curves untouched (decided 2026-11-14): `--ease-enter`, `--ease-exit`, `--ease-move`, `--ease-spring` | `ease-enter`, `ease-spring` |
+| `control-h/px/py`, `cell-py/px`, `gap` | `--spacing-control`, `--spacing-control-x/y`, `--spacing-cell-x/y`, `--spacing-stack`, switched by `data-density` | `h-control px-control-x` |
 | `duration-*`, layers (z-index) | no Tailwind namespace: `@utility` | `duration-fast`, `z-popover` |
-| `icon-size`, `icon-stroke`, `focus-width|offset`, badge shape hooks | variables kept, read through `--spacing-icon` or `[stroke-width:var(--icon-stroke)]` | `size-icon` |
+| `icon-size`, `icon-stroke`, `focus-width/offset`, badge shape hooks | variables kept, read through `--spacing-icon` or `[stroke-width:var(--cc-icon-stroke)]` (`--icon-stroke` from phase 10) | `size-icon` |
 
 `dark:` follows the nearest theme: a `@custom-variant dark` matches inside a
 theme whose `colorScheme` is dark (or shadcn's `.dark`) and not inside a light
