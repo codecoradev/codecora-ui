@@ -39,10 +39,13 @@ export const themeKeys: readonly string[] = [
  * outside these stay Tailwind's defaults, including the type scale (`text-xl`
  * is 1.25rem as in the Tailwind docs) and the easing curves.
  */
+/** `var(--name)`: a theme key that reads the variable a theme declares. */
+const readVariable = (name: string): string => `var(--${name})`;
+
 export const tailwindKeys: Readonly<Record<string, string>> = {
-  ...Object.fromEntries(themeKeys.map((k) => [k, `var(--${k})`])),
-  // The icon size stays a CodeCora token: @codecora/icons reads it too.
-  'spacing-icon': 'var(--cc-icon-size)',
+  ...Object.fromEntries(themeKeys.map((name) => [name, readVariable(name)])),
+  // @codecora/icons reads the icon size too, so it keeps its cc- name.
+  'spacing-icon': readVariable('cc-icon-size'),
   ...Object.fromEntries(Object.entries(leading).map(([k, v]) => [`leading-${k}`, v])),
   // The measure of a short description (EmptyState): max-w-description.
   'container-description': '40ch',
