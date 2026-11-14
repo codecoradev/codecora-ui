@@ -2,11 +2,10 @@
  * Import after tailwindcss, @codecora/tokens/theme.css and @codecora/ui/source.css, so Tailwind scans
  * the memory components and generates the utilities they use (D13).
  *
- * During the migration (#155) only components already written with Tailwind
- * utilities are listed, one `@source './Name.svelte';` each: the plain-CSS
- * ones carry words such as `hidden` or `table` in their <style> blocks, and
- * scanning them would generate those utilities in your app. source.test.ts
- * keeps the list to .svelte files without a <style> block.
+ * Every component is listed, one `@source './Name.svelte';` each, so Tailwind
+ * scans their markup only (not the compiled helpers or tests). source.test.ts
+ * fails when a component is missing from the list, when a listed file does not
+ * exist, or when a listed file has a <style> block.
  */
 @source './MemoryList.svelte';
 @source './MemoryDetail.svelte';
