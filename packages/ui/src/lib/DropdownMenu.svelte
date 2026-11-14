@@ -42,7 +42,7 @@
       {side}
       sideOffset={6}
       aria-label={label}
-      class="cc-menu z-popover border-border bg-popover text-foreground shadow-popover animate-popover-in data-[state=closed]:animate-popover-out min-w-48 origin-[var(--bits-dropdown-menu-content-transform-origin)] rounded-md border p-1 font-sans motion-reduce:animate-none"
+      class="cc-menu z-popover border-border bg-popover text-foreground shadow-popover animate-popover-in data-[state=closed]:animate-popover-out min-w-48 origin-[var(--bits-dropdown-menu-content-transform-origin)] rounded-md border p-1 font-sans motion-reduce:animate-none motion-reduce:data-[state=closed]:animate-none"
     >
       {#each items as item (item.label)}
         {#if item.separatorBefore}<DropdownMenu.Separator

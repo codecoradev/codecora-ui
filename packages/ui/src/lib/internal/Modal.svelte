@@ -9,11 +9,11 @@
 
   /** The scrim behind the panel; bits-ui keeps it mounted until its exit ends. */
   export const overlay =
-    'cc-modal-overlay fixed inset-0 z-overlay bg-overlay animate-overlay-in data-[state=closed]:animate-overlay-out motion-reduce:animate-none';
+    'cc-modal-overlay fixed inset-0 z-overlay bg-overlay animate-overlay-in data-[state=closed]:animate-overlay-out motion-reduce:animate-none motion-reduce:data-[state=closed]:animate-none';
 
   /** Exits run one step shorter than entries; reduced motion drops the keyframes. */
   const panelRecipe = tv({
-    base: 'cc-modal z-modal border-border bg-popover text-foreground shadow-modal focus-visible:outline-ring fixed grid content-start gap-3 overflow-y-auto p-5 font-sans focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:-outline-offset-2 focus-visible:outline-solid motion-reduce:animate-none',
+    base: 'cc-modal z-modal border-border bg-popover text-foreground shadow-modal focus-visible:outline-ring fixed grid content-start gap-3 overflow-y-auto p-5 font-sans focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:-outline-offset-2 focus-visible:outline-solid motion-reduce:animate-none motion-reduce:data-[state=closed]:animate-none',
     variants: {
       placement: {
         // Opacity eases; only the movement springs.

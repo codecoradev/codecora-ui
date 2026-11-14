@@ -104,7 +104,8 @@ const exit = (name: string, d = 'fast') =>
  * `animate-*` utilities for the overlays (`animate-dialog-in`,
  * `data-[state=closed]:animate-dialog-out`). Every one reads the duration and
  * easing tokens, so reduced motion drops them to 0ms; components also add
- * `motion-reduce:animate-none` to drop the keyframes, as DESIGN.md asks.
+ * `motion-reduce:animate-none` (plus `motion-reduce:data-[state=closed]:animate-none`
+ * beside an exit) to drop the keyframes, as DESIGN.md asks.
  */
 export const tailwindAnimations: Readonly<Record<string, string>> = {
   'overlay-in': enter('cc-fade-in'),

@@ -64,11 +64,11 @@
 <Dialog.Root bind:open>
   <Dialog.Portal>
     <Dialog.Overlay
-      class="cc-palette-overlay z-overlay bg-overlay animate-overlay-in data-[state=closed]:animate-overlay-out fixed inset-0 motion-reduce:animate-none"
+      class="cc-palette-overlay z-overlay bg-overlay animate-overlay-in data-[state=closed]:animate-overlay-out fixed inset-0 motion-reduce:animate-none motion-reduce:data-[state=closed]:animate-none"
     />
     <!-- Opacity eases; only the movement springs. Exits run one step shorter. -->
     <Dialog.Content
-      class="cc-palette z-modal border-border bg-popover text-foreground shadow-modal animate-palette-in data-[state=closed]:animate-palette-out fixed top-[min(20%,2*var(--cc-space-16))] left-1/2 w-[min(36rem,calc(100vw-2*var(--cc-space-4)))] -translate-x-1/2 overflow-hidden rounded-lg border font-sans motion-reduce:animate-none"
+      class="cc-palette z-modal border-border bg-popover text-foreground shadow-modal animate-palette-in data-[state=closed]:animate-palette-out fixed top-[min(20%,2*var(--cc-space-16))] left-1/2 w-[min(36rem,calc(100vw-2*var(--cc-space-4)))] -translate-x-1/2 overflow-hidden rounded-lg border font-sans motion-reduce:animate-none motion-reduce:data-[state=closed]:animate-none"
       aria-label={label}
     >
       <Dialog.Title class="cc-palette-title sr-only">{label}</Dialog.Title>

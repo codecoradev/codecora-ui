@@ -160,7 +160,7 @@ describe('overlay animations', () => {
     }
   });
 
-  it('honour reduced motion: durations drop to 0ms and motion-reduce:animate-none wins', async () => {
+  it('honour reduced motion: durations drop to 0ms and the motion-reduce classes win', async () => {
     expect(css).toMatch(
       /@media \(prefers-reduced-motion: reduce\) \{[^}]*--cc-duration-normal: 0ms;[^}]*--cc-ease-spring: var\(--cc-ease-out\)/,
     );
@@ -168,13 +168,25 @@ describe('overlay animations', () => {
       'animate-dialog-in',
       'data-[state=closed]:animate-dialog-out',
       'motion-reduce:animate-none',
+      'motion-reduce:data-[state=closed]:animate-none',
     ]);
-    const closed = out.indexOf('[data-state="closed"]');
-    const reduce = out.indexOf('@media (prefers-reduced-motion: reduce) {\n  .motion-reduce');
+    const closed = out.indexOf(
+      '.data-\\[state\\=closed\\]\\:animate-dialog-out[data-state="closed"]',
+    );
     expect(closed).toBeGreaterThan(-1);
-    // Same specificity as the open and closed rules, emitted after them, so it wins.
-    expect(reduce).toBeGreaterThan(closed);
-    expect(out.slice(reduce)).toMatch(/\.motion-reduce\\:animate-none \{\s+animation: none;/);
+    // The open state: one class, so motion-reduce:animate-none (one class, emitted later) wins.
+    expect(out).toMatch(/\.motion-reduce\\:animate-none \{\s+animation: none;/);
+    // The closed state is class + attribute; only a rule with the same two parts, emitted
+    // after it, beats it, so components add motion-reduce:data-[state=closed]:animate-none.
+    const reduceClosed = out.indexOf(
+      '.motion-reduce\\:data-\\[state\\=closed\\]\\:animate-none[data-state="closed"]',
+    );
+    expect(reduceClosed).toBeGreaterThan(closed);
+    expect(out.slice(reduceClosed)).toMatch(/^[^{]*\{\s+animation: none;/);
+    // ...and it sits inside the reduced-motion media block (no top-level `}` in between).
+    const media = out.lastIndexOf('@media (prefers-reduced-motion: reduce)', reduceClosed);
+    expect(media).toBeGreaterThan(-1);
+    expect(out.slice(media, reduceClosed)).not.toMatch(/\n\}/);
   });
 });
 

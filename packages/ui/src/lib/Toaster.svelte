@@ -36,7 +36,7 @@
   {#each toasts.items as item (item.id)}
     <!-- Hover or focus pauses the countdown (WCAG 2.2.1): the element is not interactive itself. -->
     <div
-      class="cc-toast cc-toast-{item.tone} border-border bg-popover text-foreground shadow-popover animate-toast-in data-[state=closed]:animate-toast-out pointer-events-auto flex w-[min(calc(var(--spacing)*96),100%)] items-start gap-3 rounded-md border p-3 font-sans data-[state=closed]:pointer-events-none motion-reduce:animate-none"
+      class="cc-toast cc-toast-{item.tone} border-border bg-popover text-foreground shadow-popover animate-toast-in data-[state=closed]:animate-toast-out pointer-events-auto flex w-[min(calc(var(--spacing)*96),100%)] items-start gap-3 rounded-md border p-3 font-sans data-[state=closed]:pointer-events-none motion-reduce:animate-none motion-reduce:data-[state=closed]:animate-none"
       data-state={toasts.items.includes(item) ? 'open' : 'closed'}
       out:leave
       role={item.tone === 'danger' ? 'alert' : 'status'}
