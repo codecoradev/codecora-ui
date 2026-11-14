@@ -61,7 +61,7 @@ Each theme defines the same roles; values differ per theme.
 - **Status:** `danger`, `success`, `warning`, each with `-text` (label on the fill) and `-soft` (tint behind status text).
 
 ### Named Rules
-**The Semantic Only Rule.** Components read `--cc-*` tokens and nothing else. A raw colour outside `packages/tokens` is a defect.
+**The Semantic Only Rule.** Components use semantic roles and nothing else: Tailwind utilities on the shadcn-named roles (`bg-primary`, `text-muted-foreground`; D13), or `--cc-*` tokens in files not yet migrated ([docs/tailwind-migration.md](docs/tailwind-migration.md)). A palette colour (`bg-blue-500`), an arbitrary colour value or a raw colour outside `packages/tokens` is a defect.
 
 **The Meaning Before Hue Rule.** Accent means "act here" or "you are here"; status colours mean their status. Neither decorates.
 

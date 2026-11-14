@@ -14,11 +14,11 @@ web
 
 ## Product Purpose
 
-One general UI system for every CodeCora product: design tokens, mixable themes, Svelte 5 components on bits-ui, icons, brand marks, and the Uteke memory domain layer. It succeeds when a fix made once reaches every app, and when each product keeps its own identity on shared structure and accessibility. See [docs/decisions.md](docs/decisions.md) (D1–D12) and [docs/architecture.md](docs/architecture.md).
+One general UI system for every CodeCora product: design tokens, mixable themes, Svelte 5 components on bits-ui, icons, brand marks, and the Uteke memory domain layer. It succeeds when a fix made once reaches every app, and when each product keeps its own identity on shared structure and accessibility. See [docs/decisions.md](docs/decisions.md) (D1–D13) and [docs/architecture.md](docs/architecture.md).
 
 ## Positioning
 
-One system, many themes, mixable per element (`data-theme`, `data-accent`, `data-density`). Products differ in accent, fonts, radius and icon weight, not in structure or accessibility. Components are plain CSS on semantic `--cc-*` tokens, so apps with Tailwind and apps without it (Uteke Cloud) consume the same packages.
+One system, many themes, mixable per element (`data-theme`, `data-accent`, `data-density`). Products differ in accent, fonts, radius and icon weight, not in structure or accessibility. Since D13 the base is Tailwind 4 with shadcn token names: components are Tailwind utilities on semantic roles (`bg-background`, `text-muted-foreground`, `bg-primary`), so a Tailwind or shadcn reference applies without translation. The move is in progress ([docs/tailwind-migration.md](docs/tailwind-migration.md)).
 
 ## Operating Context
 
@@ -54,7 +54,7 @@ One system, many themes, mixable per element (`data-theme`, `data-accent`, `data
 1. **Fix once, reach everywhere.** Shared behaviour lives in packages; product variation lives in themes and the registry.
 2. **Identity on shared structure.** A theme may change colour, type, radius, density and icon weight, never structure or accessibility.
 3. **Accessible by construction.** Contrast, keyboard use and small screens are gates in the build, not review comments.
-4. **Framework-light.** Plain CSS on semantic tokens; Tailwind and shadcn are bridges, not requirements.
+4. **Follow the common standard.** Tailwind 4 and shadcn names are the base; we add roles and gates on top, never a second vocabulary.
 5. **General by default.** Nothing product-specific enters the shared packages.
 
 ## Accessibility & Inclusion
