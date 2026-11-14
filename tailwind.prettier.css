@@ -1,0 +1,6 @@
+/*
+ * Stylesheet prettier-plugin-tailwindcss sorts classes against. Plain
+ * Tailwind, so `bun run lint` works on a fresh clone before the packages are
+ * built; CodeCora theme names sort like unknown classes, ahead of Tailwind's.
+ */
+@import 'tailwindcss';

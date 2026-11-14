@@ -25,8 +25,8 @@ dependency. Every control works with the keyboard alone and at 375 px.
 
 The components are moving to Tailwind 4 utilities (D13,
 [docs/tailwind-migration.md](../../docs/tailwind-migration.md)). `cn()` joins
-class values and resolves Tailwind conflicts with the last one winning; the
-migrated components merge their `class` prop through it:
+class values and resolves Tailwind conflicts with the last one winning; each
+component merges its `class` prop through it as it migrates:
 
 ```ts
 import { cn } from '@codecora/ui';
