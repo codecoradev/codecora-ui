@@ -1,6 +1,7 @@
 <!-- Pick a number in a range (bits-ui): arrow keys step, Home and End jump. `label` is required. -->
 <script lang="ts">
   import { Slider } from 'bits-ui';
+  import { cn } from './cn.js';
 
   interface Props {
     label: string;
@@ -29,95 +30,40 @@
   const uid = $props.id();
 </script>
 
-<div class="cc-slider">
-  <div class="head">
+<div class="cc-slider grid gap-2">
+  <div class="flex justify-between text-[length:var(--cc-font-size-sm)]">
     <span id="{uid}-label">{label}</span>
-    {#if showValue}<span class="value">{format(value)}</span>{/if}
+    {#if showValue}<span class="text-muted-foreground font-mono tabular-nums">{format(value)}</span
+      >{/if}
   </div>
-  <Slider.Root type="single" bind:value {min} {max} {step} {disabled} class="track">
-    <span class="rail"><Slider.Range class="range" /></span>
+  <Slider.Root
+    type="single"
+    bind:value
+    {min}
+    {max}
+    {step}
+    {disabled}
+    class="group/track h-control relative flex w-full touch-none items-center data-disabled:opacity-55"
+  >
+    <span class="bg-muted inset-ring-input relative h-1.5 flex-1 rounded-full inset-ring">
+      <!-- The range follows a keyboard step; while the thumb is dragged it keeps up with no lag. -->
+      <Slider.Range
+        class="bg-primary duration-fast ease-enter absolute h-full rounded-full transition-[right] group-has-data-active/track:transition-none motion-reduce:transition-none"
+      />
+    </span>
     <Slider.Thumb
       index={0}
       aria-labelledby="{uid}-label"
       aria-valuetext={format(value)}
-      class="thumb"
+      class={cn(
+        'border-primary bg-card block size-5 cursor-grab rounded-full border-2',
+        // Keyboard steps glide; a drag follows the pointer with no lag.
+        'duration-fast ease-enter transition-[left,scale]',
+        'data-active:scale-115 data-active:cursor-grabbing data-active:transition-[scale]',
+        'motion-reduce:data-[orientation]:transition-none',
+        'focus-visible:outline-ring focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)]',
+        'group-data-disabled/track:cursor-not-allowed',
+      )}
     />
   </Slider.Root>
 </div>
-
-<style>
-  .cc-slider {
-    display: grid;
-    gap: var(--cc-space-2);
-  }
-  .head {
-    display: flex;
-    justify-content: space-between;
-    font-size: var(--cc-font-size-sm);
-  }
-  .value {
-    color: var(--cc-text-muted);
-    font-family: var(--cc-font-mono);
-    font-variant-numeric: tabular-nums;
-  }
-  :global(.cc-slider .track) {
-    position: relative;
-    display: flex;
-    align-items: center;
-    width: 100%;
-    height: var(--cc-control-h);
-    touch-action: none;
-  }
-  .rail {
-    position: relative;
-    flex: 1;
-    height: 0.375rem;
-    border-radius: var(--cc-radius-pill);
-    background: var(--cc-surface-sunken);
-    box-shadow: inset 0 0 0 1px var(--cc-border-strong);
-  }
-  :global(.cc-slider .range) {
-    position: absolute;
-    height: 100%;
-    border-radius: var(--cc-radius-pill);
-    background: var(--cc-accent);
-    transition: right var(--cc-duration-fast) var(--cc-ease-out);
-  }
-  :global(.cc-slider .thumb) {
-    display: block;
-    width: 1.25rem;
-    height: 1.25rem;
-    border: 2px solid var(--cc-accent);
-    border-radius: var(--cc-radius-pill);
-    background: var(--cc-surface-raised);
-    cursor: grab;
-    /* Keyboard steps glide; a drag follows the pointer with no lag. */
-    transition:
-      left var(--cc-duration-fast) var(--cc-ease-out),
-      scale var(--cc-duration-fast) var(--cc-ease-out);
-  }
-  :global(.cc-slider .thumb[data-active]) {
-    scale: 1.15;
-    cursor: grabbing;
-    transition: scale var(--cc-duration-fast) var(--cc-ease-out);
-  }
-  :global(.cc-slider .track:has(.thumb[data-active]) .range) {
-    transition: none;
-  }
-  :global(.cc-slider .thumb:focus-visible) {
-    outline: var(--cc-focus-width) solid var(--cc-focus);
-    outline-offset: var(--cc-focus-offset);
-  }
-  :global(.cc-slider .track[data-disabled]) {
-    opacity: 0.55;
-  }
-  :global(.cc-slider .track[data-disabled] .thumb) {
-    cursor: not-allowed;
-  }
-  @media (prefers-reduced-motion: reduce) {
-    :global(.cc-slider .range),
-    :global(.cc-slider .thumb[data-orientation]) {
-      transition: none;
-    }
-  }
-</style>

@@ -2,6 +2,7 @@
 <script lang="ts">
   import { Checkbox } from 'bits-ui';
   import Glyph from './internal/Glyph.svelte';
+  import { cn } from './cn.js';
 
   interface Props {
     label: string;
@@ -46,7 +47,10 @@
   );
 </script>
 
-<div class="cc-choice" data-disabled={disabled || undefined}>
+<div
+  class="cc-choice group/choice min-h-control py-control-y flex items-start gap-3"
+  data-disabled={disabled || undefined}
+>
   <Checkbox.Root
     id={controlId}
     bind:checked
@@ -58,104 +62,38 @@
     onCheckedChange={onchange}
     aria-describedby={described}
     aria-invalid={invalid || undefined}
-    class="cc-box"
+    class={cn(
+      'cc-box border-input bg-card text-primary-foreground inline-grid size-5 flex-none cursor-pointer place-items-center rounded-sm border p-0',
+      'duration-fast ease-enter transition-[background-color,border-color] motion-reduce:transition-none',
+      // An invalid box keeps its danger border when checked.
+      'data-[state=checked]:bg-primary not-aria-invalid:data-[state=checked]:border-primary',
+      'data-[state=indeterminate]:bg-primary not-aria-invalid:data-[state=indeterminate]:border-primary',
+      'aria-invalid:border-destructive aria-invalid:inset-ring-destructive aria-invalid:inset-ring',
+      'focus-visible:outline-ring focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)]',
+      'data-disabled:cursor-not-allowed data-disabled:opacity-55',
+      // The mark: opacity eases, only the scale springs. Unchecking takes the shorter exit.
+      '[&_svg]:[transition:opacity_var(--cc-duration-fast)_var(--cc-ease-out),scale_var(--cc-duration-slow)_var(--cc-ease-spring)]',
+      'data-[state=unchecked]:[&_svg]:scale-50 data-[state=unchecked]:[&_svg]:opacity-0',
+      'data-[state=unchecked]:[&_svg]:duration-instant data-[state=unchecked]:[&_svg]:ease-exit',
+      'motion-reduce:data-[state]:[&_svg]:transition-none',
+    )}
   >
     {#snippet children({ indeterminate })}
       <!-- The check stays in the DOM while unchecked, hidden, so checking it can animate. -->
       {#if indeterminate}<Glyph name="minus" />{:else}<Glyph name="check" />{/if}
     {/snippet}
   </Checkbox.Root>
-  <div class={labelHidden ? 'text label-hidden' : 'text'}>
-    <label for={controlId}>{label}</label>
-    {#if description}<p id={hintId}>{description}</p>{/if}
+  <div class={cn('grid gap-1', labelHidden && 'sr-only')}>
+    <label
+      for={controlId}
+      class="group-data-disabled/choice:text-muted-foreground cursor-pointer group-data-disabled/choice:cursor-not-allowed"
+      >{label}</label
+    >
+    {#if description}<p
+        id={hintId}
+        class="text-muted-foreground m-0 text-[length:var(--cc-font-size-sm)]"
+      >
+        {description}
+      </p>{/if}
   </div>
 </div>
-
-<style>
-  .cc-choice {
-    display: flex;
-    align-items: flex-start;
-    gap: var(--cc-space-3);
-    min-height: var(--cc-control-h);
-    padding-block: var(--cc-control-py);
-  }
-  :global(.cc-box) {
-    display: inline-grid;
-    flex: none;
-    place-items: center;
-    width: 1.25rem;
-    height: 1.25rem;
-    padding: 0;
-    border: 1px solid var(--cc-border-strong);
-    border-radius: var(--cc-radius-sm);
-    background: var(--cc-surface-raised);
-    color: var(--cc-accent-text);
-    cursor: pointer;
-    transition:
-      background-color var(--cc-duration-fast) var(--cc-ease-out),
-      border-color var(--cc-duration-fast) var(--cc-ease-out);
-  }
-  /* Opacity eases; only the scale springs. Unchecking takes the shorter exit. */
-  :global(.cc-box :where(svg)) {
-    width: 1rem;
-    height: 1rem;
-    stroke-width: 3;
-    transition:
-      opacity var(--cc-duration-fast) var(--cc-ease-out),
-      scale var(--cc-duration-slow) var(--cc-ease-spring);
-  }
-  :global(.cc-box[data-state='unchecked'] :where(svg)) {
-    opacity: 0;
-    scale: 0.5;
-    transition:
-      opacity var(--cc-duration-instant) var(--cc-ease-exit),
-      scale var(--cc-duration-instant) var(--cc-ease-exit);
-  }
-  :global(.cc-box[data-state='checked']),
-  :global(.cc-box[data-state='indeterminate']) {
-    border-color: var(--cc-accent);
-    background: var(--cc-accent);
-  }
-  :global(.cc-box[aria-invalid='true']) {
-    border-color: var(--cc-danger);
-    box-shadow: inset 0 0 0 1px var(--cc-danger);
-  }
-  :global(.cc-box:focus-visible) {
-    outline: var(--cc-focus-width) solid var(--cc-focus);
-    outline-offset: var(--cc-focus-offset);
-  }
-  :global(.cc-box[data-disabled]) {
-    opacity: 0.55;
-    cursor: not-allowed;
-  }
-  .label-hidden {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
-  }
-  .text {
-    display: grid;
-    gap: var(--cc-space-1);
-  }
-  label {
-    cursor: pointer;
-  }
-  p {
-    margin: 0;
-    color: var(--cc-text-muted);
-    font-size: var(--cc-font-size-sm);
-  }
-  [data-disabled] label {
-    cursor: not-allowed;
-    color: var(--cc-text-muted);
-  }
-  @media (prefers-reduced-motion: reduce) {
-    :global(.cc-box),
-    :global(.cc-box[data-state] :where(svg)) {
-      transition: none;
-    }
-  }
-</style>

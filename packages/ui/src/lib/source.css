@@ -18,3 +18,14 @@
 @source './DropdownMenu.svelte';
 @source './CommandPalette.svelte';
 @source './Toaster.svelte';
+@source './Field.svelte';
+@source './FieldGroup.svelte';
+@source './Input.svelte';
+@source './Textarea.svelte';
+@source './Checkbox.svelte';
+@source './RadioGroup.svelte';
+@source './Switch.svelte';
+@source './Slider.svelte';
+@source './Select.svelte';
+@source './Combobox.svelte';
+@source './ToggleGroup.svelte';

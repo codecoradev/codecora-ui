@@ -1,6 +1,7 @@
 <!-- A row of related toggles (bits-ui): one choice, or several. Arrow keys move between them. -->
 <script lang="ts">
   import { ToggleGroup } from 'bits-ui';
+  import { cn } from './cn.js';
 
   interface Item {
     value: string;
@@ -25,64 +26,27 @@
 </script>
 
 <!-- bits-ui types `value` per `type`; the union is narrowed by `type` at the call site. -->
-<ToggleGroup.Root {type} bind:value={value as never} aria-label={label} class="cc-toggles">
+<ToggleGroup.Root
+  {type}
+  bind:value={value as never}
+  aria-label={label}
+  class="cc-toggles border-input bg-card inline-flex rounded-md border"
+>
   {#each items as item (item.value)}
-    <ToggleGroup.Item value={item.value} disabled={item.disabled} class="cc-toggle">
+    <ToggleGroup.Item
+      value={item.value}
+      disabled={item.disabled}
+      class={cn(
+        'cc-toggle min-h-control px-control-x font-inherit text-foreground cursor-pointer rounded-none border-0 bg-transparent',
+        'duration-fast ease-enter transition-[background-color,color] motion-reduce:transition-none',
+        '[.cc-toggle+&]:border-s-input [.cc-toggle+&]:border-s',
+        'first:rounded-s-[calc(var(--cc-radius-md)-1px)] last:rounded-e-[calc(var(--cc-radius-md)-1px)]',
+        'hover:bg-accent data-[state=on]:bg-primary data-[state=on]:text-primary-foreground',
+        'focus-visible:outline-ring focus-visible:relative focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:-outline-offset-2',
+        'data-disabled:cursor-not-allowed data-disabled:opacity-55',
+      )}
+    >
       {item.label}
     </ToggleGroup.Item>
   {/each}
 </ToggleGroup.Root>
-
-<style>
-  :global(.cc-toggles) {
-    display: inline-flex;
-    border: 1px solid var(--cc-border-strong);
-    border-radius: var(--cc-radius-md);
-    background: var(--cc-surface-raised);
-  }
-  :global(.cc-toggle) {
-    min-height: var(--cc-control-h);
-    padding-inline: var(--cc-control-px);
-    border: 0;
-    border-radius: 0;
-    background: none;
-    color: var(--cc-text);
-    font: inherit;
-    cursor: pointer;
-    transition:
-      background-color var(--cc-duration-fast) var(--cc-ease-out),
-      color var(--cc-duration-fast) var(--cc-ease-out);
-  }
-  :global(.cc-toggle + .cc-toggle) {
-    border-inline-start: 1px solid var(--cc-border-strong);
-  }
-  :global(.cc-toggle:first-child) {
-    border-start-start-radius: calc(var(--cc-radius-md) - 1px);
-    border-end-start-radius: calc(var(--cc-radius-md) - 1px);
-  }
-  :global(.cc-toggle:last-child) {
-    border-start-end-radius: calc(var(--cc-radius-md) - 1px);
-    border-end-end-radius: calc(var(--cc-radius-md) - 1px);
-  }
-  :global(.cc-toggle:hover) {
-    background: var(--cc-surface-hover);
-  }
-  :global(.cc-toggle[data-state='on']) {
-    background: var(--cc-accent);
-    color: var(--cc-accent-text);
-  }
-  :global(.cc-toggle:focus-visible) {
-    position: relative;
-    outline: var(--cc-focus-width) solid var(--cc-focus);
-    outline-offset: -2px;
-  }
-  :global(.cc-toggle[data-disabled]) {
-    opacity: 0.55;
-    cursor: not-allowed;
-  }
-  @media (prefers-reduced-motion: reduce) {
-    :global(.cc-toggle) {
-      transition: none;
-    }
-  }
-</style>

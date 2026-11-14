@@ -30,81 +30,33 @@
   );
 </script>
 
-<div class="cc-choice" data-disabled={disabled || undefined}>
+<div
+  class="cc-choice group/choice min-h-control py-control-y flex items-start gap-3"
+  data-disabled={disabled || undefined}
+>
   <Switch.Root
     id={controlId}
     bind:checked
     {name}
     {disabled}
     aria-describedby={described}
-    class="cc-switch"
+    class="cc-switch border-input bg-muted data-[state=checked]:border-primary data-[state=checked]:bg-primary focus-visible:outline-ring relative h-6 w-10 flex-none cursor-pointer rounded-full border p-0 focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)] data-disabled:cursor-not-allowed data-disabled:opacity-55"
   >
-    <Switch.Thumb class="cc-switch-thumb" />
+    <Switch.Thumb
+      class="cc-switch-thumb bg-foreground duration-fast ease-enter data-[state=checked]:bg-primary-foreground ms-0.75 block size-4.5 rounded-full transition-transform data-[state=checked]:translate-x-4"
+    />
   </Switch.Root>
-  <div class="text">
-    <label for={controlId}>{label}</label>
-    {#if description}<p id={hintId}>{description}</p>{/if}
+  <div class="grid gap-1">
+    <label
+      for={controlId}
+      class="group-data-disabled/choice:text-muted-foreground cursor-pointer group-data-disabled/choice:cursor-not-allowed"
+      >{label}</label
+    >
+    {#if description}<p
+        id={hintId}
+        class="text-muted-foreground m-0 text-[length:var(--cc-font-size-sm)]"
+      >
+        {description}
+      </p>{/if}
   </div>
 </div>
-
-<style>
-  .cc-choice {
-    display: flex;
-    align-items: flex-start;
-    gap: var(--cc-space-3);
-    min-height: var(--cc-control-h);
-    padding-block: var(--cc-control-py);
-  }
-  :global(.cc-switch) {
-    position: relative;
-    flex: none;
-    width: 2.5rem;
-    height: 1.5rem;
-    padding: 0;
-    border: 1px solid var(--cc-border-strong);
-    border-radius: var(--cc-radius-pill);
-    background: var(--cc-surface-sunken);
-    cursor: pointer;
-  }
-  :global(.cc-switch[data-state='checked']) {
-    border-color: var(--cc-accent);
-    background: var(--cc-accent);
-  }
-  :global(.cc-switch:focus-visible) {
-    outline: var(--cc-focus-width) solid var(--cc-focus);
-    outline-offset: var(--cc-focus-offset);
-  }
-  :global(.cc-switch[data-disabled]) {
-    opacity: 0.55;
-    cursor: not-allowed;
-  }
-  :global(.cc-switch-thumb) {
-    display: block;
-    width: 1.125rem;
-    height: 1.125rem;
-    margin-inline-start: 0.1875rem;
-    border-radius: var(--cc-radius-pill);
-    background: var(--cc-text);
-    transition: transform var(--cc-duration-fast) var(--cc-ease-out);
-  }
-  :global(.cc-switch[data-state='checked'] .cc-switch-thumb) {
-    transform: translateX(1rem);
-    background: var(--cc-accent-text);
-  }
-  .text {
-    display: grid;
-    gap: var(--cc-space-1);
-  }
-  label {
-    cursor: pointer;
-  }
-  p {
-    margin: 0;
-    color: var(--cc-text-muted);
-    font-size: var(--cc-font-size-sm);
-  }
-  [data-disabled] label {
-    cursor: not-allowed;
-    color: var(--cc-text-muted);
-  }
-</style>

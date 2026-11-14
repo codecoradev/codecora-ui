@@ -1,6 +1,7 @@
 <!-- Single choice from a short list (bits-ui): arrow keys move and select. Give it a `label`. -->
 <script lang="ts">
   import { RadioGroup } from 'bits-ui';
+  import { cn } from './cn.js';
 
   interface Item {
     value: string;
@@ -46,117 +47,52 @@
   aria-label={label}
   aria-describedby={describedby}
   aria-invalid={invalid || undefined}
-  class={['cc-radios', `cc-radios-${orientation}`]}
+  class={cn(
+    'cc-radios group/radios flex gap-x-6 gap-y-1',
+    `cc-radios-${orientation}`,
+    orientation === 'vertical' ? 'flex-col' : 'flex-row flex-wrap',
+  )}
 >
   {#each items as item (item.value)}
-    <div class="cc-choice" data-disabled={disabled || item.disabled || undefined}>
+    <div
+      class="cc-choice group/choice min-h-control py-control-y flex items-start gap-3"
+      data-disabled={disabled || item.disabled || undefined}
+    >
       <RadioGroup.Item
         id="{uid}-{item.value}"
         value={item.value}
         disabled={item.disabled}
         aria-describedby={item.description ? `${uid}-${item.value}-hint` : undefined}
-        class="cc-radio"
+        class={cn(
+          'cc-radio border-input bg-card inline-grid size-5 flex-none cursor-pointer place-items-center rounded-full border p-0',
+          'duration-fast ease-enter transition-[border-color] motion-reduce:transition-none',
+          // In an invalid group the danger border stays on the checked radio too.
+          'not-group-aria-invalid/radios:data-[state=checked]:border-primary',
+          'group-aria-invalid/radios:border-destructive group-aria-invalid/radios:inset-ring-destructive group-aria-invalid/radios:inset-ring',
+          'focus-visible:outline-ring focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)]',
+          'data-disabled:cursor-not-allowed data-disabled:opacity-55',
+        )}
       >
         {#snippet children({ checked })}
-          {#if checked}<span class="dot"></span>{/if}
+          {#if checked}<!-- Opacity eases; only the scale springs. The dot is gone the moment it is unchecked. -->
+            <span
+              class="dot animate-dot-in bg-primary size-2.5 rounded-full motion-reduce:animate-none"
+            ></span>{/if}
         {/snippet}
       </RadioGroup.Item>
-      <div class="text">
-        <label for="{uid}-{item.value}">{item.label}</label>
-        {#if item.description}<p id="{uid}-{item.value}-hint">{item.description}</p>{/if}
+      <div class="grid gap-1">
+        <label
+          for="{uid}-{item.value}"
+          class="group-data-disabled/choice:text-muted-foreground cursor-pointer group-data-disabled/choice:cursor-not-allowed"
+          >{item.label}</label
+        >
+        {#if item.description}<p
+            id="{uid}-{item.value}-hint"
+            class="text-muted-foreground m-0 text-[length:var(--cc-font-size-sm)]"
+          >
+            {item.description}
+          </p>{/if}
       </div>
     </div>
   {/each}
 </RadioGroup.Root>
-
-<style>
-  :global(.cc-radios) {
-    display: flex;
-    gap: var(--cc-space-1) var(--cc-space-6);
-  }
-  :global(.cc-radios-vertical) {
-    flex-direction: column;
-  }
-  :global(.cc-radios-horizontal) {
-    flex-flow: row wrap;
-  }
-  .cc-choice {
-    display: flex;
-    align-items: flex-start;
-    gap: var(--cc-space-3);
-    min-height: var(--cc-control-h);
-    padding-block: var(--cc-control-py);
-  }
-  :global(.cc-radio) {
-    display: inline-grid;
-    flex: none;
-    place-items: center;
-    width: 1.25rem;
-    height: 1.25rem;
-    padding: 0;
-    border: 1px solid var(--cc-border-strong);
-    border-radius: var(--cc-radius-pill);
-    background: var(--cc-surface-raised);
-    cursor: pointer;
-    transition: border-color var(--cc-duration-fast) var(--cc-ease-out);
-  }
-  :global(.cc-radio[data-state='checked']) {
-    border-color: var(--cc-accent);
-  }
-  :global(.cc-radios[aria-invalid='true'] .cc-radio) {
-    border-color: var(--cc-danger);
-    box-shadow: inset 0 0 0 1px var(--cc-danger);
-  }
-  :global(.cc-radio:focus-visible) {
-    outline: var(--cc-focus-width) solid var(--cc-focus);
-    outline-offset: var(--cc-focus-offset);
-  }
-  :global(.cc-radio[data-disabled]) {
-    opacity: 0.55;
-    cursor: not-allowed;
-  }
-  .dot {
-    width: 0.625rem;
-    height: 0.625rem;
-    border-radius: var(--cc-radius-pill);
-    background: var(--cc-accent);
-    /* Opacity eases; only the scale springs. The dot is gone the moment it is unchecked. */
-    animation:
-      cc-dot-fade var(--cc-duration-fast) var(--cc-ease-out),
-      cc-dot-pop var(--cc-duration-slow) var(--cc-ease-spring);
-  }
-  @keyframes cc-dot-fade {
-    from {
-      opacity: 0;
-    }
-  }
-  @keyframes cc-dot-pop {
-    from {
-      scale: 0.4;
-    }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    :global(.cc-radio) {
-      transition: none;
-    }
-    .dot {
-      animation: none;
-    }
-  }
-  .text {
-    display: grid;
-    gap: var(--cc-space-1);
-  }
-  label {
-    cursor: pointer;
-  }
-  p {
-    margin: 0;
-    color: var(--cc-text-muted);
-    font-size: var(--cc-font-size-sm);
-  }
-  [data-disabled] label {
-    cursor: not-allowed;
-    color: var(--cc-text-muted);
-  }
-</style>
