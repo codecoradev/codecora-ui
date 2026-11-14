@@ -2,6 +2,7 @@
 <script lang="ts">
   import { Tabs } from 'bits-ui';
   import type { Snippet } from 'svelte';
+  import { cn, type ClassValue } from './cn.js';
 
   interface Item {
     value: string;
@@ -15,9 +16,10 @@
     /** Names the tab list for assistive technology. */
     label: string;
     panel: Snippet<[string]>;
+    class?: ClassValue;
   }
 
-  let { items, value = $bindable(), label, panel }: Props = $props();
+  let { items, value = $bindable(), label, panel, class: className }: Props = $props();
 
   $effect.pre(() => {
     if (value === undefined) value = items[0]?.value;
@@ -54,21 +56,39 @@
   });
 </script>
 
-<Tabs.Root bind:value class="cc-tabs">
+<Tabs.Root bind:value class={cn('cc-tabs', className)}>
+  <!-- The tabs sit 1px over the list's border (-mb-px), which would make the list
+       scroll vertically too and draw a scrollbar: overflow-y-hidden. The underline
+       is inside the box, so nothing is lost. -->
   <Tabs.List
     bind:ref={list}
-    class="cc-tabs-list"
+    class="cc-tabs-list border-border relative flex gap-1 overflow-x-auto overflow-y-hidden border-b"
     aria-label={label}
     data-indicator={indicator ? '' : undefined}
   >
     {#each items as item (item.value)}
-      <Tabs.Trigger value={item.value} disabled={item.disabled} class="cc-tab">
+      <!-- A dashed underline tells "unavailable" apart from an unselected tab (none) and the selected one (solid). -->
+      <Tabs.Trigger
+        value={item.value}
+        disabled={item.disabled}
+        class={cn(
+          'cc-tab min-h-control px-control-x font-inherit text-muted-foreground -mb-px flex-none cursor-pointer border-0 border-b-2 border-transparent bg-transparent font-medium',
+          'not-data-disabled:hover:text-foreground data-[state=active]:border-b-primary data-[state=active]:text-foreground in-data-indicator:data-[state=active]:border-b-transparent',
+          'data-disabled:cursor-not-allowed data-disabled:border-dashed data-disabled:border-b-current data-disabled:opacity-55',
+          'focus-visible:outline-ring focus-visible:rounded-sm focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:-outline-offset-2',
+        )}
+      >
         {item.label}
       </Tabs.Trigger>
     {/each}
     {#if indicator}
+      <!-- A 1px bar scaled to the tab's width: transform only, so the spring may move it. -->
       <span
-        class={['cc-tab-indicator', settled && 'settled']}
+        class={[
+          'cc-tab-indicator bg-primary pointer-events-none absolute bottom-0 left-0 h-0.5 w-px origin-left',
+          settled &&
+            'duration-slow ease-spring transition-[translate,scale] motion-reduce:transition-none',
+        ]}
         style:translate="{indicator.x}px 0"
         style:scale="{indicator.width} 1"
         aria-hidden="true"
@@ -76,83 +96,10 @@
     {/if}
   </Tabs.List>
   {#each items as item (item.value)}
-    <Tabs.Content value={item.value} class="cc-tab-panel">{@render panel(item.value)}</Tabs.Content>
+    <Tabs.Content
+      value={item.value}
+      class="cc-tab-panel focus-visible:outline-ring pt-4 focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)]"
+      >{@render panel(item.value)}</Tabs.Content
+    >
   {/each}
 </Tabs.Root>
-
-<style>
-  :global(.cc-tabs-list) {
-    position: relative;
-    display: flex;
-    gap: var(--cc-space-1);
-    overflow-x: auto;
-    /* The tabs sit 1px over the list's border (margin-bottom: -1px), which would
-       make the list scroll vertically too, and draw a scrollbar where they are
-       always shown. The underline is inside the box, so nothing is lost. */
-    overflow-y: hidden;
-    border-bottom: 1px solid var(--cc-border);
-  }
-  :global(.cc-tab) {
-    flex: none;
-    min-height: var(--cc-control-h);
-    padding-inline: var(--cc-control-px);
-    border: 0;
-    border-bottom: 2px solid transparent;
-    margin-bottom: -1px;
-    background: transparent;
-    color: var(--cc-text-muted);
-    font: inherit;
-    font-weight: 500;
-    cursor: pointer;
-  }
-  :global(.cc-tab:hover:not([data-disabled])) {
-    color: var(--cc-text);
-  }
-  :global(.cc-tab[data-state='active']) {
-    color: var(--cc-text);
-    border-bottom-color: var(--cc-accent);
-  }
-  :global(.cc-tabs-list[data-indicator] .cc-tab[data-state='active']) {
-    border-bottom-color: transparent;
-  }
-  /* A 1px bar scaled to the tab's width: transform only, so the spring may move it. */
-  .cc-tab-indicator {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 1px;
-    height: 2px;
-    background: var(--cc-accent);
-    transform-origin: left;
-    pointer-events: none;
-  }
-  .cc-tab-indicator.settled {
-    transition:
-      translate var(--cc-duration-slow) var(--cc-ease-spring),
-      scale var(--cc-duration-slow) var(--cc-ease-spring);
-  }
-  :global(.cc-tab[data-disabled]) {
-    opacity: 0.55;
-    cursor: not-allowed;
-    /* A dashed underline tells "unavailable" apart from an unselected tab (none) and the selected one (solid). */
-    border-bottom-style: dashed;
-    border-bottom-color: currentColor;
-  }
-  :global(.cc-tab:focus-visible) {
-    outline: var(--cc-focus-width) solid var(--cc-focus);
-    outline-offset: -2px;
-    border-radius: var(--cc-radius-sm);
-  }
-  :global(.cc-tab-panel) {
-    padding-top: var(--cc-space-4);
-  }
-  :global(.cc-tab-panel:focus-visible) {
-    outline: var(--cc-focus-width) solid var(--cc-focus);
-    outline-offset: var(--cc-focus-offset);
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .cc-tab-indicator.settled {
-      transition: none;
-    }
-  }
-</style>

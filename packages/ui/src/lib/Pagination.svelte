@@ -1,6 +1,22 @@
 <!-- Page links for a long list (bits-ui). `page` is 1-based. -->
+<script module lang="ts">
+  import { tv } from './internal/variants.js';
+
+  const pageButton = tv({
+    base: [
+      'cc-page min-h-control min-w-control font-inherit text-foreground inline-grid cursor-pointer place-items-center rounded-md border border-transparent bg-transparent px-2 tabular-nums',
+      'duration-fast ease-enter transition-[background-color,color,border-color] motion-reduce:transition-none',
+      'hover:bg-accent data-selected:border-primary data-selected:bg-primary data-selected:text-primary-foreground',
+      'focus-visible:outline-ring focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)]',
+      'disabled:cursor-not-allowed disabled:opacity-55',
+    ],
+    variants: { step: { true: 'cc-page-step' } },
+  });
+</script>
+
 <script lang="ts">
   import { Pagination } from 'bits-ui';
+  import { cn, type ClassValue } from './cn.js';
   import Glyph from './internal/Glyph.svelte';
 
   interface Props {
@@ -10,6 +26,7 @@
     siblingCount?: number;
     /** Names the landmark; translate it with the rest of the page. */
     label?: string;
+    class?: ClassValue;
   }
 
   let {
@@ -18,6 +35,7 @@
     page = $bindable(1),
     siblingCount = 1,
     label = 'Pagination',
+    class: className,
   }: Props = $props();
 </script>
 
@@ -26,77 +44,24 @@
   {perPage}
   {siblingCount}
   bind:page
-  class="cc-pagination"
+  class={cn('cc-pagination flex flex-wrap items-center gap-1', className)}
   aria-label={label}
 >
   {#snippet children({ pages })}
-    <Pagination.PrevButton class="cc-page cc-page-step" aria-label="Previous page">
+    <Pagination.PrevButton class={pageButton({ step: true })} aria-label="Previous page">
       <Glyph name="chevron-left" />
     </Pagination.PrevButton>
     {#each pages as item (item.key)}
       {#if item.type === 'ellipsis'}
-        <span class="gap" aria-hidden="true">…</span>
+        <span class="text-muted-foreground min-w-6 text-center" aria-hidden="true">…</span>
       {:else}
-        <Pagination.Page page={item} class="cc-page" aria-label="Page {item.value}">
+        <Pagination.Page page={item} class={pageButton()} aria-label="Page {item.value}">
           {item.value}
         </Pagination.Page>
       {/if}
     {/each}
-    <Pagination.NextButton class="cc-page cc-page-step" aria-label="Next page">
+    <Pagination.NextButton class={pageButton({ step: true })} aria-label="Next page">
       <Glyph name="chevron-right" />
     </Pagination.NextButton>
   {/snippet}
 </Pagination.Root>
-
-<style>
-  :global(.cc-pagination) {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--cc-space-1);
-  }
-  :global(.cc-page) {
-    display: inline-grid;
-    place-items: center;
-    min-width: var(--cc-control-h);
-    min-height: var(--cc-control-h);
-    padding-inline: var(--cc-space-2);
-    border: 1px solid transparent;
-    border-radius: var(--cc-radius-md);
-    background: none;
-    color: var(--cc-text);
-    font: inherit;
-    font-variant-numeric: tabular-nums;
-    cursor: pointer;
-    transition:
-      background-color var(--cc-duration-fast) var(--cc-ease-out),
-      color var(--cc-duration-fast) var(--cc-ease-out),
-      border-color var(--cc-duration-fast) var(--cc-ease-out);
-  }
-  :global(.cc-page:hover) {
-    background: var(--cc-surface-hover);
-  }
-  :global(.cc-page[data-selected]) {
-    border-color: var(--cc-accent);
-    background: var(--cc-accent);
-    color: var(--cc-accent-text);
-  }
-  :global(.cc-page:focus-visible) {
-    outline: var(--cc-focus-width) solid var(--cc-focus);
-    outline-offset: var(--cc-focus-offset);
-  }
-  :global(.cc-page:disabled) {
-    opacity: 0.55;
-    cursor: not-allowed;
-  }
-  .gap {
-    min-width: 1.5rem;
-    text-align: center;
-    color: var(--cc-text-muted);
-  }
-  @media (prefers-reduced-motion: reduce) {
-    :global(.cc-page) {
-      transition: none;
-    }
-  }
-</style>

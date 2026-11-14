@@ -17,6 +17,7 @@ export { shadcnBridge } from './css.js';
 export {
   formAnimations,
   shadcnExtensions,
+  accordionAnimations,
   tailwindAnimations,
   tailwindKeyframes,
   tailwindKeys,

@@ -1,5 +1,15 @@
 <script lang="ts">
-  import { Alert, Badge, Button, EmptyState, Input, Select, Skeleton } from '@codecora/ui';
+  import {
+    Alert,
+    Badge,
+    Button,
+    cn,
+    EmptyState,
+    Input,
+    Select,
+    Skeleton,
+    type ClassValue,
+  } from '@codecora/ui';
   import { onMount } from 'svelte';
   import type { MemoryBrowser } from './browser.svelte.js';
   import { formatDate, preview } from './format.js';
@@ -10,9 +20,10 @@
     label?: string;
     /** Milliseconds to wait after typing before searching. */
     debounce?: number;
+    class?: ClassValue;
   }
 
-  let { browser, label = 'Memories', debounce = 250 }: Props = $props();
+  let { browser, label = 'Memories', debounce = 250, class: className }: Props = $props();
 
   const uid = $props.id();
   const caps = $derived(browser.capabilities);
@@ -96,15 +107,19 @@
   <Button variant="primary" onclick={() => browser.create()}>New memory</Button>
 {/snippet}
 
-<section class="cc-memory-list" aria-labelledby="{uid}-title">
-  <header>
-    <h2 id="{uid}-title" class="title">{label}</h2>
+<section class={cn('cc-memory-list grid min-w-0 gap-3', className)} aria-labelledby="{uid}-title">
+  <header class="flex items-center justify-between gap-3">
+    <h2 id="{uid}-title" class="font-display m-0 text-[length:var(--cc-font-size-lg)]">{label}</h2>
     {#if caps.create}
       <Button variant="secondary" onclick={() => browser.create()}>New memory</Button>
     {/if}
   </header>
 
-  <div class="filters" role="search">
+  <!-- The search box takes the whole first row; the filters share the next. -->
+  <div
+    class="grid grid-cols-[repeat(auto-fit,minmax(min(100%,calc(var(--spacing)*48)),1fr))] gap-2 [&>:first-child]:col-span-full"
+    role="search"
+  >
     {#if caps.search}
       <Input
         type="search"
@@ -122,7 +137,7 @@
     {/if}
   </div>
 
-  <p class="status" role="status">
+  <p class="text-muted-foreground m-0 min-h-lh text-[length:var(--cc-font-size-sm)]" role="status">
     {#if !browser.loading && !browser.error}
       {browser.items.length}{browser.hasMore ? '+' : ''}
       {browser.items.length === 1 ? 'memory' : 'memories'}{browser.filtered ? ' match' : ''}
@@ -132,12 +147,12 @@
   {#if browser.error}
     <Alert tone="danger" title="Memories did not load">
       {browser.error}
-      <div class="retry"><Button onclick={() => browser.load()}>Try again</Button></div>
+      <div class="mt-2"><Button onclick={() => browser.load()}>Try again</Button></div>
     </Alert>
   {:else if browser.loading && browser.items.length === 0}
-    <ul class="rows" aria-busy="true" aria-label="Loading memories">
+    <ul class="m-0 grid list-none gap-1 p-0" aria-busy="true" aria-label="Loading memories">
       {#each { length: 4 }, i (i)}
-        <li class="skeleton">
+        <li class="px-control-x py-control-y grid gap-2">
           <Skeleton height="1em" />
           <Skeleton height="1em" width="60%" />
         </li>
@@ -158,36 +173,43 @@
       />
     {/if}
   {:else}
-    <ul class="rows" bind:this={list} aria-label={label} aria-busy={browser.loading}>
+    <ul
+      class="m-0 grid list-none gap-1 p-0"
+      bind:this={list}
+      aria-label={label}
+      aria-busy={browser.loading}
+    >
       {#each browser.items as memory (memory.id)}
         <li>
           <button
             type="button"
-            class="row"
+            class="min-h-control px-control-x py-control-y font-inherit text-foreground duration-fast ease-enter hover:bg-accent focus-visible:outline-ring aria-[current=true]:border-primary aria-[current=true]:bg-primary-soft grid w-full cursor-pointer gap-1 rounded-md border border-transparent bg-transparent text-start transition-[background-color,border-color] focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)]"
             data-id={memory.id}
             aria-current={memory.id === browser.selectedId ? 'true' : undefined}
             tabindex={memory.id === focusId ? 0 : -1}
             onclick={() => browser.select(memory.id)}
             {onkeydown}
           >
-            <span class="content">{preview(memory.content)}</span>
-            <span class="meta">
+            <span class="line-clamp-2 wrap-anywhere">{preview(memory.content)}</span>
+            <span
+              class="text-muted-foreground flex flex-wrap items-center gap-x-2 gap-y-1 text-[length:var(--cc-font-size-xs)]"
+            >
               {#if memory.pinned}<Badge tone="accent">Pinned</Badge>{/if}
-              <span class="type">{memory.memoryType}</span>
+              <span class="font-semibold">{memory.memoryType}</span>
               {#each memory.tags.slice(0, 3) as tag (tag)}
-                <span class="tag">{tag}</span>
+                <span class="font-mono wrap-anywhere">{tag}</span>
               {/each}
               {#if memory.tags.length > 3}
-                <span class="tag">+{memory.tags.length - 3}</span>
+                <span class="font-mono wrap-anywhere">+{memory.tags.length - 3}</span>
               {/if}
-              <span class="date">{formatDate(memory.createdAt)}</span>
+              <span class="tabular-nums">{formatDate(memory.createdAt)}</span>
             </span>
           </button>
         </li>
       {/each}
     </ul>
     {#if browser.hasMore}
-      <div class="more">
+      <div class="flex justify-center">
         <Button loading={browser.loading} loadingLabel="Loading" onclick={() => browser.loadMore()}>
           Load more
         </Button>
@@ -195,109 +217,3 @@
     {/if}
   {/if}
 </section>
-
-<style>
-  .cc-memory-list {
-    display: grid;
-    gap: var(--cc-space-3);
-    min-width: 0;
-  }
-  header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--cc-space-3);
-  }
-  .title {
-    margin: 0;
-    font-family: var(--cc-font-display);
-    font-size: var(--cc-font-size-lg);
-  }
-  .filters {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
-    gap: var(--cc-space-2);
-  }
-  .filters > :global(:first-child) {
-    grid-column: 1 / -1;
-  }
-  .status {
-    margin: 0;
-    min-height: 1lh;
-    color: var(--cc-text-muted);
-    font-size: var(--cc-font-size-sm);
-  }
-  .retry {
-    margin-top: var(--cc-space-2);
-  }
-  .rows {
-    display: grid;
-    gap: var(--cc-space-1);
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-  .skeleton {
-    display: grid;
-    gap: var(--cc-space-2);
-    padding: var(--cc-control-py) var(--cc-control-px);
-  }
-  .row {
-    display: grid;
-    gap: var(--cc-space-1);
-    width: 100%;
-    min-height: var(--cc-control-h);
-    padding: var(--cc-control-py) var(--cc-control-px);
-    border: 1px solid transparent;
-    border-radius: var(--cc-radius-md);
-    background: transparent;
-    color: var(--cc-text);
-    font: inherit;
-    text-align: start;
-    cursor: pointer;
-    transition:
-      background-color var(--cc-duration-fast) var(--cc-ease-out),
-      border-color var(--cc-duration-fast) var(--cc-ease-out);
-  }
-  .row:hover {
-    background: var(--cc-surface-hover);
-  }
-  .row:focus-visible {
-    outline: var(--cc-focus-width) solid var(--cc-focus);
-    outline-offset: var(--cc-focus-offset);
-  }
-  .row[aria-current='true'] {
-    border-color: var(--cc-accent);
-    background: var(--cc-accent-soft);
-  }
-  .content {
-    display: -webkit-box;
-    overflow: hidden;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
-    overflow-wrap: anywhere;
-  }
-  .meta {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--cc-space-1) var(--cc-space-2);
-    color: var(--cc-text-muted);
-    font-size: var(--cc-font-size-xs);
-  }
-  .type {
-    font-weight: 600;
-  }
-  .tag {
-    font-family: var(--cc-font-mono);
-    overflow-wrap: anywhere;
-  }
-  .date {
-    font-variant-numeric: tabular-nums;
-  }
-  .more {
-    display: flex;
-    justify-content: center;
-  }
-</style>
