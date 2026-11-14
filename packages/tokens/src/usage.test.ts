@@ -39,6 +39,12 @@ describe('component token usage', () => {
 const motion = /(?:^|[\s;{])(transition|animation)\s*:\s*([^;]+);/g;
 
 describe('component motion', () => {
+  // Components on Tailwind utilities are checked by classes.test.ts; this suite
+  // covers the ones still on plain CSS and empties as they migrate (#155).
+  it('runs over the plain-CSS components that are left', () => {
+    expect(sources(ui).length).toBeGreaterThan(0);
+  });
+
   for (const file of sources(ui)) {
     const source = readFileSync(file, 'utf8');
     const declarations = [...source.matchAll(motion)].map((m) => ({ prop: m[1]!, value: m[2]! }));
