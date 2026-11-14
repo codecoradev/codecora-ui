@@ -1,6 +1,29 @@
 <!-- A button with an icon and no visible text; `label` is its accessible name and tooltip-free title. -->
+<script module lang="ts">
+  import { tv } from './internal/variants.js';
+
+  const iconButton = tv({
+    base: [
+      'cc-icon-button size-control inline-flex cursor-pointer items-center justify-center rounded-md border p-0',
+      // The background eases; a press shrinks to --cc-press-scale (1 under reduced motion).
+      'duration-fast ease-enter transition-[background-color,scale] [transition-duration:var(--cc-duration-fast),var(--cc-duration-instant)]',
+      'not-disabled:hover:bg-accent not-disabled:active:[scale:var(--cc-press-scale)]',
+      'focus-visible:outline-ring focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)] focus-visible:outline-solid',
+      'disabled:cursor-not-allowed disabled:opacity-55',
+    ],
+    variants: {
+      variant: {
+        ghost: 'text-foreground border-transparent bg-transparent',
+        secondary: 'border-input bg-card text-foreground',
+        danger: 'text-destructive border-transparent bg-transparent',
+      },
+    },
+  });
+</script>
+
 <script lang="ts">
   import type { HTMLButtonAttributes } from 'svelte/elements';
+  import { cn } from './cn.js';
   import Icon from './internal/Icon.svelte';
   import type { IconComponent } from './types.js';
 
@@ -25,51 +48,7 @@
   {...rest}
   {type}
   aria-label={label}
-  class={['cc-icon-button', `cc-icon-button-${variant}`, className]}
+  class={cn(iconButton({ variant }), `cc-icon-button-${variant}`, className)}
 >
   <Icon {icon} />
 </button>
-
-<style>
-  .cc-icon-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: var(--cc-control-h);
-    height: var(--cc-control-h);
-    padding: 0;
-    border: 1px solid transparent;
-    border-radius: var(--cc-radius-md);
-    cursor: pointer;
-    transition:
-      background-color var(--cc-duration-fast) var(--cc-ease-out),
-      scale var(--cc-duration-instant) var(--cc-ease-out);
-  }
-  .cc-icon-button:not(:disabled):active {
-    scale: var(--cc-press-scale);
-  }
-  .cc-icon-button:focus-visible {
-    outline: var(--cc-focus-width) solid var(--cc-focus);
-    outline-offset: var(--cc-focus-offset);
-  }
-  .cc-icon-button:disabled {
-    opacity: 0.55;
-    cursor: not-allowed;
-  }
-  .cc-icon-button-ghost {
-    background: transparent;
-    color: var(--cc-text);
-  }
-  .cc-icon-button-secondary {
-    background: var(--cc-surface-raised);
-    color: var(--cc-text);
-    border-color: var(--cc-border-strong);
-  }
-  .cc-icon-button-danger {
-    background: transparent;
-    color: var(--cc-danger);
-  }
-  .cc-icon-button:not(:disabled):hover {
-    background: var(--cc-surface-hover);
-  }
-</style>

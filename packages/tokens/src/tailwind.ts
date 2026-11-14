@@ -59,6 +59,8 @@ export const tailwindKeys: Readonly<Record<string, string>> = {
   'ease-exit': 'var(--cc-ease-exit)',
   'ease-move': 'var(--cc-ease-in-out)',
   'ease-spring': 'var(--cc-ease-spring)',
+  // The measure of a short description (EmptyState): max-w-description.
+  'container-description': '40ch',
   // A comfortable reading measure for long text: max-w-measure.
   'container-measure': '72ch',
 };
@@ -128,6 +130,40 @@ export const tailwindAnimations: Readonly<Record<string, string>> = {
   'toast-out': exit('cc-toast-out'),
 };
 
+/**
+ * Keyframe animations, `animate-<name>`: the value and the keyframes Tailwind
+ * emits once a component uses the utility. Endless ones keep literal timing
+ * (a spinner is not a transition); entries read the motion tokens, so they
+ * drop to 0ms under reduced motion. Components add `motion-reduce:` as the
+ * plain CSS did (`animate-none`, or `animate-spinner-reduced`).
+ */
+export const displayAnimations: Readonly<Record<string, { value: string; keyframes: string }>> = {
+  spinner: {
+    value: 'cc-spin 0.8s linear infinite',
+    keyframes: '@keyframes cc-spin {\n  to {\n    transform: rotate(360deg);\n  }\n}',
+  },
+  // Under reduced motion the spinner keeps turning, three times slower.
+  'spinner-reduced': {
+    value: 'cc-spin 2.4s linear infinite',
+    keyframes: '@keyframes cc-spin {\n  to {\n    transform: rotate(360deg);\n  }\n}',
+  },
+  // Opacity runs on the compositor; a background-position shimmer repaints every frame.
+  skeleton: {
+    value: 'cc-pulse 1.4s ease-in-out infinite',
+    keyframes: '@keyframes cc-pulse {\n  50% {\n    opacity: 0.45;\n  }\n}',
+  },
+  // Arrives where it stays: a short settle into place, no spring in the reading flow.
+  'settle-in': {
+    value: 'cc-settle-in var(--cc-duration-normal) var(--cc-ease-out)',
+    keyframes:
+      '@keyframes cc-settle-in {\n  from {\n    opacity: 0;\n    transform: translateY(calc(-1 * var(--cc-space-1)));\n  }\n}',
+  },
+  'fade-in': {
+    value: 'cc-fade-in var(--cc-duration-normal) var(--cc-ease-out)',
+    keyframes: '@keyframes cc-fade-in {\n  from {\n    opacity: 0;\n  }\n}',
+  },
+};
+
 /** Utilities with no Tailwind theme namespace: `duration-fast`, `z-popover`. */
 export const tailwindUtilities: Readonly<Record<string, Record<string, string>>> = {
   ...Object.fromEntries(
@@ -149,16 +185,19 @@ export const tailwindUtilities: Readonly<Record<string, Record<string, string>>>
     [
       'font-family',
       'font-size',
-      'line-height',
-      'font-weight',
       'font-style',
-      'font-variant',
+      'font-weight',
       'font-stretch',
+      'font-variant',
       'font-kerning',
       'font-size-adjust',
       'font-optical-sizing',
+      'font-feature-settings',
+      'font-variation-settings',
+      'line-height',
     ].map((p) => [p, 'inherit']),
   ),
+  'underline-offset-text': { 'text-underline-offset': '0.2em' },
   // Code shows the characters as typed: no ligature turns <!-- or -> into an arrow.
   'ligatures-none': { 'font-variant-ligatures': 'none' },
 };
@@ -291,6 +330,10 @@ export function tailwindThemeCss(): string {
       ]),
       '}',
     ]),
+    ...Object.entries(displayAnimations).map(([k, { value }]) => `--animate-${k}: ${value};`),
+    ...[...new Set(Object.values(displayAnimations).map((a) => a.keyframes))].flatMap((k) =>
+      k.split('\n'),
+    ),
   ])}\n}\n`;
 
   const utilities = Object.entries(tailwindUtilities)

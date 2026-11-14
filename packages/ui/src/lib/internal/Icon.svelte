@@ -13,16 +13,7 @@
   let { icon: Icon }: Props = $props();
 </script>
 
-<span class="cc-icon" aria-hidden="true"><Icon /></span>
-
-<style>
-  .cc-icon {
-    display: inline-flex;
-    flex: none;
-  }
-  .cc-icon :global(svg) {
-    width: var(--cc-icon-size);
-    height: var(--cc-icon-size);
-    stroke-width: var(--cc-icon-stroke);
-  }
-</style>
+<span
+  class="cc-icon [&_svg]:size-icon inline-flex flex-none [&_svg]:[stroke-width:var(--cc-icon-stroke)]"
+  aria-hidden="true"><Icon /></span
+>

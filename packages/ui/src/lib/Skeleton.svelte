@@ -10,27 +10,13 @@
   let { width = '100%', height = '1em', circle = false }: Props = $props();
 </script>
 
-<span class="cc-skeleton" class:circle style:width style:height aria-hidden="true"></span>
-
-<style>
-  .cc-skeleton {
-    display: block;
-    border-radius: var(--cc-radius-sm);
-    background: var(--cc-surface-hover);
-    /* Opacity runs on the compositor; the old background-position shimmer repainted every frame. */
-    animation: cc-pulse 1.4s ease-in-out infinite;
-  }
-  .circle {
-    border-radius: var(--cc-radius-pill);
-  }
-  @keyframes cc-pulse {
-    50% {
-      opacity: 0.45;
-    }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .cc-skeleton {
-      animation: none;
-    }
-  }
-</style>
+<!-- Opacity pulses on the compositor; reduced motion holds it still. -->
+<span
+  class={[
+    'cc-skeleton animate-skeleton bg-accent block motion-reduce:animate-none',
+    circle ? 'rounded-full' : 'rounded-sm',
+  ]}
+  style:width
+  style:height
+  aria-hidden="true"
+></span>

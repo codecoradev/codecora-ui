@@ -13,20 +13,9 @@
 <Separator.Root
   {orientation}
   {decorative}
-  class={['cc-separator', `cc-separator-${orientation}`]}
+  class={[
+    'cc-separator bg-border flex-none',
+    `cc-separator-${orientation}`,
+    orientation === 'horizontal' ? 'h-px w-full' : 'w-px self-stretch',
+  ]}
 />
-
-<style>
-  :global(.cc-separator) {
-    flex: none;
-    background: var(--cc-border);
-  }
-  :global(.cc-separator-horizontal) {
-    width: 100%;
-    height: 1px;
-  }
-  :global(.cc-separator-vertical) {
-    width: 1px;
-    align-self: stretch;
-  }
-</style>

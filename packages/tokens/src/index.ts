@@ -20,6 +20,7 @@ export {
   accordionAnimations,
   tailwindAnimations,
   tailwindKeyframes,
+  displayAnimations,
   tailwindKeys,
   tailwindUtilities,
   themeVariables,

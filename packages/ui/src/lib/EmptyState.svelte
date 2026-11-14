@@ -16,42 +16,16 @@
   let { title, description, icon, level = 3, action }: Props = $props();
 </script>
 
-<div class="cc-empty">
-  {#if icon}<span class="art"><Icon {icon} /></span>{/if}
-  <svelte:element this={`h${level}`} class="title">{title}</svelte:element>
-  {#if description}<p class="description">{description}</p>{/if}
-  {#if action}<div class="action">{@render action()}</div>{/if}
+<div class="cc-empty grid justify-items-center gap-2 px-4 py-10 text-center">
+  <!-- [&_.cc-icon_svg] outranks the icon's own [&_svg] size. -->
+  {#if icon}<span class="text-muted-foreground mb-2 inline-flex [&_.cc-icon_svg]:size-8"
+      ><Icon {icon} /></span
+    >{/if}
+  <svelte:element this={`h${level}`} class="font-display m-0 text-[length:var(--cc-font-size-lg)]"
+    >{title}</svelte:element
+  >
+  {#if description}<p class="max-w-description text-muted-foreground m-0 text-pretty">
+      {description}
+    </p>{/if}
+  {#if action}<div class="mt-3">{@render action()}</div>{/if}
 </div>
-
-<style>
-  .cc-empty {
-    display: grid;
-    justify-items: center;
-    gap: var(--cc-space-2);
-    padding: var(--cc-space-10) var(--cc-space-4);
-    text-align: center;
-  }
-  .art {
-    display: inline-flex;
-    margin-bottom: var(--cc-space-2);
-    color: var(--cc-text-muted);
-  }
-  .art :global(svg) {
-    width: 2rem;
-    height: 2rem;
-  }
-  .title {
-    margin: 0;
-    font-family: var(--cc-font-display);
-    font-size: var(--cc-font-size-lg);
-  }
-  .description {
-    margin: 0;
-    max-width: 40ch;
-    color: var(--cc-text-muted);
-    text-wrap: pretty;
-  }
-  .action {
-    margin-top: var(--cc-space-3);
-  }
-</style>
