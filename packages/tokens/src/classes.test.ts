@@ -6,6 +6,7 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { dirname, join, relative } from 'node:path';
+import { parse } from 'svelte/compiler';
 import { compile } from 'tailwindcss';
 import { beforeAll, describe, expect, it } from 'vitest';
 import { tailwindThemeCss } from './tailwind.js';
@@ -28,16 +29,155 @@ function svelteFiles(dir: string): string[] {
   });
 }
 
-/** Text from `start` up to the bracket that closes the one at `start - 1`. */
-function balanced(source: string, start: number): string {
-  let depth = 1;
-  for (let i = start; i < source.length; i++) {
-    const c = source[i];
-    if (c === '(' || c === '{' || c === '[') depth++;
-    else if (c === ')' || c === '}' || c === ']') depth--;
-    if (depth === 0) return source.slice(start, i);
+// The extraction walks the Svelte AST (svelte/compiler), so ternaries,
+// template literals, comparisons and nested calls are read as code, not text.
+type Node = { type: string; [key: string]: unknown };
+const isNode = (v: unknown): v is Node =>
+  typeof v === 'object' && v !== null && typeof (v as Node).type === 'string';
+const SKIP = new Set([
+  'parent',
+  'loc',
+  'start',
+  'end',
+  'metadata',
+  'leadingComments',
+  'trailingComments',
+]);
+const keyName = (p: Node): string | undefined => {
+  const key = p.key as Node | undefined;
+  if (!key || p.computed) return undefined;
+  return key.type === 'Identifier'
+    ? (key.name as string)
+    : key.type === 'Literal'
+      ? String(key.value)
+      : undefined;
+};
+const isClassCall = (n: Node) =>
+  n.type === 'CallExpression' &&
+  (n.callee as Node).type === 'Identifier' &&
+  ['cn', 'clsx'].includes((n.callee as Node).name as string);
+
+/**
+ * Strings an expression can put into a class list. Branches of ternaries and
+ * logical operators, array items, clsx object keys and cn()/clsx() arguments
+ * count; conditions, comparison operands and the arguments of other calls
+ * (recipe options such as `size: 'sm'`) do not.
+ */
+function classLiterals(n: unknown): string[] {
+  if (!isNode(n)) return [];
+  switch (n.type) {
+    case 'Literal':
+      return typeof n.value === 'string' ? [n.value] : [];
+    case 'TemplateLiteral':
+      return [
+        (n.quasis as Node[]).map((q) => (q.value as { cooked: string }).cooked).join(' '),
+        ...(n.expressions as Node[]).flatMap(classLiterals),
+      ];
+    case 'ConditionalExpression':
+      return [...classLiterals(n.consequent), ...classLiterals(n.alternate)];
+    case 'LogicalExpression':
+      return n.operator === '&&'
+        ? classLiterals(n.right)
+        : [...classLiterals(n.left), ...classLiterals(n.right)];
+    case 'BinaryExpression':
+      return n.operator === '+' ? [...classLiterals(n.left), ...classLiterals(n.right)] : [];
+    case 'ArrayExpression':
+      return (n.elements as unknown[]).flatMap(classLiterals);
+    case 'ObjectExpression':
+      return (n.properties as Node[]).flatMap((p) => {
+        const k = p.type === 'Property' ? keyName(p) : undefined;
+        return k === undefined ? [] : [k];
+      });
+    case 'CallExpression':
+      return isClassCall(n) ? (n.arguments as unknown[]).flatMap(classLiterals) : [];
+    case 'ChainExpression':
+    case 'TSAsExpression':
+    case 'TSNonNullExpression':
+      return classLiterals(n.expression);
+    default:
+      return [];
   }
-  return source.slice(start);
+}
+
+/** Classes in a tv() config: base, slots, variant values, compound class/className. */
+function tvLiterals(config: unknown): string[] {
+  if (!isNode(config) || config.type !== 'ObjectExpression') return [];
+  const values = (obj: unknown): unknown[] =>
+    isNode(obj) && obj.type === 'ObjectExpression'
+      ? (obj.properties as Node[]).filter((p) => p.type === 'Property').map((p) => p.value)
+      : [obj];
+  const slotValues = (v: unknown) => values(v).flatMap(classLiterals);
+  return (config.properties as Node[]).flatMap((p) => {
+    if (p.type !== 'Property') return [];
+    switch (keyName(p)) {
+      case 'base':
+        return classLiterals(p.value);
+      case 'slots':
+        return slotValues(p.value);
+      case 'variants':
+        return values(p.value).flatMap((variant) => values(variant).flatMap(slotValues));
+      case 'compoundVariants':
+      case 'compoundSlots':
+        return isNode(p.value) && p.value.type === 'ArrayExpression'
+          ? (p.value.elements as unknown[]).flatMap((entry) =>
+              isNode(entry) && entry.type === 'ObjectExpression'
+                ? (entry.properties as Node[])
+                    .filter(
+                      (q) =>
+                        q.type === 'Property' && ['class', 'className'].includes(keyName(q) ?? ''),
+                    )
+                    .flatMap((q) => slotValues(q.value))
+                : [],
+            )
+          : [];
+      default:
+        return []; // defaultVariants, extend, …: names and options, not classes
+    }
+  });
+}
+
+/**
+ * Class expressions: each `class` attribute (static text plus its `{…}`
+ * parts, or `class={…}`), each `class:name` directive, each cn()/clsx() call
+ * and each tv() config. One group is one class list, so the transition rule
+ * sees `cn('transition-colors', 'duration-fast ease-enter')` as a whole.
+ */
+export function classGroups(source: string): string[][] {
+  const ast = parse(source, { modern: true }) as unknown as Node;
+  const groups: string[][] = [];
+  const walk = (n: unknown): void => {
+    if (Array.isArray(n)) return n.forEach(walk);
+    if (!isNode(n)) return;
+    if (n.type === 'Attribute' && n.name === 'class') {
+      const parts = Array.isArray(n.value) ? (n.value as Node[]) : [n.value as Node];
+      groups.push(
+        parts.flatMap((part) =>
+          part?.type === 'Text'
+            ? [part.data as string]
+            : part?.type === 'ExpressionTag'
+              ? classLiterals(part.expression)
+              : [],
+        ),
+      );
+      return;
+    }
+    if (n.type === 'ClassDirective') groups.push([n.name as string]);
+    if (n.type === 'CallExpression' && isClassCall(n)) {
+      groups.push((n.arguments as unknown[]).flatMap(classLiterals));
+      return;
+    }
+    if (
+      n.type === 'CallExpression' &&
+      (n.callee as Node).type === 'Identifier' &&
+      (n.callee as Node).name === 'tv'
+    ) {
+      groups.push(tvLiterals((n.arguments as unknown[])[0]));
+      return;
+    }
+    for (const [k, v] of Object.entries(n)) if (!SKIP.has(k)) walk(v);
+  };
+  walk(ast);
+  return groups.map((g) => g.filter((s) => s.trim() !== '')).filter((g) => g.length > 0);
 }
 
 /** Bracket-aware: the index of the last `ch` outside [...] and (...), or -1. */
@@ -51,67 +191,6 @@ function lastOutside(t: string, ch: string): number {
     else if (c === ch && depth === 0) found = i;
   }
   return found;
-}
-
-/**
- * Class-bearing string literals in a piece of code. Template literals give
- * their static text and are searched again inside `${…}`. A literal used as an
- * object VALUE (`size: 'sm'`, recipe arguments, compoundVariants conditions,
- * defaultVariants) is a variant name, not a class; a quoted object KEY
- * (`{ 'font-bold': on }`) is a class.
- */
-function literals(code: string, objectValuesAreClasses = false): string[] {
-  const out: string[] = [];
-  const re = /'([^'\n]*)'|"([^"\n]*)"|`([^`]*)`/g;
-  for (const m of code.matchAll(re)) {
-    const before = code.slice(0, m.index).trimEnd();
-    if (
-      !objectValuesAreClasses &&
-      /[\w$\]'"]\s*:$/.test(before) &&
-      !/\?\s*[^:]*:$/.test(before.slice(-60))
-    )
-      continue;
-    if (m[3] !== undefined) {
-      out.push(m[3].replace(/\$\{[^}]*\}/g, ' '));
-      for (const e of m[3].matchAll(/\$\{([^}]*)\}/g)) out.push(...literals(e[1]!));
-    } else out.push(m[1] ?? m[2] ?? '');
-  }
-  return out;
-}
-
-/** In a tv() config, values under variants/base/slots are classes; the rest are names. */
-function tvLiterals(body: string): string[] {
-  const names = body
-    .replace(/defaultVariants\s*:\s*\{[^}]*\}/g, '')
-    // compoundVariants: [{ variant: 'primary', size: 'sm', class: '…' }]: keep only class/className
-    .replace(/\{([^{}]*\b(?:class|className)\s*:[^{}]*)\}/g, (_, inner: string) =>
-      inner.replace(/\b(?!class\b|className\b)[\w$]+\s*:\s*('[^']*'|"[^"]*"|\[[^\]]*\])/g, ''),
-    );
-  return literals(names, true);
-}
-
-/**
- * Class expressions: each static `class="…"`/`class='…'` (with the literals in
- * its `{…}` parts), each `class={…}`, `cn(…)` and `tv(…)`, and each
- * `class:name` directive. One group is one element's class list, so the
- * transition rule sees `cn('transition-colors', 'duration-fast ease-enter')`
- * as a whole.
- */
-export function classGroups(source: string): string[][] {
-  const markup = source.replace(/<script[\s\S]*?<\/script>/g, (s) => ' '.repeat(s.length));
-  const groups: string[][] = [];
-  for (const m of markup.matchAll(/\bclass=("([^"]*)"|'([^']*)')/g)) {
-    const value = m[2] ?? m[3] ?? '';
-    const group = [value.replace(/\{[^}]*\}/g, ' ')];
-    for (const e of value.matchAll(/\{([^}]*)\}/g)) group.push(...literals(e[1]!));
-    groups.push(group);
-  }
-  for (const m of markup.matchAll(/\bclass:([^\s=>/]+)/g)) groups.push([m[1]!]);
-  for (const m of source.matchAll(/\bclass=\{|\bcn\(|\btv\(/g)) {
-    const body = balanced(source, m.index! + m[0].length);
-    groups.push(m[0] === 'tv(' ? tvLiterals(body) : literals(body));
-  }
-  return groups.map((g) => g.filter((s) => s.trim() !== '')).filter((g) => g.length > 0);
 }
 
 /** All class strings, for tests and the unknown-class check. */
@@ -205,22 +284,36 @@ describe('class lint rules', () => {
     const src = `<script>const b = tv({ base: 'px-4', variants: { v: { a: 'bg-primary' } }, compoundVariants: [{ v: 'a', class: 'font-medium' }], defaultVariants: { v: 'a' } });</script>
 <div class="flex gap-2 {on ? 'bg-blue-500' : 'bg-card'}"><span class={cn(b({ v: 'icon-sm' }), 'text-sm', on && 'font-bold', \`p-2 \${on ? 'mt-1' : ''}\`, className)}></span></div>
 <p class='italic' class:underline={on}></p>`;
-    expect(classStrings(src).sort()).toEqual(
+    expect([...new Set(classStrings(src).flatMap(tokens))].sort()).toEqual(
       [
         'bg-blue-500',
         'bg-card',
         'bg-primary',
-        'flex gap-2  ',
+        'flex',
         'font-bold',
         'font-medium',
+        'gap-2',
         'italic',
         'mt-1',
-        'p-2  ',
+        'p-2',
         'px-4',
         'text-sm',
         'underline',
       ].sort(),
     );
+  });
+
+  it('reads ternaries, comparisons, nested templates and slot compounds as code', () => {
+    const src = `<script>
+  const r = tv({ slots: { root: 'p-2' }, variants: { size: { sm: { root: 'h-8' } } }, compoundVariants: [{ size: 'sm', class: { root: 'gap-1' } }] });
+</script>
+<a class={cn('x', on ? 'hover:bg-accent [&_svg]:size-4 data-[state=open]:bg-card px-control-x py-control-y' : 'bg-blue-500')}></a>
+<a class={href === '/docs/x' ? 'text-primary' : on ? recipe({ size: 'icon-sm' }) : ''}></a>
+<a class={\`a \${on ? \`b \${x ? 'bg-red-500' : '}'}\` : ''}\`}></a>`;
+    const found = [...new Set(classStrings(src).flatMap(tokens))];
+    for (const t of ['bg-blue-500', 'bg-red-500', 'gap-1', 'h-8', 'p-2', 'text-primary'])
+      expect(found).toContain(t);
+    for (const t of ['/docs/x', 'icon-sm', 'sm']) expect(found).not.toContain(t);
   });
 
   it("checks the transition rule across one element's class list", () => {
