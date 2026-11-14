@@ -17,6 +17,8 @@ export const twMergeExtension = {
   classGroups: {
     duration: [{ duration: ['instant', 'fast', 'normal', 'slow'] }],
     z: [{ z: ['sticky', 'overlay', 'modal', 'popover', 'tooltip', 'toast', 'skip'] }],
+    // font: inherit, not a font family: `font-mono` after it must not remove it.
+    'font-inherit': ['font-inherit'],
   },
 };
 
