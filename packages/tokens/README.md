@@ -56,6 +56,8 @@ The Tailwind-first setup (D13, [docs/tailwind-migration.md](../../docs/tailwind-
 @import '@codecora/ui/source.css'; /* Tailwind scans the components */
 ```
 
+`theme.css` already contains everything in `tokens.css` (the token layers moved inside Tailwind's `base`), so it **replaces** `tokens.css`: import one or the other, never both. Loading `tokens.css` as well would add top-level `cc.*` layers after Tailwind's, and their colours on `[data-theme]` would then beat utilities such as `bg-card`.
+
 - Colours take the shadcn names: `bg-background`, `text-foreground`, `bg-card`, `bg-muted`, `text-muted-foreground`, `bg-accent` (hover tint), `border-border`, `border-input`, `ring-ring`, `bg-primary text-primary-foreground`, `bg-destructive`, plus `primary-hover`, `primary-soft`, `destructive-soft`, `success`, `warning` (each with `-foreground` and `-soft`) and `overlay`. The raw variables (`var(--primary)`) work in your own CSS too.
 - Theme keys: `rounded-sm|md|lg` and `font-sans|display|mono` follow the theme; `h-control`, `px-control-x`, `py-control-y`, `gap-stack`, `px-cell-x`, `py-cell-y` and `size-icon` follow `data-density`; `shadow-popover`, `shadow-modal`.
 - Motion: `duration-instant|fast|normal|slow` and `ease-enter|exit|move|spring` (Tailwind's own `ease-out` and `ease-in-out` are unchanged); all drop to 0 ms under reduced motion.

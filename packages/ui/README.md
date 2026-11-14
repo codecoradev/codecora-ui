@@ -19,7 +19,8 @@ and styled with plain CSS on semantic `--cc-*` tokens. See the
 <Button variant="primary" icon={Plus}>Create key</Button>
 ```
 
-Components read `--cc-*` tokens, so load `@codecora/tokens/tokens.css` and set
+Components read `--cc-*` tokens, so load `@codecora/tokens/tokens.css` (or,
+in a Tailwind app, `@codecora/tokens/theme.css` instead, never both) and set
 `data-theme` on an ancestor. Icons are props; this package has no icon
 dependency. Every control works with the keyboard alone and at 375 px.
 
