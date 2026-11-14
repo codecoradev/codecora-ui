@@ -41,6 +41,6 @@ export { default as ToggleGroup } from './ToggleGroup.svelte';
 export { default as Tooltip } from './Tooltip.svelte';
 export { default as VisuallyHidden } from './VisuallyHidden.svelte';
 export { toast, type ToastOptions } from './toast.svelte.js';
-export { cn, type ClassValue } from './cn.js';
+export { cn, twMergeExtension, type ClassValue } from './cn.js';
 export type { IconComponent, Tone } from './types.js';
 export type { NavGroup, NavItem } from './types.js';

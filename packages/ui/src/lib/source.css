@@ -1,0 +1,5 @@
+/*
+ * Import after tailwindcss and @codecora/tokens/theme.css, so Tailwind scans
+ * the shipped components and generates the utilities they use (D13).
+ */
+@source './';

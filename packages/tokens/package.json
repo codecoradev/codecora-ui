@@ -16,6 +16,7 @@
       "default": "./dist/index.js"
     },
     "./tokens.css": "./dist/css/tokens.css",
+    "./theme.css": "./dist/css/theme.css",
     "./base.css": "./dist/css/base.css",
     "./themes/*.css": "./dist/css/themes/*.css",
     "./tailwind.css": "./dist/css/tailwind.css",

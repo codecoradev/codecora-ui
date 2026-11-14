@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { cn } from './cn.js';
+import { tailwindKeys, tailwindUtilities } from '@codecora/tokens';
+import { cn, twMergeExtension } from './cn.js';
 
 describe('cn', () => {
   it('joins strings, arrays, objects and skips falsy values', () => {
@@ -19,5 +20,43 @@ describe('cn', () => {
 
   it('keeps classes that are not Tailwind utilities', () => {
     expect(cn('cc-button', 'cc-button-primary', 'px-2')).toBe('cc-button cc-button-primary px-2');
+  });
+});
+
+describe('cn with the CodeCora theme names', () => {
+  it('replaces density sizes, durations, easing, shadows and layers like Tailwind ones', () => {
+    expect(cn('h-control px-control-x', 'h-8')).toBe('px-control-x h-8');
+    expect(cn('duration-fast', 'duration-150')).toBe('duration-150');
+    expect(cn('duration-150', 'duration-slow')).toBe('duration-slow');
+    expect(cn('ease-enter', 'ease-spring')).toBe('ease-spring');
+    expect(cn('shadow-popover', 'shadow-modal')).toBe('shadow-modal');
+    expect(cn('z-popover', 'z-toast')).toBe('z-toast');
+  });
+
+  it('keeps colour and size utilities apart', () => {
+    expect(cn('text-muted-foreground', 'text-sm')).toBe('text-muted-foreground text-sm');
+    expect(cn('shadow-popover', 'shadow-primary')).toBe('shadow-popover shadow-primary');
+  });
+
+  it('knows every name the tokens package adds', () => {
+    const spacing = Object.keys(tailwindKeys)
+      .filter((k) => k.startsWith('spacing-'))
+      .map((k) => k.slice('spacing-'.length));
+    const shadow = Object.keys(tailwindKeys)
+      .filter((k) => k.startsWith('shadow-'))
+      .map((k) => k.slice('shadow-'.length));
+    const ease = Object.keys(tailwindKeys)
+      .filter((k) => k.startsWith('ease-'))
+      .map((k) => k.slice('ease-'.length));
+    const utilities = Object.keys(tailwindUtilities);
+    expect(twMergeExtension.theme.spacing).toEqual(spacing);
+    expect(twMergeExtension.theme.shadow).toEqual(shadow);
+    expect(twMergeExtension.theme.ease).toEqual(ease);
+    expect(twMergeExtension.classGroups.duration[0]!.duration.map((d) => `duration-${d}`)).toEqual(
+      utilities.filter((u) => u.startsWith('duration-')),
+    );
+    expect(twMergeExtension.classGroups.z[0]!.z.map((z) => `z-${z}`)).toEqual(
+      utilities.filter((u) => u.startsWith('z-')),
+    );
   });
 });
