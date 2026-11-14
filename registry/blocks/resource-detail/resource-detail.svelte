@@ -161,33 +161,43 @@
         `${tool.name} ${tool.description ?? ''}`.toLowerCase().includes(query.trim().toLowerCase()),
     ),
   );
+  // The time column; on phones it starts the second line, so it aligns left.
+  const time =
+    'text-muted-foreground text-end text-[length:var(--cc-font-size-sm)] tabular-nums max-sm:text-start';
   const views = $derived([
     { value: 'featured', label: `${featuredLabel} ${featuredCount}` },
     { value: 'all', label: `${allLabel} ${tools.length}` },
   ]);
 </script>
 
-<div class="page">
+<div class="mx-auto grid max-w-224 gap-6 p-6 max-md:p-4">
   <Link href={backHref}><ChevronLeft size={16} aria-hidden="true" /> {backLabel}</Link>
 
-  <header class="head">
-    <div class="who">
+  <header class="flex flex-wrap items-start justify-between gap-4">
+    <div class="flex min-w-0 gap-4">
       <Avatar {name} size="lg" />
       <div>
-        <h1>
+        <h1 class="m-0 flex flex-wrap items-center gap-2 text-[length:var(--cc-font-size-xl)]">
           {name}
           {#if badge}<Badge tone={badge.tone}>{badge.label}</Badge>{/if}
         </h1>
-        <p class="muted">{description}</p>
+        <p class="text-muted-foreground mx-0 mt-1 mb-0">{description}</p>
       </div>
     </div>
 
-    <div class="split">
-      <Button variant="primary" icon={Plus} onclick={onprimary}>{primaryLabel}</Button>
+    <div class="flex">
+      <!-- The button and its arrow read as one control: square the joining corners. -->
+      <Button class="rounded-e-none" variant="primary" icon={Plus} onclick={onprimary}>
+        {primaryLabel}
+      </Button>
       {#if moreActions.length > 0}
         <DropdownMenu label="More ways to {primaryLabel.toLowerCase()}" items={moreActions}>
           {#snippet trigger({ props })}
-            <button type="button" class="more" {...props}>
+            <button
+              type="button"
+              class="bg-primary text-primary-foreground hover:bg-primary-hover focus-visible:outline-ring min-h-control min-w-control inline-flex cursor-pointer items-center justify-center rounded-e-md border-0 border-s border-s-[color-mix(in_srgb,var(--primary-foreground)_35%,transparent)] focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)]"
+              {...props}
+            >
               <ChevronDown size={16} aria-hidden="true" />
             </button>
           {/snippet}
@@ -197,12 +207,18 @@
   </header>
 
   <section aria-labelledby="groups-title">
-    <h2 id="groups-title">{groupsTitle}</h2>
-    <div class="box">
+    <h2 class="mx-0 mt-0 mb-3 text-[length:var(--cc-font-size-lg)]" id="groups-title">
+      {groupsTitle}
+    </h2>
+    <div class="border-border bg-card rounded-lg border">
       {#each groups as group (group.label)}
-        <div class="group">
-          <div class="group-head">
-            <h3>{group.label}</h3>
+        <div class="border-border not-first:border-t">
+          <div class="flex items-center justify-between gap-3 px-4 py-2">
+            <h3
+              class="text-muted-foreground m-0 text-[length:var(--cc-font-size-sm)] font-semibold"
+            >
+              {group.label}
+            </h3>
             {#if group.actionLabel}
               <Button variant="ghost" icon={Plus} onclick={group.onaction}>
                 {group.actionLabel}
@@ -210,17 +226,25 @@
             {/if}
           </div>
           {#if group.rows.length === 0}
-            {#if group.empty}<p class="muted pad">{group.empty}</p>{/if}
+            {#if group.empty}
+              <p class="text-muted-foreground m-0 px-4 py-3 text-[length:var(--cc-font-size-sm)]">
+                {group.empty}
+              </p>
+            {/if}
           {:else}
-            <ul>
+            <ul class="m-0 list-none p-0">
               {#each group.rows as row (row.id)}
-                <li>
-                  <span class="label">{row.label}</span>
-                  <span class="status">
+                <!-- One column per cell, so badges, times and menus line up from row to row;
+                     on phones the label takes a line and the rest share the next. -->
+                <li
+                  class="grid grid-cols-[minmax(0,1fr)_5rem_9.5rem_var(--cc-control-h)] items-center gap-3 px-4 py-2 max-sm:grid-cols-[auto_minmax(0,1fr)_var(--cc-control-h)]"
+                >
+                  <span class="min-w-0 wrap-anywhere max-sm:col-span-full">{row.label}</span>
+                  <span>
                     {#if row.status}<Badge tone={row.status.tone}>{row.status.label}</Badge>{/if}
                   </span>
-                  <span class="time">{row.time ?? ''}</span>
-                  <span class="menu">
+                  <span class={time}>{row.time ?? ''}</span>
+                  <span class="flex justify-end">
                     {#if row.menu && row.menu.length > 0}
                       <DropdownMenu label="Actions for {row.label}" items={row.menu}>
                         {#snippet trigger({ props })}
@@ -239,10 +263,12 @@
   </section>
 
   <section aria-labelledby="tools-title">
-    <h2 id="tools-title">{toolsTitle}</h2>
-    <div class="toolbar">
+    <h2 class="mx-0 mt-0 mb-3 text-[length:var(--cc-font-size-lg)]" id="tools-title">
+      {toolsTitle}
+    </h2>
+    <div class="flex flex-wrap items-center justify-between gap-3">
       <ToggleGroup label="{toolsTitle} shown" items={views} bind:value={view} />
-      <div class="search">
+      <div class="min-w-[min(100%,calc(var(--spacing)*48))] shrink grow-0 basis-72">
         <Input
           type="search"
           placeholder="Search {toolsTitle.toLowerCase()}"
@@ -253,7 +279,7 @@
     </div>
 
     {#if callout}
-      <div class="callout">
+      <div class="my-4">
         <Alert tone="neutral" title={callout.title}>{callout.text}</Alert>
       </div>
     {/if}
@@ -266,191 +292,20 @@
         description="Try other words, or switch to {allLabel.toLowerCase()}."
       />
     {:else}
-      <ul class="tools" aria-label={toolsTitle}>
+      <ul
+        class="border-border bg-card mx-0 mt-4 mb-0 list-none rounded-lg border p-0"
+        aria-label={toolsTitle}
+      >
         {#each visible as tool (tool.id)}
-          <li>
-            <span class="tool-name">
+          <li class="border-border flex flex-wrap gap-x-4 gap-y-1 px-4 py-3 not-first:border-t">
+            <span class="inline-flex items-center gap-1 font-medium">
               {#if tool.featured}<Zap size={14} aria-hidden="true" />{/if}
               {tool.name}
             </span>
-            {#if tool.description}<span class="muted">{tool.description}</span>{/if}
+            {#if tool.description}<span class="text-muted-foreground">{tool.description}</span>{/if}
           </li>
         {/each}
       </ul>
     {/if}
   </section>
 </div>
-
-<style>
-  .page {
-    display: grid;
-    gap: var(--cc-space-6);
-    max-inline-size: 56rem;
-    margin-inline: auto;
-    padding: var(--cc-space-6);
-  }
-  .head {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: var(--cc-space-4);
-  }
-  .who {
-    display: flex;
-    gap: var(--cc-space-4);
-    min-inline-size: 0;
-  }
-  h1 {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--cc-space-2);
-    margin: 0;
-    font-size: var(--cc-font-size-xl);
-  }
-  h2 {
-    margin: 0 0 var(--cc-space-3);
-    font-size: var(--cc-font-size-lg);
-  }
-  h3 {
-    margin: 0;
-    color: var(--cc-text-muted);
-    font-size: var(--cc-font-size-sm);
-    font-weight: 600;
-  }
-  .muted {
-    margin: var(--cc-space-1) 0 0;
-    color: var(--cc-text-muted);
-  }
-  .pad {
-    margin: 0;
-    padding: var(--cc-space-3) var(--cc-space-4);
-    font-size: var(--cc-font-size-sm);
-  }
-  .split {
-    display: flex;
-  }
-  .split :global(.cc-button) {
-    border-start-end-radius: 0;
-    border-end-end-radius: 0;
-  }
-  .more {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-block-size: var(--cc-control-h);
-    min-inline-size: var(--cc-control-h);
-    border: 0;
-    border-inline-start: 1px solid color-mix(in srgb, var(--cc-accent-text) 35%, transparent);
-    border-start-end-radius: var(--cc-radius-md);
-    border-end-end-radius: var(--cc-radius-md);
-    background: var(--cc-accent);
-    color: var(--cc-accent-text);
-    cursor: pointer;
-  }
-  .more:hover {
-    background: var(--cc-accent-hover);
-  }
-  .more:focus-visible {
-    outline: var(--cc-focus-width) solid var(--cc-focus);
-    outline-offset: var(--cc-focus-offset);
-  }
-  .box {
-    border: 1px solid var(--cc-border);
-    border-radius: var(--cc-radius-lg);
-    background: var(--cc-surface-raised);
-  }
-  .group + .group {
-    border-block-start: 1px solid var(--cc-border);
-  }
-  .group-head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--cc-space-3);
-    padding: var(--cc-space-2) var(--cc-space-4);
-  }
-  ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-  /* One column per cell, so badges, times and menus line up from row to row. */
-  .group li {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 5rem 9.5rem var(--cc-control-h);
-    align-items: center;
-    gap: var(--cc-space-3);
-    padding: var(--cc-space-2) var(--cc-space-4);
-  }
-  .label {
-    min-inline-size: 0;
-    overflow-wrap: anywhere;
-  }
-  .time {
-    color: var(--cc-text-muted);
-    font-size: var(--cc-font-size-sm);
-    font-variant-numeric: tabular-nums;
-    text-align: end;
-  }
-  .menu {
-    display: flex;
-    justify-content: flex-end;
-  }
-  .toolbar {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--cc-space-3);
-  }
-  .search {
-    flex: 0 1 18rem;
-    min-inline-size: min(100%, 12rem);
-  }
-  .callout {
-    margin-block: var(--cc-space-4);
-  }
-  .tools {
-    margin-block-start: var(--cc-space-4);
-    border: 1px solid var(--cc-border);
-    border-radius: var(--cc-radius-lg);
-    background: var(--cc-surface-raised);
-  }
-  .tools li {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--cc-space-1) var(--cc-space-4);
-    padding: var(--cc-space-3) var(--cc-space-4);
-  }
-  .tools li + li {
-    border-block-start: 1px solid var(--cc-border);
-  }
-  .tools .muted {
-    margin: 0;
-  }
-  .tool-name {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--cc-space-1);
-    font-weight: 500;
-  }
-  @media (width < 40rem) {
-    /* The label takes a line; status, time and menu share the next one. */
-    .group li {
-      grid-template-columns: auto minmax(0, 1fr) var(--cc-control-h);
-    }
-    .label {
-      grid-column: 1 / -1;
-    }
-    .time {
-      text-align: start;
-    }
-  }
-  @media (width < 48rem) {
-    .page {
-      padding: var(--cc-space-4);
-    }
-  }
-</style>

@@ -16,15 +16,15 @@
   const url = (name: string) =>
     `${origin}${resolve('/')}r/${name}.json`.replace(/([^:])\/\//, '$1/');
 
-  const bridge = `@import '@codecora/tokens/tokens.css';
-@import '@codecora/tokens/shadcn.css';
+  const bridge = `@import 'tailwindcss';
+@import '@codecora/tokens/theme.css';
+@import '@codecora/ui/source.css';
 
 :root,
 .dark {
-  --background: var(--cc-surface);
-  --primary: var(--cc-accent);
-  --ring: var(--cc-focus);
-  /* ... every shadcn variable, mapped onto a --cc-* token */
+  --background: revert-layer;
+  --primary: revert-layer;
+  /* ... every shadcn variable, handed back to theme.css */
 }`;
 </script>
 
@@ -33,7 +33,7 @@
   <p>
     Blocks are copied into your app (<code>$lib/components</code>) and are yours to change. They are
     built from <code>@codecora/ui</code>, which stays a package, and each one installs the theme
-    bridge first.
+    item first.
   </p>
   <div class="items">
     {#each registryItems as item (item.name)}
@@ -54,18 +54,21 @@
 </section>
 
 <section aria-labelledby="r-bridge">
-  <h2 id="r-bridge">What the theme bridge does</h2>
+  <h2 id="r-bridge">What the theme item does</h2>
   <p>
-    <code>cc-theme</code> adds <code>@codecora/tokens</code>, imports its CSS and rewrites the
-    shadcn variables in your <code>:root</code> and <code>.dark</code> blocks to read CodeCora
-    tokens. Your shadcn components then follow <code>data-theme</code>, <code>data-accent</code> and
-    <code>data-density</code> on any element, nested regions included.
+    <code>cc-theme</code> installs <code>@codecora/tokens</code> and <code>@codecora/ui</code>, adds
+    their Tailwind 4 imports to your global CSS and hands the shadcn variables in your
+    <code>:root</code> and <code>.dark</code> blocks back to the theme, which declares them. Your
+    shadcn components and the blocks then follow <code>data-theme</code>, <code>data-accent</code>
+    and <code>data-density</code> on any element, nested regions included.
   </p>
   <CodeBlock code={bridge} language="css" />
   <p>
     Dark themes (for example <code>corin</code>) set their own colours, but shadcn's
     <code>dark:</code> utilities still follow the <code>.dark</code> class: add it next to a dark
-    <code>data-theme</code>. See the <a href={resolve('/tokens')}>token catalogue</a> for every theme.
+    <code>data-theme</code>, or delete shadcn's <code>@custom-variant dark</code> line so
+    <code>dark:</code> follows the dark themes too. See the
+    <a href={resolve('/tokens')}>token catalogue</a> for every theme.
   </p>
 </section>
 

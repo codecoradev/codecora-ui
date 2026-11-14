@@ -69,8 +69,8 @@
   ];
 </script>
 
-<section class="cc-data-table" aria-label={title}>
-  <h2>{title}</h2>
+<section class="cc-data-table grid grid-cols-1 gap-4" aria-label={title}>
+  <h2 class="text-[length:var(--cc-font-size-lg)]">{title}</h2>
   <DataTable
     label={title}
     {columns}
@@ -84,7 +84,7 @@
     emptyDescription="Try another name or status."
   >
     {#snippet toolbar()}
-      <div class="filters">
+      <div class="flex flex-wrap gap-2">
         <Input
           type="search"
           aria-label="Filter by name"
@@ -137,19 +137,3 @@
     {/snippet}
   </DataTable>
 </section>
-
-<style>
-  .cc-data-table {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--cc-space-4);
-  }
-  h2 {
-    font-size: var(--cc-font-size-lg);
-  }
-  .filters {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--cc-space-2);
-  }
-</style>

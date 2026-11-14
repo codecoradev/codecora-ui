@@ -6,19 +6,13 @@
     {
       "name": "cc-theme",
       "type": "registry:theme",
-      "title": "CodeCora theme bridge",
-      "description": "Installs @codecora/tokens and points the shadcn-svelte variables at --cc-* tokens, so shadcn components follow data-theme, data-accent and data-density.",
+      "title": "CodeCora theme",
+      "description": "Installs @codecora/tokens and @codecora/ui and imports their Tailwind 4 CSS, so shadcn components and the blocks follow data-theme, data-accent and data-density.",
       "registryDependencies": [],
       "files": [],
       "css": {
-        "@import \"@codecora/tokens/tokens.css\"": {},
-        "@import \"@codecora/tokens/shadcn.css\"": {}
-      },
-      "cssVars": {
-        "theme": {
-          "font-sans": "var(--cc-font-sans)",
-          "font-mono": "var(--cc-font-mono)"
-        }
+        "@import \"@codecora/tokens/theme.css\"": {},
+        "@import \"@codecora/ui/source.css\"": {}
       }
     },
     {
