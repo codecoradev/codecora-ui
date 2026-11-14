@@ -60,6 +60,8 @@ Each theme defines the same roles; values differ per theme.
 - **Accent:** `accent` (fill, link, selection), `accent-hover`, `accent-text` (label on the fill), `focus` (ring), `accent-soft` (selected-row tint).
 - **Status:** `danger`, `success`, `warning`, each with `-text` (label on the fill) and `-soft` (tint behind status text).
 
+In Tailwind utilities (D13) these roles take the shadcn names: the action colour above is `primary` (`bg-primary text-primary-foreground`), and shadcn's `accent` is the hover tint (`surface-hover`), not the action colour. The full map is in [docs/tailwind-migration.md](docs/tailwind-migration.md).
+
 ### Named Rules
 **The Semantic Only Rule.** Components use semantic roles and nothing else: Tailwind utilities on the shadcn-named roles (`bg-primary`, `text-muted-foreground`; D13), or `--cc-*` tokens in files not yet migrated ([docs/tailwind-migration.md](docs/tailwind-migration.md)). A palette colour (`bg-blue-500`), an arbitrary colour value or a raw colour outside `packages/tokens` is a defect.
 

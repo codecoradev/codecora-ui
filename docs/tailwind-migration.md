@@ -75,7 +75,12 @@ Non-colour tokens use Tailwind's own theme namespaces wherever one exists:
 | `icon-size`, `icon-stroke`, `focus-width|offset`, badge shape hooks | variables kept, read through `--spacing-icon` or `[stroke-width:var(--icon-stroke)]` | `size-icon` |
 
 `dark:` follows the theme: a `@custom-variant dark` matches every theme whose
-`colorScheme` is dark, plus `.dark` for shadcn compatibility.
+`colorScheme` is dark, plus `.dark` for shadcn compatibility. It matches any
+dark ancestor, so a light theme nested inside a dark one still sees `dark:`;
+CSS cannot pick the nearest theme. Components and blocks therefore never use
+`dark:` (the semantic roles already change per theme, D8); it is for app code
+that does not nest themes, and the class lint rejects it in `packages/` and
+`registry/`.
 
 The token source stays TypeScript (`palette.ts`, `themes.ts`) because the
 contrast gate checks every theme and accent from it; the build emits
@@ -118,7 +123,7 @@ One issue and one PR per phase (batches may split further).
 |---|---|---|
 | 0 | D13, this plan, governing docs | Merged to `develop` |
 | 1 | Tooling: `tailwindcss`, `@tailwindcss/vite`, `tailwind-variants`, `tailwind-merge`, `clsx`, Prettier and ESLint Tailwind plugins; Tailwind in the playground and component tests | Playground builds with Tailwind; gates green |
-| 2 | Tokens: `theme.css` (shadcn names, themes, accents, density, motion utilities, dark variant), `@codecora/ui/source.css`; `--cc-*` emitted as aliases for the transition | Contrast gate and design-doc test pass on the new names |
+| 2 | Tokens: `theme.css` (shadcn names, themes, accents, density, motion utilities, dark variant), `@codecora/ui/source.css`. Until phase 10 the shadcn names read the `--cc-*` tokens, the same direction as `shadcn.css` and the `cc-theme` item, so loading them together never makes a variable loop | Contrast gate and design-doc test pass on the new names |
 | 3 | Class lint gate (replaces `usage.test.ts` for migrated files) | A palette colour or literal duration fails CI |
 | 4 | Components, batch A: Button, IconButton, Badge, Kbd, Link, Separator, Spinner, Skeleton, Card, Alert, Avatar, VisuallyHidden, EmptyState, Progress | Baselines unchanged, axe green |
 | 5 | Batch B (forms): Field, FieldGroup, Input, Textarea, Checkbox, RadioGroup, Switch, Slider, Select, Combobox, ToggleGroup | Same |
@@ -126,7 +131,7 @@ One issue and one PR per phase (batches may split further).
 | 7 | Batch D (navigation, shell, data): Tabs, Accordion, Breadcrumb, Pagination, AppShell, Sidebar, Table, DataTable, CodeBlock; then `@codecora/memory` components | Same |
 | 8 | Registry: blocks on utilities and `cn()`; `cc-theme` installs `theme.css` instead of rewriting variables | `registry.test.ts` and a shadcn-svelte install smoke test pass |
 | 9 | Playground pages on utilities | No `<style>` left except documented cases |
-| 10 | Remove `--cc-*` aliases, `shadcn.css` and `tailwind.css`; update READMEs, DESIGN.md token names, CHANGELOG | Breaking release; the maintainer picks the version |
+| 10 | Flip the direction (themes declare the shadcn names), remove `--cc-*`, `shadcn.css` and `tailwind.css` in the same release; update READMEs, DESIGN.md token names, CHANGELOG | Breaking release; the maintainer picks the version |
 
 ## Consumer impact
 
@@ -137,7 +142,7 @@ One issue and one PR per phase (batches may split further).
   `app.css` (the `cc-theme` item does it), then shadcn components and
   CodeCora components share one set of variables.
 - Apps that override `--cc-*` tokens rename the overrides with the table
-  above while the aliases still exist (phases 2 to 9).
+  above before phase 10, while `--cc-*` still exists (phases 2 to 9).
 
 ## Decided
 
