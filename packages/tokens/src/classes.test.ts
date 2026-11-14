@@ -1,7 +1,9 @@
 // @vitest-environment node
 // Class lint (D13, #159): the DESIGN.md rules, checked on Tailwind class
 // strings in every file already written with utilities (a .svelte file
-// without a <style> block, and its tv()/cn() calls). Files still on plain CSS
+// without a <style> block, and its tv()/cn() calls, plus the variables and
+// prop defaults those read). Strings built elsewhere (imported constants,
+// .ts modules) are not followed. Files still on plain CSS
 // are covered by usage.test.ts until they migrate.
 import { readdirSync, readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
@@ -90,7 +92,10 @@ function classLiterals(n: unknown): string[] {
       });
     case 'CallExpression':
       return isClassCall(n) ? (n.arguments as unknown[]).flatMap(classLiterals) : [];
+    case 'SpreadElement':
+      return classLiterals(n.argument);
     case 'ChainExpression':
+    case 'TSSatisfiesExpression':
     case 'TSAsExpression':
     case 'TSNonNullExpression':
       return classLiterals(n.expression);
@@ -99,52 +104,112 @@ function classLiterals(n: unknown): string[] {
   }
 }
 
-/** Classes in a tv() config: base, slots, variant values, compound class/className. */
-function tvLiterals(config: unknown): string[] {
+/**
+ * Class lists in a tv() config, one per slot (each slot styles its own
+ * element): base, slots, variant values and compound class/className, each
+ * filed under the slot it targets (`base` without slots).
+ */
+function tvGroups(config: unknown): string[][] {
   if (!isNode(config) || config.type !== 'ObjectExpression') return [];
-  const values = (obj: unknown): unknown[] =>
+  const bySlot = new Map<string, string[]>();
+  const add = (slot: string, v: unknown) =>
+    bySlot.set(slot, [...(bySlot.get(slot) ?? []), ...classLiterals(v)]);
+  const props = (obj: unknown): Node[] =>
     isNode(obj) && obj.type === 'ObjectExpression'
-      ? (obj.properties as Node[]).filter((p) => p.type === 'Property').map((p) => p.value)
-      : [obj];
-  const slotValues = (v: unknown) => values(v).flatMap(classLiterals);
-  return (config.properties as Node[]).flatMap((p) => {
-    if (p.type !== 'Property') return [];
+      ? (obj.properties as Node[]).filter((p) => p.type === 'Property')
+      : [];
+  /** A class value or a { slot: classes } map. */
+  const file = (v: unknown) =>
+    isNode(v) && v.type === 'ObjectExpression'
+      ? props(v).forEach((p) => add(keyName(p) ?? 'base', p.value))
+      : add('base', v);
+  for (const p of props(config)) {
     switch (keyName(p)) {
       case 'base':
-        return classLiterals(p.value);
+        add('base', p.value);
+        break;
       case 'slots':
-        return slotValues(p.value);
+        file(p.value);
+        break;
       case 'variants':
-        return values(p.value).flatMap((variant) => values(variant).flatMap(slotValues));
+        for (const variant of props(p.value))
+          for (const option of props(variant.value)) file(option.value);
+        break;
       case 'compoundVariants':
       case 'compoundSlots':
-        return isNode(p.value) && p.value.type === 'ArrayExpression'
-          ? (p.value.elements as unknown[]).flatMap((entry) =>
-              isNode(entry) && entry.type === 'ObjectExpression'
-                ? (entry.properties as Node[])
-                    .filter(
-                      (q) =>
-                        q.type === 'Property' && ['class', 'className'].includes(keyName(q) ?? ''),
-                    )
-                    .flatMap((q) => slotValues(q.value))
-                : [],
-            )
-          : [];
-      default:
-        return []; // defaultVariants, extend, …: names and options, not classes
+        if (isNode(p.value) && p.value.type === 'ArrayExpression')
+          for (const entry of p.value.elements as unknown[])
+            for (const q of props(entry))
+              if (['class', 'className'].includes(keyName(q) ?? '')) file(q.value);
+        break;
+      default: // defaultVariants, extend, …: names and options, not classes
     }
-  });
+  }
+  return [...bySlot.values()];
 }
 
 /**
+ * Identifiers in class-value positions (the same places classLiterals reads
+ * strings from), to follow `class={cls}` back to `cls`. Identifiers used as
+ * conditions or recipe options (`button({ variant })`) are not followed.
+ */
+function identifiers(n: unknown, into = new Set<string>()): Set<string> {
+  if (Array.isArray(n)) n.forEach((x) => identifiers(x, into));
+  else if (isNode(n))
+    switch (n.type) {
+      case 'Identifier':
+        into.add(n.name as string);
+        break;
+      case 'ExpressionTag':
+        identifiers(n.expression, into);
+        break;
+      case 'ConditionalExpression':
+        identifiers([n.consequent, n.alternate], into);
+        break;
+      case 'LogicalExpression':
+        identifiers(n.operator === '&&' ? [n.right] : [n.left, n.right], into);
+        break;
+      case 'BinaryExpression':
+        if (n.operator === '+') identifiers([n.left, n.right], into);
+        break;
+      case 'ArrayExpression':
+        identifiers(n.elements, into);
+        break;
+      case 'SpreadElement':
+        identifiers(n.argument, into);
+        break;
+      case 'TemplateLiteral':
+        identifiers(n.expressions, into);
+        break;
+      case 'CallExpression':
+        if (isClassCall(n)) identifiers(n.arguments, into);
+        break;
+      default:
+    }
+  return into;
+}
+
+/** `$derived(x)` is x; other initialisers stay as they are. */
+const unwrap = (n: unknown): unknown =>
+  isNode(n) &&
+  n.type === 'CallExpression' &&
+  (n.callee as Node).type === 'Identifier' &&
+  (n.callee as Node).name === '$derived'
+    ? (n.arguments as unknown[])[0]
+    : n;
+
+/**
  * Class expressions: each `class` attribute (static text plus its `{…}`
- * parts, or `class={…}`), each `class:name` directive, each cn()/clsx() call
- * and each tv() config. One group is one class list, so the transition rule
- * sees `cn('transition-colors', 'duration-fast ease-enter')` as a whole.
+ * parts, or `class={…}`), each `class:name` directive, each cn()/clsx() call,
+ * each tv() slot, and the value of any variable or prop default that a class
+ * expression reads (`const cls = $derived(…)`, `class: className = '…'`).
+ * One group is one class list, so the transition rule sees
+ * `cn('transition-colors', 'duration-fast ease-enter')` as a whole.
  */
 export function classGroups(source: string): string[][] {
   const ast = parse(source, { modern: true }) as unknown as Node;
   const groups: string[][] = [];
+  const read = new Set<string>();
   const walk = (n: unknown): void => {
     if (Array.isArray(n)) return n.forEach(walk);
     if (!isNode(n)) return;
@@ -159,11 +224,16 @@ export function classGroups(source: string): string[][] {
               : [],
         ),
       );
+      identifiers(
+        parts.filter((part) => part?.type === 'ExpressionTag'),
+        read,
+      );
       return;
     }
     if (n.type === 'ClassDirective') groups.push([n.name as string]);
     if (n.type === 'CallExpression' && isClassCall(n)) {
       groups.push((n.arguments as unknown[]).flatMap(classLiterals));
+      identifiers(n.arguments, read);
       return;
     }
     if (
@@ -171,12 +241,23 @@ export function classGroups(source: string): string[][] {
       (n.callee as Node).type === 'Identifier' &&
       (n.callee as Node).name === 'tv'
     ) {
-      groups.push(tvLiterals((n.arguments as unknown[])[0]));
+      groups.push(...tvGroups((n.arguments as unknown[])[0]));
       return;
     }
     for (const [k, v] of Object.entries(n)) if (!SKIP.has(k)) walk(v);
   };
   walk(ast);
+  // Second pass: values of the variables and prop defaults those expressions read.
+  const follow = (n: unknown): void => {
+    if (Array.isArray(n)) return n.forEach(follow);
+    if (!isNode(n)) return;
+    const id = (x: unknown) => (isNode(x) && x.type === 'Identifier' ? (x.name as string) : '');
+    if (n.type === 'VariableDeclarator' && read.has(id(n.id)))
+      groups.push(classLiterals(unwrap(n.init)));
+    if (n.type === 'AssignmentPattern' && read.has(id(n.left))) groups.push(classLiterals(n.right));
+    for (const [k, v] of Object.entries(n)) if (!SKIP.has(k)) follow(v);
+  };
+  follow(ast);
   return groups.map((g) => g.filter((s) => s.trim() !== '')).filter((g) => g.length > 0);
 }
 
@@ -314,6 +395,29 @@ describe('class lint rules', () => {
     for (const t of ['bg-blue-500', 'bg-red-500', 'gap-1', 'h-8', 'p-2', 'text-primary'])
       expect(found).toContain(t);
     for (const t of ['/docs/x', 'icon-sm', 'sm']) expect(found).not.toContain(t);
+  });
+
+  it('checks each tv() slot as its own class list', () => {
+    const ok = `<script>const s = tv({ slots: { track: 'transition-colors duration-fast ease-enter', thumb: 'transition-transform duration-normal ease-spring' } });</script>`;
+    expect(classGroups(ok).flatMap((g) => violations(g, 'packages/ui/src/lib/X.svelte'))).toEqual(
+      [],
+    );
+    const bare = `<script>const s = tv({ slots: { track: 'transition-colors', thumb: 'transition-transform duration-normal ease-spring' } });</script>`;
+    expect(
+      classGroups(bare)
+        .flatMap((g) => violations(g, 'packages/ui/src/lib/X.svelte'))
+        .join(),
+    ).toContain('without a duration token');
+  });
+
+  it('follows class={x} to the variable or prop default it reads', () => {
+    const src = `<script>let { class: className = 'bg-blue-500' } = $props(); const cls = $derived(on ? 'text-red-500' : 'p-2'); const other = 'not-a-class';</script>
+<div class={cn(cls, className)}></div>`;
+    const found = classStrings(src).flatMap(tokens);
+    for (const t of ['bg-blue-500', 'text-red-500', 'p-2']) expect(found).toContain(t);
+    expect(found).not.toContain('not-a-class');
+    const recipe = `<script>let { size = 'icon-sm' } = $props();</script><b class={cn(button({ size }))}></b>`;
+    expect(classStrings(recipe)).toEqual([]);
   });
 
   it("checks the transition rule across one element's class list", () => {
