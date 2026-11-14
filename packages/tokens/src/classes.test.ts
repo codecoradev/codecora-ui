@@ -206,7 +206,7 @@ const unwrap = (n: unknown): unknown =>
  * One group is one class list, so the transition rule sees
  * `cn('transition-colors', 'duration-fast ease-enter')` as a whole.
  */
-export function classGroups(source: string): string[][] {
+function extract(source: string): { groups: string[][]; followed: string[] } {
   const ast = parse(source, { modern: true }) as unknown as Node;
   const groups: string[][] = [];
   const read = new Set<string>();
@@ -253,13 +253,30 @@ export function classGroups(source: string): string[][] {
     if (!isNode(n)) return;
     const id = (x: unknown) => (isNode(x) && x.type === 'Identifier' ? (x.name as string) : '');
     if (n.type === 'VariableDeclarator' && read.has(id(n.id)))
-      groups.push(classLiterals(unwrap(n.init)));
-    if (n.type === 'AssignmentPattern' && read.has(id(n.left))) groups.push(classLiterals(n.right));
+      followed.push(...classLiterals(unwrap(n.init)));
+    if (n.type === 'AssignmentPattern' && read.has(id(n.left)))
+      followed.push(...classLiterals(n.right));
     for (const [k, v] of Object.entries(n)) if (!SKIP.has(k)) follow(v);
   };
+  const followed: string[] = [];
   follow(ast);
-  return groups.map((g) => g.filter((s) => s.trim() !== '')).filter((g) => g.length > 0);
+  return {
+    groups: groups.map((g) => g.filter((s) => s.trim() !== '')).filter((g) => g.length > 0),
+    followed: followed.filter((s) => s.trim() !== ''),
+  };
 }
+
+/** Class lists written in place: attributes, directives, cn()/clsx() calls, tv() slots. */
+export const classGroups = (source: string): string[][] => extract(source).groups;
+
+/**
+ * Strings followed from `class={x}` to the variable or prop default `x`.
+ * Names are matched by name, not scope, and the value is not joined to the
+ * element that reads it, so these get the per-class rules only (no timing
+ * rule, no unknown-class check). `$state()`/`$derived.by()` values and
+ * identifiers inside a followed value are not followed.
+ */
+export const followedStrings = (source: string): string[] => extract(source).followed;
 
 /** Bracket-aware: the index of the last `ch` outside [...] and (...), or -1. */
 function lastOutside(t: string, ch: string): number {
@@ -275,7 +292,10 @@ function lastOutside(t: string, ch: string): number {
 }
 
 /** All class strings, for tests and the unknown-class check. */
-export const classStrings = (source: string): string[] => [...new Set(classGroups(source).flat())];
+export const classStrings = (source: string): string[] => {
+  const { groups, followed } = extract(source);
+  return [...new Set([...groups.flat(), ...followed])];
+};
 
 const tokens = (s: string) => s.split(/\s+/).filter(Boolean);
 /** Hook classes (`cc-button`) and group/peer markers carry no style of their own. */
@@ -292,7 +312,7 @@ const springOnly =
   /^transition-(transform|\[(transform|translate|scale|rotate)(,(transform|translate|scale|rotate))*\])$/;
 
 /** Rule violations in one element's class list (a group of strings); `file` is relative to the repo. */
-export function violations(classList: string | string[], file: string): string[] {
+export function violations(classList: string | string[], file: string, timing = true): string[] {
   const out: string[] = [];
   const list = tokens([classList].flat().join(' '));
   const utilities = list.map(utility);
@@ -311,7 +331,9 @@ export function violations(classList: string | string[], file: string): string[]
       out.push(`${t}: dark: in shared code, rely on the theme roles`);
   }
   // transition-none (also under motion-reduce:) stops motion, so it needs no timing.
-  const motion = utilities.filter((u) => /^transition(-|$)/.test(u) && u !== 'transition-none');
+  const motion = !timing
+    ? []
+    : utilities.filter((u) => /^transition(-|$)/.test(u) && u !== 'transition-none');
   if (motion.length > 0) {
     if (!utilities.some((u) => /^duration-(instant|fast|normal|slow)$/.test(u)))
       out.push(`${motion.join(' ')}: transition without a duration token`);
@@ -416,6 +438,10 @@ describe('class lint rules', () => {
     const found = classStrings(src).flatMap(tokens);
     for (const t of ['bg-blue-500', 'text-red-500', 'p-2']) expect(found).toContain(t);
     expect(found).not.toContain('not-a-class');
+    const split = `<script>const t = 'transition-colors';</script><i class="duration-fast ease-enter {t}"></i>`;
+    expect(
+      followedStrings(split).flatMap((f) => violations(f, 'packages/ui/src/lib/X.svelte', false)),
+    ).toEqual([]);
     const recipe = `<script>let { size = 'icon-sm' } = $props();</script><b class={cn(button({ size }))}></b>`;
     expect(classStrings(recipe)).toEqual([]);
   });
@@ -471,9 +497,13 @@ describe('migrated files', () => {
   for (const file of files) {
     const name = relative(root, file);
     it(`${name} follows the class rules`, () => {
-      const groups = classGroups(readFileSync(file, 'utf8'));
+      const source = readFileSync(file, 'utf8');
+      const groups = classGroups(source);
       const strings = groups.flat();
-      const found = groups.flatMap((g) => violations(g, name));
+      const found = [
+        ...groups.flatMap((g) => violations(g, name)),
+        ...followedStrings(source).flatMap((f) => violations(f, name, false)),
+      ];
       const unknown = strings
         .flatMap(tokens)
         .filter((t) => !hook(t) && /[-:[/]/.test(t) && !known(t))
