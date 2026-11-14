@@ -31,7 +31,7 @@
 </script>
 
 <svg
-  class="cc-glyph"
+  class="cc-glyph size-icon flex-none [stroke-width:var(--cc-icon-stroke)]"
   viewBox="0 0 24 24"
   fill="none"
   stroke="currentColor"
@@ -42,12 +42,3 @@
 >
   <path d={paths[name]} />
 </svg>
-
-<style>
-  .cc-glyph {
-    flex: none;
-    width: var(--cc-icon-size);
-    height: var(--cc-icon-size);
-    stroke-width: var(--cc-icon-stroke);
-  }
-</style>

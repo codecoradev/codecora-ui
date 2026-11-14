@@ -53,3 +53,4 @@
 @source './Spinner.svelte';
 @source './VisuallyHidden.svelte';
 @source './internal/Icon.svelte';
+@source './internal/Glyph.svelte';
