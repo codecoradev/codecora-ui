@@ -3,3 +3,5 @@
  * the shipped components and generates the utilities they use (D13).
  */
 @source './';
+@source not './**/*.test.*';
+@source not './fixtures';

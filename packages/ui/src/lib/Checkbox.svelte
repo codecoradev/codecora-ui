@@ -65,7 +65,7 @@
       {#if indeterminate}<Glyph name="minus" />{:else}<Glyph name="check" />{/if}
     {/snippet}
   </Checkbox.Root>
-  <div class={labelHidden ? 'text hidden' : 'text'}>
+  <div class={labelHidden ? 'text label-hidden' : 'text'}>
     <label for={controlId}>{label}</label>
     {#if description}<p id={hintId}>{description}</p>{/if}
   </div>
@@ -128,7 +128,7 @@
     opacity: 0.55;
     cursor: not-allowed;
   }
-  .hidden {
+  .label-hidden {
     position: absolute;
     width: 1px;
     height: 1px;

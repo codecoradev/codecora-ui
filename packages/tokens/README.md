@@ -60,7 +60,7 @@ The Tailwind-first setup (D13, [docs/tailwind-migration.md](../../docs/tailwind-
 - Theme keys: `rounded-sm|md|lg` and `font-sans|display|mono` follow the theme; `h-control`, `px-control-x`, `py-control-y`, `gap-stack`, `px-cell-x`, `py-cell-y` and `size-icon` follow `data-density`; `shadow-popover`, `shadow-modal`.
 - Motion: `duration-instant|fast|normal|slow` and `ease-enter|exit|move|spring` (Tailwind's own `ease-out` and `ease-in-out` are unchanged); all drop to 0 ms under reduced motion.
 - Stacking: `z-sticky`, `z-overlay`, `z-modal`, `z-popover`, `z-tooltip`, `z-toast`, `z-skip`.
-- `dark:` applies inside a dark theme (`corin`, `neutral-dark`, `uteke-dark`, `dimmed`, `gaira`, `tagfold`) and under shadcn's `.dark`.
+- `dark:` follows the nearest theme: it applies inside a dark theme (`corin`, `neutral-dark`, `uteke-dark`, `dimmed`, `gaira`, `tagfold`) or shadcn's `.dark`, and not inside a light theme nested in one. A dark theme nested two levels deeper reads as light, so components rely on the semantic colours, not `dark:`.
 - The type scale is Tailwind's (`text-xl` is 1.25rem).
 
 The token layers sit inside Tailwind's `base` layer, so a utility always beats a token and unlayered app CSS still overrides any token. While the migration runs, these names read the `--cc-*` tokens; the exports `themeVariables`, `tailwindKeys` and `tailwindUtilities` list them.

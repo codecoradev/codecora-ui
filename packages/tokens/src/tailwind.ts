@@ -80,14 +80,22 @@ export const tailwindUtilities: Readonly<Record<string, Record<string, string>>>
 /** Elements where a token can change, so the shadcn variables must be re-read there. */
 const SCOPES = ':root, [data-theme], [data-accent]';
 
-/** `dark:` matches inside a dark theme (and shadcn's `.dark`). */
+/**
+ * `dark:` follows the nearest theme: it matches an element whose closest
+ * `data-theme` (itself or an ancestor) is a dark theme, or shadcn's `.dark`.
+ * CSS cannot ask for the closest ancestor, so the selector covers two levels
+ * (a dark theme, and a light theme inside it); a dark theme nested inside
+ * that light one reads as light. Components never use `dark:` (D13 plan).
+ */
 export function darkSelector(): string {
-  const dark = themeNames.filter((n) => themes[n].colorScheme === 'dark');
-  return [
-    '.dark',
-    '.dark *',
-    ...dark.flatMap((n) => [`[data-theme='${n}']`, `[data-theme='${n}'] *`]),
-  ].join(', ');
+  const group = (scheme: 'light' | 'dark') =>
+    `:where(${[
+      ...(scheme === 'dark' ? ['.dark'] : []),
+      ...themeNames.filter((n) => themes[n].colorScheme === scheme).map((n) => `[data-theme=${n}]`),
+    ].join(',')})`;
+  const d = group('dark');
+  const l = group('light');
+  return `${d},${d} *:not(${l},${d} ${l} *)`;
 }
 
 /**
@@ -121,5 +129,10 @@ export function tailwindThemeCss(): string {
 
   const variant = `@custom-variant dark (&:where(${darkSelector()}));\n`;
 
-  return [tokens, variables, theme, utilities, variant].join('\n');
+  // The duration utilities set --tw-duration; Tailwind registers it as
+  // non-inheriting only when one of its own duration-<n> classes is used, so
+  // register it here too, or a child's plain `transition` would inherit it.
+  const property = '@property --tw-duration {\n  syntax: "*";\n  inherits: false;\n}\n';
+
+  return [tokens, variables, theme, utilities, property, variant].join('\n');
 }

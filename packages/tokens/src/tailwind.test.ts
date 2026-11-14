@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 import { compile } from 'tailwindcss';
 import { describe, expect, it } from 'vitest';
 import { semanticTokens } from './schema.js';
@@ -102,11 +103,56 @@ describe('theme.css compiled by Tailwind', () => {
     expect(out).toContain('z-index: var(--cc-layer-popover)');
   });
 
-  it('applies dark: inside dark themes only', async () => {
-    const out = await build(['dark:bg-card']);
+  it('emits dark: with the theme selector and registers --tw-duration', async () => {
+    const out = await build(['dark:bg-card', 'duration-fast']);
     const rule = out.slice(out.indexOf('.dark\\:bg-card'));
-    expect(rule).toContain("[data-theme='corin']");
-    expect(rule).not.toContain("[data-theme='corin-light']");
-    expect(darkSelector()).toContain('.dark');
+    expect(rule).toContain('[data-theme=corin]');
+    expect(out).toMatch(/@property --tw-duration \{\s+syntax: "\*";\s+inherits: false;/);
+  });
+});
+
+describe('dark: follows the nearest theme', () => {
+  const selector = `:where(${darkSelector()})`;
+
+  /** Builds nested elements from theme names (or `.dark`) and returns the innermost child. */
+  function nest(...themes: string[]): Element {
+    document.body.replaceChildren();
+    let parent: Element = document.body;
+    for (const t of themes) {
+      const el = document.createElement('div');
+      if (t === '.dark') el.className = 'dark';
+      else el.setAttribute('data-theme', t);
+      parent.append(el);
+      parent = el;
+    }
+    const leaf = document.createElement('span');
+    parent.append(leaf);
+    return leaf;
+  }
+
+  it('stays short enough to repeat on every dark: utility', () => {
+    expect(selector.length).toBeLessThan(1024);
+  });
+
+  it.each([
+    [['corin'], true],
+    [['neutral'], false],
+    [['neutral', 'corin'], true],
+    [['corin', 'neutral'], false],
+    [['corin', 'dimmed'], true],
+    [['uteke', 'corin', 'tagfold'], true],
+    // Known limit: a dark theme inside a light one inside a dark one reads as light.
+    [['corin', 'neutral', 'gaira'], false],
+    [['.dark'], true],
+    [['.dark', 'neutral'], false],
+    [[], false],
+  ])('%j -> %s', (themes, dark) => {
+    expect(nest(...themes).matches(selector)).toBe(dark);
+  });
+
+  it('matches the themed element itself', () => {
+    const leaf = nest('neutral', 'corin');
+    expect(leaf.parentElement!.matches(selector)).toBe(true);
+    expect(leaf.parentElement!.parentElement!.matches(selector)).toBe(false);
   });
 });
