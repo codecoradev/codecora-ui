@@ -73,11 +73,9 @@
     >
       <Dialog.Title class="cc-palette-title sr-only">{label}</Dialog.Title>
       <Command.Root class="cc-palette-root">
-        <!-- font: inherit is inline: a keyword reads no token, which the class lint asks of arbitrary values. -->
         <Command.Input
           {placeholder}
-          class="cc-palette-input min-h-control border-border px-control-x focus-visible:outline-ring w-full border-0 border-b bg-transparent text-inherit focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:-outline-offset-2 focus-visible:outline-solid"
-          style="font: inherit"
+          class="cc-palette-input min-h-control border-border px-control-x focus-visible:outline-ring w-full border-0 border-b bg-transparent text-inherit [font:inherit] focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:-outline-offset-2 focus-visible:outline-solid"
           aria-label={label}
         />
         <Command.List

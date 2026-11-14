@@ -22,9 +22,8 @@
         right:
           'cc-modal-right animate-sheet-right-in data-[state=closed]:animate-sheet-right-out inset-y-0 right-0 max-h-dvh w-[min(calc(var(--spacing)*104),100vw)] border-l',
         left: 'cc-modal-left animate-sheet-left-in data-[state=closed]:animate-sheet-left-out inset-y-0 left-0 max-h-dvh w-[min(calc(var(--spacing)*104),100vw)] border-r',
-        // max-height 85dvh is set inline: it reads no token, which the class lint asks of arbitrary values.
         bottom:
-          'cc-modal-bottom animate-sheet-bottom-in data-[state=closed]:animate-sheet-bottom-out inset-x-0 bottom-0 rounded-t-lg border-t',
+          'cc-modal-bottom animate-sheet-bottom-in data-[state=closed]:animate-sheet-bottom-out inset-x-0 bottom-0 max-h-[85dvh] rounded-t-lg border-t',
       },
       tone: { default: 'cc-modal-default', danger: 'cc-modal-danger' },
     },
@@ -86,7 +85,6 @@
   }: Props = $props();
 
   const panelClass = $derived(cn(panelRecipe({ placement, tone })));
-  const panelStyle = $derived(placement === 'bottom' ? 'max-height: 85dvh' : undefined);
   const descriptionClass = $derived(cn(descriptionRecipe({ tone })));
 
   function focusInitial(event: Event) {
@@ -121,12 +119,7 @@
   <AlertDialog.Root bind:open {onOpenChange}>
     <AlertDialog.Portal>
       <AlertDialog.Overlay class={overlay} />
-      <AlertDialog.Content
-        class={panelClass}
-        style={panelStyle}
-        data-theme={theme}
-        onOpenAutoFocus={focusInitial}
-      >
+      <AlertDialog.Content class={panelClass} data-theme={theme} onOpenAutoFocus={focusInitial}>
         {@render header(AlertDialog.Title, false)}
         {#if description}
           <AlertDialog.Description class={descriptionClass}>{description}</AlertDialog.Description>
@@ -147,12 +140,7 @@
     {/if}
     <Dialog.Portal>
       <Dialog.Overlay class={overlay} />
-      <Dialog.Content
-        class={panelClass}
-        style={panelStyle}
-        data-theme={theme}
-        onOpenAutoFocus={focusInitial}
-      >
+      <Dialog.Content class={panelClass} data-theme={theme} onOpenAutoFocus={focusInitial}>
         {@render header(Dialog.Title, true)}
         {#if description}
           <Dialog.Description class={descriptionClass}>{description}</Dialog.Description>
