@@ -3,6 +3,45 @@
   focus return come from bits-ui. Dialog (centered) and Sheet (edge panel)
   are thin wrappers that pick a placement.
 -->
+<script module lang="ts">
+  import { cn } from '../cn.js';
+  import { tv } from './variants.js';
+
+  /** The scrim behind the panel; bits-ui keeps it mounted until its exit ends. */
+  export const overlay =
+    'cc-modal-overlay fixed inset-0 z-overlay bg-overlay animate-overlay-in data-[state=closed]:animate-overlay-out motion-reduce:animate-none';
+
+  /** Exits run one step shorter than entries; reduced motion drops the keyframes. */
+  const panelRecipe = tv({
+    base: 'cc-modal z-modal border-border bg-popover text-foreground shadow-modal focus-visible:outline-ring fixed grid content-start gap-3 overflow-y-auto p-5 font-sans focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:-outline-offset-2 focus-visible:outline-solid motion-reduce:animate-none',
+    variants: {
+      placement: {
+        // Opacity eases; only the movement springs.
+        center:
+          'cc-modal-center animate-dialog-in data-[state=closed]:animate-dialog-out top-1/2 left-1/2 max-h-[calc(100dvh-2*var(--cc-space-4))] w-[min(32rem,calc(100vw-2*var(--cc-space-4)))] -translate-1/2 rounded-lg border',
+        right:
+          'cc-modal-right animate-sheet-right-in data-[state=closed]:animate-sheet-right-out inset-y-0 right-0 max-h-dvh w-[min(calc(var(--spacing)*104),100vw)] border-l',
+        left: 'cc-modal-left animate-sheet-left-in data-[state=closed]:animate-sheet-left-out inset-y-0 left-0 max-h-dvh w-[min(calc(var(--spacing)*104),100vw)] border-r',
+        // max-height 85dvh is set inline: it reads no token, which the class lint asks of arbitrary values.
+        bottom:
+          'cc-modal-bottom animate-sheet-bottom-in data-[state=closed]:animate-sheet-bottom-out inset-x-0 bottom-0 rounded-t-lg border-t',
+      },
+      tone: { default: 'cc-modal-default', danger: 'cc-modal-danger' },
+    },
+  });
+
+  const descriptionRecipe = tv({
+    base: 'cc-modal-description m-0',
+    variants: {
+      tone: { default: 'text-muted-foreground', danger: 'text-foreground font-medium' },
+    },
+  });
+
+  /** Square icon button in the corner: close here, dismiss in Toaster. */
+  export const closeButton =
+    'inline-flex size-control flex-none cursor-pointer items-center justify-center -m-2 rounded-md border-0 bg-transparent p-0 text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)] focus-visible:outline-ring focus-visible:outline-solid';
+</script>
+
 <script lang="ts">
   import { AlertDialog, Dialog } from 'bits-ui';
   import type { Snippet } from 'svelte';
@@ -45,6 +84,11 @@
     tone = 'default',
     initialFocus,
   }: Props = $props();
+
+  const panelClass = $derived(cn(panelRecipe({ placement, tone })));
+  const panelStyle = $derived(placement === 'bottom' ? 'max-height: 85dvh' : undefined);
+  const descriptionClass = $derived(cn(descriptionRecipe({ tone })));
+
   function focusInitial(event: Event) {
     const el = initialFocus ? document.getElementById(initialFocus) : null;
     if (!el) return;
@@ -54,13 +98,17 @@
 </script>
 
 {#snippet header(Title: typeof Dialog.Title, close: boolean)}
-  <header class="cc-modal-header">
-    <Title class="cc-modal-title">
-      {#if tone === 'danger'}<span class="cc-modal-mark"><Glyph name="alert" /></span>{/if}
+  <header class="cc-modal-header flex items-start justify-between gap-3">
+    <Title
+      class="cc-modal-title font-display m-0 flex items-center gap-2 text-lg leading-[var(--cc-leading-tight)]"
+    >
+      {#if tone === 'danger'}<span class="cc-modal-mark text-destructive inline-flex"
+          ><Glyph name="alert" /></span
+        >{/if}
       {title}
     </Title>
     {#if close}
-      <Dialog.Close class="cc-modal-close">
+      <Dialog.Close class={cn('cc-modal-close', closeButton)}>
         <Glyph name="close" />
         <VisuallyHidden>Close</VisuallyHidden>
       </Dialog.Close>
@@ -72,20 +120,21 @@
   <!-- Alert dialog: role=alertdialog, no outside-click or X close; the footer holds the choice. -->
   <AlertDialog.Root bind:open {onOpenChange}>
     <AlertDialog.Portal>
-      <AlertDialog.Overlay class="cc-modal-overlay" />
+      <AlertDialog.Overlay class={overlay} />
       <AlertDialog.Content
-        class="cc-modal cc-modal-{placement} cc-modal-{tone}"
+        class={panelClass}
+        style={panelStyle}
         data-theme={theme}
         onOpenAutoFocus={focusInitial}
       >
         {@render header(AlertDialog.Title, false)}
         {#if description}
-          <AlertDialog.Description class="cc-modal-description"
-            >{description}</AlertDialog.Description
-          >
+          <AlertDialog.Description class={descriptionClass}>{description}</AlertDialog.Description>
         {/if}
         {#if children}<div class="cc-modal-body">{@render children()}</div>{/if}
-        {#if footer}<footer class="cc-modal-footer">{@render footer()}</footer>{/if}
+        {#if footer}<footer class="cc-modal-footer mt-2 flex flex-wrap justify-end gap-2">
+            {@render footer()}
+          </footer>{/if}
       </AlertDialog.Content>
     </AlertDialog.Portal>
   </AlertDialog.Root>
@@ -97,206 +146,22 @@
       </Dialog.Trigger>
     {/if}
     <Dialog.Portal>
-      <Dialog.Overlay class="cc-modal-overlay" />
+      <Dialog.Overlay class={overlay} />
       <Dialog.Content
-        class="cc-modal cc-modal-{placement} cc-modal-{tone}"
+        class={panelClass}
+        style={panelStyle}
         data-theme={theme}
         onOpenAutoFocus={focusInitial}
       >
         {@render header(Dialog.Title, true)}
         {#if description}
-          <Dialog.Description class="cc-modal-description">{description}</Dialog.Description>
+          <Dialog.Description class={descriptionClass}>{description}</Dialog.Description>
         {/if}
         {#if children}<div class="cc-modal-body">{@render children()}</div>{/if}
-        {#if footer}<footer class="cc-modal-footer">{@render footer()}</footer>{/if}
+        {#if footer}<footer class="cc-modal-footer mt-2 flex flex-wrap justify-end gap-2">
+            {@render footer()}
+          </footer>{/if}
       </Dialog.Content>
     </Dialog.Portal>
   </Dialog.Root>
 {/if}
-
-<style>
-  :global(.cc-modal-overlay) {
-    position: fixed;
-    inset: 0;
-    z-index: var(--cc-layer-overlay);
-    background: var(--cc-scrim);
-    animation: cc-fade var(--cc-duration-normal) var(--cc-ease-out);
-  }
-  /* bits-ui keeps closing content mounted until its animations finish. Exits run one step shorter. */
-  :global(.cc-modal-overlay[data-state='closed']) {
-    animation: cc-fade-out var(--cc-duration-fast) var(--cc-ease-exit) forwards;
-  }
-  :global(.cc-modal) {
-    position: fixed;
-    z-index: var(--cc-layer-modal);
-    display: grid;
-    gap: var(--cc-space-3);
-    align-content: start;
-    max-height: 100dvh;
-    overflow-y: auto;
-    padding: var(--cc-space-5);
-    background: var(--cc-surface-raised);
-    color: var(--cc-text);
-    border: 1px solid var(--cc-border);
-    box-shadow: var(--cc-shadow-modal);
-    font-family: var(--cc-font-sans);
-    animation: cc-rise var(--cc-duration-normal) var(--cc-ease-out);
-  }
-  :global(.cc-modal[data-state='closed']) {
-    animation: cc-rise-out var(--cc-duration-fast) var(--cc-ease-exit) forwards;
-  }
-  :global(.cc-modal:focus-visible) {
-    outline: var(--cc-focus-width) solid var(--cc-focus);
-    outline-offset: -2px;
-  }
-  :global(.cc-modal-center) {
-    top: 50%;
-    left: 50%;
-    width: min(32rem, calc(100vw - 2 * var(--cc-space-4)));
-    max-height: calc(100dvh - 2 * var(--cc-space-4));
-    transform: translate(-50%, -50%);
-    border-radius: var(--cc-radius-lg);
-    /* Opacity eases; only the movement springs. */
-    animation:
-      cc-fade var(--cc-duration-normal) var(--cc-ease-out),
-      cc-pop var(--cc-duration-slow) var(--cc-ease-spring);
-  }
-  :global(.cc-modal-center[data-state='closed']) {
-    animation: cc-pop-out var(--cc-duration-fast) var(--cc-ease-exit) forwards;
-  }
-  :global(.cc-modal-right),
-  :global(.cc-modal-left) {
-    top: 0;
-    bottom: 0;
-    width: min(26rem, 100vw);
-    align-content: start;
-    animation: cc-slide-x var(--cc-duration-normal) var(--cc-ease-out);
-  }
-  :global(.cc-modal-right[data-state='closed']),
-  :global(.cc-modal-left[data-state='closed']) {
-    animation: cc-slide-x-out var(--cc-duration-fast) var(--cc-ease-exit) forwards;
-  }
-  :global(.cc-modal-right) {
-    right: 0;
-    border-width: 0 0 0 1px;
-  }
-  :global(.cc-modal-left) {
-    left: 0;
-    border-width: 0 1px 0 0;
-    --cc-slide-from: -100%;
-  }
-  :global(.cc-modal-bottom) {
-    right: 0;
-    bottom: 0;
-    left: 0;
-    max-height: 85dvh;
-    border-width: 1px 0 0;
-    border-radius: var(--cc-radius-lg) var(--cc-radius-lg) 0 0;
-  }
-  .cc-modal-header {
-    display: flex;
-    align-items: start;
-    justify-content: space-between;
-    gap: var(--cc-space-3);
-  }
-  :global(.cc-modal-title) {
-    margin: 0;
-    font-family: var(--cc-font-display);
-    font-size: var(--cc-font-size-lg);
-    line-height: var(--cc-leading-tight);
-  }
-  :global(.cc-modal-description) {
-    margin: 0;
-    color: var(--cc-text-muted);
-  }
-  :global(.cc-modal-title) {
-    display: flex;
-    align-items: center;
-    gap: var(--cc-space-2);
-  }
-  :global(.cc-modal-mark) {
-    display: inline-flex;
-    color: var(--cc-danger);
-  }
-  :global(.cc-modal-danger .cc-modal-description) {
-    color: var(--cc-text);
-    font-weight: 500;
-  }
-  :global(.cc-modal-close) {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex: none;
-    width: var(--cc-control-h);
-    height: var(--cc-control-h);
-    margin: calc(-1 * var(--cc-space-2));
-    padding: 0;
-    border: 0;
-    border-radius: var(--cc-radius-md);
-    background: transparent;
-    color: var(--cc-text-muted);
-    cursor: pointer;
-  }
-  :global(.cc-modal-close:hover) {
-    background: var(--cc-surface-hover);
-    color: var(--cc-text);
-  }
-  :global(.cc-modal-close:focus-visible) {
-    outline: var(--cc-focus-width) solid var(--cc-focus);
-    outline-offset: var(--cc-focus-offset);
-  }
-  .cc-modal-footer {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    gap: var(--cc-space-2);
-    margin-top: var(--cc-space-2);
-  }
-  @keyframes cc-fade {
-    from {
-      opacity: 0;
-    }
-  }
-  @keyframes cc-fade-out {
-    to {
-      opacity: 0;
-    }
-  }
-  @keyframes cc-pop {
-    from {
-      transform: translate(-50%, calc(-50% + var(--cc-space-3))) scale(0.97);
-    }
-  }
-  @keyframes cc-pop-out {
-    to {
-      opacity: 0;
-      transform: translate(-50%, calc(-50% + var(--cc-space-2))) scale(0.98);
-    }
-  }
-  @keyframes cc-slide-x {
-    from {
-      transform: translateX(var(--cc-slide-from, 100%));
-    }
-  }
-  @keyframes cc-slide-x-out {
-    to {
-      transform: translateX(var(--cc-slide-from, 100%));
-    }
-  }
-  @keyframes cc-rise {
-    from {
-      transform: translateY(100%);
-    }
-  }
-  @keyframes cc-rise-out {
-    to {
-      transform: translateY(100%);
-    }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    :global(.cc-modal-overlay[data-state]),
-    :global(.cc-modal[data-state]) {
-      animation: none;
-    }
-  }
-</style>

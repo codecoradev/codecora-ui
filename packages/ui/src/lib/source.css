@@ -6,5 +6,15 @@
  * utilities are listed, one `@source './Name.svelte';` each: the plain-CSS
  * ones carry words such as `hidden` or `table` in their <style> blocks, and
  * scanning them would generate those utilities in your app. source.test.ts
- * keeps the list to .svelte files without a <style> block. None yet.
+ * keeps the list to .svelte files without a <style> block.
  */
+@source './internal/Modal.svelte';
+@source './internal/MenuIcon.svelte';
+@source './Dialog.svelte';
+@source './ConfirmDialog.svelte';
+@source './Sheet.svelte';
+@source './Popover.svelte';
+@source './Tooltip.svelte';
+@source './DropdownMenu.svelte';
+@source './CommandPalette.svelte';
+@source './Toaster.svelte';
