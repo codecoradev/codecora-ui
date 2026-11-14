@@ -10,7 +10,7 @@ describe('source.css', () => {
   it('lists single component files, not folders or globs', () => {
     for (const [, not, path] of sources) {
       expect(not).toBeUndefined();
-      expect(path).toMatch(/^\.\/[A-Z]\w*\.svelte$/);
+      expect(path).toMatch(/^\.\/(internal\/)?[A-Z]\w*\.svelte$/);
     }
   });
 
