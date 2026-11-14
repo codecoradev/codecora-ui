@@ -74,13 +74,13 @@ Non-colour tokens use Tailwind's own theme namespaces wherever one exists:
 | `duration-*`, layers (z-index) | no Tailwind namespace: `@utility` | `duration-fast`, `z-popover` |
 | `icon-size`, `icon-stroke`, `focus-width|offset`, badge shape hooks | variables kept, read through `--spacing-icon` or `[stroke-width:var(--icon-stroke)]` | `size-icon` |
 
-`dark:` follows the theme: a `@custom-variant dark` matches every theme whose
-`colorScheme` is dark, plus `.dark` for shadcn compatibility. It matches any
-dark ancestor, so a light theme nested inside a dark one still sees `dark:`;
-CSS cannot pick the nearest theme. Components and blocks therefore never use
-`dark:` (the semantic roles already change per theme, D8); it is for app code
-that does not nest themes, and the class lint rejects it in `packages/` and
-`registry/`.
+`dark:` follows the nearest theme: a `@custom-variant dark` matches inside a
+theme whose `colorScheme` is dark (or shadcn's `.dark`) and not inside a light
+theme nested in it. CSS cannot ask for the closest ancestor, so the selector
+covers two levels; a dark theme nested inside that light one reads as light.
+Components and blocks therefore never use `dark:` (the semantic roles already
+change per theme, D8); it is for app code, and the class lint rejects it in
+`packages/` and `registry/`.
 
 The token source stays TypeScript (`palette.ts`, `themes.ts`) because the
 contrast gate checks every theme and accent from it; the build emits
