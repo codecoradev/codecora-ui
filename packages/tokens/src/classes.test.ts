@@ -3,8 +3,9 @@
 // strings in every file already written with utilities (a .svelte file
 // without a <style> block, and its tv()/cn() calls, plus the variables and
 // prop defaults those read). Strings built elsewhere (imported constants,
-// .ts modules) are not followed. Files still on plain CSS
-// are covered by usage.test.ts until they migrate.
+// .ts modules) are not followed. A file with a <style> block is skipped:
+// every component, block and page is on utilities, so only a file whose
+// markup holds a "<style>" string (the playground layout's {@html}) is left out.
 import { readdirSync, readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { dirname, join, relative } from 'node:path';
@@ -527,8 +528,7 @@ describe('migrated files', () => {
       ...declaredIn(readFileSync(join(tw, 'theme.css'), 'utf8')),
       ...declaredIn(readFileSync(playgroundCss, 'utf8')),
     ]);
-    const allowed = (name: string) =>
-      declared.has(name) || /^--(tw|bits|spacing$|text-[\w-]+$|default-)/.test(name);
+    const allowed = (name: string) => declared.has(name) || /^--(tw-|bits-)/.test(name);
     const unknown = files.flatMap((file) => {
       const source = readFileSync(file, 'utf8');
       const own = new Set(declaredIn(source));
