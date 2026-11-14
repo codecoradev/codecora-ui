@@ -19,11 +19,9 @@ product fleet and open to any Svelte app.
 - **Accessible by construction.** Every theme and accent passes WCAG AA in CI
   (the `contrast` theme targets 7:1). Every component works with the keyboard
   alone and at 375 px.
-- **Tailwind 4 first (D13, in progress).** Tokens take the shadcn names
-  (`bg-background`, `bg-primary`, `text-muted-foreground`), so Tailwind and
-  shadcn references apply without translation. Until the
-  [migration](docs/tailwind-migration.md) is done, components are plain CSS on
-  `--cc-*` tokens. Works in SvelteKit 2, SvelteKit 3, plain Vite and Tauri.
+- **The standard toolkit.** Components are Tailwind 4 utilities on the shadcn
+  variable names (D13), so Tailwind and shadcn snippets work on every theme
+  without translation. Works in SvelteKit 2, SvelteKit 3, plain Vite and Tauri.
 - **Fix once, reach everywhere.** Shared behaviour lives in the packages;
   product identity lives in themes.
 
@@ -61,9 +59,15 @@ set up (#15); the import names stay the same.
 
 ## Quick start
 
+```css
+/* app.css */
+@import 'tailwindcss';
+@import '@codecora/tokens/theme.css';
+@import '@codecora/ui/source.css';
+```
+
 ```svelte
 <script lang="ts">
-  import '@codecora/tokens/tokens.css';
   import { Button, Field, Input, Toaster, toast } from '@codecora/ui';
   import { Plus } from '@codecora/icons/lucide';
 
@@ -91,8 +95,8 @@ Phosphor or your own set.
 
 | Package | What | Depends on |
 |---|---|---|
-| [`@codecora/tokens`](packages/tokens) | Primitive, semantic and theme tokens; CSS variables, TS export, Tailwind 4 preset, shadcn-svelte variable bridge | nothing |
-| [`@codecora/ui`](packages/ui) | 42 Svelte 5 components on bits-ui, plain CSS on semantic tokens | `@codecora/tokens`, `bits-ui` |
+| [`@codecora/tokens`](packages/tokens) | Primitive, semantic and theme tokens; one Tailwind 4 stylesheet (`theme.css`) on the shadcn variable names, TS export | nothing |
+| [`@codecora/ui`](packages/ui) | 42 Svelte 5 components on bits-ui, Tailwind 4 utilities on the theme roles | `@codecora/tokens`, `bits-ui` |
 | [`@codecora/icons`](packages/icons) | `Icon` wrapper that follows each theme's size and stroke, a curated Lucide set and a Phosphor adapter | `@lucide/svelte`, `phosphor-svelte` (optional peers) |
 | [`@codecora/brand`](packages/brand) | Product marks and favicon sets (Uteke, Corin, Gatehouse) as files and Svelte components | nothing |
 | [`@codecora/memory`](packages/memory) | Uteke domain layer: typed `MemoryClient` over uteke-serve, Uteke Cloud (API and portal) and Tauri, with per-backend capabilities, and the memory browser components (`MemoryList`, `MemoryDetail`, `MemoryEditor`) | `@codecora/ui` (peer) |
@@ -213,14 +217,14 @@ Navigation drawer at 375 px:
 ## Documentation
 
 - [docs/architecture.md](docs/architecture.md): packages, tokens and how products consume them
-- [docs/decisions.md](docs/decisions.md): locked decisions D1–D13
+- [docs/decisions.md](docs/decisions.md): locked decisions D1–D12
 - [docs/roadmap.md](docs/roadmap.md): milestones M0–M4 and the issue map
 - [DESIGN.md](DESIGN.md) and [docs/design/](docs/design): rules every theme shares, one file per theme
 - [CHANGELOG.md](CHANGELOG.md)
 
 ## Contributing
 
-Bug fixes are welcome. Changes to direction (new packages, decisions D1–D13)
+Bug fixes are welcome. Changes to direction (new packages, decisions D1–D12)
 start with an issue. See [CONTRIBUTING.md](CONTRIBUTING.md) and
 [AGENTS.md](AGENTS.md) for the workflow and the local gates.
 

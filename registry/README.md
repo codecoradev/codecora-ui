@@ -62,8 +62,8 @@ tarball entries in `package.json` alone.
 
 `theme.css` declares every shadcn variable (`--background`, `--primary`,
 `--ring`, the chart and sidebar variables, plus `--primary-hover`,
-`--success`, `--warning` and the other roles the blocks use) in Tailwind's
-base layer. The values shadcn wrote into your `:root` and `.dark` blocks have
+`--success`, `--warning` and the other roles the blocks use) on each theme, in
+Tailwind's base layer. The values shadcn wrote into your `:root` and `.dark` blocks have
 no layer, so they would win; the shadcn CLI can set those variables but not
 delete them, so the item sets each one to `revert-layer`, which hands it back
 to `theme.css`:
@@ -78,7 +78,8 @@ to `theme.css`:
 
 It also writes the theme's radius and font keys (`--radius-sm|md|lg`,
 `--font-sans|display|mono`) into your `@theme inline` block, which comes after
-the imports and would otherwise keep shadcn's values. The CLI adds a
+the imports and would otherwise keep shadcn's values: each key reads the
+variable of the same name the themes declare (`--radius-md: var(--radius-md)`). The CLI adds a
 `--name: var(--name)` line there for each variable as well; those lines do
 nothing and can go. You can also delete the `:root` and `.dark` blocks
 altogether.
@@ -90,10 +91,10 @@ sidebar, a preview card) included. shadcn's
 class; delete it and `dark:` follows the dark themes (`corin`,
 `neutral-dark`, ...) as well, since `theme.css` declares that variant.
 
-Coming from the earlier plain-CSS bridge? Remove its
-`@import '@codecora/tokens/tokens.css'` and `@import '@codecora/tokens/shadcn.css'`
-lines: `theme.css` replaces both, and `tokens.css` next to it would beat the
-utilities (see the tokens README).
+Coming from the earlier plain-CSS bridge? `@codecora/tokens/tokens.css` and
+`@codecora/tokens/shadcn.css` no longer exist: remove their imports, since
+`theme.css` replaces both, and rename any `--cc-*` overrides in your CSS with
+the migration table in the [tokens README](../packages/tokens/README.md).
 
 ## Develop
 
@@ -106,7 +107,8 @@ bun run test    # registry.json shape and the generated cc-theme item
 `registry.json` lists the items. The build reads each block's imports to fill
 in `dependencies` (workspace versions become `^x.y.z` ranges). The theme item
 has no files to read, so `build.ts` fills it in first (`theme.ts`): the light
-and dark variables from `themeVariables`, the theme keys from `tailwindKeys`
+and dark variables from `themeVariables` (every colour name and `--radius`),
+the radius and font keys from `tailwindKeys`
 and the `@codecora/tokens` and `@codecora/ui` ranges from the package
 versions. A release therefore needs no edit here. The
 playground serves `dist/r` through a prerendered `/r/[item].json` route, so the

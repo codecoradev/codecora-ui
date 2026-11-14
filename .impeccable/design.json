@@ -5,9 +5,9 @@
   "extensions": {
     "motion": [
       {
-        "name": "ease-out",
+        "name": "ease-enter",
         "value": "cubic-bezier(0.22, 1, 0.36, 1)",
-        "purpose": "State changes (hover, press, open); token --cc-ease-out."
+        "purpose": "State changes (hover, press, open); token --ease-enter (`ease-enter`)."
       },
       {
         "name": "duration-fast",
@@ -26,9 +26,9 @@
       "name": "Primary Button",
       "kind": "button",
       "refersTo": "button-primary",
-      "description": "The one action a view asks for; accent fill, label in accent-text.",
+      "description": "The one action a view asks for; primary fill, label in primary-foreground.",
       "html": "<button class=\"ds-btn-primary\">Save changes</button>",
-      "css": ".ds-btn-primary { min-height: var(--cc-control-h); padding: 0 var(--cc-control-px); border: 0; border-radius: var(--cc-radius-md); background: var(--cc-accent); color: var(--cc-accent-text); font: 500 var(--cc-font-size-sm)/1.5 var(--cc-font-sans); cursor: pointer; transition: background-color var(--cc-duration-fast) var(--cc-ease-out); } .ds-btn-primary:hover { background: var(--cc-accent-hover); } .ds-btn-primary:focus-visible { outline: 2px solid var(--cc-focus); outline-offset: 2px; }"
+      "css": ".ds-btn-primary { min-height: var(--spacing-control); padding: 0 var(--spacing-control-x); border: 0; border-radius: var(--radius-md); background: var(--primary); color: var(--primary-foreground); font: 500 var(--text-sm)/1.5 var(--font-sans); cursor: pointer; transition: background-color var(--cc-duration-fast) var(--ease-enter); } .ds-btn-primary:hover { background: var(--primary-hover); } .ds-btn-primary:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }"
     },
     {
       "name": "Text Input",
@@ -36,21 +36,21 @@
       "refersTo": "input",
       "description": "Raised field with a 3:1 boundary; the ring takes the accent on focus.",
       "html": "<input class=\"ds-input\" placeholder=\"Search memories\" />",
-      "css": ".ds-input { min-height: var(--cc-control-h); padding: 0 var(--cc-control-px); border: 1px solid var(--cc-border-strong); border-radius: var(--cc-radius-md); background: var(--cc-surface-raised); color: var(--cc-text); font: 400 var(--cc-font-size-md)/1.5 var(--cc-font-sans); } .ds-input::placeholder { color: var(--cc-text-muted); } .ds-input:focus-visible { outline: 2px solid var(--cc-focus); outline-offset: 2px; }"
+      "css": ".ds-input { min-height: var(--spacing-control); padding: 0 var(--spacing-control-x); border: 1px solid var(--input); border-radius: var(--radius-md); background: var(--card); color: var(--foreground); font: 400 var(--text-base)/1.5 var(--font-sans); } .ds-input::placeholder { color: var(--muted-foreground); } .ds-input:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }"
     },
     {
       "name": "Status Badge",
       "kind": "chip",
       "description": "Status text on its soft tint; colour never carries the meaning alone.",
       "html": "<span class=\"ds-badge\">Failed</span>",
-      "css": ".ds-badge { display: inline-flex; align-items: center; padding: var(--cc-space-1) var(--cc-space-2); border-radius: var(--cc-radius-pill); background: var(--cc-danger-soft); color: var(--cc-danger); font: 500 var(--cc-font-size-xs)/1.5 var(--cc-font-sans); }"
+      "css": ".ds-badge { display: inline-flex; align-items: center; padding: calc(var(--spacing) * 1) calc(var(--spacing) * 2); border-radius: calc(infinity * 1px); background: var(--destructive-soft); color: var(--destructive); font: 500 var(--text-xs)/1.5 var(--font-sans); }"
     }
   ],
   "narrative": {
     "northStar": "One Frame, Many Faces",
     "overview": "Every CodeCora product stands on the same frame: the same structure, spacing, states, keyboard behaviour and contrast floor. A theme is the face on that frame: colour, fonts, radius, density and icon weight. Themes mix per element, so a dark corin panel can sit inside a light uteke page and both stay correct.",
     "keyCharacteristics": [
-      "Semantic tokens only (`--cc-surface`, `--cc-text`, `--cc-accent`, ...); components never see a raw colour.",
+      "Semantic roles only (`bg-background`, `text-foreground`, `bg-primary`, ... on the shadcn variable names); components never see a raw colour.",
       "One accent per scope, chosen with `data-accent`; status colours carry meaning, never decoration.",
       "Two densities, `comfortable` (44px controls) and `compact` (32px), switched with `data-density`.",
       "Flat surfaces separated by tone; shadows are reserved for floating layers."
@@ -58,7 +58,7 @@
     "rules": [
       {
         "name": "The Semantic Only Rule",
-        "body": "Components read `--cc-*` tokens and nothing else. A raw colour outside `packages/tokens` is a defect.",
+        "body": "Components use the semantic utilities (theme roles and keys) and the CodeCora-only `--cc-*` tokens, nothing else. A palette colour (`bg-blue-500`), an arbitrary colour or a raw colour outside `packages/tokens` is a defect; the class lint enforces it.",
         "section": "colors"
       },
       {
@@ -84,7 +84,7 @@
     ],
     "dos": [
       "**Do** set `data-theme` on the element that should change, not on every child.",
-      "**Do** use `border-strong` wherever the border is the only cue that a control exists."
+      "**Do** use `border-input` wherever the border is the only cue that a control exists."
     ],
     "donts": [
       "**Don't** write a colour literal in a component, a playground page or an app override.",

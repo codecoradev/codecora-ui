@@ -32,25 +32,27 @@ props and never imports an icon set.
 Three tiers:
 
 1. **Primitive**: colour scales, spacing scale, radius, type scale, motion.
-2. **Semantic**: `--cc-surface`, `--cc-surface-raised`, `--cc-text`,
-   `--cc-text-muted`, `--cc-border`, `--cc-accent`, `--cc-accent-text`,
-   `--cc-danger`, `--cc-success`, `--cc-warning`, `--cc-focus`,
-   `--cc-radius-*`, `--cc-font-*`, `--cc-icon-stroke`, `--cc-icon-size`, ...
+2. **Semantic**: the shadcn variable names (`--background`, `--card`,
+   `--foreground`, `--muted-foreground`, `--border`, `--input`, `--primary`,
+   `--primary-foreground`, `--destructive`, `--success`, `--warning`,
+   `--ring`, ...), Tailwind's theme keys (`--radius-*`, `--font-*`,
+   `--spacing-control`, `--shadow-*`, `--ease-*`) and the CodeCora-only
+   `--cc-*` tokens Tailwind has no namespace for (`--cc-icon-stroke`,
+   `--cc-icon-size`, `--cc-focus-width`, ...).
 3. **Theme**: a mapping of semantic tokens. First themes: `neutral`, `uteke`
    (editorial light, from uteke.app), `corin` (editor dark, from Corin's
    DESIGN.md). Modifiers: `data-density="compact|comfortable"`,
    `data-accent="<name>"`.
 
-Outputs: CSS (`tokens.css`, one file per theme), TypeScript constants,
-a Tailwind 4 `@theme` preset, and a shadcn bridge that maps `--background`,
-`--foreground`, `--primary`, ... onto `--cc-*` so existing shadcn components
-follow CodeCora themes.
+Outputs (D13): one Tailwind 4 stylesheet, `theme.css`, in which every theme
+declares the shadcn names directly, so shadcn components and CodeCora
+components share one set of variables; and the TypeScript token source.
 
 Every theme must pass WCAG AA contrast for text and UI pairs (checked in CI).
 
 ### Components (`@codecora/ui`)
 
-- Built on bits-ui. Since D13 styled with Tailwind 4 utilities on semantic roles (shadcn names), variants through `tailwind-variants`, `class` merged with `cn()`; components not yet migrated still use plain CSS on `--cc-*` ([tailwind-migration.md](tailwind-migration.md)).
+- Built on bits-ui and styled with Tailwind 4 utilities on the theme roles (shadcn names) and keys of `@codecora/tokens/theme.css` (D13); variants through `tailwind-variants`, the `class` prop merged last with `cn()`. Each package's `source.css` lists its components for the app's Tailwind to scan.
 - Svelte 5 runes, `svelte ^5.33` peer, no `$app/*` imports (works in
   SvelteKit 2, SvelteKit 3 and Vite SPAs such as Corin).
 - Packaged with `svelte-package`: `.svelte` sources ship and compile in the

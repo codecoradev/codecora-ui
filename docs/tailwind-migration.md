@@ -1,6 +1,6 @@
 # Tailwind-first migration (D13)
 
-Status: accepted 2026-11-14, migration in progress. D13 replaces D7.
+Status: accepted 2026-11-14, done in phases 0 to 10 (#155). D13 replaces D7. The final token names are in [packages/tokens/README.md](../packages/tokens/README.md); this page keeps the plan as it was carried out.
 
 ## Why
 
