@@ -2,27 +2,27 @@
 name: CodeCora UI, corin theme
 description: Editor-grade dark from Corin; deep chrome for long sessions, teal only on actions.
 colors:
-  surface: "#0E1015"
-  surface-raised: "#12151D"
-  surface-sunken: "#0A0C10"
-  surface-hover: "#222836"
+  background: "#0E1015"
+  card: "#12151D"
+  muted: "#0A0C10"
+  accent: "#222836"
   border: "#222836"
-  border-strong: "#6A7489"
-  text: "#E6E9EF"
-  text-muted: "#8B93A7"
-  danger: "#F87171"
-  danger-text: "#0E1015"
+  input: "#6A7489"
+  foreground: "#E6E9EF"
+  muted-foreground: "#8B93A7"
+  destructive: "#F87171"
+  destructive-foreground: "#0E1015"
   success: "#34D399"
-  success-text: "#0E1015"
+  success-foreground: "#0E1015"
   warning: "#E89B3C"
-  warning-text: "#0E1015"
-  accent: "#4FD8D2"
-  accent-hover: "#7EE3DE"
-  accent-text: "#0E1015"
+  warning-foreground: "#0E1015"
+  primary: "#4FD8D2"
+  primary-hover: "#7EE3DE"
+  primary-foreground: "#0E1015"
 typography:
   display:
     fontFamily: "ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif"
-    fontSize: "2.25rem"
+    fontSize: "1.875rem"
     fontWeight: 600
     lineHeight: 1.2
   title:
@@ -58,16 +58,16 @@ spacing:
   "8": "2rem"
 components:
   button-primary:
-    backgroundColor: "{colors.accent}"
-    textColor: "{colors.accent-text}"
+    backgroundColor: "{colors.primary}"
+    textColor: "{colors.primary-foreground}"
     rounded: "{rounded.md}"
     height: "2.75rem"
     padding: "0 0.875rem"
   button-primary-hover:
-    backgroundColor: "{colors.accent-hover}"
+    backgroundColor: "{colors.primary-hover}"
   input:
-    backgroundColor: "{colors.surface-raised}"
-    textColor: "{colors.text}"
+    backgroundColor: "{colors.card}"
+    textColor: "{colors.foreground}"
     rounded: "{rounded.md}"
     height: "2.75rem"
 ---
@@ -93,15 +93,15 @@ Corin is where people work for hours, so its theme is a console at night. Deep b
 Blue-black layers with a single teal and bright status signals.
 
 ### Primary
-- **Console Teal** (`accent`): primary actions, links, the selected item and the focus ring. Brightens to `accent-hover`; labels on it use dark `accent-text`.
+- **Console Teal** (`primary`): primary actions, links, the selected item and the focus ring. Brightens to `primary-hover`; labels on it use dark `primary-foreground`.
 
 ### Neutral
-- **Night** (`surface`): the page.
-- **Panel** (`surface-raised`): cards, popovers and inputs.
-- **Deep Well** (`surface-sunken`): wells and inset areas below the page.
-- **Chrome Edge** (`surface-hover`, also `border`): hover tint and hairlines.
-- **Steel Edge** (`border-strong`): control boundaries (3:1).
-- **Starlight** (`text`) and **Dusk Grey** (`text-muted`): body and secondary text.
+- **Night** (`background`): the page.
+- **Panel** (`card`): cards, popovers and inputs.
+- **Deep Well** (`muted`): wells and inset areas below the page.
+- **Chrome Edge** (`accent`, also `border`): hover tint and hairlines.
+- **Steel Edge** (`input`): control boundaries (3:1).
+- **Starlight** (`foreground`) and **Dusk Grey** (`muted-foreground`): body and secondary text.
 
 ### Named Rules
 **The Teal Means Act Rule.** Teal marks what the user can do. The other accents stay available through `data-accent`, never as a second action colour on the same screen.
@@ -153,5 +153,5 @@ Corin is a console, so tags look like data.
 - **Do** set every ID, date and count in mono with tabular figures.
 
 ### Don't:
-- **Don't** use `text-muted` darker than Dusk Grey; Corin's old overlay grey fails 4.5:1 as text.
+- **Don't** use `muted-foreground` darker than Dusk Grey; Corin's old overlay grey fails 4.5:1 as text.
 - **Don't** use amber or yellow for anything but warnings and scores.

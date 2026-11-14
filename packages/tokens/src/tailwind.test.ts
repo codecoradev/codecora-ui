@@ -1,16 +1,16 @@
 // @vitest-environment jsdom
 import { compile } from 'tailwindcss';
 import { describe, expect, it } from 'vitest';
-import { semanticTokens } from './schema.js';
+import { colorTokens } from './schema.js';
 import {
   darkSelector,
-  shadcnExtensions,
   accordionAnimations,
   tailwindAnimations,
   tailwindKeyframes,
   formAnimations,
   displayAnimations,
   tailwindKeys,
+  themeKeys,
   tailwindThemeCss,
   tailwindUtilities,
   themeVariables,
@@ -31,20 +31,28 @@ describe('theme.css', () => {
     expect(css).not.toMatch(/@layer cc\./);
   });
 
-  it('declares every shadcn and extension variable where a theme or accent can change', () => {
-    for (const [name, token] of Object.entries(themeVariables))
-      expect(css).toContain(`--${name}: var(--cc-${token});`);
-    expect(css).toMatch(/:root, \[data-theme\], \[data-accent\] \{\s+--background:/);
+  it('maps every colour variable to a Tailwind colour that reads it', () => {
+    for (const name of colorTokens) expect(css).toContain(`--color-${name}: var(--${name});`);
+    expect(themeVariables).toEqual([...colorTokens, 'radius']);
   });
 
-  it('reads only tokens that exist', () => {
-    const known = new Set<string>(semanticTokens);
-    for (const token of Object.values(themeVariables)) expect(known).toContain(token);
+  it('keeps the theme-declared keys out of :root, so no key reads itself there', () => {
+    const block = css.slice(css.indexOf('@theme inline reference {'));
+    for (const key of themeKeys) expect(block).toContain(`--${key}: var(--${key});`);
+    expect(css.match(/@theme inline reference \{/g)).toHaveLength(1);
   });
 
   it('names extensions in the shadcn pattern', () => {
-    for (const name of Object.keys(shadcnExtensions))
-      expect(name).toMatch(/^[a-z]+(-(foreground|hover|soft))?$/);
+    for (const name of colorTokens)
+      expect(name).toMatch(
+        /^[a-z]+(-[a-z]+)?(-(\d|foreground|hover|soft|primary|accent|border|ring))*$/,
+      );
+  });
+
+  it('leaves no --cc- name that has a Tailwind namespace', () => {
+    expect(css).not.toMatch(
+      /--cc-(surface|text|accent|danger|scrim|border|radius|font|space|leading|shadow|ease|control|gap|cell)/,
+    );
   });
 
   it('leaves the Tailwind type scale and easing names alone', () => {
@@ -53,6 +61,7 @@ describe('theme.css', () => {
     ).toEqual([]);
     expect(css).not.toMatch(/--text-[\w-]+:/);
     expect(css).not.toMatch(/--ease-(in|out|in-out):/);
+    expect(css).not.toMatch(/--leading-(tight|normal|snug|relaxed|loose|none):/);
   });
 });
 
@@ -78,10 +87,10 @@ describe('theme.css compiled by Tailwind', () => {
 
   it('sizes controls from the density tokens', async () => {
     const out = await build(['h-control', 'px-control-x', 'gap-stack', 'py-cell-y', 'size-icon']);
-    expect(out).toContain('height: var(--cc-control-h)');
-    expect(out).toContain('padding-inline: var(--cc-control-px)');
-    expect(out).toContain('gap: var(--cc-gap)');
-    expect(out).toContain('padding-block: var(--cc-cell-py)');
+    expect(out).toContain('height: var(--spacing-control)');
+    expect(out).toContain('padding-inline: var(--spacing-control-x)');
+    expect(out).toContain('gap: var(--spacing-stack)');
+    expect(out).toContain('padding-block: var(--spacing-cell-y)');
     expect(out).toContain('width: var(--cc-icon-size)');
   });
 
@@ -93,11 +102,13 @@ describe('theme.css compiled by Tailwind', () => {
       'ease-spring',
       'ease-enter',
     ]);
-    expect(out).toContain('border-radius: var(--cc-radius-md)');
-    expect(out).toContain('font-family: var(--cc-font-display)');
-    expect(out).toContain('var(--cc-shadow-popover)');
-    expect(out).toContain('transition-timing-function: var(--cc-ease-spring)');
-    expect(out).toContain('transition-timing-function: var(--cc-ease-out)');
+    expect(out).toContain('border-radius: var(--radius-md)');
+    expect(out).toContain('font-family: var(--font-display)');
+    expect(out).toContain('var(--shadow-popover)');
+    expect(out).toContain('transition-timing-function: var(--ease-spring)');
+    expect(out).toContain('transition-timing-function: var(--ease-enter)');
+    // The variables come from the themes, not from Tailwind's :root.
+    expect(out).not.toMatch(/--radius-md: var\(--radius-md\)/);
   });
 
   it('times transitions with the duration tokens and stacks with the layer tokens', async () => {
@@ -110,7 +121,7 @@ describe('theme.css compiled by Tailwind', () => {
 
   it('animates with token timing and emits the keyframes an animation uses', async () => {
     for (const [name, { animation, keyframes }] of Object.entries(formAnimations)) {
-      expect(animation, name).toMatch(/var\(--cc-duration-\w+\) var\(--cc-ease-\w+\)/);
+      expect(animation, name).toMatch(/var\(--cc-duration-\w+\) var\(--ease-\w+\)/);
       const out = await build([`animate-${name}`]);
       for (const k of Object.keys(keyframes)) expect(out, name).toContain(`@keyframes ${k}`);
     }
@@ -118,20 +129,18 @@ describe('theme.css compiled by Tailwind', () => {
   });
 
   it('inherits the font in longhands, so a text or leading utility still wins', async () => {
-    const size = 'text-[length:var(--cc-font-size-sm)]';
-    const leading = 'leading-[var(--cc-leading-normal)]';
-    const out = await build(['font-inherit', size, leading]);
+    const out = await build(['font-inherit', 'text-[length:var(--text-sm)]', 'leading-heading']);
     expect(out).not.toMatch(/\bfont: inherit/);
     const inherit = out.indexOf('line-height: inherit');
     expect(inherit).toBeGreaterThan(-1);
-    expect(out.indexOf('font-size: var(--cc-font-size-sm)')).toBeGreaterThan(inherit);
-    expect(out.indexOf('line-height: var(--cc-leading-normal)')).toBeGreaterThan(inherit);
+    expect(out.indexOf('font-size: var(--text-sm)')).toBeGreaterThan(inherit);
+    expect(out.indexOf('line-height: 1.2')).toBeGreaterThan(inherit);
   });
 
   it('animates the accordion with the motion tokens and emits only the keyframes in use', async () => {
     const out = await build(['data-[state=open]:animate-accordion-open']);
     expect(out).toContain(
-      'animation: cc-accordion-open var(--cc-duration-normal) var(--cc-ease-out)',
+      'animation: cc-accordion-open var(--cc-duration-normal) var(--ease-enter)',
     );
     expect(out).toMatch(/@keyframes cc-accordion-open \{/);
     expect(out).not.toContain('@keyframes cc-accordion-close');
@@ -164,8 +173,8 @@ describe('theme.css compiled by Tailwind', () => {
     expect(out).toContain('animation: cc-spin 0.8s linear infinite');
     expect(out).toContain('animation: cc-spin 2.4s linear infinite');
     expect(out).toContain('animation: cc-pulse 1.4s ease-in-out infinite');
-    expect(out).toContain('animation: cc-settle-in var(--cc-duration-normal) var(--cc-ease-out)');
-    expect(out).toContain('animation: cc-fade-in var(--cc-duration-normal) var(--cc-ease-out)');
+    expect(out).toContain('animation: cc-settle-in var(--cc-duration-normal) var(--ease-enter)');
+    expect(out).toContain('animation: cc-fade-in var(--cc-duration-normal) var(--ease-enter)');
     expect(out).toMatch(/@keyframes cc-spin \{\s+to \{\s+transform: rotate\(360deg\);/);
     expect(out).toMatch(/@keyframes cc-pulse \{\s+50% \{\s+opacity: 0\.45;/);
     // One cc-spin, though two animations use it.
@@ -178,11 +187,13 @@ describe('theme.css compiled by Tailwind', () => {
       'max-w-measure',
       'font-inherit',
       'underline-offset-text',
+      'leading-heading',
     ]);
     expect(out).toContain('max-width: 40ch');
     expect(out).toContain('max-width: 72ch');
     expect(out).toContain('font-family: inherit');
     expect(out).toContain('text-underline-offset: 0.2em');
+    expect(out).toContain('line-height: 1.2');
   });
 
   it('emits dark: with the theme selector and registers --tw-duration', async () => {
@@ -215,7 +226,7 @@ describe('overlay animations', () => {
       for (const part of value.split(/,(?![^(]*\))/)) {
         const [name] = part.trim().split(' ');
         expect(Object.keys(tailwindKeyframes)).toContain(name);
-        expect(part).toMatch(/var\(--cc-duration-(instant|fast|normal|slow)\) var\(--cc-ease-/);
+        expect(part).toMatch(/var\(--cc-duration-(instant|fast|normal|slow)\) var\(--ease-/);
       }
   });
 
@@ -229,10 +240,10 @@ describe('overlay animations', () => {
         for (const decls of frames) expect(Object.keys(decls)).toEqual(['transform']);
       }
       if (!key.endsWith('-out')) continue;
-      expect(value).toMatch(/var\(--cc-ease-exit\) forwards$/);
+      expect(value).toMatch(/var\(--ease-exit\) forwards$/);
       const entry = tailwindAnimations[key.replace(/-out$/, '-in')]!;
       const enterStep = Math.min(
-        ...[...entry.matchAll(/--cc-duration-(\w+)\) var\(--cc-ease-out/g)].map((m) =>
+        ...[...entry.matchAll(/--cc-duration-(\w+)\) var\(--ease-enter/g)].map((m) =>
           steps.indexOf(m[1]!),
         ),
       );
@@ -242,7 +253,7 @@ describe('overlay animations', () => {
 
   it('honour reduced motion: durations drop to 0ms and the motion-reduce classes win', async () => {
     expect(css).toMatch(
-      /@media \(prefers-reduced-motion: reduce\) \{[^}]*--cc-duration-normal: 0ms;[^}]*--cc-ease-spring: var\(--cc-ease-out\)/,
+      /@media \(prefers-reduced-motion: reduce\) \{[^}]*--cc-duration-normal: 0ms;[^}]*--ease-spring: var\(--ease-enter\)/,
     );
     const out = await build([
       'animate-dialog-in',

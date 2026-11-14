@@ -2,27 +2,27 @@
 name: CodeCora UI, gaira theme
 description: gaira's console; ink surfaces, volt only on actions and focus, Inter and JetBrains Mono.
 colors:
-  surface: "#0E1110"
-  surface-raised: "#151917"
-  surface-sunken: "#0A0C0B"
-  surface-hover: "#222826"
+  background: "#0E1110"
+  card: "#151917"
+  muted: "#0A0C0B"
+  accent: "#222826"
   border: "#2A302D"
-  border-strong: "#6B736F"
-  text: "#E8ECEA"
-  text-muted: "#959E99"
-  danger: "#F87171"
-  danger-text: "#0E1110"
+  input: "#6B736F"
+  foreground: "#E8ECEA"
+  muted-foreground: "#959E99"
+  destructive: "#F87171"
+  destructive-foreground: "#0E1110"
   success: "#4FD8D2"
-  success-text: "#0E1110"
+  success-foreground: "#0E1110"
   warning: "#E89B3C"
-  warning-text: "#0E1110"
-  accent: "#D4FF3A"
-  accent-hover: "#E2FF7A"
-  accent-text: "#0E1110"
+  warning-foreground: "#0E1110"
+  primary: "#D4FF3A"
+  primary-hover: "#E2FF7A"
+  primary-foreground: "#0E1110"
 typography:
   display:
     fontFamily: "'Inter Variable', 'Inter', ui-sans-serif, system-ui, sans-serif"
-    fontSize: "2.25rem"
+    fontSize: "1.875rem"
     fontWeight: 600
     lineHeight: 1.2
   title:
@@ -58,16 +58,16 @@ spacing:
   "8": "2rem"
 components:
   button-primary:
-    backgroundColor: "{colors.accent}"
-    textColor: "{colors.accent-text}"
+    backgroundColor: "{colors.primary}"
+    textColor: "{colors.primary-foreground}"
     rounded: "{rounded.md}"
     height: "2.75rem"
     padding: "0 0.875rem"
   button-primary-hover:
-    backgroundColor: "{colors.accent-hover}"
+    backgroundColor: "{colors.primary-hover}"
   input:
-    backgroundColor: "{colors.surface-raised}"
-    textColor: "{colors.text}"
+    backgroundColor: "{colors.card}"
+    textColor: "{colors.foreground}"
     rounded: "{rounded.md}"
     height: "2.75rem"
 ---
@@ -93,15 +93,15 @@ gaira runs billed AI tools: image generation, OCR, captions, decisions. Its UI i
 Ink layers, one volt accent, status signals that stay out of volt's way.
 
 ### Primary
-- **Volt** (`accent`): primary actions, the selected item and the focus ring. Brightens to `accent-hover`; text on it is always ink (`accent-text`), since white on volt fails 4.5:1.
+- **Volt** (`primary`): primary actions, the selected item and the focus ring. Brightens to `primary-hover`; text on it is always ink (`primary-foreground`), since white on volt fails 4.5:1.
 
 ### Neutral
-- **Ink** (`surface`): the page; the same ink that sits on volt in the logo.
-- **Panel** (`surface-raised`): cards, popovers and inputs.
-- **Well** (`surface-sunken`): result stages and inset areas.
-- **Edge** (`surface-hover`, `border`): hover tint and hairlines.
-- **Steel** (`border-strong`): control boundaries (3:1).
-- **Paper** (`text`) and **Ash** (`text-muted`): body and secondary text.
+- **Ink** (`background`): the page; the same ink that sits on volt in the logo.
+- **Panel** (`card`): cards, popovers and inputs.
+- **Well** (`muted`): result stages and inset areas.
+- **Edge** (`accent`, `border`): hover tint and hairlines.
+- **Steel** (`input`): control boundaries (3:1).
+- **Paper** (`foreground`) and **Ash** (`muted-foreground`): body and secondary text.
 
 ### Named Rules
 **The Volt Means Act Rule.** Volt marks what the user can do. Success is teal, not green, so a completed run never reads as another button.

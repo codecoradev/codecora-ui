@@ -13,6 +13,7 @@ export const twMergeExtension = {
     spacing: ['control', 'control-x', 'control-y', 'stack', 'cell-x', 'cell-y', 'icon'],
     shadow: ['popover', 'modal'],
     ease: ['enter', 'exit', 'move', 'spring'],
+    leading: ['heading'],
   },
   classGroups: {
     duration: [{ duration: ['instant', 'fast', 'normal', 'slow'] }],

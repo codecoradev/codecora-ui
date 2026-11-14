@@ -1,6 +1,8 @@
-// Tier 1, non-colour primitives. Theme-independent; emitted once on :root.
+// Tier 1, non-colour primitives. Theme-independent; emitted once on :root
+// where Tailwind has no value of its own.
 import type { Density } from './schema.js';
 
+/** Tailwind's spacing scale (`--spacing: 0.25rem`), steps the components use. */
 export const space = {
   1: '0.25rem',
   2: '0.5rem',
@@ -14,17 +16,26 @@ export const space = {
   16: '4rem',
 } as const;
 
+/**
+ * Tailwind's default type scale (`text-xs` ... `text-3xl`), which the
+ * components use since D13. Not emitted: Tailwind declares it.
+ */
 export const fontSize = {
   xs: '0.75rem',
   sm: '0.875rem',
-  md: '1rem',
+  base: '1rem',
   lg: '1.125rem',
-  xl: '1.375rem',
-  '2xl': '1.75rem',
-  '3xl': '2.25rem',
+  xl: '1.25rem',
+  '2xl': '1.5rem',
+  '3xl': '1.875rem',
 } as const;
 
-export const leading = { tight: '1.2', normal: '1.5' } as const;
+/**
+ * Line heights Tailwind has no step for: `leading-heading` (1.2) for
+ * headings and other tight text. Tailwind's own `leading-tight` (1.25) and
+ * `leading-normal` (1.5) are unchanged.
+ */
+export const leading = { heading: '1.2' } as const;
 
 /**
  * Durations drop to 0ms under `prefers-reduced-motion: reduce`. Entries take
@@ -67,14 +78,16 @@ export function spring(zeta: number, omega: number, segments = 20): string {
 }
 
 /**
- * `out` for entries, `exit` for leaving, `in-out` for movement between two
- * resting places. `spring` overshoots by about 5% and is for movement and
- * scale only, never opacity or colour; reduced motion swaps it for `out`.
+ * `--ease-<name>`: `enter` for entries, `exit` for leaving, `move` for
+ * movement between two resting places. `spring` overshoots by about 5% and is
+ * for movement and scale only, never opacity or colour; reduced motion swaps
+ * it for `enter`. New names, so Tailwind's own `ease-out` and `ease-in-out`
+ * keep their documented curves.
  */
 export const ease = {
-  out: 'cubic-bezier(0.22, 1, 0.36, 1)',
-  'in-out': 'cubic-bezier(0.33, 0, 0.67, 1)',
+  enter: 'cubic-bezier(0.22, 1, 0.36, 1)',
   exit: 'cubic-bezier(0.4, 0, 1, 1)',
+  move: 'cubic-bezier(0.33, 0, 0.67, 1)',
   spring: spring(0.7, 10),
 } as const;
 

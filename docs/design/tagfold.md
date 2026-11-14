@@ -2,27 +2,27 @@
 name: CodeCora UI, tagfold theme
 description: tagfold's tool; near-black slate that steps up in tone, one mint accent, 9px controls and 12px cards, system fonts.
 colors:
-  surface: "#101014"
-  surface-raised: "#17171D"
-  surface-sunken: "#1E1E26"
-  surface-hover: "#23232B"
+  background: "#101014"
+  card: "#17171D"
+  muted: "#1E1E26"
+  accent: "#23232B"
   border: "#2A2A34"
-  border-strong: "#70708A"
-  text: "#ECECF1"
-  text-muted: "#9A9AA8"
-  danger: "#EF7B7B"
-  danger-text: "#2A0D0D"
+  input: "#70708A"
+  foreground: "#ECECF1"
+  muted-foreground: "#9A9AA8"
+  destructive: "#EF7B7B"
+  destructive-foreground: "#2A0D0D"
   success: "#7EE0A3"
-  success-text: "#0C1510"
+  success-foreground: "#0C1510"
   warning: "#F0B45C"
-  warning-text: "#241A08"
-  accent: "#7EE0A3"
-  accent-hover: "#A9ECBF"
-  accent-text: "#0C1510"
+  warning-foreground: "#241A08"
+  primary: "#7EE0A3"
+  primary-hover: "#A9ECBF"
+  primary-foreground: "#0C1510"
 typography:
   display:
     fontFamily: "ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif"
-    fontSize: "2.25rem"
+    fontSize: "1.875rem"
     fontWeight: 600
     lineHeight: 1.2
   title:
@@ -58,16 +58,16 @@ spacing:
   "8": "2rem"
 components:
   button-primary:
-    backgroundColor: "{colors.accent}"
-    textColor: "{colors.accent-text}"
+    backgroundColor: "{colors.primary}"
+    textColor: "{colors.primary-foreground}"
     rounded: "{rounded.md}"
     height: "2.75rem"
     padding: "0 0.875rem"
   button-primary-hover:
-    backgroundColor: "{colors.accent-hover}"
+    backgroundColor: "{colors.primary-hover}"
   input:
-    backgroundColor: "{colors.surface-raised}"
-    textColor: "{colors.text}"
+    backgroundColor: "{colors.card}"
+    textColor: "{colors.foreground}"
     rounded: "{rounded.md}"
     height: "2.75rem"
 ---
@@ -93,19 +93,19 @@ tagfold is where a photographer sorts a batch and tags it for stock sites. Its U
 Slate layers, one mint accent, status colours that stay out of mint's way.
 
 ### Primary
-- **Mint** (`accent`): primary actions, the selected item and the focus ring. Brightens to `accent-hover`; text on it is always dark ink (`accent-text`), since white on mint fails 4.5:1. It is also the success colour.
+- **Mint** (`primary`): primary actions, the selected item and the focus ring. Brightens to `primary-hover`; text on it is always dark ink (`primary-foreground`), since white on mint fails 4.5:1. It is also the success colour.
 
 ### Neutral
-- **Slate** (`surface`): the page.
-- **Panel** (`surface-raised`): cards, popovers and inputs.
-- **Well** (`surface-sunken`): inset areas and neutral badges, one step lighter than the panel.
-- **Edge** (`surface-hover`, `border`): hover tint (`#23232B`) and hairlines (`#2A2A34`).
-- **Steel** (`border-strong`): control boundaries (3:1).
-- **Paper** (`text`) and **Mist** (`text-muted`): body and secondary text.
+- **Slate** (`background`): the page.
+- **Panel** (`card`): cards, popovers and inputs.
+- **Well** (`muted`): inset areas and neutral badges, one step lighter than the panel.
+- **Edge** (`accent`, `border`): hover tint (`#23232B`) and hairlines (`#2A2A34`).
+- **Steel** (`input`): control boundaries (3:1).
+- **Paper** (`foreground`) and **Mist** (`muted-foreground`): body and secondary text.
 
 ### Departure from tagfold's palette
 
-Every value is tagfold's own except one. `border-strong` is `#70708A` instead of `#4A4A57`, which is 2.2:1 on the page, 2.1:1 on the panel and 1.9:1 on the well, all under the 3:1 a control boundary needs. The replacement is 4.0, 3.7 and 3.5:1.
+Every value is tagfold's own except one. `input` is `#70708A` instead of `#4A4A57`, which is 2.2:1 on the page, 2.1:1 on the panel and 1.9:1 on the well, all under the 3:1 a control boundary needs. The replacement is 4.0, 3.7 and 3.5:1.
 
 ### Named Rules
 **The Mint Means Act Rule.** Mint marks what the user can do, and also what went well. Never put it on a large area, and keep amber and red for status only.

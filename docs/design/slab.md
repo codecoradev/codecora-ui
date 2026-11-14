@@ -2,23 +2,23 @@
 name: CodeCora UI, slab theme
 description: The Proof Sheet.
 colors:
-  surface: "oklch(97% 0.006 90)"
-  surface-raised: "oklch(100% 0 0)"
-  surface-sunken: "oklch(93% 0.008 90)"
-  surface-hover: "oklch(90% 0.01 90)"
+  background: "oklch(97% 0.006 90)"
+  card: "oklch(100% 0 0)"
+  muted: "oklch(93% 0.008 90)"
+  accent: "oklch(90% 0.01 90)"
   border: "oklch(30% 0.004 90)"
-  border-strong: "oklch(18% 0.003 90)"
-  text: "oklch(16% 0.003 90)"
-  text-muted: "oklch(38% 0.006 90)"
-  danger: "oklch(47% 0.18 27)"
-  danger-text: "oklch(99% 0.004 27)"
+  input: "oklch(18% 0.003 90)"
+  foreground: "oklch(16% 0.003 90)"
+  muted-foreground: "oklch(38% 0.006 90)"
+  destructive: "oklch(47% 0.18 27)"
+  destructive-foreground: "oklch(99% 0.004 27)"
   success: "oklch(46% 0.15 150)"
-  success-text: "oklch(98% 0.006 150)"
+  success-foreground: "oklch(98% 0.006 150)"
   warning: "oklch(47% 0.1 70)"
-  warning-text: "oklch(99% 0.004 70)"
-  accent: "oklch(47% 0.17 275)"
-  accent-hover: "oklch(41% 0.16 275)"
-  accent-text: "oklch(99% 0.004 275)"
+  warning-foreground: "oklch(99% 0.004 70)"
+  primary: "oklch(47% 0.17 275)"
+  primary-hover: "oklch(41% 0.16 275)"
+  primary-foreground: "oklch(99% 0.004 275)"
 typography:
   body:
     fontFamily: "ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif"
@@ -59,7 +59,7 @@ Radius 0 for inline pieces, controls, cards and dialogs. The pill radius stays r
 
 ### Shadows
 
-The only theme that sets `shadow`: popovers cast `var(--cc-space-1)` and dialogs `var(--cc-space-2)` down and right, with no blur, in `--cc-text`. Resting surfaces stay flat (the Tone Before Shadow Rule).
+The only theme that sets `shadow`: popovers cast `0.25rem` and dialogs `0.5rem` down and right, with no blur, in `--foreground`. Resting surfaces stay flat (the Tone Before Shadow Rule).
 
 ### Shape hooks
 

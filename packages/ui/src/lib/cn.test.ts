@@ -53,10 +53,14 @@ describe('cn with the CodeCora theme names', () => {
     const ease = Object.keys(tailwindKeys)
       .filter((k) => k.startsWith('ease-'))
       .map((k) => k.slice('ease-'.length));
+    const leading = Object.keys(tailwindKeys)
+      .filter((k) => k.startsWith('leading-'))
+      .map((k) => k.slice('leading-'.length));
     const utilities = Object.keys(tailwindUtilities);
     expect(twMergeExtension.theme.spacing).toEqual(spacing);
     expect(twMergeExtension.theme.shadow).toEqual(shadow);
     expect(twMergeExtension.theme.ease).toEqual(ease);
+    expect(twMergeExtension.theme.leading).toEqual(leading);
     expect(twMergeExtension.classGroups.duration[0]!.duration.map((d) => `duration-${d}`)).toEqual(
       utilities.filter((u) => u.startsWith('duration-')),
     );

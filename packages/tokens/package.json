@@ -1,7 +1,7 @@
 {
   "name": "@codecora/tokens",
   "version": "0.7.0",
-  "description": "Design tokens and themes for CodeCora products: CSS custom properties, TypeScript constants, Tailwind 4 preset, shadcn bridge",
+  "description": "Design tokens and themes for CodeCora products: one Tailwind 4 stylesheet on shadcn variable names, and the TypeScript token source",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
@@ -15,12 +15,7 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
-    "./tokens.css": "./dist/css/tokens.css",
-    "./theme.css": "./dist/css/theme.css",
-    "./base.css": "./dist/css/base.css",
-    "./themes/*.css": "./dist/css/themes/*.css",
-    "./tailwind.css": "./dist/css/tailwind.css",
-    "./shadcn.css": "./dist/css/shadcn.css"
+    "./theme.css": "./dist/css/theme.css"
   },
   "files": [
     "dist",

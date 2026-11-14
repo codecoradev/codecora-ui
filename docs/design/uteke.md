@@ -2,27 +2,27 @@
 name: CodeCora UI, uteke theme
 description: Editorial light from uteke.app; green paper, ink, and one green that marks what matters.
 colors:
-  surface: "oklch(97.5% 0.008 150)"
-  surface-raised: "oklch(99% 0.004 150)"
-  surface-sunken: "oklch(94.6% 0.01 150)"
-  surface-hover: "oklch(92% 0.012 150)"
+  background: "oklch(97.5% 0.008 150)"
+  card: "oklch(99% 0.004 150)"
+  muted: "oklch(94.6% 0.01 150)"
+  accent: "oklch(92% 0.012 150)"
   border: "oklch(88% 0.011 150)"
-  border-strong: "oklch(45% 0.013 152)"
-  text: "oklch(21% 0.015 155)"
-  text-muted: "oklch(45% 0.013 152)"
-  danger: "oklch(47% 0.18 27)"
-  danger-text: "oklch(99% 0.004 27)"
+  input: "oklch(45% 0.013 152)"
+  foreground: "oklch(21% 0.015 155)"
+  muted-foreground: "oklch(45% 0.013 152)"
+  destructive: "oklch(47% 0.18 27)"
+  destructive-foreground: "oklch(99% 0.004 27)"
   success: "oklch(46% 0.15 150)"
-  success-text: "oklch(98% 0.006 150)"
+  success-foreground: "oklch(98% 0.006 150)"
   warning: "oklch(47% 0.1 70)"
-  warning-text: "oklch(99% 0.004 70)"
-  accent: "oklch(46% 0.15 150)"
-  accent-hover: "oklch(40% 0.14 150)"
-  accent-text: "oklch(98% 0.006 150)"
+  warning-foreground: "oklch(99% 0.004 70)"
+  primary: "oklch(46% 0.15 150)"
+  primary-hover: "oklch(40% 0.14 150)"
+  primary-foreground: "oklch(98% 0.006 150)"
 typography:
   display:
     fontFamily: "'Space Grotesk', ui-sans-serif, system-ui, sans-serif"
-    fontSize: "2.25rem"
+    fontSize: "1.875rem"
     fontWeight: 600
     lineHeight: 1.2
   title:
@@ -58,16 +58,16 @@ spacing:
   "8": "2rem"
 components:
   button-primary:
-    backgroundColor: "{colors.accent}"
-    textColor: "{colors.accent-text}"
+    backgroundColor: "{colors.primary}"
+    textColor: "{colors.primary-foreground}"
     rounded: "{rounded.md}"
     height: "2.75rem"
     padding: "0 0.875rem"
   button-primary-hover:
-    backgroundColor: "{colors.accent-hover}"
+    backgroundColor: "{colors.primary-hover}"
   input:
-    backgroundColor: "{colors.surface-raised}"
-    textColor: "{colors.text}"
+    backgroundColor: "{colors.card}"
+    textColor: "{colors.foreground}"
     rounded: "{rounded.md}"
     height: "2.75rem"
 ---
@@ -93,15 +93,15 @@ Uteke keeps memories, and its theme reads like a notebook kept by hand. Green-ti
 Warm-green paper and ink with one green voice.
 
 ### Primary
-- **Notebook Green** (`accent`): primary actions, links, the selected item and the focus ring. Deepens to `accent-hover`; labels on it use `accent-text`.
+- **Notebook Green** (`primary`): primary actions, links, the selected item and the focus ring. Deepens to `primary-hover`; labels on it use `primary-foreground`.
 
 ### Neutral
-- **Field Paper** (`surface`): the page.
-- **Fresh Leaf** (`surface-raised`): cards, inputs and popovers.
-- **Pressed Leaf** (`surface-sunken`): wells, sidebars and table headers.
+- **Field Paper** (`background`): the page.
+- **Fresh Leaf** (`card`): cards, inputs and popovers.
+- **Pressed Leaf** (`muted`): wells, sidebars and table headers.
 - **Margin Rule** (`border`): decorative rules between sections.
-- **Pencil Line** (`border-strong`, also `text-muted`): control boundaries and secondary text.
-- **Field Ink** (`text`): body text.
+- **Pencil Line** (`input`, also `muted-foreground`): control boundaries and secondary text.
+- **Field Ink** (`foreground`): body text.
 
 ### Named Rules
 **The One Ink Rule.** Green is the only colour that is not ink or paper, outside status messages. If a screen needs a second colour to make sense, the hierarchy is wrong.
@@ -155,5 +155,5 @@ Uteke reads like a printed page, so its small pieces behave like labels.
 - **Do** keep the green rare: one primary action per view.
 
 ### Don't:
-- **Don't** introduce pure white cards on the paper; use `surface-raised`.
+- **Don't** introduce pure white cards on the paper; use `card`.
 - **Don't** use green to decorate headings or illustrations.

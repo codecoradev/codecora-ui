@@ -2,27 +2,27 @@
 name: CodeCora UI, neutral theme
 description: The default theme; a quiet workbench a product can build its identity on.
 colors:
-  surface: "oklch(98.5% 0.003 260)"
-  surface-raised: "oklch(99.6% 0.001 260)"
-  surface-sunken: "oklch(96.2% 0.005 260)"
-  surface-hover: "oklch(93.6% 0.007 260)"
+  background: "oklch(98.5% 0.003 260)"
+  card: "oklch(99.6% 0.001 260)"
+  muted: "oklch(96.2% 0.005 260)"
+  accent: "oklch(93.6% 0.007 260)"
   border: "oklch(90% 0.008 260)"
-  border-strong: "oklch(55% 0.012 260)"
-  text: "oklch(22% 0.012 260)"
-  text-muted: "oklch(45% 0.014 260)"
-  danger: "oklch(47% 0.18 27)"
-  danger-text: "oklch(99% 0.004 27)"
+  input: "oklch(55% 0.012 260)"
+  foreground: "oklch(22% 0.012 260)"
+  muted-foreground: "oklch(45% 0.014 260)"
+  destructive: "oklch(47% 0.18 27)"
+  destructive-foreground: "oklch(99% 0.004 27)"
   success: "oklch(46% 0.15 150)"
-  success-text: "oklch(98% 0.006 150)"
+  success-foreground: "oklch(98% 0.006 150)"
   warning: "oklch(47% 0.1 70)"
-  warning-text: "oklch(99% 0.004 70)"
-  accent: "oklch(50% 0.16 260)"
-  accent-hover: "oklch(44% 0.16 260)"
-  accent-text: "oklch(99% 0.003 260)"
+  warning-foreground: "oklch(99% 0.004 70)"
+  primary: "oklch(50% 0.16 260)"
+  primary-hover: "oklch(44% 0.16 260)"
+  primary-foreground: "oklch(99% 0.003 260)"
 typography:
   display:
     fontFamily: "ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif"
-    fontSize: "2.25rem"
+    fontSize: "1.875rem"
     fontWeight: 600
     lineHeight: 1.2
   title:
@@ -58,16 +58,16 @@ spacing:
   "8": "2rem"
 components:
   button-primary:
-    backgroundColor: "{colors.accent}"
-    textColor: "{colors.accent-text}"
+    backgroundColor: "{colors.primary}"
+    textColor: "{colors.primary-foreground}"
     rounded: "{rounded.md}"
     height: "2.75rem"
     padding: "0 0.875rem"
   button-primary-hover:
-    backgroundColor: "{colors.accent-hover}"
+    backgroundColor: "{colors.primary-hover}"
   input:
-    backgroundColor: "{colors.surface-raised}"
-    textColor: "{colors.text}"
+    backgroundColor: "{colors.card}"
+    textColor: "{colors.foreground}"
     rounded: "{rounded.md}"
     height: "2.75rem"
 ---
@@ -93,16 +93,16 @@ The shared rules every theme follows live in the root [DESIGN.md](../../DESIGN.m
 A cool, low-chroma grey field with a single saturated blue.
 
 ### Primary
-- **Workbench Blue** (`accent`): primary buttons, links, the selected item and the focus ring. Darkens to `accent-hover` on hover; labels on it use `accent-text`.
+- **Workbench Blue** (`primary`): primary buttons, links, the selected item and the focus ring. Darkens to `primary-hover` on hover; labels on it use `primary-foreground`.
 
 ### Neutral
-- **Bench Paper** (`surface`): the page.
-- **Clean Sheet** (`surface-raised`): cards, popovers and inputs that sit above the page.
-- **Tray Grey** (`surface-sunken`): sidebars, table headers and wells.
-- **Hover Grey** (`surface-hover`): row and menu hover.
+- **Bench Paper** (`background`): the page.
+- **Clean Sheet** (`card`): cards, popovers and inputs that sit above the page.
+- **Tray Grey** (`muted`): sidebars, table headers and wells.
+- **Hover Grey** (`accent`): row and menu hover.
 - **Hairline** (`border`): decorative dividers only.
-- **Edge Grey** (`border-strong`): input and checkbox boundaries (3:1).
-- **Blueprint Ink** (`text`) and **Pencil Grey** (`text-muted`): body text and secondary text.
+- **Edge Grey** (`input`): input and checkbox boundaries (3:1).
+- **Blueprint Ink** (`foreground`) and **Pencil Grey** (`muted-foreground`): body text and secondary text.
 
 ### Named Rules
 **The One Blue Rule.** Blue means "act here" or "you are here". Never use it for decoration or for a status.
@@ -148,7 +148,7 @@ Neutral keeps every hook at its plain value, so it is the baseline the others ar
 ## Do's and Don'ts
 
 ### Do:
-- **Do** use `border-strong` for anything that marks a control's boundary.
+- **Do** use `input` for anything that marks a control's boundary.
 - **Do** let a product theme replace `neutral` rather than restyling `neutral` per app.
 
 ### Don't:
