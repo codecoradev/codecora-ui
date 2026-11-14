@@ -28,34 +28,40 @@
 }`;
 </script>
 
-<section aria-labelledby="r-items">
-  <h2 id="r-items">Items</h2>
-  <p>
+<section aria-labelledby="r-items" class="grid grid-cols-1 gap-4 pb-10">
+  <h2 id="r-items" class="text-[length:var(--cc-font-size-xl)] font-bold">Items</h2>
+  <p class="text-muted-foreground">
     Blocks are copied into your app (<code>$lib/components</code>) and are yours to change. They are
     built from <code>@codecora/ui</code>, which stays a package, and each one installs the theme
     item first.
   </p>
-  <div class="items">
+  <div
+    class="grid grid-cols-[repeat(auto-fill,minmax(min(100%,calc(var(--spacing)*88)),1fr))] gap-4 *:min-w-0"
+  >
     {#each registryItems as item (item.name)}
       <Card>
         {#snippet header()}
-          <div class="head">
-            <h3>{item.title ?? item.name}</h3>
+          <div class="flex items-center justify-between gap-2">
+            <h3 class="text-[length:var(--cc-font-size-md)] font-bold">
+              {item.title ?? item.name}
+            </h3>
             <Badge tone={item.type === 'registry:theme' ? 'accent' : 'neutral'}>
               {item.type.replace('registry:', '')}
             </Badge>
           </div>
         {/snippet}
-        <p>{item.description}</p>
+        <p class="text-muted-foreground mb-3">{item.description}</p>
         <CodeBlock code={`npx shadcn-svelte@latest add ${url(item.name)}`} language="sh" />
       </Card>
     {/each}
   </div>
 </section>
 
-<section aria-labelledby="r-bridge">
-  <h2 id="r-bridge">What the theme item does</h2>
-  <p>
+<section aria-labelledby="r-bridge" class="grid grid-cols-1 gap-4 pb-10">
+  <h2 id="r-bridge" class="text-[length:var(--cc-font-size-xl)] font-bold">
+    What the theme item does
+  </h2>
+  <p class="text-muted-foreground">
     <code>cc-theme</code> installs <code>@codecora/tokens</code> and <code>@codecora/ui</code>, adds
     their Tailwind 4 imports to your global CSS and hands the shadcn variables in your
     <code>:root</code> and <code>.dark</code> blocks back to the theme, which declares them. Your
@@ -63,7 +69,7 @@
     and <code>data-density</code> on any element, nested regions included.
   </p>
   <CodeBlock code={bridge} language="css" />
-  <p>
+  <p class="text-muted-foreground">
     Dark themes (for example <code>corin</code>) set their own colours, but shadcn's
     <code>dark:</code> utilities still follow the <code>.dark</code> class: add it next to a dark
     <code>data-theme</code>, or delete shadcn's <code>@custom-variant dark</code> line so
@@ -71,40 +77,3 @@
     <a href={resolve('/tokens')}>token catalogue</a> for every theme.
   </p>
 </section>
-
-<style>
-  section {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--cc-space-4);
-    padding-bottom: var(--cc-space-10);
-  }
-  h2 {
-    font-size: var(--cc-font-size-xl);
-  }
-  h3 {
-    font-size: var(--cc-font-size-md);
-  }
-  p {
-    max-inline-size: 65ch;
-    color: var(--cc-text-muted);
-  }
-  .items {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr));
-    gap: var(--cc-space-4);
-  }
-  /* Long install commands scroll inside their code block instead of widening the page. */
-  .items > :global(*) {
-    min-inline-size: 0;
-  }
-  .items p {
-    margin-bottom: var(--cc-space-3);
-  }
-  .head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--cc-space-2);
-  }
-</style>

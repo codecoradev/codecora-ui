@@ -11,20 +11,30 @@
   import Copy from '@lucide/svelte/icons/copy';
 
   const names = Object.keys(lucide) as (keyof typeof lucide)[];
+
+  const section = 'grid grid-cols-1 gap-4 pb-10';
+  const h2 = 'text-[length:var(--cc-font-size-xl)] font-bold';
+  const row = 'flex flex-wrap items-center gap-3';
+  const inline = 'flex flex-wrap items-center gap-2';
 </script>
 
-<section aria-labelledby="i-contract">
-  <h2 id="i-contract">Size and stroke come from the theme</h2>
-  <p class="lead">
+<section aria-labelledby="i-contract" class={section}>
+  <h2 id="i-contract" class={h2}>Size and stroke come from the theme</h2>
+  <p class="text-muted-foreground">
     <code>--cc-icon-size</code> and <code>--cc-icon-stroke</code> are semantic tokens, so a theme can
     change icon weight. Each row is one theme, drawn with that theme's own values.
   </p>
-  <ul class="themes">
+  <ul class="grid gap-3">
     {#each themeNames as name (name)}
-      <li data-theme={name}>
-        <span class="theme-name">{themes[name].label}</span>
-        <span class="values">stroke {themes[name].icon.stroke}, size {themes[name].icon.size}</span>
-        <span class="row" aria-hidden="true">
+      <li
+        data-theme={name}
+        class="border-border bg-card text-foreground flex flex-wrap items-center gap-4 rounded-md border px-4 py-3"
+      >
+        <span class="min-w-20 font-semibold">{themes[name].label}</span>
+        <span class="text-muted-foreground min-w-40 font-mono text-[length:var(--cc-font-size-sm)]"
+          >stroke {themes[name].icon.stroke}, size {themes[name].icon.size}</span
+        >
+        <span class={row} aria-hidden="true">
           <Icon icon={lucide.Plus} />
           <Icon icon={lucide.Search} />
           <Icon icon={lucide.Settings} />
@@ -36,31 +46,31 @@
   </ul>
 </section>
 
-<section aria-labelledby="i-usage">
-  <h2 id="i-usage">Using it</h2>
-  <div class="row">
+<section aria-labelledby="i-usage" class={section}>
+  <h2 id="i-usage" class={h2}>Using it</h2>
+  <div class={row}>
     <Button variant="primary" icon={lucide.Plus}>Create key</Button>
     <IconButton icon={lucide.Trash} label="Delete" variant="danger" />
-    <span class="inline"><Icon icon={lucide.CircleCheck} label="Verified" /> Verified</span>
-    <span class="inline"
+    <span class={inline}><Icon icon={lucide.CircleCheck} label="Verified" /> Verified</span>
+    <span class={inline}
       ><Icon icon={Copy} size="0.875rem" stroke={2.5} /> One-off size and stroke</span
     >
   </div>
-  <p class="muted">
+  <p class="text-muted-foreground">
     Decorative icons are hidden from assistive technology; the one labelled "Verified" is an image
     with a name.
   </p>
 </section>
 
-<section aria-labelledby="i-phosphor">
-  <h2 id="i-phosphor">Phosphor adapter</h2>
-  <p class="lead">
+<section aria-labelledby="i-phosphor" class={section}>
+  <h2 id="i-phosphor" class={h2}>Phosphor adapter</h2>
+  <p class="text-muted-foreground">
     Phosphor draws weight with a prop, so the theme stroke maps to a weight. Weight for stroke 1.75
     is <code>{weightForStroke(1.75)}</code>; 2.5 is <code>{weightForStroke(2.5)}</code>.
   </p>
-  <div class="row">
+  <div class={row}>
     {#each ['thin', 'light', 'regular', 'bold'] as const as weight (weight)}
-      <span class="inline">
+      <span class={inline}>
         <PhosphorIcon icon={PhPlus} {weight} />
         <PhosphorIcon icon={PhBell} {weight} />
         <PhosphorIcon icon={PhTrash} {weight} />
@@ -70,84 +80,16 @@
   </div>
 </section>
 
-<section aria-labelledby="i-set">
-  <h2 id="i-set">Curated Lucide set ({names.length})</h2>
-  <ul class="grid">
+<section aria-labelledby="i-set" class={section}>
+  <h2 id="i-set" class={h2}>Curated Lucide set ({names.length})</h2>
+  <ul class="grid grid-cols-[repeat(auto-fill,minmax(calc(var(--spacing)*36),1fr))] gap-2">
     {#each names as name (name)}
-      <li>
+      <li
+        class="border-border flex items-center gap-2 rounded-sm border px-3 py-2 text-[length:var(--cc-font-size-sm)]"
+      >
         <Icon icon={lucide[name]} />
         <span>{name}</span>
       </li>
     {/each}
   </ul>
 </section>
-
-<style>
-  section {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--cc-space-4);
-    padding-bottom: var(--cc-space-10);
-  }
-  h2 {
-    font-size: var(--cc-font-size-xl);
-  }
-  .lead,
-  .muted {
-    color: var(--cc-text-muted);
-  }
-  ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-  .themes {
-    display: grid;
-    gap: var(--cc-space-3);
-  }
-  .themes li {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--cc-space-4);
-    padding: var(--cc-space-3) var(--cc-space-4);
-    border: 1px solid var(--cc-border);
-    border-radius: var(--cc-radius-md);
-    background: var(--cc-surface-raised);
-    color: var(--cc-text);
-  }
-  .theme-name {
-    min-width: 5rem;
-    font-weight: 600;
-  }
-  .values {
-    min-width: 10rem;
-    color: var(--cc-text-muted);
-    font-family: var(--cc-font-mono);
-    font-size: var(--cc-font-size-sm);
-  }
-  .row,
-  .inline {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--cc-space-3);
-  }
-  .inline {
-    gap: var(--cc-space-2);
-  }
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
-    gap: var(--cc-space-2);
-  }
-  .grid li {
-    display: flex;
-    align-items: center;
-    gap: var(--cc-space-2);
-    padding: var(--cc-space-2) var(--cc-space-3);
-    border: 1px solid var(--cc-border);
-    border-radius: var(--cc-radius-sm);
-    font-size: var(--cc-font-size-sm);
-  }
-</style>

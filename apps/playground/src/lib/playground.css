@@ -1,12 +1,35 @@
-/* Playground chrome. Reads semantic tokens only; no colour literals. */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
+/*
+ * Playground chrome on top of Tailwind's preflight: the page font, heading and
+ * paragraph defaults, links, the global focus ring. Reads semantic tokens
+ * only; no colour literals. Imported into the base layer (app.css), after
+ * preflight, so it overrides preflight and every utility overrides it.
+ */
+
+/*
+ * Playground layout values that no design token covers (measures, grid
+ * tracks, a few type details), named once here and read by the pages'
+ * utilities as `max-w-[var(--pg-measure-lead)]`.
+ */
+:root {
+  --pg-measure-lead: 56ch;
+  --pg-measure-body: 55ch;
+  --pg-measure-intro: 60ch;
+  --pg-cols-list-detail: minmax(0, 2fr) minmax(0, 3fr);
+  --pg-cols-character: minmax(0, 3fr) minmax(0, 2fr);
+  --pg-cols-glyph: auto minmax(0, 1fr);
+  --pg-cols-radius: repeat(4, auto);
+  --pg-cols-term: auto 1fr;
+  --pg-tracking-label: 0.04em;
+  --pg-tracking-glyph: -0.03em;
+  --pg-leading-loose: 1.6;
+  --pg-leading-small: 1.4;
+  --pg-glyph-size: clamp(4rem, 12vw, 7rem);
+  --pg-crumb-separator: '/';
+  /* The end of a motion track: its width less the dot's own (read on the dot). */
+  --pg-track-end: calc(100cqi - 100%);
 }
 
 body {
-  margin: 0;
   font-family: var(--cc-font-sans);
   font-size: var(--cc-font-size-md);
   line-height: var(--cc-leading-normal);
@@ -17,11 +40,9 @@ body {
   font-family: var(--cc-font-display);
   line-height: var(--cc-leading-tight);
   text-wrap: balance;
-  margin: 0;
 }
 
 :where(p) {
-  margin: 0;
   max-width: 65ch;
   text-wrap: pretty;
 }
@@ -31,8 +52,10 @@ body {
   color: var(--cc-text);
 }
 
-:where(a) {
+/* `a`, not `:where(a)`: it has to outweigh preflight's `a { color: inherit }`. */
+a {
   color: var(--cc-accent);
+  text-decoration: underline;
   text-underline-offset: 0.2em;
 }
 
@@ -45,8 +68,19 @@ body {
   caret-color: var(--cc-accent);
 }
 
-:where(code, kbd, .num) {
+/*
+ * Preflight's mono family is resolved on <html>, so it misses a theme set on
+ * an inner element: read the token on the element itself.
+ */
+code,
+kbd,
+samp,
+pre {
   font-family: var(--cc-font-mono);
+}
+
+code,
+kbd {
   font-variant-numeric: tabular-nums;
 }
 

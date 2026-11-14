@@ -115,22 +115,28 @@
   ];
   const progress = steps.filter((s) => s.done).length;
 
+  const h2 = 'text-[length:var(--cc-font-size-xl)] font-bold';
+  /* A flat band, not a bordered box, so the Cards inside it are the only cards. */
+  const frame = 'bg-muted px-4 py-6';
+  const split =
+    'grid grid-cols-[repeat(auto-fit,minmax(calc(var(--spacing)*64),1fr))] items-start gap-4';
+
   const sourceUrl =
     'https://github.com/codecoradev/codecora-ui/blob/develop/apps/playground/src/lib/UiSamples.svelte';
 </script>
 
-<p class="source">
+<p class="text-muted-foreground mb-6">
   Every screen below is built from <code>@codecora/ui</code> components and tokens only.
   <Link href={sourceUrl} external>Read the source on GitHub</Link>
 </p>
 
-<section aria-labelledby="s-login">
-  <h2 id="s-login">Sign in</h2>
-  <div class="frame center">
-    <Card class="narrow">
+<section class="grid grid-cols-1 gap-3 pb-10" aria-labelledby="s-login">
+  <h2 id="s-login" class={h2}>Sign in</h2>
+  <div class="{frame} grid place-items-center">
+    <Card class="w-[min(100%,calc(var(--spacing)*96))]">
       {#snippet header()}Sign in to your workspace{/snippet}
       <form
-        class="stack"
+        class="grid gap-4"
         novalidate
         onsubmit={(event) => {
           event.preventDefault();
@@ -159,7 +165,7 @@
         </Field>
         <Checkbox label="Keep me signed in" bind:checked={remember} />
         <Button variant="primary" type="submit">Sign in</Button>
-        <p class="muted center-text">
+        <p class="text-muted-foreground text-center text-[length:var(--cc-font-size-sm)]">
           New here? <Link href="#s-login">Create an account</Link>
         </p>
       </form>
@@ -167,17 +173,17 @@
   </div>
 </section>
 
-<section aria-labelledby="s-settings">
-  <h2 id="s-settings">Settings</h2>
-  <div class="frame">
-    <div class="stack wide">
+<section class="grid grid-cols-1 gap-3 pb-10" aria-labelledby="s-settings">
+  <h2 id="s-settings" class={h2}>Settings</h2>
+  <div class={frame}>
+    <div class="grid max-w-160 gap-4">
       <Breadcrumb
         label="Settings breadcrumb"
         items={[{ label: 'Workspace', href: '#s-settings' }, { label: 'Settings' }]}
       />
       <Card>
         {#snippet header()}Memory{/snippet}
-        <div class="stack">
+        <div class="grid gap-4">
           <Field label="Region" description="Where your memories are stored.">
             {#snippet children(control)}<Select
                 {...control}
@@ -197,7 +203,7 @@
       </Card>
       <Card>
         {#snippet header()}Notifications{/snippet}
-        <div class="stack">
+        <div class="grid gap-4">
           <Switch label="Email alerts" description="At most one a day." bind:checked={alerts} />
           <Separator />
           <FieldGroup legend="Digest" description="A summary of new memories.">
@@ -225,19 +231,19 @@
   </div>
 </section>
 
-<section aria-labelledby="s-list">
-  <h2 id="s-list">List and detail</h2>
-  <div class="frame split">
-    <ul class="list" aria-label="Memories">
+<section class="grid grid-cols-1 gap-3 pb-10" aria-labelledby="s-list">
+  <h2 id="s-list" class={h2}>List and detail</h2>
+  <div class="{frame} {split}">
+    <ul class="grid gap-1" aria-label="Memories">
       {#each memories as memory (memory.id)}
         <li>
           <button
             type="button"
-            class="item"
+            class="min-h-control border-border bg-card text-foreground font-inherit hover:bg-accent aria-[current=true]:border-primary focus-visible:outline-ring flex w-full cursor-pointer items-center justify-between gap-3 rounded-md border px-3 py-2 text-left focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)] aria-[current=true]:[box-shadow:inset_var(--cc-row-marker)_0_0_var(--cc-accent)]"
             aria-current={memory.id === current ? 'true' : undefined}
             onclick={() => (current = memory.id)}
           >
-            <span class="title">{memory.title}</span>
+            <span class="font-medium">{memory.title}</span>
             <Badge
               tone={memory.type === 'decision'
                 ? 'accent'
@@ -249,12 +255,12 @@
         </li>
       {/each}
     </ul>
-    <div class="stack">
+    <div class="grid gap-4">
       <Card>
         {#snippet header()}{open.title}{/snippet}
-        <div class="stack">
+        <div class="grid gap-4">
           <p>{open.body}</p>
-          <div class="tags">
+          <div class="flex flex-wrap gap-2">
             {#each open.tags as tag (tag)}<Badge>{tag}</Badge>{/each}
           </div>
         </div>
@@ -268,10 +274,10 @@
   </div>
 </section>
 
-<section aria-labelledby="s-keys">
-  <h2 id="s-keys">Data table</h2>
-  <div class="frame">
-    <div class="stack">
+<section class="grid grid-cols-1 gap-3 pb-10" aria-labelledby="s-keys">
+  <h2 id="s-keys" class={h2}>Data table</h2>
+  <div class={frame}>
+    <div class="grid gap-4">
       <Breadcrumb
         label="Keys breadcrumb"
         items={[{ label: 'Workspace', href: '#s-keys' }, { label: 'API keys' }]}
@@ -350,14 +356,14 @@
   </div>
 </section>
 
-<section aria-labelledby="s-first">
-  <h2 id="s-first">First run</h2>
-  <div class="frame split">
+<section class="grid grid-cols-1 gap-3 pb-10" aria-labelledby="s-first">
+  <h2 id="s-first" class={h2}>First run</h2>
+  <div class="{frame} {split}">
     <Card>
       {#snippet header()}Get started{/snippet}
-      <div class="stack">
+      <div class="grid gap-4">
         <Progress label="Setup" value={progress} max={steps.length} showValue />
-        <ol class="steps">
+        <ol class="grid">
           {#each steps as step (step.label)}
             <li class:done={step.done}>
               <Checkbox label={step.label} checked={step.done} disabled />
@@ -366,7 +372,7 @@
         </ol>
       </div>
     </Card>
-    <div class="empty">
+    <div class="border-input rounded-lg border border-dashed">
       <EmptyState
         icon={Inbox}
         title="No memories yet"
@@ -379,105 +385,3 @@
 </section>
 
 <Toaster />
-
-<style>
-  .source {
-    max-width: 65ch;
-    margin: 0 0 var(--cc-space-6);
-    color: var(--cc-text-muted);
-  }
-  section {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--cc-space-3);
-    padding-bottom: var(--cc-space-10);
-  }
-  h2 {
-    font-size: var(--cc-font-size-xl);
-  }
-  /* A flat band, not a bordered box, so the Cards inside it are the only cards. */
-  .frame {
-    padding: var(--cc-space-6) var(--cc-space-4);
-    background: var(--cc-surface-sunken);
-  }
-  .frame.center {
-    display: grid;
-    place-items: center;
-  }
-  .frame.split {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
-    gap: var(--cc-space-4);
-    align-items: start;
-  }
-  .stack {
-    display: grid;
-    gap: var(--cc-space-4);
-  }
-  .wide {
-    max-width: 40rem;
-  }
-  :global(.narrow) {
-    width: min(100%, 24rem);
-  }
-  .muted {
-    margin: 0;
-    color: var(--cc-text-muted);
-    font-size: var(--cc-font-size-sm);
-  }
-  .center-text {
-    text-align: center;
-  }
-  .list {
-    display: grid;
-    gap: var(--cc-space-1);
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-  .item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--cc-space-3);
-    width: 100%;
-    min-height: var(--cc-control-h);
-    padding: var(--cc-space-2) var(--cc-space-3);
-    border: 1px solid var(--cc-border);
-    border-radius: var(--cc-radius-md);
-    background: var(--cc-surface-raised);
-    color: var(--cc-text);
-    font: inherit;
-    text-align: left;
-    cursor: pointer;
-  }
-  .item:hover {
-    background: var(--cc-surface-hover);
-  }
-  .item[aria-current='true'] {
-    border-color: var(--cc-accent);
-    box-shadow: inset var(--cc-row-marker) 0 0 var(--cc-accent);
-  }
-  .item:focus-visible {
-    outline: var(--cc-focus-width) solid var(--cc-focus);
-    outline-offset: var(--cc-focus-offset);
-  }
-  .title {
-    font-weight: 500;
-  }
-  .tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--cc-space-2);
-  }
-  .steps {
-    display: grid;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-  .empty {
-    border: 1px dashed var(--cc-border-strong);
-    border-radius: var(--cc-radius-lg);
-  }
-</style>

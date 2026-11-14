@@ -2,119 +2,64 @@
   import { fontSize, space } from '@codecora/tokens';
 
   const radii = ['sm', 'md', 'lg', 'pill'] as const;
+
+  const section = 'grid content-start gap-3';
+  const h3 = 'text-muted-foreground font-sans text-[length:var(--cc-font-size-sm)] font-semibold';
 </script>
 
-<div class="scales">
-  <section aria-labelledby="sc-type">
-    <h3 id="sc-type">Type scale</h3>
-    <ul class="type">
+<div class="grid grid-cols-[repeat(auto-fit,minmax(min(100%,var(--container-2xs)),1fr))] gap-8">
+  <section aria-labelledby="sc-type" class={section}>
+    <h3 id="sc-type" class={h3}>Type scale</h3>
+    <ul class="grid gap-2">
       {#each Object.entries(fontSize).reverse() as [step, size] (step)}
-        <li>
-          <span class="meta"><code>{step}</code> <span class="num">{size}</span></span>
-          <span class="specimen" style:font-size="var(--cc-font-size-{step})">Memories, kept</span>
+        <li class="grid gap-1">
+          <span class="text-muted-foreground text-[length:var(--cc-font-size-xs)]"
+            ><code>{step}</code> <span class="font-mono tabular-nums">{size}</span></span
+          >
+          <span
+            class="font-display leading-[var(--cc-leading-tight)]"
+            style:font-size="var(--cc-font-size-{step})">Memories, kept</span
+          >
         </li>
       {/each}
     </ul>
-    <p class="mono-line">
-      Mono, tabular: <span class="num">0123456789 · 2026-10-29 · 4.92:1</span>
+    <p class="text-muted-foreground text-[length:var(--cc-font-size-sm)]">
+      Mono, tabular: <span class="font-mono tabular-nums">0123456789 · 2026-10-29 · 4.92:1</span>
     </p>
   </section>
 
-  <section aria-labelledby="sc-radius">
-    <h3 id="sc-radius">Radius</h3>
-    <ul class="radius">
+  <section aria-labelledby="sc-radius" class={section}>
+    <h3 id="sc-radius" class={h3}>Radius</h3>
+    <ul class="grid grid-cols-[var(--pg-cols-radius)] justify-start gap-4">
       {#each radii as r (r)}
-        <li>
-          <span class="box" style:border-radius="var(--cc-radius-{r})" aria-hidden="true"></span>
+        <li class="grid justify-items-center gap-2">
+          <span
+            class="bg-muted border-input size-14 border"
+            style:border-radius="var(--cc-radius-{r})"
+            aria-hidden="true"
+          ></span>
           <code>{r}</code>
         </li>
       {/each}
     </ul>
   </section>
 
-  <section aria-labelledby="sc-space">
-    <h3 id="sc-space">Spacing</h3>
-    <ul class="space">
+  <section aria-labelledby="sc-space" class={section}>
+    <h3 id="sc-space" class={h3}>Spacing</h3>
+    <ul class="grid gap-2">
       {#each Object.entries(space) as [step, size] (step)}
-        <li>
+        <li
+          class="grid grid-cols-[calc(var(--spacing)*8)_auto_1fr] items-center gap-3 text-[length:var(--cc-font-size-sm)]"
+        >
           <code>{step}</code>
-          <span class="bar" style:width="var(--cc-space-{step})" aria-hidden="true"></span>
-          <span class="num">{size}</span>
+          <span
+            class="bg-primary h-3 rounded-sm"
+            style:width="var(--cc-space-{step})"
+            aria-hidden="true"
+          ></span>
+          <span class="text-muted-foreground font-mono tabular-nums">{size}</span>
         </li>
       {/each}
     </ul>
   </section>
 </div>
-
-<style>
-  .scales {
-    display: grid;
-    gap: var(--cc-space-8);
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
-  }
-  section {
-    display: grid;
-    gap: var(--cc-space-3);
-    align-content: start;
-  }
-  h3 {
-    font-size: var(--cc-font-size-sm);
-    color: var(--cc-text-muted);
-    font-family: var(--cc-font-sans);
-    font-weight: 600;
-  }
-  ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    gap: var(--cc-space-2);
-  }
-  .type li {
-    display: grid;
-    gap: var(--cc-space-1);
-  }
-  .meta {
-    font-size: var(--cc-font-size-xs);
-    color: var(--cc-text-muted);
-  }
-  .specimen {
-    font-family: var(--cc-font-display);
-    line-height: var(--cc-leading-tight);
-  }
-  .mono-line {
-    font-size: var(--cc-font-size-sm);
-    color: var(--cc-text-muted);
-  }
-  .radius {
-    grid-template-columns: repeat(4, auto);
-    justify-content: start;
-    gap: var(--cc-space-4);
-  }
-  .radius li {
-    display: grid;
-    gap: var(--cc-space-2);
-    justify-items: center;
-  }
-  .box {
-    width: 3.5rem;
-    height: 3.5rem;
-    background: var(--cc-surface-sunken);
-    border: 1px solid var(--cc-border-strong);
-  }
-  .space li {
-    display: grid;
-    grid-template-columns: 2rem auto 1fr;
-    gap: var(--cc-space-3);
-    align-items: center;
-    font-size: var(--cc-font-size-sm);
-  }
-  .bar {
-    height: 0.75rem;
-    background: var(--cc-accent);
-    border-radius: var(--cc-radius-sm);
-  }
-  .space .num {
-    color: var(--cc-text-muted);
-  }
-</style>

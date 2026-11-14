@@ -28,164 +28,66 @@ ${closeScript}
     { role: 'Text', family: first(t.font.sans) },
     { role: 'Data', family: first(t.font.mono) },
   ]);
+  const facts = 'text-muted-foreground text-[length:var(--cc-font-size-sm)]';
 </script>
 
-<div class="character">
-  <div class="type">
-    <p class="glyph" aria-hidden="true">Aa</p>
-    <div class="lines">
-      <p class="name">{northStars[theme]}</p>
-      <p class="body">
+<div class="grid grid-cols-1 gap-8 lg:grid-cols-[var(--pg-cols-character)]">
+  <div class="grid grid-cols-[var(--pg-cols-glyph)] items-center gap-6 max-[30rem]:grid-cols-1">
+    <p
+      class="font-display text-[length:var(--pg-glyph-size)] leading-none font-semibold tracking-[var(--pg-tracking-glyph)]"
+      aria-hidden="true"
+    >
+      Aa
+    </p>
+    <div class="grid min-w-0 gap-2">
+      <p class="font-display text-[length:var(--cc-font-size-xl)] font-semibold">
+        {northStars[theme]}
+      </p>
+      <p class="text-muted-foreground max-w-[var(--pg-measure-body)]">
         Remember that Dana's birthday is 12 March. Any later conversation, on any device, finds it.
       </p>
-      <p class="data">01a19474 · 2026-11-01 · 4.92:1</p>
-      <dl class="faces">
+      <p class="font-mono text-[length:var(--cc-font-size-sm)] tabular-nums">
+        01a19474 · 2026-11-01 · 4.92:1
+      </p>
+      <dl class="mt-2 flex flex-wrap gap-x-6 gap-y-2 text-[length:var(--cc-font-size-sm)]">
         {#each faces as face (face.role)}
           <div>
-            <dt>{face.role}</dt>
-            <dd>{systemNames[face.family] ?? face.family}</dd>
+            <dt class="text-muted-foreground">{face.role}</dt>
+            <dd class="font-semibold">{systemNames[face.family] ?? face.family}</dd>
           </div>
         {/each}
       </dl>
     </div>
   </div>
 
-  <div class="shape">
-    <ul class="corners" aria-label="Corner radius">
+  <div class="grid content-start gap-4">
+    <ul class="flex flex-wrap gap-5" aria-label="Corner radius">
       {#each ['sm', 'md', 'lg'] as r (r)}
-        <li>
-          <span class="box" style:border-radius="var(--cc-radius-{r})" aria-hidden="true"></span>
-          <code>{r} {t.radius[r as 'sm' | 'md' | 'lg']}</code>
+        <li class="grid justify-items-start gap-2">
+          <span
+            class="border-input bg-primary-soft h-12 w-18 border"
+            style:border-radius="var(--cc-radius-{r})"
+            aria-hidden="true"
+          ></span>
+          <code class="text-muted-foreground text-[length:var(--cc-font-size-xs)]"
+            >{r} {t.radius[r as 'sm' | 'md' | 'lg']}</code
+          >
         </li>
       {/each}
     </ul>
-    <div class="badges">
+    <div class="flex flex-wrap gap-2">
       <Badge>Draft</Badge>
       <Badge tone="accent">New</Badge>
       <Badge tone="success">Synced</Badge>
       <Badge tone="danger">Failed</Badge>
     </div>
-    <p class="facts">
-      Icon stroke <span class="num">{t.icon.stroke}</span> · focus ring
-      <span class="num">{t.shape.focusWidth}</span> · {t.colorScheme} scheme
+    <p class={facts}>
+      Icon stroke <span class="font-mono tabular-nums">{t.icon.stroke}</span> · focus ring
+      <span class="font-mono tabular-nums">{t.shape.focusWidth}</span> · {t.colorScheme} scheme
     </p>
   </div>
-  <div class="setup">
-    <p class="facts">Use this theme</p>
+  <div class="col-span-full grid gap-2">
+    <p class={facts}>Use this theme</p>
     <CodeBlock code={setup} language="svelte" />
   </div>
 </div>
-
-<style>
-  .character {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--cc-space-8);
-  }
-  .type {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
-    gap: var(--cc-space-6);
-    align-items: center;
-  }
-  .glyph {
-    margin: 0;
-    font-family: var(--cc-font-display);
-    font-size: clamp(4rem, 12vw, 7rem);
-    font-weight: 600;
-    line-height: 1;
-    letter-spacing: -0.03em;
-  }
-  .lines {
-    display: grid;
-    gap: var(--cc-space-2);
-    min-width: 0;
-  }
-  .lines p {
-    margin: 0;
-  }
-  .name {
-    font-family: var(--cc-font-display);
-    font-size: var(--cc-font-size-xl);
-    font-weight: 600;
-  }
-  .body {
-    max-width: 55ch;
-    color: var(--cc-text-muted);
-  }
-  .data,
-  .num {
-    font-family: var(--cc-font-mono);
-    font-variant-numeric: tabular-nums;
-  }
-  .data {
-    font-size: var(--cc-font-size-sm);
-  }
-  .faces {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--cc-space-2) var(--cc-space-6);
-    margin: var(--cc-space-2) 0 0;
-    font-size: var(--cc-font-size-sm);
-  }
-  .faces dt {
-    color: var(--cc-text-muted);
-  }
-  .faces dd {
-    margin: 0;
-    font-weight: 600;
-  }
-  .shape {
-    display: grid;
-    gap: var(--cc-space-4);
-    align-content: start;
-  }
-  .corners {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--cc-space-5);
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-  .corners li {
-    display: grid;
-    justify-items: start;
-    gap: var(--cc-space-2);
-  }
-  .box {
-    width: 4.5rem;
-    height: 3rem;
-    border: 1px solid var(--cc-border-strong);
-    background: var(--cc-accent-soft);
-  }
-  .corners code {
-    font-size: var(--cc-font-size-xs);
-    color: var(--cc-text-muted);
-  }
-  .badges {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--cc-space-2);
-  }
-  .facts {
-    margin: 0;
-    color: var(--cc-text-muted);
-    font-size: var(--cc-font-size-sm);
-  }
-  .setup {
-    display: grid;
-    gap: var(--cc-space-2);
-    grid-column: 1 / -1;
-  }
-  @media (min-width: 64rem) {
-    .character {
-      grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
-    }
-  }
-  @media (max-width: 30rem) {
-    .type {
-      grid-template-columns: minmax(0, 1fr);
-    }
-  }
-</style>

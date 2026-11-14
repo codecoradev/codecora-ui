@@ -31,225 +31,93 @@
   const colors = $derived(themes[name].colors);
   const ratio = (a: string, b: string) => contrastRatio(parseColor(a), parseColor(b)).toFixed(1);
   const lightness = (value: string) => /oklch\(\s*([\d.]+)%/.exec(value)?.[1];
+
+  const muted = 'text-muted-foreground text-[length:var(--cc-font-size-sm)]';
+  const surface = 'h-7 rounded-md border';
+  const proof = 'bg-muted rounded-md px-3 py-2 text-[length:var(--cc-font-size-sm)]';
+  const num = 'font-mono tabular-nums';
+  const pair = 'inline-flex items-center gap-2';
 </script>
 
 <article
-  class="tile"
+  class="border-input grid min-w-0 gap-3 rounded-lg border p-4"
   data-theme={name}
   data-accent={accent}
   data-density={density}
   aria-labelledby="tile-{name}"
 >
-  <header>
-    <div>
-      <h4 id="tile-{name}">
-        <a href={resolve('/themes/[theme]', { theme: name })}>{themes[name].label}</a>
+  <header class="flex items-start justify-between gap-3">
+    <div class="grid min-w-0 gap-1">
+      <h4 id="tile-{name}" class="font-display text-[length:var(--cc-font-size-xl)] font-bold">
+        <!-- The title opens the theme page, so it looks like a link at rest. -->
+        <a
+          class="decoration-input underline-offset-text focus-visible:outline-ring text-inherit underline decoration-2 hover:decoration-current focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)]"
+          href={resolve('/themes/[theme]', { theme: name })}>{themes[name].label}</a
+        >
       </h4>
-      <p>{northStars[name]}</p>
+      <p class={muted}>{northStars[name]}</p>
     </div>
-    <span class="glyph" aria-hidden="true">Aa</span>
+    <span
+      class="font-display text-[length:var(--cc-font-size-3xl)] leading-none font-semibold"
+      aria-hidden="true">Aa</span
+    >
   </header>
 
   <!-- Its surfaces in order, at the control radius: round themes read as pills. -->
-  <div class="surfaces" aria-hidden="true">
-    <span class="surface"></span>
-    <span class="raised"></span>
-    <span class="sunken"></span>
-    <span class="accent"></span>
+  <div class="grid grid-cols-4 gap-1" aria-hidden="true">
+    <span class="{surface} border-border bg-background"></span>
+    <span class="{surface} border-border bg-card"></span>
+    <span class="{surface} border-border bg-muted"></span>
+    <span class="{surface} border-primary bg-primary"></span>
   </div>
 
   {#if accessNotes[name]}
-    <p class="note">{accessNotes[name]}</p>
+    <p class={muted}>{accessNotes[name]}</p>
   {/if}
+  <!-- The Access proof: measured from the theme, not claimed. -->
   {#if name === 'contrast'}
-    <p class="proof">
-      Text <strong class="num">{ratio(colors.text, colors.surface)}:1</strong>, muted text
-      <strong class="num">{ratio(colors.textMuted, colors.surface)}:1</strong> on the page
+    <p class={proof}>
+      Text <strong class={num}>{ratio(colors.text, colors.surface)}:1</strong>, muted text
+      <strong class={num}>{ratio(colors.textMuted, colors.surface)}:1</strong> on the page
     </p>
   {:else if name === 'neutral-cvd'}
-    <p class="proof pairs">
-      <span class="pair"><span class="fill success" aria-hidden="true"></span>Success is blue</span>
-      <span class="pair"
-        ><span class="fill danger" aria-hidden="true"></span>Danger is vermillion</span
+    <p class="{proof} flex flex-wrap gap-x-3 gap-y-1">
+      <span class={pair}
+        ><span class="bg-success size-4 rounded-sm" aria-hidden="true"></span>Success is blue</span
+      >
+      <span class={pair}
+        ><span class="bg-destructive size-4 rounded-sm" aria-hidden="true"></span>Danger is
+        vermillion</span
       >
     </p>
   {:else if name === 'dimmed'}
-    <p class="proof">
-      Page at <strong class="num">{lightness(colors.surface) ?? '?'}%</strong> lightness, text
-      <strong class="num">{ratio(colors.text, colors.surface)}:1</strong>: no white on black
+    <p class={proof}>
+      Page at <strong class={num}>{lightness(colors.surface) ?? '?'}%</strong> lightness, text
+      <strong class={num}>{ratio(colors.text, colors.surface)}:1</strong>: no white on black
     </p>
   {/if}
 
-  <div class="specimen" aria-hidden="true">
-    <span class="action">Save</span>
-    <span class="focus">Focused</span>
+  <div class="flex flex-wrap items-center gap-2" aria-hidden="true">
+    <!-- The filled action as the theme draws it: accent, radius, label colour. -->
+    <span
+      class="min-h-control px-control-x bg-primary text-primary-foreground inline-flex items-center rounded-md text-[length:var(--cc-font-size-sm)] font-semibold"
+      >Save</span
+    >
+    <!-- The focus ring, drawn on so its width and offset can be compared. -->
+    <span
+      class="min-h-control px-control-x border-input bg-card outline-ring inline-flex items-center rounded-md border text-[length:var(--cc-font-size-sm)] outline-[length:var(--cc-focus-width)] outline-offset-[var(--cc-focus-offset)]"
+      >Focused</span
+    >
     <Badge tone="success">Active</Badge>
     <Badge tone="danger">Revoked</Badge>
-    <span class="float">Saved <span class="when">now</span></span>
+    <!-- A floating layer: the theme's own shadow and large radius. -->
+    <span
+      class="border-border bg-card shadow-popover inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-[length:var(--cc-font-size-sm)]"
+      >Saved <span class="text-muted-foreground font-mono tabular-nums">now</span></span
+    >
   </div>
 
   {#if current}
-    <footer><Badge tone="accent">Current theme</Badge></footer>
+    <footer class="flex"><Badge tone="accent">Current theme</Badge></footer>
   {/if}
 </article>
-
-<style>
-  .tile {
-    display: grid;
-    gap: var(--cc-space-3);
-    min-width: 0;
-    padding: var(--cc-space-4);
-    border: 1px solid var(--cc-border-strong);
-    border-radius: var(--cc-radius-lg);
-  }
-  header {
-    display: flex;
-    align-items: start;
-    justify-content: space-between;
-    gap: var(--cc-space-3);
-  }
-  header > div {
-    display: grid;
-    gap: var(--cc-space-1);
-    min-width: 0;
-  }
-  h4 {
-    margin: 0;
-    font-family: var(--cc-font-display);
-    font-size: var(--cc-font-size-xl);
-  }
-  /* The title opens the theme page, so it looks like a link at rest. */
-  h4 a {
-    color: inherit;
-    text-decoration: underline;
-    text-decoration-color: var(--cc-border-strong);
-    text-decoration-thickness: 2px;
-    text-underline-offset: 0.2em;
-  }
-  h4 a:hover {
-    text-decoration-color: currentColor;
-  }
-  h4 a:focus-visible {
-    outline: var(--cc-focus-width) solid var(--cc-focus);
-    outline-offset: var(--cc-focus-offset);
-  }
-  header p,
-  .note {
-    margin: 0;
-    color: var(--cc-text-muted);
-    font-size: var(--cc-font-size-sm);
-  }
-  .glyph {
-    font-family: var(--cc-font-display);
-    font-size: var(--cc-font-size-3xl);
-    font-weight: 600;
-    line-height: 1;
-  }
-  .surfaces {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: var(--cc-space-1);
-  }
-  .surfaces span {
-    height: 1.75rem;
-    border: 1px solid var(--cc-border);
-    border-radius: var(--cc-radius-md);
-  }
-  .surfaces .surface {
-    background: var(--cc-surface);
-  }
-  .surfaces .raised {
-    background: var(--cc-surface-raised);
-  }
-  .surfaces .sunken {
-    background: var(--cc-surface-sunken);
-  }
-  .surfaces .accent {
-    border-color: var(--cc-accent);
-    background: var(--cc-accent);
-  }
-  /* The Access proof: measured from the theme, not claimed. */
-  .proof {
-    margin: 0;
-    padding: var(--cc-space-2) var(--cc-space-3);
-    border-radius: var(--cc-radius-md);
-    background: var(--cc-surface-sunken);
-    font-size: var(--cc-font-size-sm);
-  }
-  .proof.pairs {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--cc-space-1) var(--cc-space-3);
-  }
-  .num {
-    font-family: var(--cc-font-mono);
-    font-variant-numeric: tabular-nums;
-  }
-  .pair {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--cc-space-2);
-  }
-  .fill {
-    width: 1rem;
-    height: 1rem;
-    border-radius: var(--cc-radius-sm);
-  }
-  .fill.success {
-    background: var(--cc-success);
-  }
-  .fill.danger {
-    background: var(--cc-danger);
-  }
-  .specimen {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--cc-space-2);
-  }
-  /* The filled action as the theme draws it: accent, radius, label colour. */
-  .action {
-    display: inline-flex;
-    align-items: center;
-    min-height: var(--cc-control-h);
-    padding-inline: var(--cc-control-px);
-    border-radius: var(--cc-radius-md);
-    background: var(--cc-accent);
-    color: var(--cc-accent-text);
-    font-size: var(--cc-font-size-sm);
-    font-weight: 600;
-  }
-  /* The focus ring, drawn on so its width and offset can be compared. */
-  .focus {
-    display: inline-flex;
-    align-items: center;
-    min-height: var(--cc-control-h);
-    padding-inline: var(--cc-control-px);
-    border: 1px solid var(--cc-border-strong);
-    border-radius: var(--cc-radius-md);
-    background: var(--cc-surface-raised);
-    outline: var(--cc-focus-width) solid var(--cc-focus);
-    outline-offset: var(--cc-focus-offset);
-    font-size: var(--cc-font-size-sm);
-  }
-  /* A floating layer: the theme's own shadow and large radius. */
-  .float {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--cc-space-2);
-    padding: var(--cc-space-2) var(--cc-space-3);
-    border: 1px solid var(--cc-border);
-    border-radius: var(--cc-radius-lg);
-    background: var(--cc-surface-raised);
-    box-shadow: var(--cc-shadow-popover);
-    font-size: var(--cc-font-size-sm);
-  }
-  .when {
-    color: var(--cc-text-muted);
-    font-family: var(--cc-font-mono);
-    font-variant-numeric: tabular-nums;
-  }
-  footer {
-    display: flex;
-  }
-</style>

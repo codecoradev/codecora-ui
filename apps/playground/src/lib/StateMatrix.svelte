@@ -24,61 +24,85 @@
     { value: 'eu', label: 'Europe' },
     { value: 'us', label: 'United States' },
   ];
+
+  const cell = 'border-border border-b p-3 text-left align-top';
+  const colHead = `${cell} text-muted-foreground text-[length:var(--cc-font-size-sm)] font-semibold`;
+  const rowHead = `${cell} text-[length:var(--cc-font-size-sm)] font-medium whitespace-nowrap`;
 </script>
 
-<section aria-labelledby="c-matrix">
-  <h2 id="c-matrix">State matrix</h2>
-  <p class="muted">
+<section aria-labelledby="c-matrix" class="grid grid-cols-1 gap-4 pb-10">
+  <h2 id="c-matrix" class="text-[length:var(--cc-font-size-xl)] font-bold">State matrix</h2>
+  <p class="text-muted-foreground max-w-[var(--pg-measure-intro)]">
     Every state a control can be in, in the theme and density chosen above. Hover and focus need
     your pointer and keyboard: hover a control, or press Tab to see the focus ring each theme draws.
   </p>
 
   <!-- A scrollable region must be reachable by keyboard (axe: scrollable-region-focusable). -->
   <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
-  <div class="scroll" role="region" aria-label="Matrix of component states" tabindex="0">
-    <table class="matrix">
+  <!-- Positioned, so absolutely placed screen-reader text stays inside the scroll box. -->
+  <div
+    class="relative overflow-x-auto"
+    role="region"
+    aria-label="Matrix of component states"
+    tabindex="0"
+  >
+    <table class="w-full min-w-176 border-collapse">
       <thead>
         <tr>
-          <th scope="col">Control</th>
-          {#each columns as column (column)}<th scope="col">{column}</th>{/each}
+          <th scope="col" class={colHead}>Control</th>
+          {#each columns as column (column)}<th scope="col" class={colHead}>{column}</th>{/each}
         </tr>
       </thead>
       <tbody>
         <tr>
-          <th scope="row">Button</th>
-          <td><Button variant="primary" icon={Download}>Export</Button></td>
-          <td><Button variant="primary" disabled>Export</Button></td>
-          <td><Button variant="primary" loading loadingLabel="Exporting">Export</Button></td>
-          <td class="na"><span role="img" aria-label="Not applicable">–</span></td>
+          <th scope="row" class={rowHead}>Button</th>
+          <td class={cell}><Button variant="primary" icon={Download}>Export</Button></td>
+          <td class={cell}><Button variant="primary" disabled>Export</Button></td>
+          <td class={cell}
+            ><Button variant="primary" loading loadingLabel="Exporting">Export</Button></td
+          >
+          <td class="{cell} text-muted-foreground"
+            ><span role="img" aria-label="Not applicable">–</span></td
+          >
         </tr>
         <tr>
-          <th scope="row">Danger button</th>
-          <td><Button variant="danger" icon={Trash}>Revoke</Button></td>
-          <td><Button variant="danger" disabled>Revoke</Button></td>
-          <td><Button variant="danger" loading loadingLabel="Revoking">Revoke</Button></td>
-          <td class="na"><span role="img" aria-label="Not applicable">–</span></td>
+          <th scope="row" class={rowHead}>Danger button</th>
+          <td class={cell}><Button variant="danger" icon={Trash}>Revoke</Button></td>
+          <td class={cell}><Button variant="danger" disabled>Revoke</Button></td>
+          <td class={cell}
+            ><Button variant="danger" loading loadingLabel="Revoking">Revoke</Button></td
+          >
+          <td class="{cell} text-muted-foreground"
+            ><span role="img" aria-label="Not applicable">–</span></td
+          >
         </tr>
         <tr>
-          <th scope="row">Icon button</th>
-          <td><IconButton icon={Trash} label="Delete" variant="secondary" /></td>
-          <td><IconButton icon={Trash} label="Delete (disabled)" disabled /></td>
-          <td class="na"><span role="img" aria-label="Not applicable">–</span></td>
-          <td class="na"><span role="img" aria-label="Not applicable">–</span></td>
+          <th scope="row" class={rowHead}>Icon button</th>
+          <td class={cell}><IconButton icon={Trash} label="Delete" variant="secondary" /></td>
+          <td class={cell}><IconButton icon={Trash} label="Delete (disabled)" disabled /></td>
+          <td class="{cell} text-muted-foreground"
+            ><span role="img" aria-label="Not applicable">–</span></td
+          >
+          <td class="{cell} text-muted-foreground"
+            ><span role="img" aria-label="Not applicable">–</span></td
+          >
         </tr>
         <tr>
-          <th scope="row">Input</th>
-          <td><Input aria-label="Default input" value="ci-deploy" /></td>
-          <td><Input aria-label="Disabled input" value="locked" disabled /></td>
-          <td class="na"><span role="img" aria-label="Not applicable">–</span></td>
-          <td>
+          <th scope="row" class={rowHead}>Input</th>
+          <td class={cell}><Input aria-label="Default input" value="ci-deploy" /></td>
+          <td class={cell}><Input aria-label="Disabled input" value="locked" disabled /></td>
+          <td class="{cell} text-muted-foreground"
+            ><span role="img" aria-label="Not applicable">–</span></td
+          >
+          <td class={cell}>
             <Field label="Email" error="Enter name@example.com.">
               {#snippet children(control)}<Input {...control} value="not-an-email" />{/snippet}
             </Field>
           </td>
         </tr>
         <tr>
-          <th scope="row">Select</th>
-          <td>
+          <th scope="row" class={rowHead}>Select</th>
+          <td class={cell}>
             <Field label="Region">
               {#snippet children(control)}<Select
                   {...control}
@@ -87,48 +111,58 @@
                 />{/snippet}
             </Field>
           </td>
-          <td>
+          <td class={cell}>
             <Field label="Region (locked)">
               {#snippet children(control)}
                 <Select {...control} items={regions} value="eu" disabled />
               {/snippet}
             </Field>
           </td>
-          <td class="na"><span role="img" aria-label="Not applicable">–</span></td>
-          <td>
+          <td class="{cell} text-muted-foreground"
+            ><span role="img" aria-label="Not applicable">–</span></td
+          >
+          <td class={cell}>
             <Field label="Region" error="Choose a region.">
               {#snippet children(control)}<Select {...control} items={regions} value="" />{/snippet}
             </Field>
           </td>
         </tr>
         <tr>
-          <th scope="row">Textarea</th>
-          <td><Textarea aria-label="Default textarea" value="A note" /></td>
-          <td><Textarea aria-label="Disabled textarea" value="Locked" disabled /></td>
-          <td class="na"><span role="img" aria-label="Not applicable">–</span></td>
-          <td>
+          <th scope="row" class={rowHead}>Textarea</th>
+          <td class={cell}><Textarea aria-label="Default textarea" value="A note" /></td>
+          <td class={cell}><Textarea aria-label="Disabled textarea" value="Locked" disabled /></td>
+          <td class="{cell} text-muted-foreground"
+            ><span role="img" aria-label="Not applicable">–</span></td
+          >
+          <td class={cell}>
             <Field label="Notes" error="Keep notes under 200 characters.">
               {#snippet children(control)}<Textarea {...control} value="Too long …" />{/snippet}
             </Field>
           </td>
         </tr>
         <tr>
-          <th scope="row">Checkbox</th>
-          <td><Checkbox label="Receipt" checked /></td>
-          <td><Checkbox label="Receipt (locked)" disabled /></td>
-          <td class="na"><span role="img" aria-label="Not applicable">–</span></td>
-          <td><Checkbox label="Accept terms" invalid /></td>
+          <th scope="row" class={rowHead}>Checkbox</th>
+          <td class={cell}><Checkbox label="Receipt" checked /></td>
+          <td class={cell}><Checkbox label="Receipt (locked)" disabled /></td>
+          <td class="{cell} text-muted-foreground"
+            ><span role="img" aria-label="Not applicable">–</span></td
+          >
+          <td class={cell}><Checkbox label="Accept terms" invalid /></td>
         </tr>
         <tr>
-          <th scope="row">Switch</th>
-          <td><Switch label="Alerts" checked /></td>
-          <td><Switch label="Alerts (locked)" disabled /></td>
-          <td class="na"><span role="img" aria-label="Not applicable">–</span></td>
-          <td class="na"><span role="img" aria-label="Not applicable">–</span></td>
+          <th scope="row" class={rowHead}>Switch</th>
+          <td class={cell}><Switch label="Alerts" checked /></td>
+          <td class={cell}><Switch label="Alerts (locked)" disabled /></td>
+          <td class="{cell} text-muted-foreground"
+            ><span role="img" aria-label="Not applicable">–</span></td
+          >
+          <td class="{cell} text-muted-foreground"
+            ><span role="img" aria-label="Not applicable">–</span></td
+          >
         </tr>
         <tr>
-          <th scope="row">Combobox</th>
-          <td>
+          <th scope="row" class={rowHead}>Combobox</th>
+          <td class={cell}>
             <Field label="Region">
               {#snippet children(control)}<Combobox
                   {...control}
@@ -137,15 +171,17 @@
                 />{/snippet}
             </Field>
           </td>
-          <td>
+          <td class={cell}>
             <Field label="Region (locked)">
               {#snippet children(control)}
                 <Combobox {...control} items={regions} value="eu" disabled />
               {/snippet}
             </Field>
           </td>
-          <td class="na"><span role="img" aria-label="Not applicable">–</span></td>
-          <td>
+          <td class="{cell} text-muted-foreground"
+            ><span role="img" aria-label="Not applicable">–</span></td
+          >
+          <td class={cell}>
             <Field label="Region" error="Choose a region.">
               {#snippet children(control)}<Combobox
                   {...control}
@@ -156,15 +192,19 @@
           </td>
         </tr>
         <tr>
-          <th scope="row">Slider</th>
-          <td><Slider label="Retention" value={30} /></td>
-          <td><Slider label="Retention (locked)" value={30} disabled /></td>
-          <td class="na"><span role="img" aria-label="Not applicable">–</span></td>
-          <td class="na"><span role="img" aria-label="Not applicable">–</span></td>
+          <th scope="row" class={rowHead}>Slider</th>
+          <td class={cell}><Slider label="Retention" value={30} /></td>
+          <td class={cell}><Slider label="Retention (locked)" value={30} disabled /></td>
+          <td class="{cell} text-muted-foreground"
+            ><span role="img" aria-label="Not applicable">–</span></td
+          >
+          <td class="{cell} text-muted-foreground"
+            ><span role="img" aria-label="Not applicable">–</span></td
+          >
         </tr>
         <tr>
-          <th scope="row">Badge</th>
-          <td class="badges" colspan="4">
+          <th scope="row" class={rowHead}>Badge</th>
+          <td class="{cell} table-cell [&_.cc-badge]:me-2" colspan="4">
             <Badge>Neutral</Badge>
             <Badge tone="accent">Accent</Badge>
             <Badge tone="success">Success</Badge>
@@ -176,10 +216,13 @@
     </table>
   </div>
 
-  <details>
-    <summary>Props</summary>
+  <details class="border-border rounded-md border px-4 py-3">
+    <summary class="cursor-pointer font-medium">Props</summary>
     <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
-    <pre tabindex="0" aria-label="Component props"><code
+    <pre
+      tabindex="0"
+      aria-label="Component props"
+      class="mt-3 overflow-x-auto font-mono text-[length:var(--cc-font-size-sm)]"><code
         >{`<Button variant="primary|secondary|ghost|danger" icon={Icon} loading loadingLabel="Saving" href disabled />
 <IconButton icon={Icon} label="Required, names the action" variant disabled />
 <Field label description error required>
@@ -196,70 +239,3 @@
       ></pre>
   </details>
 </section>
-
-<style>
-  section {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--cc-space-4);
-    padding-bottom: var(--cc-space-10);
-  }
-  h2 {
-    font-size: var(--cc-font-size-xl);
-  }
-  .muted {
-    max-width: 60ch;
-    color: var(--cc-text-muted);
-  }
-  /* Positioned, so absolutely placed screen-reader text stays inside the scroll box. */
-  .scroll {
-    position: relative;
-    overflow-x: auto;
-  }
-  .matrix {
-    width: 100%;
-    min-width: 44rem;
-    border-collapse: collapse;
-  }
-  .matrix th,
-  .matrix td {
-    padding: var(--cc-space-3);
-    text-align: left;
-    vertical-align: top;
-    border-bottom: 1px solid var(--cc-border);
-  }
-  .matrix thead th {
-    color: var(--cc-text-muted);
-    font-size: var(--cc-font-size-sm);
-    font-weight: 600;
-  }
-  .matrix tbody th {
-    font-size: var(--cc-font-size-sm);
-    font-weight: 500;
-    white-space: nowrap;
-  }
-  .na {
-    color: var(--cc-text-muted);
-  }
-  .badges {
-    display: table-cell;
-  }
-  .badges :global(.cc-badge) {
-    margin-inline-end: var(--cc-space-2);
-  }
-  details {
-    border: 1px solid var(--cc-border);
-    border-radius: var(--cc-radius-md);
-    padding: var(--cc-space-3) var(--cc-space-4);
-  }
-  summary {
-    cursor: pointer;
-    font-weight: 500;
-  }
-  pre {
-    margin: var(--cc-space-3) 0 0;
-    overflow-x: auto;
-    font-family: var(--cc-font-mono);
-    font-size: var(--cc-font-size-sm);
-  }
-</style>

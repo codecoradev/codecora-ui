@@ -271,56 +271,73 @@
   function stop() {
     stopping = true;
   }
+
+  const note = 'text-muted-foreground text-[length:var(--cc-font-size-sm)]';
+  const h2 = 'text-[length:var(--cc-font-size-xl)] font-bold';
+  const h3 = 'text-[length:var(--cc-font-size-md)] font-bold';
+  const meta = 'text-muted-foreground text-[length:var(--cc-font-size-sm)]';
+  const track = 'bg-muted @container block rounded-full p-1';
+  const dot = 'bg-primary block size-4 rounded-full';
+  /* The far end of the track: its width (100cqi) less the dot's own. */
+  const moveTo = '[transform:translateX(var(--pg-track-end))]';
+  const card =
+    'border-border bg-card grid content-start justify-items-start gap-3 rounded-md border p-4';
+  const dl =
+    'grid grid-cols-[var(--pg-cols-term)] gap-x-3 gap-y-1 text-[length:var(--cc-font-size-sm)]';
 </script>
 
-<div class="motion">
-  <div class="controls">
+<div class="grid gap-10">
+  <div class="grid max-w-160 gap-2">
     <Switch
       bind:checked={reduce}
       label="Reduce motion"
       description="Applies what the tokens do under prefers-reduced-motion: every duration 0 ms, spring falls back to ease-out."
     />
     {#if systemReduces}
-      <p class="note">
+      <p class={note}>
         Your system asks for reduced motion, so motion is already off on every page.
       </p>
     {/if}
   </div>
 
-  <section aria-labelledby="m-scale">
-    <div class="head">
-      <h2 id="m-scale">Scale</h2>
+  <section class="grid gap-4" aria-labelledby="m-scale">
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <h2 id="m-scale" class={h2}>Scale</h2>
       <Button variant="secondary" onclick={() => (moved = !moved)}
         >{moved ? 'Reset' : 'Play'}</Button
       >
     </div>
-    <p class="lead">
+    <p class={note}>
       Durations run with <code>ease-out</code>. Curves run at <code>slow</code> so their shape shows.
     </p>
-    <details class="usage">
-      <summary>Use the tokens</summary>
+    <details class="group">
+      <summary
+        class="border-input bg-card focus-visible:outline-ring inline-flex min-h-11 cursor-pointer items-center rounded-md border px-3 text-[length:var(--cc-font-size-sm)] font-semibold group-open:mb-3 focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)]"
+        >Use the tokens</summary
+      >
       <CodeBlock code={snippet} language="css" />
     </details>
-    <ul class="tracks">
+    <ul class="grid gap-4">
       {#each Object.entries(duration) as [step, value] (step)}
-        <li>
-          <span class="meta"><code>duration-{step}</code> <span class="num">{value}</span></span>
-          <span class="track" aria-hidden="true">
+        <li class="grid gap-2">
+          <span class={meta}
+            ><code class="text-foreground">duration-{step}</code>
+            <span class="font-mono tabular-nums">{value}</span></span
+          >
+          <span class={track} aria-hidden="true">
             <span
-              class="dot"
-              class:moved
+              class={[dot, moved && moveTo]}
               style:transition="transform var(--cc-duration-{step}) var(--cc-ease-out)"
             ></span>
           </span>
         </li>
       {/each}
       {#each curves as { name, use } (name)}
-        <li>
-          <span class="meta"><code>ease-{name}</code> {use}</span>
-          <span class="track" aria-hidden="true">
+        <li class="grid gap-2">
+          <span class={meta}><code class="text-foreground">ease-{name}</code> {use}</span>
+          <span class={track} aria-hidden="true">
             <span
-              class="dot"
-              class:moved
+              class={[dot, moved && moveTo]}
               style:transition="transform var(--cc-duration-slow) var(--cc-ease-{name})"
             ></span>
           </span>
@@ -329,9 +346,9 @@
     </ul>
   </section>
 
-  <section aria-labelledby="m-overlays">
-    <div class="head">
-      <h2 id="m-overlays">Enter and exit</h2>
+  <section class="grid gap-4" aria-labelledby="m-overlays">
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <h2 id="m-overlays" class={h2}>Enter and exit</h2>
       {#if playing}
         <Button variant="secondary" onclick={stop}>Stop</Button>
       {/if}
@@ -339,17 +356,19 @@
         {playing ? 'Replaying…' : 'Replay all'}
       </Button>
     </div>
-    <p class="lead">
+    <p class={note}>
       Exits run one step shorter than entries, so closing never feels slower than opening.
     </p>
-    <ul class="overlays">
+    <ul
+      class="grid grid-cols-[repeat(auto-fit,minmax(min(100%,calc(var(--spacing)*60)),1fr))] gap-4"
+    >
       {#each overlays as overlay (overlay.id)}
-        <li>
-          <h3>{overlay.name}</h3>
-          <dl>
-            <dt>Enter</dt>
+        <li class={card}>
+          <h3 class={h3}>{overlay.name}</h3>
+          <dl class={dl}>
+            <dt class="text-muted-foreground">Enter</dt>
             <dd>{overlay.enter}</dd>
-            <dt>Exit</dt>
+            <dt class="text-muted-foreground">Exit</dt>
             <dd>{overlay.exit}</dd>
           </dl>
           {#if overlay.id === 'popover'}
@@ -357,7 +376,7 @@
               {#snippet trigger({ props })}
                 <Button {...props} disabled={playing}>Open Popover</Button>
               {/snippet}
-              <p class="plain">Anchored to its trigger. Press Escape to close.</p>
+              <p>Anchored to its trigger. Press Escape to close.</p>
             </Popover>
           {:else}
             <Button disabled={playing} onclick={() => show(overlay.id)}>Open {overlay.name}</Button>
@@ -367,26 +386,26 @@
     </ul>
   </section>
 
-  <section aria-labelledby="m-changes">
-    <div class="head">
-      <h2 id="m-changes">State changes</h2>
+  <section class="grid gap-4" aria-labelledby="m-changes">
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <h2 id="m-changes" class={h2}>State changes</h2>
       <Button variant="secondary" onclick={() => (arrival += 1)}>Replay arrivals</Button>
     </div>
-    <p class="lead">
+    <p class={note}>
       Use each one to see it move. Replay arrivals remounts Avatar and Alert, which only move when
       they appear.
     </p>
-    <ul class="overlays changes">
+    <ul class="grid grid-cols-[repeat(auto-fit,minmax(min(100%,var(--container-2xs)),1fr))] gap-4">
       {#each changes as change (change.name)}
-        <li>
-          <h3>{change.name}</h3>
-          <dl>
+        <li class={card}>
+          <h3 class={h3}>{change.name}</h3>
+          <dl class={dl}>
             {#each change.steps as [step, motion] (step)}
-              <dt>{step}</dt>
+              <dt class="text-muted-foreground">{step}</dt>
               <dd>{motion}</dd>
             {/each}
           </dl>
-          <div class="demo">
+          <div class="mt-auto grid w-full">
             {#if change.name === 'Accordion'}
               <Accordion
                 items={[
@@ -395,7 +414,7 @@
                 ]}
               >
                 {#snippet panel(value)}
-                  <p class="plain">
+                  <p>
                     {value === 'scope'
                       ? 'Read, write or admin, per key.'
                       : 'Keys expire after 90 days unless renewed.'}
@@ -411,10 +430,10 @@
                   { value: 'revoked', label: 'Revoked' },
                 ]}
               >
-                {#snippet panel(value)}<p class="plain">Showing {value} keys.</p>{/snippet}
+                {#snippet panel(value)}<p>Showing {value} keys.</p>{/snippet}
               </Tabs>
             {:else if change.name === 'Tooltip'}
-              <div class="row">
+              <div class="flex flex-wrap gap-2">
                 <Tooltip content="Copy key">
                   {#snippet trigger({ props })}<Button {...props}>Copy</Button>{/snippet}
                 </Tooltip>
@@ -423,7 +442,7 @@
                 </Tooltip>
               </div>
             {:else if change.name === 'DropdownMenu'}
-              <div class="row">
+              <div class="flex flex-wrap gap-2">
                 <DropdownMenu
                   label="Key actions"
                   items={[
@@ -450,7 +469,7 @@
                 format={(v) => `${v} GB`}
               />
             {:else if change.name === 'ToggleGroup'}
-              <div class="row">
+              <div class="flex flex-wrap gap-2">
                 <ToggleGroup
                   label="Range"
                   value="7d"
@@ -465,7 +484,7 @@
               <Pagination count={40} perPage={10} bind:page />
             {:else if change.name === 'Avatar'}
               {#key arrival}
-                <div class="row">
+                <div class="flex flex-wrap gap-2">
                   <Avatar name="Uteke" src={marks.uteke.favicons.icon192} size="lg" />
                   <Avatar name="Ada Lovelace" size="lg" />
                 </div>
@@ -475,7 +494,7 @@
                 <Alert tone="success" title="Key saved">ci-deploy can now write.</Alert>
               {/key}
             {:else if change.name === 'Button'}
-              <div class="row">
+              <div class="flex flex-wrap gap-2">
                 <Button variant="primary">Press and hold</Button>
                 <Button variant="secondary">Cancel</Button>
                 <IconButton icon={Trash} label="Delete" />
@@ -491,7 +510,7 @@
                 </Field>
               {/key}
             {:else if change.name === 'Input'}
-              <div class="row">
+              <div class="flex flex-wrap gap-2">
                 <Input aria-label="Key name" value="ci-deploy" {invalid} />
                 <Button variant="secondary" onclick={() => (invalid = !invalid)}>
                   {invalid ? 'Clear error' : 'Mark invalid'}
@@ -543,137 +562,3 @@
 />
 
 <Toaster />
-
-<style>
-  .usage summary {
-    display: inline-flex;
-    align-items: center;
-    min-height: 2.75rem;
-    padding-inline: var(--cc-space-3);
-    border: 1px solid var(--cc-border-strong);
-    border-radius: var(--cc-radius-md);
-    background: var(--cc-surface-raised);
-    font-size: var(--cc-font-size-sm);
-    font-weight: 600;
-    cursor: pointer;
-  }
-  .usage[open] summary {
-    margin-bottom: var(--cc-space-3);
-  }
-  .usage summary:focus-visible {
-    outline: var(--cc-focus-width) solid var(--cc-focus);
-    outline-offset: var(--cc-focus-offset);
-  }
-  .motion {
-    display: grid;
-    gap: var(--cc-space-10);
-  }
-  .controls {
-    display: grid;
-    gap: var(--cc-space-2);
-    max-width: 40rem;
-  }
-  .note,
-  .lead {
-    color: var(--cc-text-muted);
-    font-size: var(--cc-font-size-sm);
-  }
-  section {
-    display: grid;
-    gap: var(--cc-space-4);
-  }
-  .head {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--cc-space-3);
-  }
-  h2 {
-    font-size: var(--cc-font-size-xl);
-  }
-  ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-  .tracks {
-    display: grid;
-    gap: var(--cc-space-4);
-  }
-  .tracks li {
-    display: grid;
-    gap: var(--cc-space-2);
-  }
-  .meta {
-    font-size: var(--cc-font-size-sm);
-    color: var(--cc-text-muted);
-  }
-  .meta code {
-    color: var(--cc-text);
-  }
-  .track {
-    container-type: inline-size;
-    display: block;
-    padding: var(--cc-space-1);
-    border-radius: var(--cc-radius-pill);
-    background: var(--cc-surface-sunken);
-  }
-  .dot {
-    display: block;
-    width: var(--cc-space-4);
-    height: var(--cc-space-4);
-    border-radius: var(--cc-radius-pill);
-    background: var(--cc-accent);
-  }
-  .dot.moved {
-    transform: translateX(calc(100cqi - 100%));
-  }
-  .overlays {
-    display: grid;
-    gap: var(--cc-space-4);
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
-  }
-  .changes {
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
-  }
-  .overlays li {
-    display: grid;
-    gap: var(--cc-space-3);
-    align-content: start;
-    justify-items: start;
-    padding: var(--cc-space-4);
-    border: 1px solid var(--cc-border);
-    border-radius: var(--cc-radius-md);
-    background: var(--cc-surface-raised);
-  }
-  h3 {
-    font-size: var(--cc-font-size-md);
-  }
-  dl {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: var(--cc-space-1) var(--cc-space-3);
-    margin: 0;
-    font-size: var(--cc-font-size-sm);
-  }
-  dt {
-    color: var(--cc-text-muted);
-  }
-  dd {
-    margin: 0;
-  }
-  .plain {
-    margin: 0;
-  }
-  .demo {
-    display: grid;
-    width: 100%;
-    margin-top: auto;
-  }
-  .row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--cc-space-2);
-  }
-</style>

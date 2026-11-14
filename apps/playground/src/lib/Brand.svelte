@@ -3,6 +3,7 @@
   import { Mark, marks, productNames } from '@codecora/brand';
 
   const sizes = [128, 64, 32, 16];
+  const tile = 'border-border bg-background flex flex-wrap items-end gap-4 rounded-md border p-4';
 
   const kinds = {
     svg: 'Vector master (SVG)',
@@ -25,27 +26,30 @@
 
 {#each productNames as name (name)}
   {@const product = marks[name]}
-  <section aria-labelledby="b-{name}">
-    <h2 id="b-{name}">{product.label}</h2>
-    <p class="muted">
+  <section aria-labelledby="b-{name}" class="grid grid-cols-1 gap-4 pb-10">
+    <h2 id="b-{name}" class="text-[length:var(--cc-font-size-xl)] font-bold">{product.label}</h2>
+    <p class="text-muted-foreground">
       {kinds[product.kind]}{product.rasterSize
         ? `, ${product.rasterSize} px: never scaled past its master`
         : ''}.
     </p>
 
-    <div class="tiles">
-      <div class="tile" data-theme="neutral">
+    <div class="grid grid-cols-[repeat(auto-fit,minmax(calc(var(--spacing)*64),1fr))] gap-3">
+      <!-- Each tile sets its own theme (neutral, corin): a light and a dark surface. -->
+      <div class={tile} data-theme="neutral">
         {#each sizes as size (size)}<Mark product={name} {size} />{/each}
       </div>
-      <div class="tile" data-theme="corin">
+      <div class={tile} data-theme="corin">
         {#each sizes as size (size)}<Mark product={name} {size} />{/each}
       </div>
     </div>
 
-    <h3>Favicon set</h3>
-    <ul class="set">
+    <h3 class="text-[length:var(--cc-font-size-lg)] font-bold">Favicon set</h3>
+    <ul class="grid grid-cols-[repeat(auto-fill,minmax(calc(var(--spacing)*52),1fr))] gap-3">
       {#each iconRows(name) as row (row.label)}
-        <li>
+        <li
+          class="border-border flex items-center gap-3 rounded-sm border p-3 text-[length:var(--cc-font-size-sm)]"
+        >
           <img src={row.src} alt="" width={row.size} height={row.size} />
           <code>{row.label}</code>
         </li>
@@ -54,76 +58,17 @@
   </section>
 {/each}
 
-<section aria-labelledby="b-usage">
-  <h2 id="b-usage">Using it</h2>
+<section aria-labelledby="b-usage" class="grid grid-cols-1 gap-4 pb-10">
+  <h2 id="b-usage" class="text-[length:var(--cc-font-size-xl)] font-bold">Using it</h2>
   <!-- A scrollable code block must be keyboard reachable (axe: scrollable-region-focusable). -->
   <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
-  <pre tabindex="0" aria-label="Brand package usage"><code
+  <pre
+    tabindex="0"
+    aria-label="Brand package usage"
+    class="border-border bg-muted overflow-x-auto rounded-md border p-4 font-mono text-[length:var(--cc-font-size-sm)]"><code
       >{`import { Mark, Favicons } from '@codecora/brand';
 
 <Favicons product="uteke" />   // in the root layout
 <Mark product="uteke" size={32} label="Uteke" />`}</code
     ></pre>
 </section>
-
-<style>
-  section {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--cc-space-4);
-    padding-bottom: var(--cc-space-10);
-  }
-  h2 {
-    font-size: var(--cc-font-size-xl);
-  }
-  h3 {
-    margin: 0;
-    font-size: var(--cc-font-size-lg);
-  }
-  .muted {
-    color: var(--cc-text-muted);
-  }
-  .tiles {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
-    gap: var(--cc-space-3);
-  }
-  .tile {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-end;
-    gap: var(--cc-space-4);
-    padding: var(--cc-space-4);
-    border: 1px solid var(--cc-border);
-    border-radius: var(--cc-radius-md);
-    /* Each tile sets its own theme (neutral, corin): a light and a dark surface. */
-    background: var(--cc-surface);
-  }
-  .set {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
-    gap: var(--cc-space-3);
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-  .set li {
-    display: flex;
-    align-items: center;
-    gap: var(--cc-space-3);
-    padding: var(--cc-space-3);
-    border: 1px solid var(--cc-border);
-    border-radius: var(--cc-radius-sm);
-    font-size: var(--cc-font-size-sm);
-  }
-  pre {
-    margin: 0;
-    padding: var(--cc-space-4);
-    overflow-x: auto;
-    border: 1px solid var(--cc-border);
-    border-radius: var(--cc-radius-md);
-    background: var(--cc-surface-sunken);
-    font-family: var(--cc-font-mono);
-    font-size: var(--cc-font-size-sm);
-  }
-</style>
