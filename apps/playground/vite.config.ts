@@ -1,5 +1,6 @@
 import adapter from '@sveltejs/adapter-static';
 import { sveltekit } from '@sveltejs/kit/vite';
+import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'vite';
 
 // GitHub Pages serves a project site under /<repo>, so the Pages workflow builds
@@ -11,6 +12,7 @@ if (base !== '' && !/^\/[^/]/.test(base)) {
 
 export default defineConfig({
   plugins: [
+    tailwindcss(),
     sveltekit({
       adapter: adapter({ fallback: '404.html' }),
       paths: { base: base as '' | `/${string}` },

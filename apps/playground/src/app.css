@@ -1,0 +1,12 @@
+/*
+ * Tailwind 4 for the playground (D13, #155). Theme variables and utilities
+ * only: preflight stays off while pages and components are still plain CSS, so
+ * the move to Tailwind does not change how they render. The sources below are
+ * scanned too, so utilities used in the components and blocks get generated.
+ */
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
+
+@source '../../../packages/ui/src/lib';
+@source '../../../packages/memory/src/lib';
+@source '../../../registry/blocks';

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Favicons } from '@codecora/brand';
   import '@codecora/tokens/tokens.css';
+  import '../app.css';
   import '../lib/playground.css';
   import { fontFaces } from '../lib/fonts';
 
