@@ -7,7 +7,7 @@
 </script>
 
 <section aria-labelledby="c-display" class="grid grid-cols-1 gap-4 pb-10">
-  <h2 id="c-display" class="text-[length:var(--cc-font-size-xl)] font-bold">
+  <h2 id="c-display" class="leading-heading text-xl font-bold">
     Card, Alert, Avatar, Progress and friends
   </h2>
 

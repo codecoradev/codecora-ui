@@ -1,9 +1,25 @@
 <script lang="ts">
-  import { checkTheme, themes, type AccentName, type ThemeName } from '@codecora/tokens';
+  import {
+    accentVariables,
+    checkTheme,
+    colorVariables,
+    themes,
+    type AccentName,
+    type ThemeName,
+  } from '@codecora/tokens';
 
   let { theme, accent }: { theme: ThemeName; accent?: AccentName } = $props();
 
-  const token = (name: string) => name.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`);
+  // The pairs use the token source's role names; show the variable each one is.
+  const variables: Record<string, string> = {
+    ...colorVariables,
+    ...accentVariables,
+    accentSoft: 'primary-soft',
+    dangerSoft: 'destructive-soft',
+    successSoft: 'success-soft',
+    warningSoft: 'warning-soft',
+  };
+  const token = (role: string) => variables[role] ?? role;
   const results = $derived(checkTheme(themes[theme], accent));
   const failures = $derived(results.filter((r) => !r.pass).length);
 
@@ -36,7 +52,7 @@
   aria-label="Table of contrast ratios"
   tabindex="0"
 >
-  <table class="w-full border-collapse text-[length:var(--cc-font-size-sm)]">
+  <table class="w-full border-collapse text-sm leading-[inherit]">
     <thead>
       <tr>
         <th scope="col" class={th}>Sample</th>
@@ -53,15 +69,13 @@
             {#if r.min >= 4.5}
               <span
                 class={sample}
-                style:color="var(--cc-{token(r.fg)})"
-                style:background="var(--cc-{token(r.bg)})">Aa</span
+                style:color="var(--{token(r.fg)})"
+                style:background="var(--{token(r.bg)})">Aa</span
               >
             {:else}
               <!-- A 3:1 pair is a boundary or focus ring, so it is drawn as one, not as text. -->
-              <span class={sample} style:background="var(--cc-{token(r.bg)})" aria-hidden="true">
-                <span
-                  class="h-4 w-6 rounded-sm border-2"
-                  style:border-color="var(--cc-{token(r.fg)})"
+              <span class={sample} style:background="var(--{token(r.bg)})" aria-hidden="true">
+                <span class="h-4 w-6 rounded-sm border-2" style:border-color="var(--{token(r.fg)})"
                 ></span>
               </span>
             {/if}

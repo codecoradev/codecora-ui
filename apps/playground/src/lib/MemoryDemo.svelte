@@ -87,7 +87,7 @@
       <RadioGroup label="Backend" items={backends} bind:value={() => backend, choose} />
       {#if backend === 'live'}
         <form class="grid max-w-lg gap-3" onsubmit={connect}>
-          <p class="text-muted-foreground text-[length:var(--cc-font-size-sm)]">
+          <p class="text-muted-foreground text-sm leading-[inherit]">
             Start one with <code>uteke-serve --port 8767 --cors-origin &lt;this site&gt;</code>. The
             key is only kept in this page and is sent as a Bearer header.
           </p>

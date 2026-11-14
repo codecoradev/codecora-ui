@@ -42,7 +42,7 @@
 </script>
 
 <section aria-labelledby="c-datatable" class="grid grid-cols-1 gap-4 pb-10">
-  <h2 id="c-datatable" class="text-[length:var(--cc-font-size-xl)] font-bold">DataTable</h2>
+  <h2 id="c-datatable" class="leading-heading text-xl font-bold">DataTable</h2>
   <DataTable
     label="API keys"
     {columns}

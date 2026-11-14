@@ -30,15 +30,15 @@
 }
 
 body {
-  font-family: var(--cc-font-sans);
-  font-size: var(--cc-font-size-md);
-  line-height: var(--cc-leading-normal);
+  font-family: var(--font-sans);
+  font-size: --theme(--text-base);
+  line-height: --theme(--leading-normal);
   -webkit-font-smoothing: antialiased;
 }
 
 :where(h1, h2, h3) {
-  font-family: var(--cc-font-display);
-  line-height: var(--cc-leading-tight);
+  font-family: var(--font-display);
+  line-height: --theme(--leading-heading);
   text-wrap: balance;
 }
 
@@ -48,24 +48,24 @@ body {
 }
 
 ::selection {
-  background: var(--cc-accent-soft);
-  color: var(--cc-text);
+  background: var(--primary-soft);
+  color: var(--foreground);
 }
 
 /* `a`, not `:where(a)`: it has to outweigh preflight's `a { color: inherit }`. */
 a {
-  color: var(--cc-accent);
+  color: var(--primary);
   text-decoration: underline;
   text-underline-offset: 0.2em;
 }
 
 :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
-  outline: 2px solid var(--cc-focus);
+  outline: 2px solid var(--ring);
   outline-offset: 2px;
 }
 
 :where(input, textarea) {
-  caret-color: var(--cc-accent);
+  caret-color: var(--primary);
 }
 
 /*
@@ -76,7 +76,7 @@ code,
 kbd,
 samp,
 pre {
-  font-family: var(--cc-font-mono);
+  font-family: var(--font-mono);
 }
 
 code,
@@ -85,5 +85,5 @@ kbd {
 }
 
 html {
-  scrollbar-color: var(--cc-border-strong) var(--cc-surface);
+  scrollbar-color: var(--input) var(--background);
 }

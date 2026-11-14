@@ -6,5 +6,5 @@
   import { page } from '$app/state';
 </script>
 
-<h1 class="text-[length:calc(2*var(--cc-font-size-md))] font-bold">{page.status}</h1>
+<h1 class="text-[length:calc(2*var(--text-base))] font-bold">{page.status}</h1>
 <p>{page.error?.message}</p>

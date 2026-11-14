@@ -16,12 +16,10 @@
 </script>
 
 <section aria-labelledby="c-choice" class="grid grid-cols-1 gap-4 pb-10">
-  <h2 id="c-choice" class="text-[length:var(--cc-font-size-xl)] font-bold">
-    Checkbox, Switch, RadioGroup
-  </h2>
+  <h2 id="c-choice" class="leading-heading text-xl font-bold">Checkbox, Switch, RadioGroup</h2>
   <div class="grid grid-cols-[repeat(auto-fit,minmax(calc(var(--spacing)*56),1fr))] gap-6">
     <div class="grid content-start gap-1">
-      <h3 class="text-[length:var(--cc-font-size-lg)] font-bold">Checkbox</h3>
+      <h3 class="leading-heading text-lg font-bold">Checkbox</h3>
       <Checkbox
         label="Send me a receipt"
         description="Emailed after each payment."
@@ -32,19 +30,19 @@
       <Checkbox label="Disabled" disabled />
       <Checkbox label="Disabled and checked" checked disabled />
       <Checkbox label="I accept the terms" invalid aria-describedby="terms-error" required />
-      <p id="terms-error" class="text-destructive text-[length:var(--cc-font-size-sm)]">
+      <p id="terms-error" class="text-destructive text-sm leading-[inherit]">
         Accept the terms to continue.
       </p>
     </div>
     <div class="grid content-start gap-1">
-      <h3 class="text-[length:var(--cc-font-size-lg)] font-bold">Switch</h3>
+      <h3 class="leading-heading text-lg font-bold">Switch</h3>
       <Switch label="Email alerts" description="At most one a day." bind:checked={alerts} />
       <Switch label="Off" />
       <Switch label="Disabled" disabled />
       <Switch label="Disabled and on" checked disabled />
     </div>
     <div class="grid content-start gap-1">
-      <h3 class="text-[length:var(--cc-font-size-lg)] font-bold">RadioGroup</h3>
+      <h3 class="leading-heading text-lg font-bold">RadioGroup</h3>
       <RadioGroup label="Digest" items={digests} bind:value={digest} />
       <RadioGroup
         label="Layout"

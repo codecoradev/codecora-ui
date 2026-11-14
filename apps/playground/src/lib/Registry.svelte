@@ -29,7 +29,7 @@
 </script>
 
 <section aria-labelledby="r-items" class="grid grid-cols-1 gap-4 pb-10">
-  <h2 id="r-items" class="text-[length:var(--cc-font-size-xl)] font-bold">Items</h2>
+  <h2 id="r-items" class="leading-heading text-xl font-bold">Items</h2>
   <p class="text-muted-foreground">
     Blocks are copied into your app (<code>$lib/components</code>) and are yours to change. They are
     built from <code>@codecora/ui</code>, which stays a package, and each one installs the theme
@@ -42,7 +42,7 @@
       <Card>
         {#snippet header()}
           <div class="flex items-center justify-between gap-2">
-            <h3 class="text-[length:var(--cc-font-size-md)] font-bold">
+            <h3 class="leading-heading text-base font-bold">
               {item.title ?? item.name}
             </h3>
             <Badge tone={item.type === 'registry:theme' ? 'accent' : 'neutral'}>
@@ -58,9 +58,7 @@
 </section>
 
 <section aria-labelledby="r-bridge" class="grid grid-cols-1 gap-4 pb-10">
-  <h2 id="r-bridge" class="text-[length:var(--cc-font-size-xl)] font-bold">
-    What the theme item does
-  </h2>
+  <h2 id="r-bridge" class="leading-heading text-xl font-bold">What the theme item does</h2>
   <p class="text-muted-foreground">
     <code>cc-theme</code> installs <code>@codecora/tokens</code> and <code>@codecora/ui</code>, adds
     their Tailwind 4 imports to your global CSS and hands the shadcn variables in your

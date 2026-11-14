@@ -115,7 +115,7 @@
   ];
   const progress = steps.filter((s) => s.done).length;
 
-  const h2 = 'text-[length:var(--cc-font-size-xl)] font-bold';
+  const h2 = 'text-xl leading-heading font-bold';
   /* A flat band, not a bordered box, so the Cards inside it are the only cards. */
   const frame = 'bg-muted px-4 py-6';
   const split =
@@ -165,7 +165,7 @@
         </Field>
         <Checkbox label="Keep me signed in" bind:checked={remember} />
         <Button variant="primary" type="submit">Sign in</Button>
-        <p class="text-muted-foreground text-center text-[length:var(--cc-font-size-sm)]">
+        <p class="text-muted-foreground text-center text-sm leading-[inherit]">
           New here? <Link href="#s-login">Create an account</Link>
         </p>
       </form>
@@ -239,7 +239,7 @@
         <li>
           <button
             type="button"
-            class="min-h-control border-border bg-card text-foreground font-inherit hover:bg-accent aria-[current=true]:border-primary focus-visible:outline-ring flex w-full cursor-pointer items-center justify-between gap-3 rounded-md border px-3 py-2 text-left focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)] aria-[current=true]:[box-shadow:inset_var(--cc-row-marker)_0_0_var(--cc-accent)]"
+            class="min-h-control border-border bg-card text-foreground font-inherit hover:bg-accent aria-[current=true]:border-primary focus-visible:outline-ring flex w-full cursor-pointer items-center justify-between gap-3 rounded-md border px-3 py-2 text-left focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)] aria-[current=true]:[box-shadow:inset_var(--cc-row-marker)_0_0_var(--primary)]"
             aria-current={memory.id === current ? 'true' : undefined}
             onclick={() => (current = memory.id)}
           >

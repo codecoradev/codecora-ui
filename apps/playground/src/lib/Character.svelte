@@ -15,11 +15,9 @@
     'ui-monospace': 'System mono',
   };
   const t = $derived(themes[theme]);
-  // Split so the Svelte parser does not read it as the end of this block.
-  const closeScript = '</' + 'script>';
-  const setup = $derived(`<script>
-  import '@codecora/tokens/tokens.css';
-${closeScript}
+  const setup = $derived(`/* app.css */
+@import 'tailwindcss';
+@import '@codecora/tokens/theme.css';
 
 <!-- the whole app, or any element -->
 <html data-theme="${theme}">`);
@@ -28,7 +26,7 @@ ${closeScript}
     { role: 'Text', family: first(t.font.sans) },
     { role: 'Data', family: first(t.font.mono) },
   ]);
-  const facts = 'text-muted-foreground text-[length:var(--cc-font-size-sm)]';
+  const facts = 'text-muted-foreground text-sm leading-[inherit]';
 </script>
 
 <div class="grid grid-cols-1 gap-8 lg:grid-cols-[var(--pg-cols-character)]">
@@ -40,16 +38,14 @@ ${closeScript}
       Aa
     </p>
     <div class="grid min-w-0 gap-2">
-      <p class="font-display text-[length:var(--cc-font-size-xl)] font-semibold">
+      <p class="font-display text-xl leading-[inherit] font-semibold">
         {northStars[theme]}
       </p>
       <p class="text-muted-foreground max-w-[var(--pg-measure-body)]">
         Remember that Dana's birthday is 12 March. Any later conversation, on any device, finds it.
       </p>
-      <p class="font-mono text-[length:var(--cc-font-size-sm)] tabular-nums">
-        01a19474 · 2026-11-01 · 4.92:1
-      </p>
-      <dl class="mt-2 flex flex-wrap gap-x-6 gap-y-2 text-[length:var(--cc-font-size-sm)]">
+      <p class="font-mono text-sm leading-[inherit] tabular-nums">01a19474 · 2026-11-01 · 4.92:1</p>
+      <dl class="mt-2 flex flex-wrap gap-x-6 gap-y-2 text-sm leading-[inherit]">
         {#each faces as face (face.role)}
           <div>
             <dt class="text-muted-foreground">{face.role}</dt>
@@ -66,10 +62,10 @@ ${closeScript}
         <li class="grid justify-items-start gap-2">
           <span
             class="border-input bg-primary-soft h-12 w-18 border"
-            style:border-radius="var(--cc-radius-{r})"
+            style:border-radius="var(--radius-{r})"
             aria-hidden="true"
           ></span>
-          <code class="text-muted-foreground text-[length:var(--cc-font-size-xs)]"
+          <code class="text-muted-foreground text-xs leading-[inherit]"
             >{r} {t.radius[r as 'sm' | 'md' | 'lg']}</code
           >
         </li>
