@@ -26,5 +26,10 @@ pass icon components to it, and this package makes them follow the theme.
 ```
 
 `@lucide/svelte` and `phosphor-svelte` are optional peers: install the one you
-use. Load `@codecora/tokens/theme.css` (after `tailwindcss`) for the theme values; without it icons
-fall back to 1.25 rem and stroke 2.
+use. `Icon` is written with Tailwind utilities (`size-icon`, `stroke-icon`), so
+the app runs Tailwind 4 and imports, after `tailwindcss`:
+
+```css
+@import '@codecora/tokens/theme.css';
+@import '@codecora/icons/source.css'; /* Tailwind scans Icon */
+```

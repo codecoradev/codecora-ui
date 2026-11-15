@@ -1,0 +1,10 @@
+/*
+ * Import after tailwindcss and @codecora/tokens/theme.css, so Tailwind scans
+ * the components and generates the utilities they use (D13).
+ *
+ * Every component is listed, one `@source './Name.svelte';` each; source.test.ts
+ * fails when one is missing, when a listed file does not exist, or when a
+ * listed file has a <style> block.
+ */
+@source './Favicons.svelte';
+@source './Mark.svelte';

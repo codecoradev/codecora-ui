@@ -1,6 +1,8 @@
 <!--
   Renders any Svelte icon component at the theme's icon size and stroke
-  (--cc-icon-size, --cc-icon-stroke), so a theme can change icon weight.
+  (size-icon, stroke-icon: --cc-icon-size, --cc-icon-stroke), so a theme can
+  change icon weight. Needs Tailwind 4 with @codecora/tokens/theme.css and
+  @codecora/icons/source.css.
   Decorative by default (aria-hidden); pass `label` for an icon that carries
   meaning on its own. Size and stroke can be overridden for one icon.
 -->
@@ -24,7 +26,7 @@
 </script>
 
 <span
-  class={['cc-icon', className]}
+  class={['cc-icon [&_svg]:size-icon [&_svg]:stroke-icon inline-flex flex-none', className]}
   role={label ? 'img' : undefined}
   aria-label={label}
   aria-hidden={label ? undefined : 'true'}
@@ -33,16 +35,3 @@
 >
   <Glyph {...iconProps} />
 </span>
-
-<style>
-  .cc-icon {
-    display: inline-flex;
-    flex: none;
-  }
-  .cc-icon :global(svg) {
-    /* The fallbacks match the neutral theme, so an app without the tokens still gets sane icons. */
-    width: var(--cc-icon-size, 1.25rem);
-    height: var(--cc-icon-size, 1.25rem);
-    stroke-width: var(--cc-icon-stroke, 2);
-  }
-</style>

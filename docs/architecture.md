@@ -70,8 +70,10 @@ Skeleton, Spinner.
 - Default set Lucide (`@lucide/svelte`, ISC), optional Phosphor.
 - Components accept `icon={Component}`; internal glyphs (close, chevron,
   check, spinner) are inline SVG so `@codecora/ui` has no icon dependency.
-- Stroke width and size come from `--cc-icon-stroke` / `--cc-icon-size`, so a
-  theme can change icon weight.
+- Stroke width and size come from `--cc-icon-stroke` / `--cc-icon-size`
+  (`stroke-icon`, `size-icon`), so a theme can change icon weight. `Icon` is
+  written with Tailwind utilities like every component; `source.css` lists it
+  for the app's Tailwind to scan (the same holds for `@codecora/brand`).
 
 ### Uteke domain (`@codecora/memory`)
 

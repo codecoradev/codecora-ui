@@ -1,8 +1,9 @@
 # @codecora/brand
 
 Product marks and favicon sets for CodeCora products, as files and as Svelte
-components. Dependencies: none beyond Svelte; assets are imported with Vite's
-`?url`, so use it in a Vite-based app (SvelteKit 2 or 3, plain Vite).
+components. Dependencies: Svelte, and Tailwind 4 for `Mark` (see below); assets
+are imported with Vite's `?url`, so use it in a Vite-based app (SvelteKit 2 or
+3, plain Vite).
 
 | Product   | Mark                       | Favicon set                                                    |
 | --------- | -------------------------- | -------------------------------------------------------------- |
@@ -19,6 +20,8 @@ components. Dependencies: none beyond Svelte; assets are imported with Vite's
 <Mark product="uteke" size={32} label="Uteke" />
 ```
 
+- `Mark` is written with Tailwind utilities, so the app runs Tailwind 4 and
+  imports `@codecora/brand/source.css` after `tailwindcss`.
 - `Favicons` puts the product's `<link>` tags in the document head.
 - `Mark` renders the mark as an image; it is decorative (empty `alt`) unless you
   pass `label`.
