@@ -86,7 +86,7 @@
   const section = 'grid grid-cols-1 gap-4 pb-10';
   const h2 = 'text-xl leading-heading font-bold';
   const row = 'flex flex-wrap items-center gap-3';
-  const muted = 'text-muted-foreground max-w-[var(--pg-measure-intro)]';
+  const muted = 'text-muted-foreground max-w-intro';
   /* The section in view gets a tint, weight and an inset bar. */
   const link =
     'text-foreground hover:bg-accent aria-[current=location]:bg-primary-soft focus-visible:outline-ring grid gap-0.5 rounded-sm px-2 py-1 no-underline focus-visible:outline-focus focus-visible:outline-offset-focus aria-[current=location]:font-semibold aria-[current=location]:[box-shadow:inset_2px_0_0_var(--primary)]';
@@ -119,7 +119,7 @@
       {#each catalogue as { group, sections } (group)}
         <div class="grid content-start gap-1">
           <p
-            class="text-muted-foreground font-sans text-xs leading-[inherit] font-semibold tracking-[var(--pg-tracking-label)] uppercase"
+            class="text-muted-foreground tracking-label font-sans text-xs leading-[inherit] font-semibold uppercase"
           >
             {group}
           </p>
@@ -131,7 +131,7 @@
                   href="#{section.id}"
                   aria-current={active === section.id ? 'location' : undefined}
                   ><span>{section.title}</span><small
-                    class="text-muted-foreground text-xs leading-[var(--pg-leading-small)]"
+                    class="text-muted-foreground leading-note text-xs"
                     >{section.components.join(', ')}</small
                   ></a
                 >

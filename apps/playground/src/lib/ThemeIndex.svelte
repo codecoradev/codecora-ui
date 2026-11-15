@@ -15,7 +15,7 @@
 <section aria-labelledby="index-title" class="border-border mb-10 grid gap-5 border-b pb-10">
   <div class="grid gap-2">
     <h2 id="index-title" class="leading-heading text-2xl font-bold">Theme pages</h2>
-    <p class="text-muted-foreground max-w-[var(--pg-measure-lead)]">
+    <p class="text-muted-foreground max-w-lead">
       One fixed page per theme, at its default accent and density. Below: the theme you picked.
     </p>
   </div>
@@ -26,7 +26,7 @@
       <div class="grid gap-2" role="group" aria-labelledby="index-{group}">
         <h3
           id="index-{group}"
-          class="text-muted-foreground leading-heading text-sm font-semibold tracking-[var(--pg-tracking-label)] uppercase"
+          class="text-muted-foreground leading-heading tracking-label text-sm font-semibold uppercase"
         >
           {group}
         </h3>

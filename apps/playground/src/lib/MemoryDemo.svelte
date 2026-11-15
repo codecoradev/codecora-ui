@@ -109,9 +109,7 @@
   </Card>
 
   {#key browser}
-    <div
-      class="grid grid-cols-[var(--pg-cols-list-detail)] items-start gap-4 max-[52rem]:grid-cols-1"
-    >
+    <div class="grid-cols-list-detail grid items-start gap-4 max-[52rem]:grid-cols-1">
       <Card><MemoryList {browser} /></Card>
       <!-- The detail stays in view below the sticky appearance toolbar while the list scrolls. -->
       <div class="sticky top-20 max-[52rem]:static">

@@ -29,19 +29,16 @@
   const facts = 'text-muted-foreground text-sm leading-[inherit]';
 </script>
 
-<div class="grid grid-cols-1 gap-8 lg:grid-cols-[var(--pg-cols-character)]">
-  <div class="grid grid-cols-[var(--pg-cols-glyph)] items-center gap-6 max-[30rem]:grid-cols-1">
-    <p
-      class="font-display text-[length:var(--pg-glyph-size)] leading-none font-semibold tracking-[var(--pg-tracking-glyph)]"
-      aria-hidden="true"
-    >
+<div class="lg:grid-cols-character grid grid-cols-1 gap-8">
+  <div class="grid-cols-glyph grid items-center gap-6 max-[30rem]:grid-cols-1">
+    <p class="font-display text-glyph tracking-glyph leading-none font-semibold" aria-hidden="true">
       Aa
     </p>
     <div class="grid min-w-0 gap-2">
       <p class="font-display text-xl leading-[inherit] font-semibold">
         {northStars[theme]}
       </p>
-      <p class="text-muted-foreground max-w-[var(--pg-measure-body)]">
+      <p class="text-muted-foreground max-w-body">
         Remember that Dana's birthday is 12 March. Any later conversation, on any device, finds it.
       </p>
       <p class="font-mono text-sm leading-[inherit] tabular-nums">01a19474 · 2026-11-01 · 4.92:1</p>
