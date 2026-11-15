@@ -2,6 +2,7 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { baseCss, shadcnCss, tailwindCss, themeCss } from '../src/css.js';
 import { themeNames } from '../src/schema.js';
+import { tailwindThemeCss } from '../src/tailwind.js';
 import { themes } from '../src/themes.js';
 
 const out = new URL('../dist/css/', import.meta.url);
@@ -18,4 +19,5 @@ themeNames.forEach((name, i) => write(`themes/${name}.css`, perTheme[i]!));
 write('tokens.css', [base, ...perTheme].join('\n'));
 write('tailwind.css', tailwindCss());
 write('shadcn.css', shadcnCss());
-console.log(`dist/css: base, tokens, tailwind, shadcn, themes/{${themeNames.join(',')}}`);
+write('theme.css', tailwindThemeCss());
+console.log(`dist/css: base, tokens, theme, tailwind, shadcn, themes/{${themeNames.join(',')}}`);

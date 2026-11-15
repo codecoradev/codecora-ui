@@ -1,11 +1,13 @@
 /*
- * Tailwind 4 for the playground (D13, #155). Theme variables and utilities
- * only: preflight stays off while pages and components are still plain CSS.
+ * Tailwind 4 for the playground (D13, #155): Tailwind, then the CodeCora
+ * theme. Preflight stays off while pages and components are still plain CSS;
+ * it comes in with the pages (#165).
  *
- * source(none): Tailwind generates no utility from the plain-CSS sources yet,
- * because their class names (grid, table, hidden, ring, border) would match
- * Tailwind utilities and restyle them. Sources are added as they migrate.
+ * No sources yet (source(none), and no @codecora/ui/source.css until the
+ * first components migrate in #160): the plain-CSS class names (grid, table,
+ * inline, border, ring) would match Tailwind utilities and restyle them.
  */
 @layer theme, base, components, utilities;
 @import 'tailwindcss/theme.css' layer(theme);
 @import 'tailwindcss/utilities.css' layer(utilities) source(none);
+@import '@codecora/tokens/theme.css';

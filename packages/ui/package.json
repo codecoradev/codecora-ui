@@ -16,7 +16,8 @@
       "types": "./dist/index.d.ts",
       "svelte": "./dist/index.js",
       "default": "./dist/index.js"
-    }
+    },
+    "./source.css": "./dist/source.css"
   },
   "files": [
     "dist",
@@ -40,5 +41,8 @@
     "clsx": "^2.1.1",
     "tailwind-merge": "^3.7.0",
     "tailwind-variants": "^4.0.2"
+  },
+  "devDependencies": {
+    "@codecora/tokens": "workspace:*"
   }
 }

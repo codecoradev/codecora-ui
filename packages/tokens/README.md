@@ -46,7 +46,28 @@ Tokens sit in cascade layers (`cc.base` < `cc.theme` < `cc.modifier`), so import
 
 The `-soft` tints (`accent-soft`, `danger-soft`, ...) are mixed with `--cc-surface`, so the checked pairs hold on the page surface; on a raised card they read slightly lighter or darker. `border` is a decorative hairline; use `border-strong` where the border identifies a control. `bun run contrast` prints the report for every theme and accent, and the unit tests fail when a pair drops below WCAG AA.
 
-## Tailwind 4 and shadcn-svelte
+## Tailwind 4: `theme.css`
+
+The Tailwind-first setup (D13, [docs/tailwind-migration.md](../../docs/tailwind-migration.md)):
+
+```css
+@import 'tailwindcss';
+@import '@codecora/tokens/theme.css'; /* every theme, shadcn names, Tailwind keys, utilities */
+@import '@codecora/ui/source.css'; /* Tailwind scans the components */
+```
+
+`theme.css` already contains everything in `tokens.css` (the token layers moved inside Tailwind's `base`), so it **replaces** `tokens.css`: import one or the other, never both. Loading `tokens.css` as well would add top-level `cc.*` layers after Tailwind's, and their colours on `[data-theme]` would then beat utilities such as `bg-card`.
+
+- Colours take the shadcn names: `bg-background`, `text-foreground`, `bg-card`, `bg-muted`, `text-muted-foreground`, `bg-accent` (hover tint), `border-border`, `border-input`, `ring-ring`, `bg-primary text-primary-foreground`, `bg-destructive`, plus `primary-hover`, `primary-soft`, `destructive-soft`, `success`, `warning` (each with `-foreground` and `-soft`) and `overlay`. The raw variables (`var(--primary)`) work in your own CSS too.
+- Theme keys: `rounded-sm|md|lg` and `font-sans|display|mono` follow the theme; `h-control`, `px-control-x`, `py-control-y`, `gap-stack`, `px-cell-x`, `py-cell-y` and `size-icon` follow `data-density`; `shadow-popover`, `shadow-modal`.
+- Motion: `duration-instant|fast|normal|slow` and `ease-enter|exit|move|spring` (Tailwind's own `ease-out` and `ease-in-out` are unchanged); all drop to 0 ms under reduced motion.
+- Stacking: `z-sticky`, `z-overlay`, `z-modal`, `z-popover`, `z-tooltip`, `z-toast`, `z-skip`.
+- `dark:` follows the nearest theme: it applies inside a dark theme (`corin`, `neutral-dark`, `uteke-dark`, `dimmed`, `gaira`, `tagfold`) or shadcn's `.dark`, and not inside a light theme nested in one. A dark theme nested two levels deeper reads as light, so components rely on the semantic colours, not `dark:`.
+- The type scale is Tailwind's (`text-xl` is 1.25rem).
+
+The token layers sit inside Tailwind's `base` layer, so a utility always beats a token and unlayered app CSS still overrides any token. While the migration runs, these names read the `--cc-*` tokens; the exports `themeVariables`, `tailwindKeys` and `tailwindUtilities` list them.
+
+## Tailwind 4 and shadcn-svelte (bridge)
 
 ```css
 @import 'tailwindcss';
