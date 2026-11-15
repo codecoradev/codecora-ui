@@ -51,7 +51,7 @@
       <h4 id="tile-{name}" class="font-display text-xl leading-[inherit] font-bold">
         <!-- The title opens the theme page, so it looks like a link at rest. -->
         <a
-          class="decoration-input underline-offset-text focus-visible:outline-ring text-inherit underline decoration-2 hover:decoration-current focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)]"
+          class="decoration-input underline-offset-text focus-visible:outline-ring focus-visible:outline-focus focus-visible:outline-offset-focus text-inherit underline decoration-2 hover:decoration-current"
           href={resolve('/themes/[theme]', { theme: name })}>{themes[name].label}</a
         >
       </h4>
@@ -102,7 +102,7 @@
     >
     <!-- The focus ring, drawn on so its width and offset can be compared. -->
     <span
-      class="min-h-control px-control-x border-input bg-card outline-ring inline-flex items-center rounded-md border text-sm leading-[inherit] outline-[length:var(--cc-focus-width)] outline-offset-[var(--cc-focus-offset)]"
+      class="min-h-control px-control-x border-input bg-card outline-ring outline-focus outline-offset-focus inline-flex items-center rounded-md border text-sm leading-[inherit]"
       >Focused</span
     >
     <Badge tone="success">Active</Badge>

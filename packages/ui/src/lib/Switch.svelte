@@ -40,7 +40,7 @@
     {name}
     {disabled}
     aria-describedby={described}
-    class="cc-switch border-input bg-muted data-[state=checked]:border-primary data-[state=checked]:bg-primary focus-visible:outline-ring relative h-6 w-10 flex-none cursor-pointer rounded-full border p-0 focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)] data-disabled:cursor-not-allowed data-disabled:opacity-55"
+    class="cc-switch border-input bg-muted data-[state=checked]:border-primary data-[state=checked]:bg-primary focus-visible:outline-ring focus-visible:outline-focus focus-visible:outline-offset-focus relative h-6 w-10 flex-none cursor-pointer rounded-full border p-0 data-disabled:cursor-not-allowed data-disabled:opacity-55"
   >
     <Switch.Thumb
       class="cc-switch-thumb bg-foreground duration-fast ease-enter data-[state=checked]:bg-primary-foreground ms-0.75 block size-4.5 rounded-full transition-transform data-[state=checked]:translate-x-4"

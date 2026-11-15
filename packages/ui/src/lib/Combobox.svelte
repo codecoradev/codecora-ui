@@ -80,7 +80,7 @@
         'cc-combobox-input min-h-control border-input bg-card ps-control-x font-inherit text-foreground w-full rounded-md border pe-[calc(var(--spacing-control-x)+1.75rem)]',
         'placeholder:text-muted-foreground',
         'aria-invalid:border-destructive aria-invalid:inset-ring-destructive aria-invalid:inset-ring',
-        'focus-visible:outline-ring focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-1',
+        'focus-visible:outline-ring focus-visible:outline-focus focus-visible:outline-offset-1',
         'disabled:bg-muted disabled:cursor-not-allowed',
       )}
     />

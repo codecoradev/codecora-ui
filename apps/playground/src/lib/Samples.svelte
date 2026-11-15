@@ -10,7 +10,7 @@
 
   // The browser's 1 px block padding on buttons and inputs is kept (py-px): preflight removes it.
   const btn =
-    'min-h-control px-control-x duration-fast ease-enter disabled:opacity-60 cursor-pointer rounded-md border py-px font-sans text-sm leading-normal font-medium transition-[background-color,scale] not-disabled:active:scale-[var(--cc-press-scale)] disabled:cursor-not-allowed';
+    'min-h-control px-control-x duration-fast ease-enter disabled:opacity-60 cursor-pointer rounded-md border py-px font-sans text-sm leading-normal font-medium transition-[background-color,scale] not-disabled:active:scale-press disabled:cursor-not-allowed';
   const primary =
     'bg-primary text-primary-foreground not-disabled:hover:bg-primary-hover border-transparent';
   const label = 'text-sm leading-[inherit] font-medium';

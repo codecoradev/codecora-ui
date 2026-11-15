@@ -34,7 +34,7 @@
   const axis = 'text-muted-foreground text-xs leading-[inherit] font-normal max-[30rem]:sr-only';
   /* A theme swatch: its surface and accent split on the diagonal. */
   const swatch = 'border-input size-4 flex-none rounded-sm border';
-  const chev = 'size-4 [stroke-width:var(--cc-icon-stroke)]';
+  const chev = 'size-4 stroke-icon';
 </script>
 
 <Popover label="Theme">

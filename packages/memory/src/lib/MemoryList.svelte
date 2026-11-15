@@ -185,7 +185,7 @@
         <li>
           <button
             type="button"
-            class="min-h-control px-control-x py-control-y font-inherit text-foreground duration-fast ease-enter hover:bg-accent focus-visible:outline-ring aria-[current=true]:border-primary aria-[current=true]:bg-primary-soft grid w-full cursor-pointer gap-1 rounded-md border border-transparent bg-transparent text-start transition-[background-color,border-color] focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)]"
+            class="min-h-control px-control-x py-control-y font-inherit text-foreground duration-fast ease-enter hover:bg-accent focus-visible:outline-ring aria-[current=true]:border-primary aria-[current=true]:bg-primary-soft focus-visible:outline-focus focus-visible:outline-offset-focus grid w-full cursor-pointer gap-1 rounded-md border border-transparent bg-transparent text-start transition-[background-color,border-color]"
             data-id={memory.id}
             aria-current={memory.id === browser.selectedId ? 'true' : undefined}
             tabindex={memory.id === focusId ? 0 : -1}

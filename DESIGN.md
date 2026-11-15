@@ -113,7 +113,7 @@ Motion is global: one scale for every theme, because a theme changes the face, n
 
 Components arrive in M1 (`@codecora/ui`). The shared behaviour they must follow:
 
-- **Focus:** a `--cc-focus-width` (at least 2px) `outline-ring` outline offset `--cc-focus-offset` on `:focus-visible`, on every interactive element.
+- **Focus:** `focus-visible:outline-solid outline-ring outline-focus outline-offset-focus` on every interactive element: a ring at least 2px wide (`--cc-focus-width`), offset by `--cc-focus-offset`.
 - **Motion:** state changes use `duration-fast` with `ease-enter`; overlays follow the Motion section above.
 - **Icons:** stroke and size come from `--cc-icon-stroke` and `--cc-icon-size`.
 - **Selected states** change at least two things (for example fill and weight), never colour alone.

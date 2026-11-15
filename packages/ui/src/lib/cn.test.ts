@@ -80,5 +80,38 @@ describe('cn with the CodeCora theme names', () => {
     expect(twMergeExtension.classGroups.z[0]!.z.map((z) => `z-${z}`)).toEqual(
       utilities.filter((u) => u.startsWith('z-')),
     );
+    const named = (ns: string) =>
+      Object.keys(tailwindKeys)
+        .filter((k) => k.startsWith(`${ns}-`) && k.endsWith('-badge'))
+        .map((k) => k.slice(ns.length + 1));
+    expect(twMergeExtension.theme.radius).toEqual(named('radius'));
+    expect(twMergeExtension.theme.font).toEqual(named('font'));
+    expect(twMergeExtension.theme.tracking).toEqual(named('tracking'));
+    for (const u of [
+      'outline-focus',
+      'outline-offset-focus',
+      'stroke-icon',
+      'scale-press',
+      'case-badge',
+    ])
+      expect(utilities).toContain(u);
+  });
+
+  it('replaces the named token utilities like the Tailwind ones of their group', () => {
+    expect(cn('outline-focus', 'outline-2')).toBe('outline-2');
+    expect(cn('outline-2', 'outline-focus')).toBe('outline-focus');
+    expect(cn('outline-offset-focus', 'outline-offset-4')).toBe('outline-offset-4');
+    expect(cn('stroke-icon', 'stroke-1')).toBe('stroke-1');
+    expect(cn('active:scale-press', 'active:scale-95')).toBe('active:scale-95');
+    expect(cn('rounded-badge', 'rounded-full')).toBe('rounded-full');
+    expect(cn('font-badge', 'font-mono')).toBe('font-mono');
+    expect(cn('tracking-badge', 'tracking-wide')).toBe('tracking-wide');
+    expect(cn('case-badge', 'uppercase')).toBe('uppercase');
+  });
+
+  it('keeps the named token utilities apart from colours and weights', () => {
+    expect(cn('outline-focus outline-ring')).toBe('outline-focus outline-ring');
+    expect(cn('stroke-icon stroke-primary')).toBe('stroke-icon stroke-primary');
+    expect(cn('font-badge font-medium')).toBe('font-badge font-medium');
   });
 });

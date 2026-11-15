@@ -61,7 +61,7 @@
         'duration-fast ease-enter transition-[left,scale]',
         'data-active:scale-115 data-active:cursor-grabbing data-active:transition-[scale]',
         'motion-reduce:data-[orientation]:transition-none',
-        'focus-visible:outline-ring focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)]',
+        'focus-visible:outline-ring focus-visible:outline-focus focus-visible:outline-offset-focus',
         'group-data-disabled/track:cursor-not-allowed',
       )}
     />

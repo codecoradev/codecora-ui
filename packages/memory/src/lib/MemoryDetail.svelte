@@ -26,7 +26,7 @@
 
   const uid = $props.id();
   const title = cn(
-    'font-display focus-visible:outline-ring leading-heading m-0 flex flex-wrap items-center gap-2 text-lg font-bold focus:outline-none focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)] focus-visible:outline-solid',
+    'font-display focus-visible:outline-ring leading-heading focus-visible:outline-focus focus-visible:outline-offset-focus m-0 flex flex-wrap items-center gap-2 text-lg font-bold focus:outline-none focus-visible:outline-solid',
   );
   const memory = $derived(browser.selected);
   const caps = $derived(browser.capabilities);

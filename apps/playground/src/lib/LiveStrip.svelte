@@ -79,7 +79,7 @@
       <!-- The button carries the page's focus ring; its face is painted by the theme it picks. -->
       <button
         type="button"
-        class="pick group font-inherit focus-visible:outline-ring cursor-pointer rounded-md border-0 bg-transparent p-0 focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)] max-[47.99rem]:flex-none max-[47.99rem]:snap-start"
+        class="pick group font-inherit focus-visible:outline-ring focus-visible:outline-focus focus-visible:outline-offset-focus cursor-pointer rounded-md border-0 bg-transparent p-0 max-[47.99rem]:flex-none max-[47.99rem]:snap-start"
         aria-pressed={option === theme}
         tabindex={option === focusable ? 0 : -1}
         onfocus={() => (focused = option)}

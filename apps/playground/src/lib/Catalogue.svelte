@@ -64,7 +64,7 @@
             fill="none"
             stroke="currentColor"
             stroke-linecap="round"
-            class="[stroke-width:var(--cc-icon-stroke)]"
+            class="stroke-icon"
           />
         </svg>
         <VisuallyHidden>Close dialog</VisuallyHidden>

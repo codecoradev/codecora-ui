@@ -164,7 +164,7 @@
       {#snippet trigger({ props })}
         <button
           type="button"
-          class="text-foreground font-inherit hover:bg-accent focus-visible:outline-ring min-h-control flex w-full cursor-pointer items-center gap-3 rounded-md border-0 bg-transparent px-2 py-1 text-start focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)]"
+          class="text-foreground font-inherit hover:bg-accent focus-visible:outline-ring min-h-control focus-visible:outline-focus focus-visible:outline-offset-focus flex w-full cursor-pointer items-center gap-3 rounded-md border-0 bg-transparent px-2 py-1 text-start"
           {...props}
         >
           <Avatar name={user.name} size="sm" />

@@ -12,7 +12,7 @@ import { dirname, join, relative } from 'node:path';
 import { parse } from 'svelte/compiler';
 import { compile } from 'tailwindcss';
 import { beforeAll, describe, expect, it } from 'vitest';
-import { tailwindThemeCss } from './tailwind.js';
+import { tailwindKeys, tailwindThemeCss, tailwindUtilities } from './tailwind.js';
 
 const root = join(import.meta.dirname, '../../..');
 const roots = [
@@ -325,6 +325,41 @@ const layoutProperty =
 const springOnly =
   /^transition-(transform|\[(transform|translate|scale|rotate)(,(transform|translate|scale|rotate))*\])$/;
 
+/** The utility prefix of each Tailwind theme namespace `tailwindKeys` fills. */
+const namespacePrefix: Record<string, string> = {
+  radius: 'rounded',
+  font: 'font',
+  tracking: 'tracking',
+  // Spacing keys fit any spacing utility; the message keeps the class's own (px-, size-).
+  spacing: '*',
+  shadow: 'shadow',
+  ease: 'ease',
+  leading: 'leading',
+  container: 'max-w',
+};
+
+/**
+ * A variable that a named utility reads, and that utility: `--cc-focus-width`
+ * is `outline-focus`, `--cc-badge-radius` is `rounded-badge`. Reading one of
+ * these through an arbitrary value (`outline-[length:var(--cc-focus-width)]`)
+ * is the long way round, so the lint asks for the name.
+ */
+export const namedUtility = new Map<string, string>([
+  ...Object.entries(tailwindKeys).flatMap(([key, value]) => {
+    const v = /^var\((--[\w-]+)\)$/.exec(value)?.[1];
+    const ns = key.slice(0, key.indexOf('-'));
+    return v ? [[v, `${namespacePrefix[ns] ?? ns}-${key.slice(ns.length + 1)}`] as const] : [];
+  }),
+  // Each declaration that only reads a variable (outline-focus also sets
+  // outline-style, which is not such a read).
+  ...Object.entries(tailwindUtilities).flatMap(([name, decls]) =>
+    Object.values(decls).flatMap((value) => {
+      const v = /^var\((--[\w-]+)\)$/.exec(value)?.[1];
+      return v ? [[v, name] as const] : [];
+    }),
+  ),
+]);
+
 /** True when an arbitrary value needs no token by the rules above. */
 function layoutValue(u: string, inner: string): boolean {
   // A typed value (`length:85dvh`) or an arbitrary property (`[font:inherit]`);
@@ -351,6 +386,16 @@ export function violations(classList: string | string[], file: string, timing = 
       !layoutValue(u, value[1]!)
     )
       out.push(`${t}: arbitrary value without a token, use a theme key or [prop:var(--token)]`);
+    // A value that only reads a variable a named utility covers; a custom
+    // property being set (`[--cc-icon-size:var(--text-sm)]`) is not a read.
+    const read =
+      value && !value[1]!.startsWith('--')
+        ? /^(?:[a-z-]+:)?var\((--[\w-]+)\)$/.exec(value[1]!)?.[1]
+        : undefined;
+    if (read && namedUtility.has(read))
+      out.push(
+        `${t}: reads ${read}, use ${namedUtility.get(read)!.replace(/^\*/, u.indexOf('-[') > 0 ? u.slice(0, u.indexOf('-[')) : 'h')}`,
+      );
     if (/^(duration|delay)-\d+$/.test(u))
       out.push(`${t}: literal duration, use duration-instant|fast|normal|slow`);
     if (/^ease-(linear|in|out|in-out)$/.test(u))
@@ -398,13 +443,23 @@ describe('class lint rules', () => {
     ['dark:bg-card', 'dark:'],
     ['[color:#fff]', 'arbitrary'],
     ['hover:bg-[color:#fff]', 'arbitrary'],
+    ['focus-visible:outline-[length:var(--cc-focus-width)]', 'use outline-focus'],
+    ['outline-offset-[var(--cc-focus-offset)]', 'use outline-offset-focus'],
+    ['[stroke-width:var(--cc-icon-stroke)]', 'use stroke-icon'],
+    ['active:[scale:var(--cc-press-scale)]', 'use scale-press'],
+    ['rounded-[var(--cc-badge-radius)]', 'use rounded-badge'],
+    ['font-[family-name:var(--cc-badge-font)]', 'use font-badge'],
+    ['h-[var(--spacing-control)]', 'use h-control'],
+    ['px-[var(--spacing-control-x)]', 'use px-control-x'],
+    ['size-[var(--cc-icon-size)]', 'use size-icon'],
   ])('rejects %s', (s, reason) => {
     expect(violations(s, 'packages/ui/src/lib/X.svelte').join('\n')).toContain(reason);
   });
 
   it.each([
     'bg-primary text-primary-foreground hover:bg-primary-hover',
-    '[stroke-width:var(--cc-icon-stroke)] size-icon',
+    'stroke-icon size-icon outline-focus outline-offset-focus scale-press case-badge',
+    '[--cc-icon-size:var(--text-sm)] origin-[var(--bits-popover-content-transform-origin)]',
     'data-[state=open]:bg-accent',
     'transition-colors duration-fast ease-enter',
     'transition-transform duration-slow ease-spring',

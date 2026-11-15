@@ -12,7 +12,7 @@
 <!-- Under reduced motion it keeps turning, three times slower. -->
 <span class="cc-spinner inline-flex" role="status">
   <svg
-    class="size-icon animate-spinner motion-reduce:animate-spinner-reduced [stroke-width:var(--cc-icon-stroke)]"
+    class="size-icon animate-spinner motion-reduce:animate-spinner-reduced stroke-icon"
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"

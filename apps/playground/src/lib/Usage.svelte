@@ -7,7 +7,7 @@
   let open = $state(false);
 
   const summary =
-    'border-input bg-card focus-visible:outline-ring inline-flex min-h-11 cursor-pointer list-outside list-none items-center gap-2 rounded-md border px-3 text-sm leading-[inherit] font-semibold group-open:mb-3 focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)] [&::-webkit-details-marker]:hidden';
+    'border-input bg-card focus-visible:outline-ring inline-flex min-h-11 cursor-pointer list-outside list-none items-center gap-2 rounded-md border px-3 text-sm leading-[inherit] font-semibold group-open:mb-3 focus-visible:outline-focus focus-visible:outline-offset-focus [&::-webkit-details-marker]:hidden';
   /* The marker: a chevron drawn by two borders of the ::before box. */
   const marker =
     'before:duration-fast before:ease-enter before:size-2 before:-rotate-45 before:border-r-2 before:border-b-2 before:border-current before:transition-transform group-open:before:rotate-45';

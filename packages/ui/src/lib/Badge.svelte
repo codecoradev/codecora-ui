@@ -3,7 +3,7 @@
 
   /** The shape (radius, font, case, tracking) comes from the theme's badge tokens. */
   const badge = tv({
-    base: 'cc-badge inline-flex items-center rounded-[var(--cc-badge-radius)] px-2 py-0.5 font-[family-name:var(--cc-badge-font)] text-xs leading-[calc(var(--text-xs)*1.4)] font-medium tracking-[var(--cc-badge-tracking)] whitespace-nowrap [text-transform:var(--cc-badge-case)]',
+    base: 'cc-badge rounded-badge font-badge tracking-badge case-badge inline-flex items-center px-2 py-0.5 text-xs leading-[calc(var(--text-xs)*1.4)] font-medium whitespace-nowrap',
     variants: {
       tone: {
         neutral: 'bg-muted text-foreground inset-ring-border inset-ring',

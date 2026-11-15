@@ -51,6 +51,10 @@ export const tailwindKeys: Readonly<Record<string, string>> = {
   'container-description': '40ch',
   // A comfortable reading measure for long text: max-w-measure.
   'container-measure': '72ch',
+  // The theme's badge shape: rounded-badge, font-badge, tracking-badge.
+  'radius-badge': readVariable('cc-badge-radius'),
+  'font-badge': readVariable('cc-badge-font'),
+  'tracking-badge': readVariable('cc-badge-tracking'),
 };
 
 /**
@@ -184,6 +188,19 @@ export const tailwindUtilities: Readonly<Record<string, Record<string, string>>>
       'line-height',
     ].map((p) => [p, 'inherit']),
   ),
+  // The CodeCora-only tokens Tailwind has no namespace for, as named utilities
+  // so no component spells out `outline-[length:var(--cc-focus-width)]`.
+  // Like Tailwind's outline-2, it sets the style too (solid unless
+  // outline-dashed or outline-hidden changes --tw-outline-style), so a focus
+  // ring never falls back to the browser's outline-style: auto.
+  'outline-focus': {
+    'outline-style': 'var(--tw-outline-style, solid)',
+    'outline-width': 'var(--cc-focus-width)',
+  },
+  'outline-offset-focus': { 'outline-offset': 'var(--cc-focus-offset)' },
+  'stroke-icon': { 'stroke-width': 'var(--cc-icon-stroke)' },
+  'scale-press': { scale: 'var(--cc-press-scale)' },
+  'case-badge': { 'text-transform': 'var(--cc-badge-case)' },
   'underline-offset-text': { 'text-underline-offset': '0.2em' },
   // Code shows the characters as typed: no ligature turns <!-- or -> into an arrow.
   'ligatures-none': { 'font-variant-ligatures': 'none' },

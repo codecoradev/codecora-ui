@@ -42,7 +42,7 @@
         '[.cc-toggle+&]:border-s-input [.cc-toggle+&]:border-s',
         'first:rounded-s-[calc(var(--radius-md)-1px)] last:rounded-e-[calc(var(--radius-md)-1px)]',
         'hover:bg-accent data-[state=on]:bg-primary data-[state=on]:text-primary-foreground',
-        'focus-visible:outline-ring focus-visible:relative focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:-outline-offset-2',
+        'focus-visible:outline-ring focus-visible:outline-focus focus-visible:relative focus-visible:-outline-offset-2',
         'data-disabled:cursor-not-allowed data-disabled:opacity-55',
       )}
     >

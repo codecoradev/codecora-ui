@@ -48,7 +48,7 @@
 <!-- relative: contains the visually hidden caption and header labels. -->
 <div
   class={cn(
-    'cc-table-wrap border-border bg-card focus-visible:outline-ring relative overflow-x-auto rounded-md border focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)]',
+    'cc-table-wrap border-border bg-card focus-visible:outline-ring focus-visible:outline-focus focus-visible:outline-offset-focus relative overflow-x-auto rounded-md border',
     className,
   )}
   bind:this={wrap}

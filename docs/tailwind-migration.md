@@ -72,7 +72,7 @@ Non-colour tokens use Tailwind's own theme namespaces wherever one exists:
 | `ease-out/exit/in-out/spring` | new names, Tailwind's own curves untouched (decided 2026-11-14): `--ease-enter`, `--ease-exit`, `--ease-move`, `--ease-spring` | `ease-enter`, `ease-spring` |
 | `control-h/px/py`, `cell-py/px`, `gap` | `--spacing-control`, `--spacing-control-x/y`, `--spacing-cell-x/y`, `--spacing-stack`, switched by `data-density` | `h-control px-control-x` |
 | `duration-*`, layers (z-index) | no Tailwind namespace: `@utility` | `duration-fast`, `z-popover` |
-| `icon-size`, `icon-stroke`, `focus-width/offset`, badge shape hooks | variables kept, read through `--spacing-icon` or `[stroke-width:var(--cc-icon-stroke)]` (`--icon-stroke` from phase 10) | `size-icon` |
+| `icon-size`, `icon-stroke`, `focus-width/offset`, badge shape hooks | variables kept, read through `--spacing-icon` and named utilities (#180) | `size-icon`, `stroke-icon`, `outline-focus`, `outline-offset-focus`, `rounded-badge`, `font-badge`, `tracking-badge`, `case-badge` |
 
 `dark:` follows the nearest theme: a `@custom-variant dark` matches inside a
 theme whose `colorScheme` is dark (or shadcn's `.dark`) and not inside a light

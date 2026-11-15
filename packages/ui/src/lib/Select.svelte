@@ -48,7 +48,7 @@
     class={cn(
       'cc-select-trigger min-h-control border-input bg-card px-control-x font-inherit text-foreground flex w-full cursor-pointer items-center justify-between gap-2 rounded-md border text-left',
       'aria-invalid:border-destructive aria-invalid:inset-ring-destructive aria-invalid:inset-ring',
-      'focus-visible:outline-ring focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-1',
+      'focus-visible:outline-ring focus-visible:outline-focus focus-visible:outline-offset-1',
       'data-disabled:bg-muted data-disabled:cursor-not-allowed',
     )}
   >

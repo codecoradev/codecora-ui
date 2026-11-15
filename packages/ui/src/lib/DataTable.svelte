@@ -171,7 +171,7 @@
             {#if column.sortable}
               <button
                 type="button"
-                class="font-inherit focus-visible:outline-ring inline-flex cursor-pointer items-center gap-1 border-0 bg-transparent p-0 text-inherit focus-visible:rounded-sm focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)]"
+                class="font-inherit focus-visible:outline-ring focus-visible:outline-focus focus-visible:outline-offset-focus inline-flex cursor-pointer items-center gap-1 border-0 bg-transparent p-0 text-inherit focus-visible:rounded-sm"
                 onclick={() => toggleSort(column)}
               >
                 {column.label}
