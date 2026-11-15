@@ -7,7 +7,7 @@ and changes them.
 
 | Item | Type | What it adds |
 |---|---|---|
-| `cc-theme` | theme | `@codecora/tokens`, its CSS imports, and every shadcn variable in `:root` and `.dark` rewritten to read a `--cc-*` token |
+| `cc-theme` | theme | `@codecora/tokens` and `@codecora/ui`, their Tailwind 4 imports, and shadcn's own colour variables in `:root` and `.dark` handed back to the theme |
 | `cc-login` | block | `login-form.svelte`: sign-in card with validation, progress and an error alert |
 | `cc-settings` | block | `settings-page.svelte`: profile, notifications and danger-zone tabs, save and delete confirm |
 | `cc-dashboard-shell` | block | `dashboard-shell.svelte`: AppShell sidebar (drawer and bottom bar on phones) and a page header |
@@ -16,9 +16,11 @@ and changes them.
 | `cc-status-panel` | block | `status-panel.svelte`: status card with a tinted icon, an action, a stat strip and a why / what-to-do panel |
 | `cc-data-table` | block | `data-table.svelte`: search, status filter, sorting, selection with a bulk action, paging |
 
-Every block depends on `@codecora/ui` and installs `cc-theme` first. Blocks use
-plain CSS on `--cc-*` tokens, so they need no Tailwind classes; the dashboard
-shell and data table also import `@lucide/svelte` icons.
+Every block depends on `@codecora/ui` and installs `cc-theme` first. Blocks are
+written with Tailwind 4 utilities on the theme roles (`bg-card`,
+`text-muted-foreground`, `border-border`, `rounded-md`, ...) and merge classes
+with `cn` from `@codecora/ui`, so your app needs Tailwind 4 and the `cc-theme`
+setup below (D13). Most blocks also import `@lucide/svelte` icons.
 
 ## Install
 
@@ -47,30 +49,51 @@ itself. Install the release tarballs first (see the root README), then add
 items with `--no-deps-install`; ranges in the items (`^0.4.0`) leave the
 tarball entries in `package.json` alone.
 
-## The theme bridge
+## The theme
 
 `cc-theme` changes your global CSS (the `tailwind.css` path in
-`components.json`):
+`components.json`). It adds two imports after `tailwindcss`:
 
 ```css
-@import '@codecora/tokens/tokens.css';
-@import '@codecora/tokens/shadcn.css';
+@import 'tailwindcss';
+@import '@codecora/tokens/theme.css'; /* every theme, the shadcn variables, Tailwind keys */
+@import '@codecora/ui/source.css'; /* Tailwind scans the components the blocks use */
+```
 
-:root,
-.dark {
-  --background: var(--cc-surface);
-  --primary: var(--cc-accent);
-  --ring: var(--cc-focus);
-  /* ... the full map is `shadcnBridge` in @codecora/tokens */
+`theme.css` declares every shadcn variable (`--background`, `--primary`,
+`--ring`, the chart and sidebar variables, plus `--primary-hover`,
+`--success`, `--warning` and the other roles the blocks use) in Tailwind's
+base layer. The values shadcn wrote into your `:root` and `.dark` blocks have
+no layer, so they would win; the shadcn CLI can set those variables but not
+delete them, so the item sets each one to `revert-layer`, which hands it back
+to `theme.css`:
+
+```css
+:root {
+  --background: revert-layer;
+  --primary: revert-layer;
+  /* ... every variable theme.css declares, in .dark too */
 }
 ```
 
-After that, shadcn components follow `data-theme`, `data-accent` and
-`data-density` on any element. `shadcn.css` re-declares the variables on every
-`[data-theme]` and `[data-accent]` element, so a nested region (a dark sidebar,
-a preview card) repaints too. Dark themes such as `corin` and `neutral-dark`
-bring their own colours; shadcn's `dark:` utilities still follow the `.dark`
-class, so add it next to a dark `data-theme`.
+It also writes the theme's radius and font keys (`--radius-sm|md|lg`,
+`--font-sans|display|mono`) into your `@theme inline` block, which comes after
+the imports and would otherwise keep shadcn's values. The CLI adds a
+`--name: var(--name)` line there for each variable as well; those lines do
+nothing and can go. You can also delete the `:root` and `.dark` blocks
+altogether.
+
+After that, shadcn components and the blocks follow `data-theme`,
+`data-accent` and `data-density` on any element, nested regions (a dark
+sidebar, a preview card) included. shadcn's
+`@custom-variant dark (&:is(.dark *));` line keeps `dark:` on the `.dark`
+class; delete it and `dark:` follows the dark themes (`corin`,
+`neutral-dark`, ...) as well, since `theme.css` declares that variant.
+
+Coming from the earlier plain-CSS bridge? Remove its
+`@import '@codecora/tokens/tokens.css'` and `@import '@codecora/tokens/shadcn.css'`
+lines: `theme.css` replaces both, and `tokens.css` next to it would beat the
+utilities (see the tokens README).
 
 ## Develop
 
@@ -83,7 +106,8 @@ bun run test    # registry.json shape and the generated cc-theme item
 `registry.json` lists the items. The build reads each block's imports to fill
 in `dependencies` (workspace versions become `^x.y.z` ranges). The theme item
 has no files to read, so `build.ts` fills it in first (`theme.ts`): the light
-and dark variables from `shadcnBridge` and the `@codecora/tokens` range from
-the tokens package version. A tokens release therefore needs no edit here. The
+and dark variables from `themeVariables`, the theme keys from `tailwindKeys`
+and the `@codecora/tokens` and `@codecora/ui` ranges from the package
+versions. A release therefore needs no edit here. The
 playground serves `dist/r` through a prerendered `/r/[item].json` route, so the
 root `bun run build` builds this workspace before the apps.

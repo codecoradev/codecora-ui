@@ -112,19 +112,23 @@
 </script>
 
 {#snippet firstRequest()}
-  <p class="muted">Your first request shows up here once your app sends one.</p>
+  <p class="text-muted-foreground mx-0 mt-1 mb-0">
+    Your first request shows up here once your app sends one.
+  </p>
 {/snippet}
 
 {#snippet tabPanel(value: string)}
   {#if panel}
     {@render panel(value)}
   {:else if value === 'overview'}
-    <div class="body">
+    <div class="grid gap-4">
       <Card>
-        <div class="intro">
+        <div class="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <h2>Build with the API</h2>
-            <p>Add this to your product, keeping full control of your data, tools and logic.</p>
+            <h2 class="m-0 text-[length:var(--cc-font-size-md)]">Build with the API</h2>
+            <p class="text-muted-foreground mx-0 mt-1 mb-0">
+              Add this to your product, keeping full control of your data, tools and logic.
+            </p>
           </div>
           <Button icon={BookOpen}>Read the docs</Button>
         </div>
@@ -138,7 +142,7 @@
       />
     </div>
   {:else}
-    <p class="muted">Nothing here yet.</p>
+    <p class="text-muted-foreground mx-0 mt-1 mb-0">Nothing here yet.</p>
   {/if}
 {/snippet}
 
@@ -158,12 +162,20 @@
   {#snippet footer({ collapsed })}
     <DropdownMenu label="Account menu" side="top" items={userMenu}>
       {#snippet trigger({ props })}
-        <button type="button" class="user" {...props}>
+        <button
+          type="button"
+          class="text-foreground font-inherit hover:bg-accent focus-visible:outline-ring min-h-control flex w-full cursor-pointer items-center gap-3 rounded-md border-0 bg-transparent px-2 py-1 text-start focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)]"
+          {...props}
+        >
           <Avatar name={user.name} size="sm" />
           {#if !collapsed}
-            <span class="who">
-              <span class="name">{user.name}</span>
-              {#if user.detail}<span class="detail">{user.detail}</span>{/if}
+            <span class="grid min-w-0">
+              <span class="truncate">{user.name}</span>
+              {#if user.detail}
+                <span class="text-muted-foreground truncate text-[length:var(--cc-font-size-sm)]">
+                  {user.detail}
+                </span>
+              {/if}
             </span>
           {/if}
         </button>
@@ -172,123 +184,23 @@
   {/snippet}
 
   {#snippet header()}
-    <div class="bar">
+    <div class="flex w-full flex-wrap items-center justify-between gap-3">
       <Breadcrumb items={crumbs} />
-      <div class="tools">
+      <div class="flex flex-wrap gap-2">
         <Button variant="secondary" icon={Search} onclick={onsearch}>
           Search
-          <span class="hint" aria-hidden="true"><Kbd>⌘K</Kbd></span>
+          <span class="ms-2 inline-flex max-md:hidden" aria-hidden="true"><Kbd>⌘K</Kbd></span>
         </Button>
         {@render headerActions?.()}
       </div>
     </div>
   {/snippet}
 
-  <div class="page">
-    <div class="title">
-      <h1>{title}</h1>
-      <div class="actions">{@render actions?.()}</div>
+  <div class="grid gap-4 p-6 max-md:p-4">
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <h1 class="text-[length:var(--cc-font-size-xl)]">{title}</h1>
+      <div class="flex flex-wrap gap-2">{@render actions?.()}</div>
     </div>
     <Tabs label="{title} sections" items={tabs} bind:value={tab} panel={tabPanel} />
   </div>
 </AppShell>
-
-<style>
-  .bar {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--cc-space-3);
-    inline-size: 100%;
-  }
-  .tools,
-  .actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--cc-space-2);
-  }
-  .hint {
-    display: inline-flex;
-    margin-inline-start: var(--cc-space-2);
-  }
-  .page {
-    display: grid;
-    gap: var(--cc-space-4);
-    padding: var(--cc-space-6);
-  }
-  .title {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--cc-space-3);
-  }
-  h1 {
-    font-size: var(--cc-font-size-xl);
-  }
-  h2 {
-    margin: 0;
-    font-size: var(--cc-font-size-md);
-  }
-  .body {
-    display: grid;
-    gap: var(--cc-space-4);
-  }
-  .intro {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--cc-space-4);
-  }
-  .intro p,
-  .muted {
-    margin: var(--cc-space-1) 0 0;
-    color: var(--cc-text-muted);
-  }
-  .user {
-    display: flex;
-    align-items: center;
-    gap: var(--cc-space-3);
-    inline-size: 100%;
-    min-block-size: var(--cc-control-h);
-    padding: var(--cc-space-1) var(--cc-space-2);
-    border: 0;
-    border-radius: var(--cc-radius-md);
-    background: transparent;
-    color: var(--cc-text);
-    font: inherit;
-    text-align: start;
-    cursor: pointer;
-  }
-  .user:hover {
-    background: var(--cc-surface-hover);
-  }
-  .user:focus-visible {
-    outline: var(--cc-focus-width) solid var(--cc-focus);
-    outline-offset: var(--cc-focus-offset);
-  }
-  .who {
-    display: grid;
-    min-inline-size: 0;
-  }
-  .name,
-  .detail {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  .detail {
-    color: var(--cc-text-muted);
-    font-size: var(--cc-font-size-sm);
-  }
-  @media (width < 48rem) {
-    .page {
-      padding: var(--cc-space-4);
-    }
-    .hint {
-      display: none;
-    }
-  }
-</style>

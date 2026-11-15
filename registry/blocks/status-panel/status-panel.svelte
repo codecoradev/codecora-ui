@@ -7,7 +7,7 @@
   replace the copy and the stats with its own.
 -->
 <script lang="ts">
-  import { Button, type IconComponent, type Tone } from '@codecora/ui';
+  import { Button, cn, type IconComponent, type Tone } from '@codecora/ui';
   import CircleAlert from '@lucide/svelte/icons/circle-alert';
   import CircleCheck from '@lucide/svelte/icons/circle-check';
   import Info from '@lucide/svelte/icons/info';
@@ -71,162 +71,72 @@
     neutral: Info,
   };
   const Glyph = $derived(icon ?? glyphs[tone]);
+  // The tone tints the icon mark and colours a stat value that sets one.
+  const markTone: Record<Tone, string> = {
+    danger: 'bg-destructive-soft text-destructive',
+    warning: 'bg-warning-soft text-warning',
+    success: 'bg-success-soft text-success',
+    accent: 'bg-primary-soft text-primary',
+    neutral: 'bg-muted text-muted-foreground',
+  };
+  const valueTone: Record<Tone, string> = {
+    danger: 'text-destructive font-semibold',
+    warning: 'text-warning font-semibold',
+    success: 'text-success font-semibold',
+    accent: 'text-primary font-semibold',
+    neutral: '',
+  };
+  const mark = $derived(
+    cn('inline-flex size-11 flex-none items-center justify-center rounded-full', markTone[tone]),
+  );
 </script>
 
-<section class="panel tone-{tone}" aria-labelledby="{uid}-title">
-  <div class="head" role={tone === 'danger' ? 'alert' : 'status'}>
-    <span class="mark" aria-hidden="true"><Glyph size={20} /></span>
-    <div class="text">
-      <h2 id="{uid}-title">{title}</h2>
-      {#if description}<p class="muted">{description}</p>{/if}
+<section
+  class="border-border bg-card text-foreground grid gap-4 rounded-lg border p-5 max-sm:p-4"
+  aria-labelledby="{uid}-title"
+>
+  <div class="flex flex-wrap items-center gap-4" role={tone === 'danger' ? 'alert' : 'status'}>
+    <span class={mark} aria-hidden="true"><Glyph size={20} /></span>
+    <div class="min-w-0 shrink grow basis-56">
+      <h2 class="m-0 text-[length:var(--cc-font-size-xl)]" id="{uid}-title">{title}</h2>
+      {#if description}<p class="text-muted-foreground m-0">{description}</p>{/if}
     </div>
     {#if actionLabel}
-      <div class="action"><Button onclick={onaction}>{actionLabel}</Button></div>
+      <div><Button onclick={onaction}>{actionLabel}</Button></div>
     {/if}
   </div>
 
   {#if stats.length > 0}
-    <dl class="stats">
+    <!-- One bordered strip; the 1px gaps show the border colour between cells. -->
+    <dl
+      class="border-border bg-border m-0 grid grid-cols-[repeat(auto-fit,minmax(calc(var(--spacing)*36),1fr))] gap-px overflow-hidden rounded-md border"
+    >
       {#each stats as stat (stat.label)}
-        <div class="stat">
-          <dt>{stat.label}</dt>
-          <dd class={[stat.mono && 'mono', stat.tone && `value-${stat.tone}`]}>{stat.value}</dd>
+        <div class="bg-card grid gap-1 px-4 py-3">
+          <dt class="text-muted-foreground text-[length:var(--cc-font-size-sm)]">{stat.label}</dt>
+          <dd
+            class={cn(
+              'm-0 wrap-anywhere',
+              stat.mono && 'font-mono tabular-nums',
+              stat.tone && valueTone[stat.tone],
+            )}
+          >
+            {stat.value}
+          </dd>
         </div>
       {/each}
     </dl>
   {/if}
 
   {#if sections.length > 0}
-    <div class="sections">
+    <div class="border-border bg-muted grid gap-2 rounded-md border p-4">
       {#each sections as section (section.title)}
-        <p><strong>{section.title}:</strong> {section.text}</p>
+        <p class="m-0"><strong>{section.title}:</strong> {section.text}</p>
       {/each}
     </div>
   {/if}
 
-  {#if note}<p class="note muted">{note}</p>{/if}
+  {#if note}
+    <p class="text-muted-foreground m-0 text-[length:var(--cc-font-size-sm)]">{note}</p>
+  {/if}
 </section>
-
-<style>
-  .panel {
-    display: grid;
-    gap: var(--cc-space-4);
-    padding: var(--cc-space-5);
-    border: 1px solid var(--cc-border);
-    border-radius: var(--cc-radius-lg);
-    background: var(--cc-surface-raised);
-    color: var(--cc-text);
-  }
-  .tone-danger {
-    --tone: var(--cc-danger);
-    --tone-soft: var(--cc-danger-soft);
-  }
-  .tone-warning {
-    --tone: var(--cc-warning);
-    --tone-soft: var(--cc-warning-soft);
-  }
-  .tone-success {
-    --tone: var(--cc-success);
-    --tone-soft: var(--cc-success-soft);
-  }
-  .tone-accent {
-    --tone: var(--cc-accent);
-    --tone-soft: var(--cc-accent-soft);
-  }
-  .tone-neutral {
-    --tone: var(--cc-text-muted);
-    --tone-soft: var(--cc-surface-sunken);
-  }
-  .head {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--cc-space-4);
-  }
-  .mark {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex: none;
-    inline-size: 2.75rem;
-    block-size: 2.75rem;
-    border-radius: var(--cc-radius-pill);
-    background: var(--tone-soft);
-    color: var(--tone);
-  }
-  .text {
-    flex: 1 1 14rem;
-    min-inline-size: 0;
-  }
-  h2 {
-    margin: 0;
-    font-size: var(--cc-font-size-xl);
-  }
-  p {
-    margin: 0;
-  }
-  .muted {
-    color: var(--cc-text-muted);
-  }
-  /* One bordered strip; the 1px gaps show the border colour between cells. */
-  .stats {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
-    gap: 1px;
-    margin: 0;
-    overflow: hidden;
-    border: 1px solid var(--cc-border);
-    border-radius: var(--cc-radius-md);
-    background: var(--cc-border);
-  }
-  .stat {
-    display: grid;
-    gap: var(--cc-space-1);
-    padding: var(--cc-space-3) var(--cc-space-4);
-    background: var(--cc-surface-raised);
-  }
-  dt {
-    color: var(--cc-text-muted);
-    font-size: var(--cc-font-size-sm);
-  }
-  dd {
-    margin: 0;
-    overflow-wrap: anywhere;
-  }
-  .mono {
-    font-family: var(--cc-font-mono);
-    font-variant-numeric: tabular-nums;
-  }
-  .value-danger {
-    color: var(--cc-danger);
-    font-weight: 600;
-  }
-  .value-warning {
-    color: var(--cc-warning);
-    font-weight: 600;
-  }
-  .value-success {
-    color: var(--cc-success);
-    font-weight: 600;
-  }
-  .value-accent {
-    color: var(--cc-accent);
-    font-weight: 600;
-  }
-  .sections {
-    display: grid;
-    gap: var(--cc-space-2);
-    padding: var(--cc-space-4);
-    border: 1px solid var(--cc-border);
-    border-radius: var(--cc-radius-md);
-    background: var(--cc-surface-sunken);
-  }
-  .note {
-    font-size: var(--cc-font-size-sm);
-  }
-  @media (width < 40rem) {
-    .panel {
-      padding: var(--cc-space-4);
-    }
-  }
-</style>

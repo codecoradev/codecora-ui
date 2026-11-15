@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from 'node:fs';
 // Source, not dist: release.yml runs the tests before the packages are built.
-import { shadcnBridge } from '../packages/tokens/src/index.js';
+import { shadcnBridge, tailwindKeys, themeVariables } from '../packages/tokens/src/index.js';
 import { describe, expect, it } from 'vitest';
 import { withTheme } from './theme.js';
 
@@ -10,7 +10,12 @@ interface Item {
   type: string;
   registryDependencies: string[];
   files: { path: string; type: string }[];
-  cssVars?: { light: Record<string, string>; dark: Record<string, string> };
+  css?: Record<string, unknown>;
+  cssVars?: {
+    theme: Record<string, string>;
+    light: Record<string, string>;
+    dark: Record<string, string>;
+  };
 }
 
 const registry: { items: Item[] } = JSON.parse(
@@ -18,6 +23,8 @@ const registry: { items: Item[] } = JSON.parse(
 );
 const theme = registry.items.find((item) => item.name === 'cc-theme');
 const blocks = registry.items.filter((item) => item.type === 'registry:block');
+const built = (tokens = '0.7.0', ui = '0.6.0') =>
+  withTheme(registry, { tokens, ui }).items.find((item) => item.name === 'cc-theme');
 
 describe('registry', () => {
   it('has unique item names under the cc- prefix', () => {
@@ -26,22 +33,45 @@ describe('registry', () => {
     for (const name of names) expect(name).toMatch(/^cc-[a-z-]+$/);
   });
 
-  it('theme item gets the bridge map from @codecora/tokens, in light and dark', () => {
-    const expected = Object.fromEntries(
-      Object.entries(shadcnBridge).map(([k, v]) => [k, `var(--cc-${v})`]),
-    );
-    const built = withTheme(registry, '0.4.0').items.find((item) => item.name === 'cc-theme');
-    expect(built?.cssVars?.light).toEqual(expected);
-    expect(built?.cssVars?.dark).toEqual(expected);
+  it('theme item imports theme.css and the ui sources, not the plain-CSS bridge', () => {
+    expect(Object.keys(theme?.css ?? {})).toEqual([
+      '@import "@codecora/tokens/theme.css"',
+      '@import "@codecora/ui/source.css"',
+    ]);
   });
 
-  it('theme item asks for the tokens version it is built with', () => {
-    // A minor bump (0.4.0 -> 0.5.0) moves the range with it; ^0.4.0 would exclude 0.5.0.
-    for (const version of ['0.4.0', '0.5.0', '1.2.3']) {
-      const built = withTheme(registry, version).items.find((item) => item.name === 'cc-theme');
-      expect(built?.dependencies).toEqual([`@codecora/tokens@^${version}`]);
+  it('theme item hands every shadcn variable back to theme.css, in light and dark', () => {
+    // theme.css declares them; the values shadcn wrote into :root and .dark would win.
+    const names = Object.keys(themeVariables).sort();
+    expect(names).toEqual(expect.arrayContaining(Object.keys(shadcnBridge)));
+    for (const mode of ['light', 'dark'] as const) {
+      const vars = built()?.cssVars?.[mode] ?? {};
+      expect(Object.keys(vars).sort(), mode).toEqual(names);
+      for (const value of Object.values(vars)) expect(value, mode).toBe('revert-layer');
     }
-    expect(theme?.dependencies, 'registry.json leaves the range to build.ts').toBeUndefined();
+  });
+
+  it("theme item writes theme.css's radius and fonts over shadcn's @theme keys", () => {
+    const keys = built()?.cssVars?.theme ?? {};
+    expect(Object.keys(keys).sort()).toEqual(
+      ['font-display', 'font-mono', 'font-sans', 'radius-lg', 'radius-md', 'radius-sm'].sort(),
+    );
+    for (const [key, value] of Object.entries(keys)) expect(value, key).toBe(tailwindKeys[key]);
+  });
+
+  it('theme item asks for the package versions it is built with', () => {
+    // A minor bump (0.4.0 -> 0.5.0) moves the range with it; ^0.4.0 would exclude 0.5.0.
+    for (const [tokens, ui] of [
+      ['0.4.0', '0.3.0'],
+      ['0.5.0', '0.6.1'],
+      ['1.2.3', '2.0.0'],
+    ])
+      expect(built(tokens, ui)?.dependencies).toEqual([
+        `@codecora/tokens@^${tokens}`,
+        `@codecora/ui@^${ui}`,
+      ]);
+    expect(theme?.dependencies, 'registry.json leaves the ranges to build.ts').toBeUndefined();
+    expect(theme?.cssVars, 'registry.json leaves the variables to build.ts').toBeUndefined();
   });
 
   it('every block installs the theme and points at files that exist', () => {

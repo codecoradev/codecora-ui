@@ -59,13 +59,13 @@
   }
 </script>
 
-<Card class="cc-login">
+<Card class="cc-login mx-auto w-full max-w-104">
   {#snippet header()}
-    <h1>{title}</h1>
-    <p>{description}</p>
+    <h1 class="text-[length:var(--cc-font-size-xl)]">{title}</h1>
+    <p class="text-muted-foreground">{description}</p>
   {/snippet}
 
-  <form novalidate onsubmit={submit}>
+  <form class="grid gap-4" novalidate onsubmit={submit}>
     {#if error}
       <Alert tone="danger" title="Could not sign in">{error}</Alert>
     {/if}
@@ -79,7 +79,7 @@
         <Input {...control} type="password" autocomplete="current-password" bind:value={password} />
       {/snippet}
     </Field>
-    <div class="row">
+    <div class="flex flex-wrap items-center justify-between gap-2">
       <Checkbox label="Remember me" bind:checked={remember} />
       <Link href={forgotHref}>Forgot password?</Link>
     </div>
@@ -89,30 +89,6 @@
   </form>
 
   {#snippet footer()}
-    <p>No account yet? <Link href={signUpHref}>Create one</Link></p>
+    <p class="text-muted-foreground">No account yet? <Link href={signUpHref}>Create one</Link></p>
   {/snippet}
 </Card>
-
-<style>
-  :global(.cc-login) {
-    inline-size: min(100%, 26rem);
-    margin-inline: auto;
-  }
-  h1 {
-    font-size: var(--cc-font-size-xl);
-  }
-  p {
-    color: var(--cc-text-muted);
-  }
-  form {
-    display: grid;
-    gap: var(--cc-space-4);
-  }
-  .row {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--cc-space-2);
-  }
-</style>

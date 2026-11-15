@@ -66,9 +66,9 @@
   {/snippet}
 
   {#snippet header()}
-    <div class="cc-dashboard-header">
-      <h1>{title}</h1>
-      <div class="actions">
+    <div class="cc-dashboard-header flex w-full flex-wrap items-center justify-between gap-3">
+      <h1 class="text-[length:var(--cc-font-size-lg)]">{title}</h1>
+      <div class="flex gap-2">
         {#if actions}
           {@render actions()}
         {:else}
@@ -78,35 +78,7 @@
     </div>
   {/snippet}
 
-  <div class="cc-dashboard-page">
+  <div class="cc-dashboard-page grid gap-6 p-6 max-md:p-4">
     {@render children()}
   </div>
 </AppShell>
-
-<style>
-  .cc-dashboard-header {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--cc-space-3);
-    inline-size: 100%;
-  }
-  h1 {
-    font-size: var(--cc-font-size-lg);
-  }
-  .actions {
-    display: flex;
-    gap: var(--cc-space-2);
-  }
-  .cc-dashboard-page {
-    display: grid;
-    gap: var(--cc-space-6);
-    padding: var(--cc-space-6);
-  }
-  @media (width < 48rem) {
-    .cc-dashboard-page {
-      padding: var(--cc-space-4);
-    }
-  }
-</style>

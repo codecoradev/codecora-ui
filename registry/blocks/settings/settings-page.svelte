@@ -66,10 +66,10 @@
   }
 </script>
 
-<form class="cc-settings" onsubmit={save}>
+<form class="cc-settings grid w-full max-w-160 gap-6" onsubmit={save}>
   <header>
-    <h1>Settings</h1>
-    <p>Changes apply after you save.</p>
+    <h1 class="text-[length:var(--cc-font-size-xl)]">Settings</h1>
+    <p class="text-muted-foreground">Changes apply after you save.</p>
   </header>
 
   <Tabs
@@ -82,7 +82,7 @@
     bind:value={tab}
   >
     {#snippet panel(value)}
-      <div class="panel">
+      <div class="grid gap-4 py-4">
         {#if value === 'profile'}
           <Field label="Name">
             {#snippet children(control)}
@@ -116,10 +116,14 @@
             {/snippet}
           </Field>
         {:else}
-          <div class="danger">
+          <div
+            class="border-destructive flex flex-wrap items-center justify-between gap-4 rounded-md border p-4"
+          >
             <div>
-              <h2>Delete account</h2>
-              <p>Removes the account and everything in it. This cannot be undone.</p>
+              <h2 class="text-[length:var(--cc-font-size-md)]">Delete account</h2>
+              <p class="text-muted-foreground">
+                Removes the account and everything in it. This cannot be undone.
+              </p>
             </div>
             <Button variant="danger" onclick={() => (confirmOpen = true)}>Delete account</Button>
           </div>
@@ -128,8 +132,8 @@
     {/snippet}
   </Tabs>
 
-  <footer>
-    <p role="status">{status}</p>
+  <footer class="flex flex-wrap items-center justify-end gap-4">
+    <p class="text-muted-foreground" role="status">{status}</p>
     <Button type="submit" variant="primary" loading={saving} loadingLabel="Saving">
       Save changes
     </Button>
@@ -144,42 +148,3 @@
   tone="danger"
   onconfirm={() => ondelete?.()}
 />
-
-<style>
-  .cc-settings {
-    display: grid;
-    gap: var(--cc-space-6);
-    inline-size: min(100%, 40rem);
-  }
-  h1 {
-    font-size: var(--cc-font-size-xl);
-  }
-  h2 {
-    font-size: var(--cc-font-size-md);
-  }
-  p {
-    color: var(--cc-text-muted);
-  }
-  .panel {
-    display: grid;
-    gap: var(--cc-space-4);
-    padding-block: var(--cc-space-4);
-  }
-  .danger {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--cc-space-4);
-    padding: var(--cc-space-4);
-    border: 1px solid var(--cc-danger);
-    border-radius: var(--cc-radius-md);
-  }
-  footer {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: flex-end;
-    gap: var(--cc-space-4);
-  }
-</style>
