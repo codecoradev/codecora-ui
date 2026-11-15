@@ -72,6 +72,8 @@ jobs:
           for path in / /components /themes/neutral /themes/tagfold /memory /registry /r/index.json /r/cc-theme.json; do
             curl -sf "$url$path" -o /dev/null || { echo "::error::$path is not served under $BASE_PATH"; exit 1; }
           done
+          # /themes has no page of its own: it sends the visitor to the theme index on /tokens.
+          curl -sfL "$url/themes" | grep -q "url=../tokens#index-title" || { echo "::error::/themes does not lead to the theme index"; exit 1; }
           status=$(curl -s -o /dev/null -w '%{http_code}' "$url/no-such-page")
           test "$status" = 404 || { echo "::error::an unknown page answers $status, not 404"; exit 1; }
 
