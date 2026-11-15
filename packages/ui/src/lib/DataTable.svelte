@@ -140,7 +140,7 @@
     sort?.key === column.key ? (sort.direction === 'asc' ? 'ascending' : 'descending') : undefined;
 </script>
 
-<div class={cn('cc-datatable grid gap-3', className)}>
+<div data-slot="datatable" class={cn('grid gap-3', className)}>
   <VisuallyHidden><span role="status">{loading ? `Loading ${label}` : ''}</span></VisuallyHidden>
   {#if active.length > 0 && bulk}
     <div class="min-h-control flex flex-wrap items-center gap-3" role="status">

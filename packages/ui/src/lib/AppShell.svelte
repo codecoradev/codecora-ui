@@ -70,8 +70,9 @@
 
 <!-- Desktop (md, 48rem): the sidebar takes its own width, the content the rest. -->
 <div
+  data-slot="shell"
   class={cn(
-    'cc-shell bg-background text-foreground grid min-h-dvh font-sans text-base/normal md:flex',
+    'bg-background text-foreground grid min-h-dvh font-sans text-base/normal md:flex',
     className,
   )}
 >

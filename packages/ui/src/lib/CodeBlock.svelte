@@ -49,7 +49,7 @@
   }
 </script>
 
-<figure class={cn('cc-code border-border bg-muted m-0 rounded-md border', className)}>
+<figure data-slot="code" class={cn('border-border bg-muted m-0 rounded-md border', className)}>
   <figcaption
     class="border-border text-muted-foreground flex items-center justify-between border-b py-1 pr-2 pl-3 font-mono text-xs leading-[inherit]"
   >

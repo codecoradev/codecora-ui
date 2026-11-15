@@ -12,8 +12,9 @@
 
 <!-- Opacity pulses on the compositor; reduced motion holds it still. -->
 <span
+  data-slot="skeleton"
   class={[
-    'cc-skeleton animate-skeleton bg-accent block motion-reduce:animate-none',
+    'animate-skeleton bg-accent block motion-reduce:animate-none',
     circle ? 'rounded-full' : 'rounded-sm',
   ]}
   style:width

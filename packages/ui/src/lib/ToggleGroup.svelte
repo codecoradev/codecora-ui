@@ -30,16 +30,18 @@
   {type}
   bind:value={value as never}
   aria-label={label}
-  class="cc-toggles border-input bg-card inline-flex rounded-md border"
+  data-slot="toggles"
+  class="border-input bg-card inline-flex rounded-md border"
 >
   {#each items as item (item.value)}
     <ToggleGroup.Item
       value={item.value}
       disabled={item.disabled}
+      data-slot="toggle"
       class={cn(
-        'cc-toggle min-h-control px-control-x font-inherit text-foreground cursor-pointer rounded-none border-0 bg-transparent',
+        'min-h-control px-control-x font-inherit text-foreground cursor-pointer rounded-none border-0 bg-transparent',
         'duration-fast ease-enter transition-[background-color,color] motion-reduce:transition-none',
-        '[.cc-toggle+&]:border-s-input [.cc-toggle+&]:border-s',
+        '[[data-slot=toggle]+&]:border-s-input [[data-slot=toggle]+&]:border-s',
         'first:rounded-s-[calc(var(--radius-md)-1px)] last:rounded-e-[calc(var(--radius-md)-1px)]',
         'hover:bg-accent data-[state=on]:bg-primary data-[state=on]:text-primary-foreground',
         'focus-visible:outline-ring focus-visible:outline-focus focus-visible:relative focus-visible:-outline-offset-2',

@@ -4,7 +4,7 @@
   /** Enabled: neither :disabled nor aria-disabled (a disabled link). */
   const button = tv({
     base: [
-      'cc-button min-h-control px-control-x font-inherit inline-flex cursor-pointer items-center justify-center gap-2 rounded-md border leading-none font-medium whitespace-nowrap no-underline',
+      'min-h-control px-control-x font-inherit inline-flex cursor-pointer items-center justify-center gap-2 rounded-md border leading-none font-medium whitespace-nowrap no-underline',
       // Colours ease, a press gives a little: it shrinks to --cc-press-scale (1 under reduced motion).
       'duration-fast ease-enter transition-[background-color,border-color,scale] [transition-duration:var(--cc-duration-fast),var(--cc-duration-fast),var(--cc-duration-instant)]',
       'not-disabled:not-aria-disabled:active:scale-press',
@@ -63,12 +63,14 @@
   }: Props = $props();
 
   const inactive = $derived(disabled || loading);
-  const classes = $derived(cn(button({ variant }), `cc-button-${variant}`, className));
+  const classes = $derived(cn(button({ variant }), className));
 </script>
 
 <!-- A link styled as a button when href is set; a disabled link drops its href. -->
 {#if href !== undefined}
   <a
+    data-slot="button"
+    data-variant={variant}
     {...rest as HTMLAnchorAttributes}
     onclick={inactive ? undefined : (onclick as HTMLAnchorAttributes['onclick'])}
     href={inactive ? undefined : href}
@@ -81,6 +83,8 @@
   </a>
 {:else}
   <button
+    data-slot="button"
+    data-variant={variant}
     {...rest as HTMLButtonAttributes}
     onclick={onclick as HTMLButtonAttributes['onclick']}
     {type}

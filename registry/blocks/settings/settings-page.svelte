@@ -66,7 +66,7 @@
   }
 </script>
 
-<form class="cc-settings grid w-full max-w-160 gap-6" onsubmit={save}>
+<form data-slot="settings" class="grid w-full max-w-160 gap-6" onsubmit={save}>
   <header>
     <h1 class="leading-heading text-xl">Settings</h1>
     <p class="text-muted-foreground">Changes apply after you save.</p>

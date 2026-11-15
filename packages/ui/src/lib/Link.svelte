@@ -15,10 +15,11 @@
 </script>
 
 <a
+  data-slot="link"
   {...rest}
   {href}
   class={cn(
-    'cc-link text-primary underline-offset-text hover:text-primary-hover underline',
+    'text-primary underline-offset-text hover:text-primary-hover underline',
     'focus-visible:outline-ring focus-visible:outline-focus focus-visible:outline-offset-focus focus-visible:rounded-sm focus-visible:outline-solid',
     className,
   )}

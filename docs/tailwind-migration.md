@@ -94,6 +94,13 @@ contrast gate checks every theme and accent from it; the build emits
   theme), so `<Button class="rounded-full">` overrides as it does in shadcn.
 - bits-ui parts take their classes directly (`data-[state=open]:` variants), so
   the `:global` selectors for portalled content go away.
+- Parts are marked with `data-slot` (shadcn v4), not hook classes: a part is
+  `data-slot="<part>"` (`button`, `modal-footer`, `glyph`) and the prop that
+  picks its look is a data attribute (`data-variant`, `data-tone`,
+  `data-size`, `data-side`); where bits-ui already sets one
+  (`data-orientation`, `data-state`) the component adds nothing. Selectors
+  read them (`[&_[data-slot=glyph]]:text-primary`), and the class lint
+  rejects a `cc-*` class (#185).
 - Keyframes live in the tokens package as `--animate-*` with reduced-motion
   fallbacks; components do not declare their own `<style>`, except where a
   pattern has no utility form (documented per case).

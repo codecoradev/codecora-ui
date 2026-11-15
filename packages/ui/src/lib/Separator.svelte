@@ -13,9 +13,9 @@
 <Separator.Root
   {orientation}
   {decorative}
+  data-slot="separator"
   class={[
-    'cc-separator bg-border flex-none',
-    `cc-separator-${orientation}`,
+    'bg-border flex-none',
     orientation === 'horizontal' ? 'h-px w-full' : 'w-px self-stretch',
   ]}
 />

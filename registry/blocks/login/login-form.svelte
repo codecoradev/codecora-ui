@@ -59,7 +59,7 @@
   }
 </script>
 
-<Card class="cc-login mx-auto w-full max-w-104">
+<Card data-slot="login" class="mx-auto w-full max-w-104">
   {#snippet header()}
     <h1 class="leading-heading text-xl">{title}</h1>
     <p class="text-muted-foreground">{description}</p>

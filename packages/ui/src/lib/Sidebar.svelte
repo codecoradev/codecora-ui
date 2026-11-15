@@ -15,8 +15,8 @@
     ],
     variants: {
       part: {
-        item: 'item text-foreground [&_.cc-icon]:text-muted-foreground aria-[current=page]:bg-primary-soft aria-[current=page]:text-primary aria-[current=page]:font-semibold aria-[current=page]:[&_.cc-icon]:text-inherit',
-        toggle: 'toggle text-muted-foreground [&_.cc-glyph]:text-muted-foreground',
+        item: 'item text-foreground [&_[data-slot=icon]]:text-muted-foreground aria-[current=page]:bg-primary-soft aria-[current=page]:text-primary aria-[current=page]:font-semibold aria-[current=page]:[&_[data-slot=icon]]:text-inherit',
+        toggle: 'toggle text-muted-foreground [&_[data-slot=glyph]]:text-muted-foreground',
       },
       collapsed: { true: 'justify-center px-0' },
     },
@@ -107,8 +107,9 @@
 {/snippet}
 
 <div
+  data-slot="sidebar"
   class={cn(
-    'cc-sidebar bg-muted text-foreground flex h-full w-60 flex-col gap-4 overflow-y-auto px-3 py-4 font-sans',
+    'bg-muted text-foreground flex h-full w-60 flex-col gap-4 overflow-y-auto px-3 py-4 font-sans',
     'motion-safe:duration-normal motion-safe:ease-enter motion-safe:transition-[width]',
     collapsed && 'collapsed w-16 items-center px-2',
     className,

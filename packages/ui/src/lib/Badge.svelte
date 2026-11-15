@@ -3,7 +3,7 @@
 
   /** The shape (radius, font, case, tracking) comes from the theme's badge tokens. */
   const badge = tv({
-    base: 'cc-badge rounded-badge font-badge tracking-badge case-badge inline-flex items-center px-2 py-0.5 text-xs leading-[calc(var(--text-xs)*1.4)] font-medium whitespace-nowrap',
+    base: 'rounded-badge font-badge tracking-badge case-badge inline-flex items-center px-2 py-0.5 text-xs leading-[calc(var(--text-xs)*1.4)] font-medium whitespace-nowrap',
     variants: {
       tone: {
         neutral: 'bg-muted text-foreground inset-ring-border inset-ring',
@@ -30,6 +30,6 @@
   let { tone = 'neutral', class: className, children, ...rest }: Props = $props();
 </script>
 
-<span {...rest} class={cn(badge({ tone }), `cc-badge-${tone}`, className)}
+<span data-slot="badge" data-tone={tone} {...rest} class={cn(badge({ tone }), className)}
   >{@render children()}</span
 >

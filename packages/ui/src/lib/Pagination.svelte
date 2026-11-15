@@ -4,13 +4,12 @@
 
   const pageButton = tv({
     base: [
-      'cc-page min-h-control min-w-control font-inherit text-foreground inline-grid cursor-pointer place-items-center rounded-md border border-transparent bg-transparent px-2 tabular-nums',
+      'min-h-control min-w-control font-inherit text-foreground inline-grid cursor-pointer place-items-center rounded-md border border-transparent bg-transparent px-2 tabular-nums',
       'duration-fast ease-enter transition-[background-color,color,border-color] motion-reduce:transition-none',
       'hover:bg-accent data-selected:border-primary data-selected:bg-primary data-selected:text-primary-foreground',
       'focus-visible:outline-ring focus-visible:outline-focus focus-visible:outline-offset-focus',
       'disabled:cursor-not-allowed disabled:opacity-55',
     ],
-    variants: { step: { true: 'cc-page-step' } },
   });
 </script>
 
@@ -44,23 +43,34 @@
   {perPage}
   {siblingCount}
   bind:page
-  class={cn('cc-pagination flex flex-wrap items-center gap-1', className)}
+  data-slot="pagination"
+  class={cn('flex flex-wrap items-center gap-1', className)}
   aria-label={label}
 >
   {#snippet children({ pages })}
-    <Pagination.PrevButton class={pageButton({ step: true })} aria-label="Previous page">
+    <Pagination.PrevButton
+      data-slot="page"
+      data-step
+      class={pageButton()}
+      aria-label="Previous page"
+    >
       <Glyph name="chevron-left" />
     </Pagination.PrevButton>
     {#each pages as item (item.key)}
       {#if item.type === 'ellipsis'}
         <span class="text-muted-foreground min-w-6 text-center" aria-hidden="true">…</span>
       {:else}
-        <Pagination.Page page={item} class={pageButton()} aria-label="Page {item.value}">
+        <Pagination.Page
+          page={item}
+          data-slot="page"
+          class={pageButton()}
+          aria-label="Page {item.value}"
+        >
           {item.value}
         </Pagination.Page>
       {/if}
     {/each}
-    <Pagination.NextButton class={pageButton({ step: true })} aria-label="Next page">
+    <Pagination.NextButton data-slot="page" data-step class={pageButton()} aria-label="Next page">
       <Glyph name="chevron-right" />
     </Pagination.NextButton>
   {/snippet}

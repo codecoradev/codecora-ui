@@ -19,7 +19,7 @@ describe('cn', () => {
   });
 
   it('keeps classes that are not Tailwind utilities', () => {
-    expect(cn('cc-button', 'cc-button-primary', 'px-2')).toBe('cc-button cc-button-primary px-2');
+    expect(cn('app-card', 'app-card-active', 'px-2')).toBe('app-card app-card-active px-2');
   });
 });
 

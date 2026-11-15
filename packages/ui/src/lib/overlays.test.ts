@@ -29,9 +29,12 @@ describe('Dialog and Sheet', () => {
     expect(await screen.findByRole('button', { name: 'Close' })).toBeInTheDocument();
   });
 
-  it('Sheet uses the side placement class', async () => {
+  it('Sheet marks its side', async () => {
     render(Sheet, { open: true, title: 'Filters', side: 'left' });
-    expect(await screen.findByRole('dialog', { name: 'Filters' })).toHaveClass('cc-modal-left');
+    expect(await screen.findByRole('dialog', { name: 'Filters' })).toHaveAttribute(
+      'data-side',
+      'left',
+    );
   });
 });
 
@@ -65,7 +68,7 @@ describe('ConfirmDialog hardening', () => {
     render(ConfirmDialog, { open: true, title: 'Delete key?', tone: 'danger', onconfirm: vi.fn() });
     const dialog = await screen.findByRole('alertdialog', { name: 'Delete key?' });
     await waitFor(() => expect(screen.getByRole('button', { name: 'Cancel' })).toHaveFocus());
-    expect(dialog).toHaveClass('cc-modal-danger');
+    expect(dialog).toHaveAttribute('data-tone', 'danger');
   });
 
   it('confirmText keeps the action disabled until the name is typed', async () => {

@@ -9,7 +9,7 @@ import { weightForStroke } from './phosphor-weight.js';
 describe('Icon', () => {
   it('is hidden from assistive technology by default', () => {
     const { container } = render(Icon, { icon: Mark });
-    const wrap = container.querySelector('.cc-icon');
+    const wrap = container.querySelector('[data-slot=icon]');
     expect(wrap).toHaveAttribute('aria-hidden', 'true');
     expect(wrap).not.toHaveAttribute('role');
     expect(container.querySelector('svg')).not.toBeNull();
@@ -22,14 +22,14 @@ describe('Icon', () => {
 
   it('overrides the theme size and stroke for one icon only', () => {
     const { container } = render(Icon, { icon: Mark, size: '1rem', stroke: 3 });
-    const wrap = container.querySelector<HTMLElement>('.cc-icon')!;
+    const wrap = container.querySelector<HTMLElement>('[data-slot=icon]')!;
     expect(wrap.style.getPropertyValue('--cc-icon-size')).toBe('1rem');
     expect(wrap.style.getPropertyValue('--cc-icon-stroke')).toBe('3');
   });
 
   it('leaves the theme tokens alone when nothing is overridden', () => {
     const { container } = render(Icon, { icon: Mark });
-    const wrap = container.querySelector<HTMLElement>('.cc-icon')!;
+    const wrap = container.querySelector<HTMLElement>('[data-slot=icon]')!;
     expect(wrap.style.getPropertyValue('--cc-icon-size')).toBe('');
   });
 

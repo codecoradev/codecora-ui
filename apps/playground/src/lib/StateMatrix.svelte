@@ -204,7 +204,7 @@
         </tr>
         <tr>
           <th scope="row" class={rowHead}>Badge</th>
-          <td class="{cell} table-cell [&_.cc-badge]:me-2" colspan="4">
+          <td class="{cell} table-cell [&_[data-slot=badge]]:me-2" colspan="4">
             <Badge>Neutral</Badge>
             <Badge tone="accent">Accent</Badge>
             <Badge tone="success">Success</Badge>

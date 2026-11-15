@@ -11,11 +11,12 @@
 </script>
 
 <input
+  data-slot="input"
   {...rest}
   bind:value
   aria-invalid={invalid || undefined}
   class={cn(
-    'cc-input min-h-control border-input bg-card px-control-x font-inherit text-foreground w-full rounded-md border',
+    'min-h-control border-input bg-card px-control-x font-inherit text-foreground w-full rounded-md border',
     'duration-fast ease-enter transition-[border-color,box-shadow] motion-reduce:transition-none',
     'placeholder:text-muted-foreground',
     'focus-visible:outline-ring focus-visible:outline-focus focus-visible:outline-offset-1',

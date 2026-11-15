@@ -14,4 +14,6 @@
 </script>
 
 <!-- sr-only is joined, not merged through cn(): a caller's class never removes the hiding -->
-<span {...rest} class={['cc-visually-hidden sr-only', className]}>{@render children()}</span>
+<span data-slot="visually-hidden" {...rest} class={['sr-only', className]}
+  >{@render children()}</span
+>

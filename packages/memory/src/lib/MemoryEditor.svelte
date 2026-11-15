@@ -66,7 +66,7 @@
   }
 </script>
 
-<form class={cn('cc-memory-editor grid gap-4', className)} onsubmit={submit} novalidate>
+<form data-slot="memory-editor" class={cn('grid gap-4', className)} onsubmit={submit} novalidate>
   {#if failure}
     <Alert tone="danger" title="Not saved">{failure}</Alert>
   {/if}

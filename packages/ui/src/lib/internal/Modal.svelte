@@ -9,28 +9,27 @@
 
   /** The scrim behind the panel; bits-ui keeps it mounted until its exit ends. */
   export const overlay =
-    'cc-modal-overlay fixed inset-0 z-overlay bg-overlay animate-overlay-in data-[state=closed]:animate-overlay-out motion-reduce:animate-none motion-reduce:data-[state=closed]:animate-none';
+    'fixed inset-0 z-overlay bg-overlay animate-overlay-in data-[state=closed]:animate-overlay-out motion-reduce:animate-none motion-reduce:data-[state=closed]:animate-none';
 
   /** Exits run one step shorter than entries; reduced motion drops the keyframes. */
   const panelRecipe = tv({
-    base: 'cc-modal z-modal border-border bg-popover text-foreground shadow-modal focus-visible:outline-ring focus-visible:outline-focus fixed grid content-start gap-3 overflow-y-auto p-5 font-sans focus-visible:-outline-offset-2 focus-visible:outline-solid motion-reduce:animate-none motion-reduce:data-[state=closed]:animate-none',
+    base: 'z-modal border-border bg-popover text-foreground shadow-modal focus-visible:outline-ring focus-visible:outline-focus fixed grid content-start gap-3 overflow-y-auto p-5 font-sans focus-visible:-outline-offset-2 focus-visible:outline-solid motion-reduce:animate-none motion-reduce:data-[state=closed]:animate-none',
     variants: {
       placement: {
         // Opacity eases; only the movement springs.
         center:
-          'cc-modal-center animate-dialog-in data-[state=closed]:animate-dialog-out top-1/2 left-1/2 max-h-[calc(100dvh-2*calc(var(--spacing)*4))] w-[min(32rem,calc(100vw-2*calc(var(--spacing)*4)))] -translate-1/2 rounded-lg border',
+          'animate-dialog-in data-[state=closed]:animate-dialog-out top-1/2 left-1/2 max-h-[calc(100dvh-2*calc(var(--spacing)*4))] w-[min(32rem,calc(100vw-2*calc(var(--spacing)*4)))] -translate-1/2 rounded-lg border',
         right:
-          'cc-modal-right animate-sheet-right-in data-[state=closed]:animate-sheet-right-out inset-y-0 right-0 max-h-dvh w-[min(calc(var(--spacing)*104),100vw)] border-l',
-        left: 'cc-modal-left animate-sheet-left-in data-[state=closed]:animate-sheet-left-out inset-y-0 left-0 max-h-dvh w-[min(calc(var(--spacing)*104),100vw)] border-r',
+          'animate-sheet-right-in data-[state=closed]:animate-sheet-right-out inset-y-0 right-0 max-h-dvh w-[min(calc(var(--spacing)*104),100vw)] border-l',
+        left: 'animate-sheet-left-in data-[state=closed]:animate-sheet-left-out inset-y-0 left-0 max-h-dvh w-[min(calc(var(--spacing)*104),100vw)] border-r',
         bottom:
-          'cc-modal-bottom animate-sheet-bottom-in data-[state=closed]:animate-sheet-bottom-out inset-x-0 bottom-0 max-h-[85dvh] rounded-t-lg border-t',
+          'animate-sheet-bottom-in data-[state=closed]:animate-sheet-bottom-out inset-x-0 bottom-0 max-h-[85dvh] rounded-t-lg border-t',
       },
-      tone: { default: 'cc-modal-default', danger: 'cc-modal-danger' },
     },
   });
 
   const descriptionRecipe = tv({
-    base: 'cc-modal-description m-0',
+    base: 'm-0',
     variants: {
       tone: { default: 'text-muted-foreground', danger: 'text-foreground font-medium' },
     },
@@ -84,7 +83,7 @@
     initialFocus,
   }: Props = $props();
 
-  const panelClass = $derived(cn(panelRecipe({ placement, tone })));
+  const panelClass = $derived(cn(panelRecipe({ placement })));
   const descriptionClass = $derived(cn(descriptionRecipe({ tone })));
 
   function focusInitial(event: Event) {
@@ -96,15 +95,18 @@
 </script>
 
 {#snippet header(Title: typeof Dialog.Title, close: boolean)}
-  <header class="cc-modal-header flex items-start justify-between gap-3">
-    <Title class="cc-modal-title font-display leading-heading m-0 flex items-center gap-2 text-lg">
-      {#if tone === 'danger'}<span class="cc-modal-mark text-destructive inline-flex"
+  <header data-slot="modal-header" class="flex items-start justify-between gap-3">
+    <Title
+      data-slot="modal-title"
+      class="font-display leading-heading m-0 flex items-center gap-2 text-lg"
+    >
+      {#if tone === 'danger'}<span data-slot="modal-mark" class="text-destructive inline-flex"
           ><Glyph name="alert" /></span
         >{/if}
       {title}
     </Title>
     {#if close}
-      <Dialog.Close class={cn('cc-modal-close', closeButton)}>
+      <Dialog.Close data-slot="modal-close" class={cn(closeButton)}>
         <Glyph name="close" />
         <VisuallyHidden>Close</VisuallyHidden>
       </Dialog.Close>
@@ -116,14 +118,23 @@
   <!-- Alert dialog: role=alertdialog, no outside-click or X close; the footer holds the choice. -->
   <AlertDialog.Root bind:open {onOpenChange}>
     <AlertDialog.Portal>
-      <AlertDialog.Overlay class={overlay} />
-      <AlertDialog.Content class={panelClass} data-theme={theme} onOpenAutoFocus={focusInitial}>
+      <AlertDialog.Overlay data-slot="modal-overlay" class={overlay} />
+      <AlertDialog.Content
+        data-slot="modal"
+        data-side={placement}
+        data-tone={tone}
+        class={panelClass}
+        data-theme={theme}
+        onOpenAutoFocus={focusInitial}
+      >
         {@render header(AlertDialog.Title, false)}
         {#if description}
-          <AlertDialog.Description class={descriptionClass}>{description}</AlertDialog.Description>
+          <AlertDialog.Description data-slot="modal-description" class={descriptionClass}
+            >{description}</AlertDialog.Description
+          >
         {/if}
-        {#if children}<div class="cc-modal-body">{@render children()}</div>{/if}
-        {#if footer}<footer class="cc-modal-footer mt-2 flex flex-wrap justify-end gap-2">
+        {#if children}<div data-slot="modal-body">{@render children()}</div>{/if}
+        {#if footer}<footer data-slot="modal-footer" class="mt-2 flex flex-wrap justify-end gap-2">
             {@render footer()}
           </footer>{/if}
       </AlertDialog.Content>
@@ -137,14 +148,23 @@
       </Dialog.Trigger>
     {/if}
     <Dialog.Portal>
-      <Dialog.Overlay class={overlay} />
-      <Dialog.Content class={panelClass} data-theme={theme} onOpenAutoFocus={focusInitial}>
+      <Dialog.Overlay data-slot="modal-overlay" class={overlay} />
+      <Dialog.Content
+        data-slot="modal"
+        data-side={placement}
+        data-tone={tone}
+        class={panelClass}
+        data-theme={theme}
+        onOpenAutoFocus={focusInitial}
+      >
         {@render header(Dialog.Title, true)}
         {#if description}
-          <Dialog.Description class={descriptionClass}>{description}</Dialog.Description>
+          <Dialog.Description data-slot="modal-description" class={descriptionClass}
+            >{description}</Dialog.Description
+          >
         {/if}
-        {#if children}<div class="cc-modal-body">{@render children()}</div>{/if}
-        {#if footer}<footer class="cc-modal-footer mt-2 flex flex-wrap justify-end gap-2">
+        {#if children}<div data-slot="modal-body">{@render children()}</div>{/if}
+        {#if footer}<footer data-slot="modal-footer" class="mt-2 flex flex-wrap justify-end gap-2">
             {@render footer()}
           </footer>{/if}
       </Dialog.Content>

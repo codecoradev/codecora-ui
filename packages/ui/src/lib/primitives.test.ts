@@ -57,7 +57,7 @@ describe('Button', () => {
 
   it('renders a leading icon component, hidden from assistive technology', () => {
     const { container } = render(Button, { children: text('Star'), icon: Star });
-    expect(container.querySelector('.cc-icon[aria-hidden="true"] svg')).not.toBeNull();
+    expect(container.querySelector('[data-slot=icon][aria-hidden="true"] svg')).not.toBeNull();
   });
 });
 
@@ -104,7 +104,7 @@ describe('Field with a real Input', () => {
 
   it('marks the error with an icon as well as colour', () => {
     const { container } = render(FieldInput, { error: 'Enter a valid email' });
-    expect(container.querySelector('.error .cc-glyph')).not.toBeNull();
+    expect(container.querySelector('.error [data-slot=glyph]')).not.toBeNull();
   });
 });
 
@@ -124,9 +124,9 @@ describe('Input and Textarea', () => {
 });
 
 describe('Badge, Spinner, Skeleton, EmptyState', () => {
-  it('Badge shows its text with the tone class', () => {
+  it('Badge shows its text with the tone attribute', () => {
     render(Badge, { children: text('Active'), tone: 'success' });
-    expect(screen.getByText('Active').parentElement).toHaveClass('cc-badge-success');
+    expect(screen.getByText('Active').parentElement).toHaveAttribute('data-tone', 'success');
   });
 
   it('Spinner has an announced label', () => {
@@ -136,7 +136,7 @@ describe('Badge, Spinner, Skeleton, EmptyState', () => {
 
   it('Skeleton is hidden from assistive technology', () => {
     const { container } = render(Skeleton, { width: '8rem' });
-    expect(container.querySelector('.cc-skeleton')).toHaveAttribute('aria-hidden', 'true');
+    expect(container.querySelector('[data-slot=skeleton]')).toHaveAttribute('aria-hidden', 'true');
   });
 
   it('EmptyState renders a heading at the chosen level plus its action', () => {
@@ -224,5 +224,16 @@ describe('Table', () => {
     scrollWidth.mockReturnValue(960);
     callbacks.forEach((callback) => callback());
     await waitFor(() => expect(screen.queryByRole('region')).toBeNull());
+  });
+});
+
+describe('data-slot', () => {
+  it('marks the part and its variant, and lets the caller replace them', () => {
+    const own = render(Badge, { tone: 'success', children: text('Live') });
+    expect(own.container.querySelector('[data-slot=badge][data-tone=success]')).not.toBeNull();
+    own.unmount();
+    // As in shadcn, the caller's attributes are spread last.
+    const { container } = render(Input, { 'data-slot': 'search' } as never);
+    expect(container.querySelector('input')).toHaveAttribute('data-slot', 'search');
   });
 });

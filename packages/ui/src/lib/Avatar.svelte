@@ -3,7 +3,7 @@
   import { tv } from './internal/variants.js';
 
   const avatar = tv({
-    base: 'cc-avatar bg-muted text-foreground inset-ring-border inline-flex flex-none items-center justify-center overflow-hidden rounded-full font-semibold inset-ring select-none',
+    base: 'bg-muted text-foreground inset-ring-border inline-flex flex-none items-center justify-center overflow-hidden rounded-full font-semibold inset-ring select-none',
     variants: {
       size: {
         sm: 'size-6 text-xs leading-[inherit]',
@@ -37,7 +37,13 @@
   );
 </script>
 
-<Avatar.Root class={cn(avatar({ size }), `cc-avatar-${size}`)} role="img" aria-label={name}>
+<Avatar.Root
+  data-slot="avatar"
+  data-size={size}
+  class={cn(avatar({ size }))}
+  role="img"
+  aria-label={name}
+>
   <!-- bits-ui shows the image once it has loaded; it fades in over the initials' place. -->
   {#if src}<Avatar.Image
       {src}

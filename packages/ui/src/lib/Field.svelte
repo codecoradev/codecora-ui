@@ -37,7 +37,7 @@
   );
 </script>
 
-<div class="cc-field grid gap-1">
+<div data-slot="field" class="grid gap-1">
   <label for={id} class="text-sm leading-[inherit] font-medium">
     {label}{#if required}<span class="text-destructive" aria-hidden="true"> *</span>{/if}
   </label>
@@ -49,7 +49,7 @@
     <!-- The glyph is 1em: the icon size follows the text, nudged onto the first line. -->
     <p
       id="{uid}-error"
-      class="error animate-error-in text-destructive m-0 flex items-start gap-1 text-sm leading-[inherit] [--cc-icon-size:var(--text-sm)] motion-reduce:animate-none [&_.cc-glyph]:mt-[calc(0.15*var(--text-sm))]"
+      class="error animate-error-in text-destructive m-0 flex items-start gap-1 text-sm leading-[inherit] [--cc-icon-size:var(--text-sm)] motion-reduce:animate-none [&_[data-slot=glyph]]:mt-[calc(0.15*var(--text-sm))]"
     >
       <Glyph name="alert" /><VisuallyHidden>Error:</VisuallyHidden>
       {error}

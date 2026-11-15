@@ -7,14 +7,14 @@
 
   /** Arrives where it stays: a short settle into place, no spring in the reading flow. */
   const alert = tv({
-    base: 'cc-alert animate-settle-in text-foreground flex items-start gap-3 rounded-md border px-4 py-3 motion-reduce:animate-none',
+    base: 'animate-settle-in text-foreground flex items-start gap-3 rounded-md border px-4 py-3 motion-reduce:animate-none',
     variants: {
       tone: {
         neutral: 'border-border bg-muted',
-        accent: 'border-primary bg-primary-soft [&_.cc-glyph]:text-primary',
-        success: 'border-success bg-success-soft [&_.cc-glyph]:text-success',
-        warning: 'border-warning bg-warning-soft [&_.cc-glyph]:text-warning',
-        danger: 'border-destructive bg-destructive-soft [&_.cc-glyph]:text-destructive',
+        accent: 'border-primary bg-primary-soft [&_[data-slot=glyph]]:text-primary',
+        success: 'border-success bg-success-soft [&_[data-slot=glyph]]:text-success',
+        warning: 'border-warning bg-warning-soft [&_[data-slot=glyph]]:text-warning',
+        danger: 'border-destructive bg-destructive-soft [&_[data-slot=glyph]]:text-destructive',
       },
     },
   });
@@ -37,7 +37,12 @@
   const glyph = $derived(tone === 'success' ? 'check' : 'alert');
 </script>
 
-<div class={cn(alert({ tone }), `cc-alert-${tone}`)} role={tone === 'danger' ? 'alert' : 'status'}>
+<div
+  data-slot="alert"
+  data-tone={tone}
+  class={cn(alert({ tone }))}
+  role={tone === 'danger' ? 'alert' : 'status'}
+>
   <Glyph name={glyph} />
   <div class="grid gap-1">
     {#if title}<p class="m-0 font-semibold">{title}</p>{/if}

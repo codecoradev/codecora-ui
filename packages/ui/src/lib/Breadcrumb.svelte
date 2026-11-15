@@ -18,13 +18,13 @@
   let { items, label = 'Breadcrumb', class: className }: Props = $props();
 </script>
 
-<nav aria-label={label} class={cn('cc-breadcrumb', className)}>
+<nav aria-label={label} data-slot="breadcrumb" class={cn(className)}>
   <ol class="m-0 flex list-none flex-wrap items-center gap-1 p-0 text-sm leading-[inherit]">
     {#each items as item, i (i)}
       {@const current = i === items.length - 1}
       <!-- The chevrons are 1rem: the icon size, overridden on the glyph itself. -->
       <li
-        class="[&_.cc-glyph]:text-muted-foreground inline-flex items-center gap-1 [&_.cc-glyph]:[--cc-icon-size:calc(var(--spacing)*4)]"
+        class="[&_[data-slot=glyph]]:text-muted-foreground inline-flex items-center gap-1 [&_[data-slot=glyph]]:[--cc-icon-size:calc(var(--spacing)*4)]"
       >
         {#if item.href && !current}
           <!-- 0.2em of the list's text size. -->

@@ -217,7 +217,7 @@
     {#snippet header()}
       <div class="flex flex-wrap items-center justify-between gap-3">
         <h1 class="font-display leading-heading text-2xl font-bold">{current}</h1>
-        <div class="flex flex-wrap gap-2 max-[47.99rem]:[&_.cc-button]:px-3">
+        <div class="flex flex-wrap gap-2 max-[47.99rem]:[&_[data-slot=button]]:px-3">
           <Button variant="secondary" icon={Funnel} onclick={() => (filterOpen = true)}>
             Filters
           </Button>

@@ -12,11 +12,12 @@
 
 <textarea
   rows="4"
+  data-slot="textarea"
   {...rest}
   bind:value
   aria-invalid={invalid || undefined}
   class={cn(
-    'cc-textarea border-input bg-card px-control-x font-inherit text-foreground min-h-[calc(var(--spacing-control)*2)] w-full resize-y rounded-md border py-2 leading-normal',
+    'border-input bg-card px-control-x font-inherit text-foreground min-h-[calc(var(--spacing-control)*2)] w-full resize-y rounded-md border py-2 leading-normal',
     'duration-fast ease-enter transition-[border-color,box-shadow] motion-reduce:transition-none',
     'placeholder:text-muted-foreground',
     'focus-visible:outline-ring focus-visible:outline-focus focus-visible:outline-offset-1',

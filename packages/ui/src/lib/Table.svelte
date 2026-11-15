@@ -47,8 +47,9 @@
 <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 <!-- relative: contains the visually hidden caption and header labels. -->
 <div
+  data-slot="table-wrap"
   class={cn(
-    'cc-table-wrap border-border bg-card focus-visible:outline-ring focus-visible:outline-focus focus-visible:outline-offset-focus relative overflow-x-auto rounded-md border',
+    'border-border bg-card focus-visible:outline-ring focus-visible:outline-focus focus-visible:outline-offset-focus relative overflow-x-auto rounded-md border',
     className,
   )}
   bind:this={wrap}
@@ -58,8 +59,9 @@
 >
   <!-- Styles the cells you write; a selected row (data-selected or aria-selected) is tinted and marked. -->
   <table
+    data-slot="table"
     class={[
-      'cc-table w-full border-collapse text-base leading-[inherit]',
+      'w-full border-collapse text-base leading-[inherit]',
       '[&_:is(th,td)]:border-border [&_:is(th,td)]:px-cell-x [&_:is(th,td)]:py-cell-y [&_:is(th,td)]:border-b [&_:is(th,td)]:text-left [&_:is(th,td)]:align-middle',
       '[&_thead_th]:bg-muted [&_thead_th]:text-muted-foreground [&_thead_th]:text-sm [&_thead_th]:leading-[inherit] [&_thead_th]:font-semibold [&_thead_th]:whitespace-nowrap',
       '[&_tbody_tr:last-child>*]:border-b-0',
@@ -69,7 +71,7 @@
       '[&_.num]:text-right [&_.num]:font-mono [&_.num]:tabular-nums',
     ]}
   >
-    <caption class="cc-table-caption sr-only m-0">{label}</caption>
+    <caption data-slot="table-caption" class="sr-only m-0">{label}</caption>
     {@render children()}
   </table>
 </div>
