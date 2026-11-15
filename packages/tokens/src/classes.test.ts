@@ -546,34 +546,43 @@ describe('class lint rules', () => {
 });
 
 describe('migrated files', () => {
-  let known: (t: string) => boolean;
+  /** The playground's own theme keys and utilities (`max-w-lead`, `grid-cols-term`). */
+  const playgroundTheme = join(root, 'apps/playground/src/lib/theme.css');
+  let knownIn: (t: string, playground: boolean) => boolean;
 
   beforeAll(async () => {
     const require = createRequire(import.meta.url);
     const tw = dirname(require.resolve('tailwindcss/package.json'));
-    const compiler = await compile(`@import 'tailwindcss';\n${tailwindThemeCss()}`, {
-      base: tw,
-      loadStylesheet: async (id: string) => {
-        const path =
-          id === 'tailwindcss' ? join(tw, 'index.css') : join(tw, id.replace(/^tailwindcss\//, ''));
-        return { path, base: dirname(path), content: readFileSync(path, 'utf8') };
-      },
-    });
-    let size = compiler.build([]).length;
-    const seen = new Map<string, boolean>();
-    known = (t) => {
-      if (!seen.has(t)) {
-        const next = compiler.build([t]).length;
-        seen.set(t, next > size);
-        size = next;
-      }
-      return seen.get(t)!;
+    const checker = async (extra: string) => {
+      const compiler = await compile(`@import 'tailwindcss';\n${tailwindThemeCss()}\n${extra}`, {
+        base: tw,
+        loadStylesheet: async (id: string) => {
+          const path =
+            id === 'tailwindcss'
+              ? join(tw, 'index.css')
+              : join(tw, id.replace(/^tailwindcss\//, ''));
+          return { path, base: dirname(path), content: readFileSync(path, 'utf8') };
+        },
+      });
+      let size = compiler.build([]).length;
+      const seen = new Map<string, boolean>();
+      return (t: string) => {
+        if (!seen.has(t)) {
+          const next = compiler.build([t]).length;
+          seen.set(t, next > size);
+          size = next;
+        }
+        return seen.get(t)!;
+      };
     };
+    const shared = await checker('');
+    const playground = await checker(readFileSync(playgroundTheme, 'utf8'));
+    knownIn = (t, inPlayground) => (inPlayground ? playground(t) : shared(t));
   });
 
   it('reads only variables that something declares', () => {
     // theme.css, Tailwind's own theme and internals, bits-ui, the playground's
-    // own --pg-* globals and properties a file declares itself.
+    // own theme keys and globals, and properties a file declares itself.
     const require = createRequire(import.meta.url);
     const tw = dirname(require.resolve('tailwindcss/package.json'));
     const declaredIn = (css: string) => [...css.matchAll(/(--[\w-]+)\s*:/g)].map((m) => m[1]!);
@@ -582,6 +591,7 @@ describe('migrated files', () => {
       ...declaredIn(tailwindThemeCss()),
       ...declaredIn(readFileSync(join(tw, 'theme.css'), 'utf8')),
       ...declaredIn(readFileSync(playgroundCss, 'utf8')),
+      ...declaredIn(readFileSync(playgroundTheme, 'utf8')),
     ]);
     const allowed = (name: string) => declared.has(name) || /^--(tw-|bits-)/.test(name);
     const unknown = files.flatMap((file) => {
@@ -609,8 +619,14 @@ describe('migrated files', () => {
       'hover:bg-accent',
       'data-[state=open]:opacity-100',
     ])
-      expect(known(t), t).toBe(true);
-    for (const t of ['bg-primry', 'h-contrl', 'duration-quick']) expect(known(t), t).toBe(false);
+      expect(knownIn(t, false), t).toBe(true);
+    for (const t of ['bg-primry', 'h-contrl', 'duration-quick'])
+      expect(knownIn(t, false), t).toBe(false);
+  });
+
+  it('knows the playground keys in the playground only', () => {
+    for (const t of ['max-w-lead', 'tracking-label', 'grid-cols-term', 'before:content-crumb'])
+      expect([knownIn(t, true), knownIn(t, false)], t).toEqual([true, false]);
   });
 
   for (const file of files) {
@@ -625,7 +641,7 @@ describe('migrated files', () => {
       ];
       const unknown = strings
         .flatMap(tokens)
-        .filter((t) => !hook(t) && /[-:[/]/.test(t) && !known(t))
+        .filter((t) => !hook(t) && /[-:[/]/.test(t) && !knownIn(t, name.startsWith('apps/')))
         .map((t) => `${t}: not a Tailwind or theme class`);
       expect([...found, ...unknown]).toEqual([]);
     });

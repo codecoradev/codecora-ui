@@ -282,10 +282,10 @@
   const track = 'bg-muted @container block rounded-full p-1';
   const dot = 'bg-primary block size-4 rounded-full';
   /* The far end of the track: its width (100cqi) less the dot's own. */
-  const moveTo = '[transform:translateX(var(--pg-track-end))]';
+  const moveTo = 'move-track-end';
   const card =
     'border-border bg-card grid content-start justify-items-start gap-3 rounded-md border p-4';
-  const dl = 'grid grid-cols-[var(--pg-cols-term)] gap-x-3 gap-y-1 text-sm leading-[inherit]';
+  const dl = 'grid grid-cols-term gap-x-3 gap-y-1 text-sm leading-[inherit]';
 </script>
 
 <div class="grid gap-10">

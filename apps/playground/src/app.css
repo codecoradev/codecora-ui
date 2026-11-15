@@ -9,6 +9,7 @@
  */
 @import 'tailwindcss';
 @import '@codecora/tokens/theme.css';
+@import './lib/theme.css';
 @import './lib/playground.css' layer(base);
 @import '@codecora/ui/source.css';
 @import '@codecora/memory/source.css';

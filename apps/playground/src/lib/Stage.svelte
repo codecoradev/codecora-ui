@@ -52,7 +52,7 @@
 
     <div class="grid gap-3">
       <h1 class="leading-heading text-3xl font-bold text-balance">{title}</h1>
-      <p class="text-muted-foreground max-w-[var(--pg-measure-intro)] text-lg leading-[inherit]">
+      <p class="text-muted-foreground max-w-intro text-lg leading-[inherit]">
         {lead}
       </p>
     </div>

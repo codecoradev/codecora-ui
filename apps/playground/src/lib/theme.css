@@ -1,0 +1,50 @@
+/*
+ * The playground's own Tailwind theme keys and utilities: page measures,
+ * label tracking, a few line heights and grid templates that no design token
+ * covers. Pages use them by name (`max-w-lead`, `tracking-label`,
+ * `grid-cols-term`), never through an arbitrary value. Imported in app.css
+ * after the CodeCora theme; the class lint reads this file too.
+ */
+@theme {
+  --container-lead: 56ch;
+  --container-body: 55ch;
+  --container-intro: 60ch;
+  --tracking-label: 0.04em;
+  --tracking-glyph: -0.03em;
+  /* Group descriptions on the overview, and the small print under a nav entry. */
+  --leading-lead: 1.6;
+  --leading-note: 1.4;
+  /* The large specimen glyph on a theme's character card. */
+  --text-glyph: clamp(4rem, 12vw, 7rem);
+}
+
+@utility grid-cols-list-detail {
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+}
+
+@utility grid-cols-character {
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+}
+
+@utility grid-cols-glyph {
+  grid-template-columns: auto minmax(0, 1fr);
+}
+
+@utility grid-cols-radius {
+  grid-template-columns: repeat(4, auto);
+}
+
+@utility grid-cols-term {
+  grid-template-columns: auto 1fr;
+}
+
+/* The breadcrumb separator, for before:content-crumb. */
+@utility content-crumb {
+  --tw-content: '/';
+  content: var(--tw-content);
+}
+
+/* The far end of a motion track: its width (100cqi) less the dot's own. */
+@utility move-track-end {
+  transform: translateX(calc(100cqi - 100%));
+}

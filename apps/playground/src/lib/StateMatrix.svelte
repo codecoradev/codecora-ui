@@ -32,7 +32,7 @@
 
 <section aria-labelledby="c-matrix" class="grid grid-cols-1 gap-4 pb-10">
   <h2 id="c-matrix" class="leading-heading text-xl font-bold">State matrix</h2>
-  <p class="text-muted-foreground max-w-[var(--pg-measure-intro)]">
+  <p class="text-muted-foreground max-w-intro">
     Every state a control can be in, in the theme and density chosen above. Hover and focus need
     your pointer and keyboard: hover a control, or press Tab to see the focus ring each theme draws.
   </p>

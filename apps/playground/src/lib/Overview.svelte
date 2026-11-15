@@ -72,9 +72,9 @@
   const head = 'grid gap-2';
   const h2 = 'text-2xl leading-heading font-bold';
   /* Under 80 characters a line in the body face. */
-  const lead = 'text-muted-foreground max-w-[var(--pg-measure-lead)]';
+  const lead = 'text-muted-foreground max-w-lead';
   const h3 = 'mb-1 text-base leading-heading font-bold';
-  const groupText = 'text-muted-foreground leading-[var(--pg-leading-loose)]';
+  const groupText = 'text-muted-foreground leading-lead';
 </script>
 
 <div class="flex flex-wrap gap-2">
@@ -101,7 +101,7 @@
     {#each groups as { group, themes: names } (group)}
       <div class="grid min-w-0 gap-3">
         <h3
-          class="text-muted-foreground leading-heading text-sm font-semibold tracking-[var(--pg-tracking-label)] uppercase"
+          class="text-muted-foreground leading-heading tracking-label text-sm font-semibold uppercase"
         >
           {group}
         </h3>

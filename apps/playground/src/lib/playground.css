@@ -5,30 +5,6 @@
  * preflight, so it overrides preflight and every utility overrides it.
  */
 
-/*
- * Playground layout values that no design token covers (measures, grid
- * tracks, a few type details), named once here and read by the pages'
- * utilities as `max-w-[var(--pg-measure-lead)]`.
- */
-:root {
-  --pg-measure-lead: 56ch;
-  --pg-measure-body: 55ch;
-  --pg-measure-intro: 60ch;
-  --pg-cols-list-detail: minmax(0, 2fr) minmax(0, 3fr);
-  --pg-cols-character: minmax(0, 3fr) minmax(0, 2fr);
-  --pg-cols-glyph: auto minmax(0, 1fr);
-  --pg-cols-radius: repeat(4, auto);
-  --pg-cols-term: auto 1fr;
-  --pg-tracking-label: 0.04em;
-  --pg-tracking-glyph: -0.03em;
-  --pg-leading-loose: 1.6;
-  --pg-leading-small: 1.4;
-  --pg-glyph-size: clamp(4rem, 12vw, 7rem);
-  --pg-crumb-separator: '/';
-  /* The end of a motion track: its width less the dot's own (read on the dot). */
-  --pg-track-end: calc(100cqi - 100%);
-}
-
 body {
   font-family: var(--font-sans);
   font-size: --theme(--text-base);

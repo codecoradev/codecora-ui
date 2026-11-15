@@ -28,7 +28,7 @@
 
   <section aria-labelledby="sc-radius" class={section}>
     <h3 id="sc-radius" class={h3}>Radius</h3>
-    <ul class="grid grid-cols-[var(--pg-cols-radius)] justify-start gap-4">
+    <ul class="grid-cols-radius grid justify-start gap-4">
       {#each Object.entries(radii) as [r, rounded] (r)}
         <li class="grid justify-items-center gap-2">
           <span class="bg-muted border-input size-14 border {rounded}" aria-hidden="true"></span>
