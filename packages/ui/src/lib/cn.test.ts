@@ -33,6 +33,11 @@ describe('cn with the CodeCora theme names', () => {
     expect(cn('z-popover', 'z-toast')).toBe('z-toast');
   });
 
+  it('keeps font-inherit when a caller adds a font family', () => {
+    expect(cn('font-inherit', 'font-mono')).toBe('font-inherit font-mono');
+    expect(cn('font-inherit text-sm', 'font-sans')).toBe('font-inherit text-sm font-sans');
+  });
+
   it('keeps colour and size utilities apart', () => {
     expect(cn('text-muted-foreground', 'text-sm')).toBe('text-muted-foreground text-sm');
     expect(cn('shadow-popover', 'shadow-primary')).toBe('shadow-popover shadow-primary');

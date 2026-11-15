@@ -140,6 +140,59 @@ export const tailwindUtilities: Readonly<Record<string, Record<string, string>>>
   ...Object.fromEntries(
     Object.keys(layers).map((k) => [`z-${k}`, { 'z-index': `var(--cc-layer-${k})` }]),
   ),
+  // `font: inherit` for form controls, written as longhands: Tailwind sorts a
+  // shorthand it does not know after every other utility, where it would undo
+  // `text-sm` or `leading-*` on the same element.
+  'font-inherit': Object.fromEntries(
+    [
+      'font-family',
+      'font-size',
+      'line-height',
+      'font-weight',
+      'font-style',
+      'font-variant',
+      'font-stretch',
+      'font-kerning',
+      'font-size-adjust',
+      'font-optical-sizing',
+    ].map((p) => [p, 'inherit']),
+  ),
+};
+
+/**
+ * Keyframe animations, as `animate-<name>` utilities (`--animate-<name>` in
+ * the theme). Durations and curves are tokens, so they drop to 0 ms and lose
+ * the spring under reduced motion; components still add
+ * `motion-reduce:animate-none` where the motion should not run at all.
+ */
+export const formAnimations: Readonly<
+  Record<string, { animation: string; keyframes: Record<string, string> }>
+> = {
+  // A field error arrives where it stays: a short settle, no spring.
+  'error-in': {
+    animation: 'cc-error-in var(--cc-duration-normal) var(--cc-ease-out)',
+    keyframes: {
+      'cc-error-in': 'from { opacity: 0; transform: translateY(calc(-1 * var(--cc-space-1))); }',
+    },
+  },
+  // A radio dot: opacity eases, only the scale springs.
+  'dot-in': {
+    animation:
+      'cc-dot-fade var(--cc-duration-fast) var(--cc-ease-out), cc-dot-pop var(--cc-duration-slow) var(--cc-ease-spring)',
+    keyframes: {
+      'cc-dot-fade': 'from { opacity: 0; }',
+      'cc-dot-pop': 'from { scale: 0.4; }',
+    },
+  },
+  // Select and Combobox lists; bits-ui keeps a list mounted until its exit ends.
+  'listbox-in': {
+    animation: 'cc-listbox-in var(--cc-duration-fast) var(--cc-ease-out)',
+    keyframes: { 'cc-listbox-in': 'from { opacity: 0; transform: scale(0.96); }' },
+  },
+  'listbox-out': {
+    animation: 'cc-listbox-out var(--cc-duration-instant) var(--cc-ease-exit) forwards',
+    keyframes: { 'cc-listbox-out': 'to { opacity: 0; transform: scale(0.96); }' },
+  },
 };
 
 /** Elements where a token can change, so the shadcn variables must be re-read there. */
@@ -194,6 +247,10 @@ export function tailwindThemeCss(): string {
       ]),
       '}',
     ]),
+    ...Object.entries(formAnimations).map(([k, a]) => `--animate-${k}: ${a.animation};`),
+    ...Object.values(formAnimations).flatMap((a) =>
+      Object.entries(a.keyframes).map(([name, body]) => `@keyframes ${name} { ${body} }`),
+    ),
   ])}\n}\n`;
 
   const utilities = Object.entries(tailwindUtilities)

@@ -2,6 +2,7 @@
 <script lang="ts">
   import { Select } from 'bits-ui';
   import Glyph from './internal/Glyph.svelte';
+  import { cn } from './cn.js';
 
   interface Item {
     value: string;
@@ -44,20 +45,34 @@
     aria-describedby={describedby}
     aria-invalid={invalid || undefined}
     aria-required={required || undefined}
-    class="cc-select-trigger"
+    class={cn(
+      'cc-select-trigger min-h-control border-input bg-card px-control-x font-inherit text-foreground flex w-full cursor-pointer items-center justify-between gap-2 rounded-md border text-left',
+      'aria-invalid:border-destructive aria-invalid:inset-ring-destructive aria-invalid:inset-ring',
+      'focus-visible:outline-ring focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-1',
+      'data-disabled:bg-muted data-disabled:cursor-not-allowed',
+    )}
   >
-    <span class:placeholder={!selected}>{selected?.label ?? placeholder}</span>
+    <span class={selected ? undefined : 'text-muted-foreground'}
+      >{selected?.label ?? placeholder}</span
+    >
     <Glyph name="chevron-down" />
   </Select.Trigger>
   <Select.Portal>
-    <Select.Content class="cc-select-content" sideOffset={4}>
+    <Select.Content
+      class={cn(
+        'cc-select-content z-popover border-border bg-popover text-foreground shadow-popover max-h-[min(20rem,var(--bits-select-content-available-height))] min-w-[var(--bits-select-anchor-width)] origin-[var(--bits-select-content-transform-origin)] overflow-y-auto rounded-md border p-1 font-sans',
+        // bits-ui keeps the list mounted until the exit animation finishes.
+        'animate-listbox-in data-[state=closed]:animate-listbox-out motion-reduce:data-[state]:animate-none',
+      )}
+      sideOffset={4}
+    >
       <Select.Viewport class="cc-select-viewport">
         {#each items as item (item.value)}
           <Select.Item
             value={item.value}
             label={item.label}
             disabled={item.disabled}
-            class="cc-select-item"
+            class="cc-select-item min-h-control px-control-x data-highlighted:bg-accent flex cursor-pointer items-center justify-between gap-3 rounded-sm data-disabled:cursor-not-allowed data-disabled:opacity-55"
           >
             {#snippet children({ selected })}
               <span>{item.label}</span>
@@ -69,90 +84,3 @@
     </Select.Content>
   </Select.Portal>
 </Select.Root>
-
-<style>
-  :global(.cc-select-trigger) {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--cc-space-2);
-    width: 100%;
-    min-height: var(--cc-control-h);
-    padding-inline: var(--cc-control-px);
-    border: 1px solid var(--cc-border-strong);
-    border-radius: var(--cc-radius-md);
-    background: var(--cc-surface-raised);
-    color: var(--cc-text);
-    font: inherit;
-    text-align: left;
-    cursor: pointer;
-  }
-  :global(.cc-select-trigger[aria-invalid='true']) {
-    border-color: var(--cc-danger);
-    box-shadow: inset 0 0 0 1px var(--cc-danger);
-  }
-  :global(.cc-select-trigger:focus-visible) {
-    outline: var(--cc-focus-width) solid var(--cc-focus);
-    outline-offset: 1px;
-  }
-  :global(.cc-select-trigger[data-disabled]) {
-    background: var(--cc-surface-sunken);
-    cursor: not-allowed;
-  }
-  .placeholder {
-    color: var(--cc-text-muted);
-  }
-  :global(.cc-select-content) {
-    z-index: var(--cc-layer-popover);
-    min-width: var(--bits-select-anchor-width);
-    max-height: min(20rem, var(--bits-select-content-available-height));
-    overflow-y: auto;
-    padding: var(--cc-space-1);
-    border: 1px solid var(--cc-border);
-    border-radius: var(--cc-radius-md);
-    background: var(--cc-surface-raised);
-    color: var(--cc-text);
-    box-shadow: var(--cc-shadow-popover);
-    font-family: var(--cc-font-sans);
-    transform-origin: var(--bits-select-content-transform-origin);
-    animation: cc-select-in var(--cc-duration-fast) var(--cc-ease-out);
-  }
-  /* bits-ui keeps the list mounted until the exit animation finishes. */
-  :global(.cc-select-content[data-state='closed']) {
-    animation: cc-select-out var(--cc-duration-instant) var(--cc-ease-exit) forwards;
-  }
-  :global(.cc-select-item) {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--cc-space-3);
-    min-height: var(--cc-control-h);
-    padding-inline: var(--cc-control-px);
-    border-radius: var(--cc-radius-sm);
-    cursor: pointer;
-  }
-  :global(.cc-select-item[data-highlighted]) {
-    background: var(--cc-surface-hover);
-  }
-  :global(.cc-select-item[data-disabled]) {
-    opacity: 0.55;
-    cursor: not-allowed;
-  }
-  @keyframes cc-select-in {
-    from {
-      opacity: 0;
-      transform: scale(0.96);
-    }
-  }
-  @keyframes cc-select-out {
-    to {
-      opacity: 0;
-      transform: scale(0.96);
-    }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    :global(.cc-select-content[data-state]) {
-      animation: none;
-    }
-  }
-</style>

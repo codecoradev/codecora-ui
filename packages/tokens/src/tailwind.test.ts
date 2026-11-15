@@ -7,6 +7,7 @@ import {
   shadcnExtensions,
   tailwindAnimations,
   tailwindKeyframes,
+  formAnimations,
   tailwindKeys,
   tailwindThemeCss,
   tailwindUtilities,
@@ -103,6 +104,26 @@ describe('theme.css compiled by Tailwind', () => {
     for (const name of names) expect(out).toContain(`.${name} {`);
     expect(out).toContain('transition-duration: var(--cc-duration-fast)');
     expect(out).toContain('z-index: var(--cc-layer-popover)');
+  });
+
+  it('animates with token timing and emits the keyframes an animation uses', async () => {
+    for (const [name, { animation, keyframes }] of Object.entries(formAnimations)) {
+      expect(animation, name).toMatch(/var\(--cc-duration-\w+\) var\(--cc-ease-\w+\)/);
+      const out = await build([`animate-${name}`]);
+      for (const k of Object.keys(keyframes)) expect(out, name).toContain(`@keyframes ${k}`);
+    }
+    expect(await build(['animate-error-in'])).not.toContain('@keyframes cc-dot-pop');
+  });
+
+  it('inherits the font in longhands, so a text or leading utility still wins', async () => {
+    const size = 'text-[length:var(--cc-font-size-sm)]';
+    const leading = 'leading-[var(--cc-leading-normal)]';
+    const out = await build(['font-inherit', size, leading]);
+    expect(out).not.toMatch(/\bfont: inherit/);
+    const inherit = out.indexOf('line-height: inherit');
+    expect(inherit).toBeGreaterThan(-1);
+    expect(out.indexOf('font-size: var(--cc-font-size-sm)')).toBeGreaterThan(inherit);
+    expect(out.indexOf('line-height: var(--cc-leading-normal)')).toBeGreaterThan(inherit);
   });
 
   it('emits dark: with the theme selector and registers --tw-duration', async () => {

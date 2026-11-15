@@ -37,62 +37,25 @@
   );
 </script>
 
-<div class="cc-field">
-  <label for={id}>
-    {label}{#if required}<span class="req" aria-hidden="true"> *</span>{/if}
+<div class="cc-field grid gap-1">
+  <label for={id} class="text-[length:var(--cc-font-size-sm)] font-medium">
+    {label}{#if required}<span class="text-destructive" aria-hidden="true"> *</span>{/if}
   </label>
   {@render children({ id, 'aria-describedby': describedby, invalid: Boolean(error), required })}
-  {#if description}<p id="{uid}-hint" class="hint">{description}</p>{/if}
+  {#if description}<p
+      id="{uid}-hint"
+      class="text-muted-foreground m-0 text-[length:var(--cc-font-size-sm)]"
+    >
+      {description}
+    </p>{/if}
   {#if error}
-    <p id="{uid}-error" class="error">
+    <!-- The glyph is 1em: the icon size follows the text, nudged onto the first line. -->
+    <p
+      id="{uid}-error"
+      class="error animate-error-in text-destructive m-0 flex items-start gap-1 text-[length:var(--cc-font-size-sm)] [--cc-icon-size:var(--cc-font-size-sm)] motion-reduce:animate-none [&_.cc-glyph]:mt-[calc(0.15*var(--cc-font-size-sm))]"
+    >
       <Glyph name="alert" /><VisuallyHidden>Error:</VisuallyHidden>
       {error}
     </p>
   {/if}
 </div>
-
-<style>
-  .cc-field {
-    display: grid;
-    gap: var(--cc-space-1);
-  }
-  label {
-    font-size: var(--cc-font-size-sm);
-    font-weight: 500;
-  }
-  .req {
-    color: var(--cc-danger);
-  }
-  .hint,
-  .error {
-    margin: 0;
-    font-size: var(--cc-font-size-sm);
-  }
-  .hint {
-    color: var(--cc-text-muted);
-  }
-  .error {
-    display: flex;
-    align-items: start;
-    gap: var(--cc-space-1);
-    color: var(--cc-danger);
-    animation: cc-error-in var(--cc-duration-normal) var(--cc-ease-out);
-  }
-  /* Arrives where it stays, like Alert: a short settle, no spring in the reading flow. */
-  @keyframes cc-error-in {
-    from {
-      opacity: 0;
-      transform: translateY(calc(-1 * var(--cc-space-1)));
-    }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .error {
-      animation: none;
-    }
-  }
-  .error :global(.cc-glyph) {
-    margin-top: 0.15em;
-    width: 1em;
-    height: 1em;
-  }
-</style>

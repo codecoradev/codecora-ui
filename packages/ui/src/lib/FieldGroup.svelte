@@ -34,53 +34,24 @@
   );
 </script>
 
-<fieldset class="cc-fieldgroup" aria-describedby={describedby}>
-  <legend>
-    {legend}{#if required}<span class="req" aria-hidden="true"> *</span>{/if}
+<fieldset class="cc-fieldgroup m-0 grid min-w-0 gap-1 border-0 p-0" aria-describedby={describedby}>
+  <legend class="mb-1 p-0 text-[length:var(--cc-font-size-sm)] font-medium">
+    {legend}{#if required}<span class="text-destructive" aria-hidden="true"> *</span>{/if}
   </legend>
-  {#if description}<p id="{uid}-hint" class="hint">{description}</p>{/if}
+  {#if description}<p
+      id="{uid}-hint"
+      class="text-muted-foreground m-0 text-[length:var(--cc-font-size-sm)]"
+    >
+      {description}
+    </p>{/if}
   {@render children({ 'aria-describedby': describedby, invalid: Boolean(error), required })}
   {#if error}
-    <p id="{uid}-error" class="error">
+    <p
+      id="{uid}-error"
+      class="error text-destructive m-0 flex items-center gap-1 text-[length:var(--cc-font-size-sm)] [--cc-icon-size:var(--cc-space-4)]"
+    >
       <Glyph name="alert" /><VisuallyHidden>Error:</VisuallyHidden>
       {error}
     </p>
   {/if}
 </fieldset>
-
-<style>
-  .cc-fieldgroup {
-    display: grid;
-    gap: var(--cc-space-1);
-    min-width: 0;
-    margin: 0;
-    padding: 0;
-    border: 0;
-  }
-  legend {
-    padding: 0;
-    margin-bottom: var(--cc-space-1);
-    font-size: var(--cc-font-size-sm);
-    font-weight: 500;
-  }
-  .req {
-    color: var(--cc-danger);
-  }
-  .hint {
-    margin: 0;
-    color: var(--cc-text-muted);
-    font-size: var(--cc-font-size-sm);
-  }
-  .error {
-    display: flex;
-    align-items: center;
-    gap: var(--cc-space-1);
-    margin: 0;
-    color: var(--cc-danger);
-    font-size: var(--cc-font-size-sm);
-  }
-  .error :global(.cc-glyph) {
-    width: 1rem;
-    height: 1rem;
-  }
-</style>

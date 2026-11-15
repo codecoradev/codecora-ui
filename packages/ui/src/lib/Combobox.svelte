@@ -6,6 +6,7 @@
 <script lang="ts">
   import { Combobox } from 'bits-ui';
   import Glyph from './internal/Glyph.svelte';
+  import { cn } from './cn.js';
 
   interface Item {
     value: string;
@@ -63,7 +64,7 @@
     if (next) search = '';
   }}
 >
-  <div class="cc-combobox">
+  <div class="cc-combobox relative flex items-center">
     <Combobox.Input
       {id}
       {placeholder}
@@ -75,21 +76,37 @@
         search = event.currentTarget.value;
         open = true;
       }}
-      class="cc-combobox-input"
+      class={cn(
+        'cc-combobox-input min-h-control border-input bg-card ps-control-x font-inherit text-foreground w-full rounded-md border pe-[calc(var(--cc-control-px)+1.75rem)]',
+        'placeholder:text-muted-foreground',
+        'aria-invalid:border-destructive aria-invalid:inset-ring-destructive aria-invalid:inset-ring',
+        'focus-visible:outline-ring focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-1',
+        'disabled:bg-muted disabled:cursor-not-allowed',
+      )}
     />
-    <Combobox.Trigger class="cc-combobox-trigger" aria-label="Show options">
+    <Combobox.Trigger
+      class="cc-combobox-trigger text-muted-foreground absolute end-2 inline-grid cursor-pointer place-items-center rounded-sm border-0 bg-transparent p-1"
+      aria-label="Show options"
+    >
       <Glyph name="chevron-down" />
     </Combobox.Trigger>
   </div>
   <Combobox.Portal>
-    <Combobox.Content class="cc-combobox-content" sideOffset={4}>
+    <Combobox.Content
+      class={cn(
+        'cc-combobox-content z-popover border-border bg-popover text-foreground shadow-popover max-h-[min(20rem,var(--bits-combobox-content-available-height))] min-w-[var(--bits-combobox-anchor-width)] origin-[var(--bits-combobox-content-transform-origin)] overflow-y-auto rounded-md border p-1 font-sans',
+        // bits-ui keeps the list mounted until the exit animation finishes.
+        'animate-listbox-in data-[state=closed]:animate-listbox-out motion-reduce:data-[state]:animate-none',
+      )}
+      sideOffset={4}
+    >
       <Combobox.Viewport class="cc-combobox-viewport">
         {#each shown as item (item.value)}
           <Combobox.Item
             value={item.value}
             label={item.label}
             disabled={item.disabled}
-            class="cc-combobox-item"
+            class="cc-combobox-item min-h-control px-control-x data-highlighted:bg-accent flex cursor-pointer items-center justify-between gap-3 rounded-sm data-disabled:cursor-not-allowed data-disabled:opacity-55"
           >
             {#snippet children({ selected })}
               <span>{item.label}</span>
@@ -97,112 +114,9 @@
             {/snippet}
           </Combobox.Item>
         {:else}
-          <p class="empty" role="status">{emptyText}</p>
+          <p class="px-control-x text-muted-foreground m-0 py-2" role="status">{emptyText}</p>
         {/each}
       </Combobox.Viewport>
     </Combobox.Content>
   </Combobox.Portal>
 </Combobox.Root>
-
-<style>
-  .cc-combobox {
-    position: relative;
-    display: flex;
-    align-items: center;
-  }
-  :global(.cc-combobox-input) {
-    width: 100%;
-    min-height: var(--cc-control-h);
-    padding-inline: var(--cc-control-px) calc(var(--cc-control-px) + 1.75rem);
-    border: 1px solid var(--cc-border-strong);
-    border-radius: var(--cc-radius-md);
-    background: var(--cc-surface-raised);
-    color: var(--cc-text);
-    font: inherit;
-  }
-  :global(.cc-combobox-input::placeholder) {
-    color: var(--cc-text-muted);
-  }
-  :global(.cc-combobox-input[aria-invalid='true']) {
-    border-color: var(--cc-danger);
-    box-shadow: inset 0 0 0 1px var(--cc-danger);
-  }
-  :global(.cc-combobox-input:focus-visible) {
-    outline: var(--cc-focus-width) solid var(--cc-focus);
-    outline-offset: 1px;
-  }
-  :global(.cc-combobox-input:disabled) {
-    background: var(--cc-surface-sunken);
-    cursor: not-allowed;
-  }
-  :global(.cc-combobox-trigger) {
-    position: absolute;
-    inset-inline-end: var(--cc-space-2);
-    display: inline-grid;
-    place-items: center;
-    padding: var(--cc-space-1);
-    border: 0;
-    border-radius: var(--cc-radius-sm);
-    background: none;
-    color: var(--cc-text-muted);
-    cursor: pointer;
-  }
-  :global(.cc-combobox-content) {
-    z-index: var(--cc-layer-popover);
-    min-width: var(--bits-combobox-anchor-width);
-    max-height: min(20rem, var(--bits-combobox-content-available-height));
-    overflow-y: auto;
-    padding: var(--cc-space-1);
-    border: 1px solid var(--cc-border);
-    border-radius: var(--cc-radius-md);
-    background: var(--cc-surface-raised);
-    color: var(--cc-text);
-    box-shadow: var(--cc-shadow-popover);
-    font-family: var(--cc-font-sans);
-    transform-origin: var(--bits-combobox-content-transform-origin);
-    animation: cc-combobox-in var(--cc-duration-fast) var(--cc-ease-out);
-  }
-  /* bits-ui keeps the list mounted until the exit animation finishes. */
-  :global(.cc-combobox-content[data-state='closed']) {
-    animation: cc-combobox-out var(--cc-duration-instant) var(--cc-ease-exit) forwards;
-  }
-  :global(.cc-combobox-item) {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--cc-space-3);
-    min-height: var(--cc-control-h);
-    padding-inline: var(--cc-control-px);
-    border-radius: var(--cc-radius-sm);
-    cursor: pointer;
-  }
-  :global(.cc-combobox-item[data-highlighted]) {
-    background: var(--cc-surface-hover);
-  }
-  :global(.cc-combobox-item[data-disabled]) {
-    opacity: 0.55;
-    cursor: not-allowed;
-  }
-  .empty {
-    margin: 0;
-    padding: var(--cc-space-2) var(--cc-control-px);
-    color: var(--cc-text-muted);
-  }
-  @keyframes cc-combobox-in {
-    from {
-      opacity: 0;
-      transform: scale(0.96);
-    }
-  }
-  @keyframes cc-combobox-out {
-    to {
-      opacity: 0;
-      transform: scale(0.96);
-    }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    :global(.cc-combobox-content[data-state]) {
-      animation: none;
-    }
-  }
-</style>
