@@ -226,3 +226,14 @@ describe('Table', () => {
     await waitFor(() => expect(screen.queryByRole('region')).toBeNull());
   });
 });
+
+describe('data-slot', () => {
+  it('marks the part and its variant, and lets the caller replace them', () => {
+    const own = render(Badge, { tone: 'success', children: text('Live') });
+    expect(own.container.querySelector('[data-slot=badge][data-tone=success]')).not.toBeNull();
+    own.unmount();
+    // As in shadcn, the caller's attributes are spread last.
+    const { container } = render(Input, { 'data-slot': 'search' } as never);
+    expect(container.querySelector('input')).toHaveAttribute('data-slot', 'search');
+  });
+});

@@ -45,11 +45,11 @@
 </script>
 
 <button
+  data-slot="icon-button"
+  data-variant={variant}
   {...rest}
   {type}
   aria-label={label}
-  data-slot="icon-button"
-  data-variant={variant}
   class={cn(iconButton({ variant }), className)}
 >
   <Icon {icon} />

@@ -30,6 +30,6 @@
   let { tone = 'neutral', class: className, children, ...rest }: Props = $props();
 </script>
 
-<span {...rest} data-slot="badge" data-tone={tone} class={cn(badge({ tone }), className)}
+<span data-slot="badge" data-tone={tone} {...rest} class={cn(badge({ tone }), className)}
   >{@render children()}</span
 >

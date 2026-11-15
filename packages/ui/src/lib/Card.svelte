@@ -14,8 +14,8 @@
 </script>
 
 <section
-  {...rest}
   data-slot="card"
+  {...rest}
   class={cn('border-border bg-card text-foreground rounded-lg border', className)}
 >
   {#if header}<header class="border-border font-display border-b p-4 font-semibold">

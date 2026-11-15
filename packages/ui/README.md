@@ -47,15 +47,26 @@ cn('rounded-md px-4', active && 'bg-accent', className); // className overrides
 Each part carries a `data-slot` attribute named after it, as in shadcn
 (`data-slot="button"`, `data-slot="modal-footer"`, `data-slot="glyph"`), and
 the prop that picks its look is reflected as a data attribute
-(`data-variant`, `data-tone`, `data-size`, `data-side`). Target those from app
-CSS or a Tailwind arbitrary variant instead of a class:
+(`data-variant`, `data-tone`, `data-size`, `data-side`, and the flags
+`data-danger` on a destructive menu item and `data-step` on the pagination
+arrows). Target those with a Tailwind arbitrary variant or from a global
+stylesheet instead of a class. A `<style>` block in your own component is
+scoped, so it cannot reach an element inside a CodeCora component unless the
+selector is wrapped in `:global()`:
 
 ```svelte
 <div class="[&_[data-slot=button]]:px-3">…</div>
-<style>
-  [data-slot='button'][data-variant='primary'] { min-width: 8rem; }
-</style>
 ```
+
+```css
+/* app.css */
+[data-slot='button'][data-variant='primary'] {
+  min-width: 8rem;
+}
+```
+
+A `data-slot` you pass to a component replaces its own, as in shadcn: the
+caller's attributes are spread last.
 
 `cn()` and the component variants run `tailwind-merge` and
 `tailwind-variants` in the browser: two runtime dependencies, about 27 KB gzip

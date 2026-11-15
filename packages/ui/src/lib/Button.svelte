@@ -69,13 +69,13 @@
 <!-- A link styled as a button when href is set; a disabled link drops its href. -->
 {#if href !== undefined}
   <a
+    data-slot="button"
+    data-variant={variant}
     {...rest as HTMLAnchorAttributes}
     onclick={inactive ? undefined : (onclick as HTMLAnchorAttributes['onclick'])}
     href={inactive ? undefined : href}
     role={inactive ? 'link' : undefined}
     aria-disabled={inactive || undefined}
-    data-slot="button"
-    data-variant={variant}
     class={classes}
   >
     {#if loading}<Spinner label={loadingLabel} />{:else if icon}<Icon {icon} />{/if}
@@ -83,13 +83,13 @@
   </a>
 {:else}
   <button
+    data-slot="button"
+    data-variant={variant}
     {...rest as HTMLButtonAttributes}
     onclick={onclick as HTMLButtonAttributes['onclick']}
     {type}
     disabled={inactive}
     aria-busy={loading || undefined}
-    data-slot="button"
-    data-variant={variant}
     class={classes}
   >
     {#if loading}<Spinner label={loadingLabel} />{:else if icon}<Icon {icon} />{/if}
