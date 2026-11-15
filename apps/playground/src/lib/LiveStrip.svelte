@@ -55,12 +55,19 @@
   let write = $state(true);
 </script>
 
-<section class="strip" aria-labelledby="strip-title">
-  <h2 id="strip-title" class="title">Pick a theme, watch the components follow</h2>
+<section
+  class="border-border bg-card mt-5 grid gap-4 rounded-lg border p-4"
+  aria-labelledby="strip-title"
+>
+  <h2 id="strip-title" class="text-[length:var(--cc-font-size-md)] font-bold">
+    Pick a theme, watch the components follow
+  </h2>
 
-  <!-- A toolbar: one Tab stop, arrows move between themes, Enter or Space applies one. -->
+  <!-- A toolbar: one Tab stop, arrows move between themes, Enter or Space applies one.
+       Positioned, so each button's offsetLeft is measured from the rail. Phones keep the
+       names in one row that scrolls sideways, faded at the edge so it reads as more. -->
   <div
-    class="rail"
+    class="relative flex flex-wrap gap-2 max-[47.99rem]:-mx-4 max-[47.99rem]:snap-x max-[47.99rem]:snap-proximity max-[47.99rem]:scroll-px-4 max-[47.99rem]:[scrollbar-width:none] max-[47.99rem]:flex-nowrap max-[47.99rem]:overflow-x-auto max-[47.99rem]:[mask-image:linear-gradient(to_right,transparent,var(--cc-text)_var(--cc-space-4),var(--cc-text)_calc(100%-var(--cc-space-8)),transparent)] max-[47.99rem]:px-4 max-[47.99rem]:py-1"
     role="toolbar"
     tabindex="-1"
     aria-label="Theme"
@@ -69,9 +76,10 @@
     onkeydown={move}
   >
     {#each rail as option (option)}
+      <!-- The button carries the page's focus ring; its face is painted by the theme it picks. -->
       <button
         type="button"
-        class="pick"
+        class="pick group font-inherit focus-visible:outline-ring cursor-pointer rounded-md border-0 bg-transparent p-0 focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)] max-[47.99rem]:flex-none max-[47.99rem]:snap-start"
         aria-pressed={option === theme}
         tabindex={option === focusable ? 0 : -1}
         onfocus={() => (focused = option)}
@@ -79,18 +87,27 @@
           if (option !== theme) onpick(option);
         }}
       >
-        <span class="face" data-theme={option}>
-          <span class="glyph" aria-hidden="true">Aa</span><span class="dot" aria-hidden="true"
+        <!-- The picked theme gets a heavier frame and a check, not colour alone. -->
+        <span
+          class="border-input bg-background text-foreground group-hover:bg-accent inline-flex min-h-11 min-w-11 items-center gap-2 rounded-md border px-3 text-[length:var(--cc-font-size-sm)] group-aria-pressed:[box-shadow:0_0_0_2px_var(--cc-surface),0_0_0_4px_var(--cc-text)]"
+          data-theme={option}
+        >
+          <span
+            class="font-display text-[length:var(--cc-font-size-lg)] leading-none font-semibold"
+            aria-hidden="true">Aa</span
+          ><!-- The theme's default accent. --><span
+            class="bg-primary size-2 flex-none rounded-full"
+            aria-hidden="true"
           ></span>
-          <span class="label">{themes[option].label}</span>
-          {#if option === theme}<Check class="check" aria-hidden="true" />{/if}
+          <span>{themes[option].label}</span>
+          {#if option === theme}<Check class="size-4" strokeWidth={2.5} aria-hidden="true" />{/if}
         </span>
       </button>
     {/each}
   </div>
 
-  <div class="row">
-    <div class="name">
+  <div class="flex flex-wrap items-end gap-x-5 gap-y-3 [&>.cc-badge]:self-center">
+    <div class="max-w-2xs shrink grow basis-48">
       <Field label="Key name">
         {#snippet children(control)}
           <Input {...control} bind:value={name} autocomplete="off" />
@@ -107,130 +124,10 @@
       Save key
     </Button>
   </div>
-  <p class="more">
+  <p class="flex flex-wrap gap-x-5 gap-y-1 text-[length:var(--cc-font-size-sm)]">
     <Link href="#themes-title">What each theme changes</Link>
     <Link href={resolve('/components')}>Every component in every state</Link>
   </p>
 </section>
 
 <Toaster />
-
-<style>
-  .strip {
-    display: grid;
-    gap: var(--cc-space-4);
-    margin-top: var(--cc-space-5);
-    padding: var(--cc-space-4);
-    border: 1px solid var(--cc-border);
-    border-radius: var(--cc-radius-lg);
-    background: var(--cc-surface-raised);
-  }
-  .title {
-    margin: 0;
-    font-size: var(--cc-font-size-md);
-  }
-  /* Positioned, so each button's offsetLeft is measured from the rail. */
-  .rail {
-    position: relative;
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--cc-space-2);
-  }
-  /* The button carries the page's focus ring; its face is painted by the theme it picks. */
-  .pick {
-    padding: 0;
-    border: 0;
-    border-radius: var(--cc-radius-md);
-    background: none;
-    font: inherit;
-    cursor: pointer;
-  }
-  .pick:focus-visible {
-    outline: var(--cc-focus-width) solid var(--cc-focus);
-    outline-offset: var(--cc-focus-offset);
-  }
-  .face {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--cc-space-2);
-    min-width: 2.75rem;
-    min-height: 2.75rem;
-    padding-inline: var(--cc-space-3);
-    border: 1px solid var(--cc-border-strong);
-    border-radius: var(--cc-radius-md);
-    background: var(--cc-surface);
-    color: var(--cc-text);
-    font-size: var(--cc-font-size-sm);
-  }
-  .pick:hover .face {
-    background: var(--cc-surface-hover);
-  }
-  /* The picked theme gets a heavier frame and a check, not colour alone. */
-  .pick[aria-pressed='true'] .face {
-    box-shadow:
-      0 0 0 2px var(--cc-surface),
-      0 0 0 4px var(--cc-text);
-  }
-  .glyph {
-    font-family: var(--cc-font-display);
-    font-size: var(--cc-font-size-lg);
-    font-weight: 600;
-    line-height: 1;
-  }
-  /* The theme's default accent. */
-  .dot {
-    flex: none;
-    width: 0.5rem;
-    height: 0.5rem;
-    border-radius: var(--cc-radius-pill);
-    background: var(--cc-accent);
-  }
-  .face :global(.check) {
-    width: 1rem;
-    height: 1rem;
-    stroke-width: 2.5;
-  }
-  .row {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: end;
-    gap: var(--cc-space-3) var(--cc-space-5);
-  }
-  .name {
-    flex: 1 1 12rem;
-    max-width: 18rem;
-  }
-  .row > :global(.cc-badge) {
-    align-self: center;
-  }
-  .more {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--cc-space-1) var(--cc-space-5);
-    margin: 0;
-    font-size: var(--cc-font-size-sm);
-  }
-  /* Phones keep the names in one row that scrolls sideways, faded at the edge so it reads as more. */
-  @media (max-width: 47.99rem) {
-    .rail {
-      flex-wrap: nowrap;
-      overflow-x: auto;
-      margin-inline: calc(var(--cc-space-4) * -1);
-      padding: var(--cc-space-1) var(--cc-space-4);
-      scroll-snap-type: x proximity;
-      scroll-padding-inline: var(--cc-space-4);
-      scrollbar-width: none;
-      mask-image: linear-gradient(
-        to right,
-        transparent,
-        var(--cc-text) var(--cc-space-4),
-        var(--cc-text) calc(100% - var(--cc-space-8)),
-        transparent
-      );
-    }
-    .pick {
-      flex: none;
-      scroll-snap-align: start;
-    }
-  }
-</style>

@@ -15,11 +15,13 @@
   ];
 </script>
 
-<section aria-labelledby="c-choice">
-  <h2 id="c-choice">Checkbox, Switch, RadioGroup</h2>
-  <div class="grid">
-    <div class="col">
-      <h3>Checkbox</h3>
+<section aria-labelledby="c-choice" class="grid grid-cols-1 gap-4 pb-10">
+  <h2 id="c-choice" class="text-[length:var(--cc-font-size-xl)] font-bold">
+    Checkbox, Switch, RadioGroup
+  </h2>
+  <div class="grid grid-cols-[repeat(auto-fit,minmax(calc(var(--spacing)*56),1fr))] gap-6">
+    <div class="grid content-start gap-1">
+      <h3 class="text-[length:var(--cc-font-size-lg)] font-bold">Checkbox</h3>
       <Checkbox
         label="Send me a receipt"
         description="Emailed after each payment."
@@ -30,17 +32,19 @@
       <Checkbox label="Disabled" disabled />
       <Checkbox label="Disabled and checked" checked disabled />
       <Checkbox label="I accept the terms" invalid aria-describedby="terms-error" required />
-      <p id="terms-error" class="error">Accept the terms to continue.</p>
+      <p id="terms-error" class="text-destructive text-[length:var(--cc-font-size-sm)]">
+        Accept the terms to continue.
+      </p>
     </div>
-    <div class="col">
-      <h3>Switch</h3>
+    <div class="grid content-start gap-1">
+      <h3 class="text-[length:var(--cc-font-size-lg)] font-bold">Switch</h3>
       <Switch label="Email alerts" description="At most one a day." bind:checked={alerts} />
       <Switch label="Off" />
       <Switch label="Disabled" disabled />
       <Switch label="Disabled and on" checked disabled />
     </div>
-    <div class="col">
-      <h3>RadioGroup</h3>
+    <div class="grid content-start gap-1">
+      <h3 class="text-[length:var(--cc-font-size-lg)] font-bold">RadioGroup</h3>
       <RadioGroup label="Digest" items={digests} bind:value={digest} />
       <RadioGroup
         label="Layout"
@@ -54,34 +58,3 @@
     </div>
   </div>
 </section>
-
-<style>
-  section {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--cc-space-4);
-    padding-bottom: var(--cc-space-10);
-  }
-  h2 {
-    font-size: var(--cc-font-size-xl);
-  }
-  h3 {
-    margin: 0;
-    font-size: var(--cc-font-size-lg);
-  }
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
-    gap: var(--cc-space-6);
-  }
-  .col {
-    display: grid;
-    align-content: start;
-    gap: var(--cc-space-1);
-  }
-  .error {
-    margin: 0;
-    color: var(--cc-danger);
-    font-size: var(--cc-font-size-sm);
-  }
-</style>

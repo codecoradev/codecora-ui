@@ -12,26 +12,46 @@
   const groups = groupedThemes();
 </script>
 
-<section aria-labelledby="index-title" class="index">
-  <div class="head">
-    <h2 id="index-title">Theme pages</h2>
-    <p>One fixed page per theme, at its default accent and density. Below: the theme you picked.</p>
+<section aria-labelledby="index-title" class="border-border mb-10 grid gap-5 border-b pb-10">
+  <div class="grid gap-2">
+    <h2 id="index-title" class="text-[length:var(--cc-font-size-2xl)] font-bold">Theme pages</h2>
+    <p class="text-muted-foreground max-w-[var(--pg-measure-lead)]">
+      One fixed page per theme, at its default accent and density. Below: the theme you picked.
+    </p>
   </div>
-  <div class="groups">
+  <div
+    class="grid grid-cols-[repeat(auto-fit,minmax(min(calc(var(--spacing)*56),100%),1fr))] items-start gap-x-6 gap-y-4"
+  >
     {#each groups as { group, themes: names } (group)}
-      <div class="group" role="group" aria-labelledby="index-{group}">
-        <h3 id="index-{group}">{group}</h3>
-        <ul>
+      <div class="grid gap-2" role="group" aria-labelledby="index-{group}">
+        <h3
+          id="index-{group}"
+          class="text-muted-foreground text-[length:var(--cc-font-size-sm)] font-semibold tracking-[var(--pg-tracking-label)] uppercase"
+        >
+          {group}
+        </h3>
+        <ul class="grid gap-1">
           {#each names as name (name)}
             <li>
+              <!-- The theme picked in the toolbar gets the accent bar, not colour alone. -->
               <a
+                class="group text-foreground hover:bg-accent focus-visible:outline-ring flex min-h-11 items-center gap-3 rounded-md px-2 py-1 no-underline focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)] aria-[current=true]:[box-shadow:inset_var(--cc-row-marker)_0_0_var(--cc-accent)]"
                 href={resolve('/themes/[theme]', { theme: name })}
                 aria-current={name === current ? 'true' : undefined}
               >
-                <span class="swatch" data-theme={name} aria-hidden="true"></span>
-                <span class="text">
-                  <span class="label">{themes[name].label}</span>
-                  <span class="star">{northStars[name]}</span>
+                <!-- A mini swatch of that theme: surface, sunken and accent at its own radius. -->
+                <span
+                  class="border-input h-6 w-9 flex-none rounded-sm border bg-transparent bg-[linear-gradient(90deg,var(--cc-surface)_0_34%,var(--cc-surface-sunken)_34%_67%,var(--cc-accent)_67%)]"
+                  data-theme={name}
+                  aria-hidden="true"
+                ></span>
+                <span class="grid">
+                  <span class="underline-offset-text font-semibold group-hover:underline"
+                    >{themes[name].label}</span
+                  >
+                  <span class="text-muted-foreground text-[length:var(--cc-font-size-sm)]"
+                    >{northStars[name]}</span
+                  >
                 </span>
               </a>
             </li>
@@ -41,101 +61,3 @@
     {/each}
   </div>
 </section>
-
-<style>
-  .index {
-    display: grid;
-    gap: var(--cc-space-5);
-    padding-bottom: var(--cc-space-10);
-    margin-bottom: var(--cc-space-10);
-    border-bottom: 1px solid var(--cc-border);
-  }
-  .head {
-    display: grid;
-    gap: var(--cc-space-2);
-  }
-  h2 {
-    margin: 0;
-    font-size: var(--cc-font-size-2xl);
-  }
-  .head p {
-    max-width: 56ch;
-    margin: 0;
-    color: var(--cc-text-muted);
-  }
-  .groups {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(14rem, 100%), 1fr));
-    gap: var(--cc-space-4) var(--cc-space-6);
-    align-items: start;
-  }
-  .group {
-    display: grid;
-    gap: var(--cc-space-2);
-  }
-  h3 {
-    margin: 0;
-    color: var(--cc-text-muted);
-    font-size: var(--cc-font-size-sm);
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-  }
-  ul {
-    display: grid;
-    gap: var(--cc-space-1);
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-  a {
-    display: flex;
-    align-items: center;
-    gap: var(--cc-space-3);
-    min-height: 2.75rem;
-    padding: var(--cc-space-1) var(--cc-space-2);
-    border-radius: var(--cc-radius-md);
-    color: var(--cc-text);
-    text-decoration: none;
-  }
-  a:hover {
-    background: var(--cc-surface-hover);
-  }
-  a:hover .label {
-    text-decoration: underline;
-  }
-  a:focus-visible {
-    outline: var(--cc-focus-width) solid var(--cc-focus);
-    outline-offset: var(--cc-focus-offset);
-  }
-  /* The theme picked in the toolbar gets the accent bar, not colour alone. */
-  a[aria-current='true'] {
-    box-shadow: inset var(--cc-row-marker) 0 0 var(--cc-accent);
-  }
-  /* A mini swatch of that theme: surface, sunken and accent at its own radius. */
-  .swatch {
-    flex: none;
-    width: 2.25rem;
-    height: 1.5rem;
-    border: 1px solid var(--cc-border-strong);
-    border-radius: var(--cc-radius-sm);
-    background: linear-gradient(
-      90deg,
-      var(--cc-surface) 0 34%,
-      var(--cc-surface-sunken) 34% 67%,
-      var(--cc-accent) 67%
-    );
-  }
-  .text {
-    display: grid;
-  }
-  .label {
-    font-weight: 600;
-    text-decoration-thickness: 2px;
-    text-underline-offset: 0.2em;
-  }
-  .star {
-    color: var(--cc-text-muted);
-    font-size: var(--cc-font-size-sm);
-  }
-</style>

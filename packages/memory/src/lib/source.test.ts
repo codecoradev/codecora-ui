@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
@@ -20,5 +20,14 @@ describe('source.css', () => {
       expect(existsSync(file)).toBe(true);
       expect(readFileSync(file, 'utf8')).not.toMatch(/<style[\s>]/);
     }
+  });
+
+  it('lists every component, so a new one cannot ship unstyled', () => {
+    const listed = new Set(sources.map(([, , path]) => path));
+    const components = readdirSync(dir, { recursive: true, encoding: 'utf8' })
+      .filter((f) => /^(internal\/)?[A-Z]\w*\.svelte$/.test(f))
+      .map((f) => `./${f}`);
+    expect(components.length).toBeGreaterThan(0);
+    expect(components.filter((c) => !listed.has(c))).toEqual([]);
   });
 });

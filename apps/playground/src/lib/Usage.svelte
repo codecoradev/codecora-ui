@@ -5,57 +5,19 @@
 
   let { id }: { id: string } = $props();
   let open = $state(false);
+
+  const summary =
+    'border-input bg-card focus-visible:outline-ring inline-flex min-h-11 cursor-pointer list-outside list-none items-center gap-2 rounded-md border px-3 text-[length:var(--cc-font-size-sm)] font-semibold group-open:mb-3 focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)] [&::-webkit-details-marker]:hidden';
+  /* The marker: a chevron drawn by two borders of the ::before box. */
+  const marker =
+    'before:duration-fast before:ease-enter before:size-2 before:-rotate-45 before:border-r-2 before:border-b-2 before:border-current before:transition-transform group-open:before:rotate-45';
 </script>
 
 {#if usage[id]}
-  <details class="usage" bind:open>
-    <summary>{open ? 'Hide the code' : 'Show the code'}</summary>
+  <!-- Sits under its section, inside the section's own bottom spacing. -->
+  <details class="group -mt-6 mb-10" bind:open>
+    <!-- The marker turns, so open and closed differ in more than colour. -->
+    <summary class="{summary} {marker}">{open ? 'Hide the code' : 'Show the code'}</summary>
     <CodeBlock code={usage[id]} language="svelte" />
   </details>
 {/if}
-
-<style>
-  /* Sits under its section, inside the section's own bottom spacing. */
-  .usage {
-    margin: calc(var(--cc-space-6) * -1) 0 var(--cc-space-10);
-  }
-  summary {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--cc-space-2);
-    min-height: 2.75rem;
-    padding-inline: var(--cc-space-3);
-    border: 1px solid var(--cc-border-strong);
-    border-radius: var(--cc-radius-md);
-    background: var(--cc-surface-raised);
-    font-size: var(--cc-font-size-sm);
-    font-weight: 600;
-    cursor: pointer;
-  }
-  /* The marker turns, so open and closed differ in more than colour. */
-  summary::before {
-    content: '';
-    width: 0.5rem;
-    height: 0.5rem;
-    border-right: 2px solid currentColor;
-    border-bottom: 2px solid currentColor;
-    transform: rotate(-45deg);
-    transition: transform var(--cc-duration-fast) var(--cc-ease-out);
-  }
-  .usage[open] summary::before {
-    transform: rotate(45deg);
-  }
-  .usage[open] summary {
-    margin-bottom: var(--cc-space-3);
-  }
-  summary::-webkit-details-marker {
-    display: none;
-  }
-  summary {
-    list-style: none;
-  }
-  summary:focus-visible {
-    outline: var(--cc-focus-width) solid var(--cc-focus);
-    outline-offset: var(--cc-focus-offset);
-  }
-</style>

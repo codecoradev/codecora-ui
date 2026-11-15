@@ -75,7 +75,7 @@
       <Command.Root class="cc-palette-root">
         <Command.Input
           {placeholder}
-          class="cc-palette-input min-h-control border-border px-control-x focus-visible:outline-ring w-full border-0 border-b bg-transparent text-inherit [font:inherit] focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:-outline-offset-2 focus-visible:outline-solid"
+          class="cc-palette-input min-h-control border-border px-control-x focus-visible:outline-ring placeholder:text-muted-foreground w-full border-0 border-b bg-transparent text-inherit [font:inherit] focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:-outline-offset-2 focus-visible:outline-solid"
           aria-label={label}
         />
         <Command.List

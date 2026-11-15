@@ -23,8 +23,10 @@
   const mod = createModKey();
 </script>
 
-<section aria-labelledby="c-nav">
-  <h2 id="c-nav">Breadcrumb, Accordion, ToggleGroup, Pagination, Popover, Menu</h2>
+<section aria-labelledby="c-nav" class="grid grid-cols-1 gap-4 pb-10">
+  <h2 id="c-nav" class="text-[length:var(--cc-font-size-xl)] font-bold">
+    Breadcrumb, Accordion, ToggleGroup, Pagination, Popover, Menu
+  </h2>
 
   <Breadcrumb
     items={[
@@ -34,7 +36,7 @@
     ]}
   />
 
-  <div class="row">
+  <div class="flex flex-wrap items-center gap-3">
     <ToggleGroup
       label="View"
       bind:value={view}
@@ -47,7 +49,7 @@
 
     <Popover label="Filters">
       {#snippet trigger({ props })}<Button {...props}>Filters</Button>{/snippet}
-      <p class="plain">Narrow the list by status or scope.</p>
+      <p>Narrow the list by status or scope.</p>
     </Popover>
 
     <DropdownMenu
@@ -86,7 +88,7 @@
     {/snippet}
   </Accordion>
 
-  <div class="row">
+  <div class="flex flex-wrap items-center gap-3">
     <Button onclick={() => (palette = true)}>Open command palette</Button>
     <span>or press <Kbd>{mod.value}</Kbd> <Kbd>K</Kbd></span>
   </div>
@@ -124,26 +126,5 @@
   />
 
   <Pagination count={240} perPage={10} bind:page />
-  <p class="plain">Page {page} of 24</p>
+  <p>Page {page} of 24</p>
 </section>
-
-<style>
-  section {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--cc-space-4);
-    padding-bottom: var(--cc-space-10);
-  }
-  h2 {
-    font-size: var(--cc-font-size-xl);
-  }
-  .row {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--cc-space-3);
-  }
-  .plain {
-    margin: 0;
-  }
-</style>

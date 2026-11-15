@@ -109,7 +109,9 @@
 
 <section class={cn('cc-memory-list grid min-w-0 gap-3', className)} aria-labelledby="{uid}-title">
   <header class="flex items-center justify-between gap-3">
-    <h2 id="{uid}-title" class="font-display m-0 text-[length:var(--cc-font-size-lg)]">{label}</h2>
+    <h2 id="{uid}-title" class="font-display m-0 text-[length:var(--cc-font-size-lg)] font-bold">
+      {label}
+    </h2>
     {#if caps.create}
       <Button variant="secondary" onclick={() => browser.create()}>New memory</Button>
     {/if}

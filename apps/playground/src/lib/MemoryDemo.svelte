@@ -80,14 +80,14 @@
   }
 </script>
 
-<div class="memory-demo">
+<div class="grid gap-4">
   <Card>
     {#snippet header()}Backend{/snippet}
-    <div class="backend">
+    <div class="grid gap-4">
       <RadioGroup label="Backend" items={backends} bind:value={() => backend, choose} />
       {#if backend === 'live'}
-        <form class="connect" onsubmit={connect}>
-          <p class="note">
+        <form class="grid max-w-lg gap-3" onsubmit={connect}>
+          <p class="text-muted-foreground text-[length:var(--cc-font-size-sm)]">
             Start one with <code>uteke-serve --port 8767 --cors-origin &lt;this site&gt;</code>. The
             key is only kept in this page and is sent as a Bearer header.
           </p>
@@ -109,49 +109,14 @@
   </Card>
 
   {#key browser}
-    <div class="panes">
+    <div
+      class="grid grid-cols-[var(--pg-cols-list-detail)] items-start gap-4 max-[52rem]:grid-cols-1"
+    >
       <Card><MemoryList {browser} /></Card>
-      <div class="detail"><Card><MemoryDetail {browser} {theme} /></Card></div>
+      <!-- The detail stays in view below the sticky appearance toolbar while the list scrolls. -->
+      <div class="sticky top-20 max-[52rem]:static">
+        <Card><MemoryDetail {browser} {theme} /></Card>
+      </div>
     </div>
   {/key}
 </div>
-
-<style>
-  .memory-demo {
-    display: grid;
-    gap: var(--cc-space-4);
-  }
-  .backend {
-    display: grid;
-    gap: var(--cc-space-4);
-  }
-  .connect {
-    display: grid;
-    gap: var(--cc-space-3);
-    max-width: 32rem;
-  }
-  .note {
-    margin: 0;
-    color: var(--cc-text-muted);
-    font-size: var(--cc-font-size-sm);
-  }
-  .panes {
-    display: grid;
-    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
-    align-items: start;
-    gap: var(--cc-space-4);
-  }
-  /* The detail stays in view below the sticky appearance toolbar while the list scrolls. */
-  .detail {
-    position: sticky;
-    top: calc(var(--cc-space-16) + var(--cc-space-4));
-  }
-  @media (max-width: 52rem) {
-    .panes {
-      grid-template-columns: minmax(0, 1fr);
-    }
-    .detail {
-      position: static;
-    }
-  }
-</style>

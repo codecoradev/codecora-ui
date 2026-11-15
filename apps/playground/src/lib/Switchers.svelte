@@ -19,35 +19,60 @@
   } = $props();
 
   const groups = groupedThemes();
+
+  const fieldset = 'grid min-w-0 gap-2';
+  const legend = 'text-muted-foreground text-[length:var(--cc-font-size-xs)] font-semibold';
+  const seg = 'flex flex-wrap gap-1';
+  const label = 'group relative';
+  const input = 'peer absolute inset-0 cursor-pointer opacity-0';
+  /* Checked changes fill, text colour and weight. */
+  const chipText =
+    'border-input bg-card group-hover:peer-not-checked:bg-accent peer-checked:border-primary peer-checked:bg-primary peer-checked:text-primary-foreground peer-focus-visible:outline-ring inline-flex min-h-9 max-w-full items-center rounded-full border px-3 text-[length:var(--cc-font-size-sm)] peer-checked:font-semibold peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2';
+  /* A theme chip is a mini swatch of that theme: surface, sunken, accent, at its own radius. */
+  const chip =
+    'border-input mr-2 h-4.5 w-7 flex-none rounded-sm border bg-transparent bg-[linear-gradient(90deg,var(--cc-surface)_0_34%,var(--cc-surface-sunken)_34%_67%,var(--cc-accent)_67%)]';
+  const dot =
+    'bg-primary mr-2 block size-3 rounded-full [box-shadow:0_0_0_1px_var(--cc-surface-raised)]';
 </script>
 
-<div class="switchers">
+<div class="flex flex-wrap gap-x-8 gap-y-4">
   {#if part !== 'more'}
-    <fieldset>
-      <legend>Theme</legend>
-      <div class="groups">
+    <fieldset class={fieldset}>
+      <legend class={legend}>Theme</legend>
+      <div class="grid gap-3">
         {#each groups as { group, themes: names } (group)}
-          <div class="group" role="group" aria-labelledby="sw-{part}-{group}">
-            <p class="group-name" id="sw-{part}-{group}">{group}</p>
+          <div class="grid gap-1" role="group" aria-labelledby="sw-{part}-{group}">
+            <p
+              class="text-muted-foreground text-[length:var(--cc-font-size-xs)]"
+              id="sw-{part}-{group}"
+            >
+              {group}
+            </p>
             <!-- Access chips stack, each with its note right under it. -->
-            <div class={group === 'Access' ? 'stack' : 'seg'}>
+            <div class={group === 'Access' ? 'grid gap-2' : seg}>
               {#each names as name (name)}
-                <div class="item">
-                  <label>
+                <div>
+                  <label class={label}>
                     <input
+                      class={input}
                       type="radio"
                       name="theme-{part}"
                       value={name}
                       bind:group={theme}
                       aria-describedby={accessNotes[name] ? `note-${part}-${name}` : undefined}
                     />
-                    <span
-                      ><span class="chip" data-theme={name} aria-hidden="true"></span>{themes[name]
+                    <span class={chipText}
+                      ><span class={chip} data-theme={name} aria-hidden="true"></span>{themes[name]
                         .label}</span
                     >
                   </label>
                   {#if accessNotes[name]}
-                    <p class="note" id="note-{part}-{name}">{accessNotes[name]}</p>
+                    <p
+                      class="text-muted-foreground max-w-description mt-1 ml-3 text-[length:var(--cc-font-size-xs)]"
+                      id="note-{part}-{name}"
+                    >
+                      {accessNotes[name]}
+                    </p>
                   {/if}
                 </div>
               {/each}
@@ -59,22 +84,34 @@
   {/if}
 
   {#if part !== 'theme'}
-    <fieldset>
-      <legend>Accent</legend>
-      <div class="seg">
-        <label>
-          <input type="radio" name="accent-{part}" value="default" bind:group={accent} />
-          <span
-            ><span class="dot solo" data-theme={theme} aria-hidden="true"></span>Theme default
-            <span class="resolved">({themes[theme].defaultAccent})</span></span
+    <fieldset class={fieldset}>
+      <legend class={legend}>Accent</legend>
+      <div class={seg}>
+        <label class={label}>
+          <input
+            class={input}
+            type="radio"
+            name="accent-{part}"
+            value="default"
+            bind:group={accent}
+          />
+          <span class={chipText}
+            ><span class={dot} data-theme={theme} aria-hidden="true"></span>Theme default
+            <span class="font-normal">({themes[theme].defaultAccent})</span></span
           >
         </label>
         {#each accentNames as name (name)}
-          <label>
-            <input type="radio" name="accent-{part}" value={name} bind:group={accent} />
-            <span
-              ><span class="dot solo" data-accent={name} aria-hidden="true"></span><span class="cap"
-                >{name}</span
+          <label class={label}>
+            <input
+              class={input}
+              type="radio"
+              name="accent-{part}"
+              value={name}
+              bind:group={accent}
+            />
+            <span class={chipText}
+              ><span class={dot} data-accent={name} aria-hidden="true"></span><span
+                class="capitalize">{name}</span
               ></span
             >
           </label>
@@ -82,134 +119,22 @@
       </div>
     </fieldset>
 
-    <fieldset>
-      <legend>Density</legend>
-      <div class="seg">
+    <fieldset class={fieldset}>
+      <legend class={legend}>Density</legend>
+      <div class={seg}>
         {#each densities as name (name)}
-          <label>
-            <input type="radio" name="density-{part}" value={name} bind:group={density} />
-            <span><span class="cap">{name}</span></span>
+          <label class={label}>
+            <input
+              class={input}
+              type="radio"
+              name="density-{part}"
+              value={name}
+              bind:group={density}
+            />
+            <span class={chipText}><span class="capitalize">{name}</span></span>
           </label>
         {/each}
       </div>
     </fieldset>
   {/if}
 </div>
-
-<style>
-  .switchers {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--cc-space-4) var(--cc-space-8);
-  }
-  fieldset {
-    border: 0;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    gap: var(--cc-space-2);
-    min-width: 0;
-  }
-  legend {
-    padding: 0;
-    font-size: var(--cc-font-size-xs);
-    font-weight: 600;
-    color: var(--cc-text-muted);
-  }
-  .groups {
-    display: grid;
-    gap: var(--cc-space-3);
-  }
-  .group {
-    display: grid;
-    gap: var(--cc-space-1);
-  }
-  .group-name {
-    margin: 0;
-    color: var(--cc-text-muted);
-    font-size: var(--cc-font-size-xs);
-  }
-  .stack {
-    display: grid;
-    gap: var(--cc-space-2);
-  }
-  .note {
-    max-width: 40ch;
-    margin: var(--cc-space-1) 0 0 var(--cc-space-3);
-    color: var(--cc-text-muted);
-    font-size: var(--cc-font-size-xs);
-  }
-  .seg {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--cc-space-1);
-  }
-  label {
-    position: relative;
-  }
-  input {
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    margin: 0;
-    cursor: pointer;
-  }
-  label > span {
-    display: inline-flex;
-    max-width: 100%;
-    align-items: center;
-    min-height: 2.25rem;
-    padding-inline: var(--cc-space-3);
-    border: 1px solid var(--cc-border-strong);
-    border-radius: var(--cc-radius-pill);
-    font-size: var(--cc-font-size-sm);
-    background: var(--cc-surface-raised);
-  }
-  /* A theme chip is a mini swatch of that theme: surface, sunken, accent, at its own radius. */
-  .chip {
-    flex: none;
-    width: 1.75rem;
-    height: 1.125rem;
-    margin-right: var(--cc-space-2);
-    border: 1px solid var(--cc-border-strong);
-    border-radius: var(--cc-radius-sm);
-    background: linear-gradient(
-      90deg,
-      var(--cc-surface) 0 34%,
-      var(--cc-surface-sunken) 34% 67%,
-      var(--cc-accent) 67%
-    );
-  }
-  .dot {
-    display: block;
-    border-radius: var(--cc-radius-pill);
-    background: var(--cc-accent);
-  }
-  /* Accent and density names are lower-case tokens; theme labels keep their own case. */
-  .cap {
-    text-transform: capitalize;
-  }
-  .resolved {
-    font-weight: 400;
-  }
-  .dot.solo {
-    width: 0.75rem;
-    height: 0.75rem;
-    margin-right: var(--cc-space-2);
-    box-shadow: 0 0 0 1px var(--cc-surface-raised);
-  }
-  label:hover > span {
-    background: var(--cc-surface-hover);
-  }
-  /* Checked changes fill, text colour and weight. */
-  input:checked + span {
-    background: var(--cc-accent);
-    border-color: var(--cc-accent);
-    color: var(--cc-accent-text);
-    font-weight: 600;
-  }
-  input:focus-visible + span {
-    outline: 2px solid var(--cc-focus);
-    outline-offset: 2px;
-  }
-</style>

@@ -40,65 +40,30 @@
   ];
 </script>
 
-<div class="groups">
+<div class="grid grid-cols-[repeat(auto-fit,minmax(min(100%,calc(var(--spacing)*64)),1fr))] gap-8">
   {#each groups as group (group.id)}
-    <section class="group" aria-labelledby="sw-{group.id}">
-      <h3 id="sw-{group.id}">{group.title}</h3>
-      <ul>
+    <section class="grid content-start gap-3" aria-labelledby="sw-{group.id}">
+      <h3
+        id="sw-{group.id}"
+        class="text-muted-foreground font-sans text-[length:var(--cc-font-size-sm)] font-semibold"
+      >
+        {group.title}
+      </h3>
+      <ul class="grid gap-2">
         {#each group.roles as role (role.name)}
-          <li>
-            <span class="chip" style:background="var(--cc-{role.name})" aria-hidden="true"></span>
-            <code>--cc-{role.name}</code>
-            <span class="use">{role.use}</span>
+          <li class="grid grid-cols-[calc(var(--spacing)*10)_1fr] items-center gap-x-3">
+            <span
+              class="border-border row-span-2 size-10 rounded-md border"
+              style:background="var(--cc-{role.name})"
+              aria-hidden="true"
+            ></span>
+            <code class="text-[length:var(--cc-font-size-sm)]">--cc-{role.name}</code>
+            <span class="text-muted-foreground text-[length:var(--cc-font-size-xs)]"
+              >{role.use}</span
+            >
           </li>
         {/each}
       </ul>
     </section>
   {/each}
 </div>
-
-<style>
-  .groups {
-    display: grid;
-    gap: var(--cc-space-8);
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
-  }
-  .group {
-    display: grid;
-    gap: var(--cc-space-3);
-    align-content: start;
-  }
-  h3 {
-    font-size: var(--cc-font-size-sm);
-    color: var(--cc-text-muted);
-    font-family: var(--cc-font-sans);
-    font-weight: 600;
-  }
-  ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    gap: var(--cc-space-2);
-  }
-  li {
-    display: grid;
-    grid-template-columns: 2.5rem 1fr;
-    column-gap: var(--cc-space-3);
-    align-items: center;
-  }
-  .chip {
-    grid-row: span 2;
-    width: 2.5rem;
-    height: 2.5rem;
-    border-radius: var(--cc-radius-md);
-    border: 1px solid var(--cc-border);
-  }
-  code {
-    font-size: var(--cc-font-size-sm);
-  }
-  .use {
-    font-size: var(--cc-font-size-xs);
-    color: var(--cc-text-muted);
-  }
-</style>

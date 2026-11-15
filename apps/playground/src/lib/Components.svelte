@@ -83,6 +83,14 @@
     name.length > 0 && name.length < 3 ? 'Use at least 3 characters.' : '',
   );
 
+  const section = 'grid grid-cols-1 gap-4 pb-10';
+  const h2 = 'text-[length:var(--cc-font-size-xl)] font-bold';
+  const row = 'flex flex-wrap items-center gap-3';
+  const muted = 'text-muted-foreground max-w-[var(--pg-measure-intro)]';
+  /* The section in view gets a tint, weight and an inset bar. */
+  const link =
+    'text-foreground hover:bg-accent aria-[current=location]:bg-primary-soft focus-visible:outline-ring grid gap-0.5 rounded-sm px-2 py-1 no-underline focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)] aria-[current=location]:font-semibold aria-[current=location]:[box-shadow:inset_2px_0_0_var(--cc-accent)]';
+
   function save() {
     saving = true;
     setTimeout(() => {
@@ -92,41 +100,58 @@
   }
 </script>
 
-<div class="layout">
-  <details class="index-wrap" bind:open={indexOpen}>
-    <summary>Jump to a section</summary>
-    <nav class="index" aria-label="Sections on this page">
+<!-- A component index beside the sections on wide screens, above them on narrow ones. -->
+<div class="grid grid-cols-1 gap-8 lg:grid-cols-[calc(var(--spacing)*52)_minmax(0,1fr)]">
+  <details class="group lg:sticky lg:top-4 lg:self-start" bind:open={indexOpen}>
+    <summary
+      class="border-input bg-card focus-visible:outline-ring flex min-h-11 cursor-pointer items-center rounded-md border px-3 text-[length:var(--cc-font-size-sm)] font-semibold group-open:mb-3 focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)] lg:hidden"
+      >Jump to a section</summary
+    >
+    <nav
+      class="border-border bg-card grid grid-cols-[repeat(auto-fill,minmax(calc(var(--spacing)*36),1fr))] content-start gap-4 rounded-md border p-4 text-[length:var(--cc-font-size-sm)] lg:max-h-[calc(100dvh-var(--cc-space-8))] lg:grid-cols-1 lg:overflow-y-auto lg:border-0 lg:bg-transparent lg:p-0 lg:pr-2"
+      aria-label="Sections on this page"
+    >
       <a
-        class="index-top"
+        class="{link} col-span-full font-semibold lg:col-auto"
         href="#c-matrix"
         aria-current={active === 'c-matrix' ? 'location' : undefined}>State matrix</a
       >
       {#each catalogue as { group, sections } (group)}
-        <div class="index-group">
-          <p class="index-title">{group}</p>
-          <ul>
+        <div class="grid content-start gap-1">
+          <p
+            class="text-muted-foreground font-sans text-[length:var(--cc-font-size-xs)] font-semibold tracking-[var(--pg-tracking-label)] uppercase"
+          >
+            {group}
+          </p>
+          <ul class="grid content-start">
             {#each sections as section (section.id)}
               <li>
                 <a
+                  class={link}
                   href="#{section.id}"
                   aria-current={active === section.id ? 'location' : undefined}
-                  ><span>{section.title}</span><small>{section.components.join(', ')}</small></a
+                  ><span>{section.title}</span><small
+                    class="text-muted-foreground text-[length:var(--cc-font-size-xs)] leading-[var(--pg-leading-small)]"
+                    >{section.components.join(', ')}</small
+                  ></a
                 >
               </li>
             {/each}
           </ul>
         </div>
       {/each}
-      <a class="index-top" href={resolve('/dashboard')}>AppShell and Sidebar</a>
+      <a class="{link} col-span-full font-semibold lg:col-auto" href={resolve('/dashboard')}
+        >AppShell and Sidebar</a
+      >
     </nav>
   </details>
 
-  <div class="sections">
+  <div class="grid min-w-0 grid-cols-1 [&_h2[id]]:scroll-mt-6">
     <StateMatrix />
 
-    <section aria-labelledby="c-buttons">
-      <h2 id="c-buttons">Buttons</h2>
-      <div class="row">
+    <section class={section} aria-labelledby="c-buttons">
+      <h2 id="c-buttons" class={h2}>Buttons</h2>
+      <div class={row}>
         <Button variant="primary" icon={Plus}>Create key</Button>
         <Button>Secondary</Button>
         <Button variant="ghost" icon={Download}>Export</Button>
@@ -139,7 +164,7 @@
           >As a link</Button
         >
       </div>
-      <div class="row">
+      <div class={row}>
         <Tooltip content="Copy key">
           {#snippet trigger({ props })}
             <IconButton {...props} icon={Copy} label="Copy key" variant="secondary" />
@@ -153,9 +178,9 @@
     </section>
     <Usage id="c-buttons" />
 
-    <section aria-labelledby="c-forms">
-      <h2 id="c-forms">Form fields</h2>
-      <div class="form">
+    <section class={section} aria-labelledby="c-forms">
+      <h2 id="c-forms" class={h2}>Form fields</h2>
+      <div class="grid max-w-md gap-4">
         <Field label="Key name" description="Shown in the audit log." error={nameError} required>
           {#snippet children(control)}
             <Input {...control} bind:value={name} placeholder="ci-deploy" autocomplete="off" />
@@ -182,12 +207,12 @@
         </Field>
       </div>
 
-      <h3 id="c-invalid">Invalid state</h3>
-      <p class="muted">
+      <h3 id="c-invalid" class="text-[length:var(--cc-font-size-lg)] font-bold">Invalid state</h3>
+      <p class={muted}>
         An icon and a screen-reader "Error:" prefix back the red text, and the control gets a
         stronger border, so the state never depends on colour alone.
       </p>
-      <div class="form">
+      <div class="grid max-w-md gap-4">
         <Field label="Email" error="Enter an address like name@example.com." required>
           {#snippet children(control)}
             <Input {...control} type="email" value="not-an-email" />
@@ -213,9 +238,9 @@
     <InputComponents />
     <Usage id="c-inputs" />
 
-    <section aria-labelledby="c-overlays">
-      <h2 id="c-overlays">Dialog, ConfirmDialog, Sheet, Toast</h2>
-      <div class="row">
+    <section class={section} aria-labelledby="c-overlays">
+      <h2 id="c-overlays" class={h2}>Dialog, ConfirmDialog, Sheet, Toast</h2>
+      <div class={row}>
         <Button onclick={() => (dialogOpen = true)}>Open dialog</Button>
         <Button variant="danger" onclick={() => (confirmOpen = true)}>Revoke key…</Button>
         <Button onclick={() => (sheetOpen = true)}>Open sheet</Button>
@@ -283,8 +308,8 @@
     <NavigationComponents />
     <Usage id="c-nav" />
 
-    <section aria-labelledby="c-tabs">
-      <h2 id="c-tabs">Tabs and Table</h2>
+    <section class={section} aria-labelledby="c-tabs">
+      <h2 id="c-tabs" class={h2}>Tabs and Table</h2>
       <Tabs
         label="Key views"
         items={[
@@ -317,7 +342,7 @@
               </tbody>
             </Table>
           {:else}
-            <p class="muted">Usage charts land with the dashboard sample.</p>
+            <p class={muted}>Usage charts land with the dashboard sample.</p>
           {/if}
         {/snippet}
       </Tabs>
@@ -330,24 +355,24 @@
     <DisplayComponents />
     <Usage id="c-display" />
 
-    <section aria-labelledby="c-status">
-      <h2 id="c-status">Badge, Skeleton, EmptyState</h2>
-      <div class="row">
+    <section class={section} aria-labelledby="c-status">
+      <h2 id="c-status" class={h2}>Badge, Skeleton, EmptyState</h2>
+      <div class={row}>
         <Badge>Neutral</Badge>
         <Badge tone="accent">Accent</Badge>
         <Badge tone="success">Success</Badge>
         <Badge tone="warning">Warning</Badge>
         <Badge tone="danger">Danger</Badge>
       </div>
-      <div class="skeletons" aria-label="Loading example" role="group">
+      <div class="flex max-w-sm items-center gap-4" aria-label="Loading example" role="group">
         <Skeleton width="3rem" height="3rem" circle />
-        <div class="lines">
+        <div class="grid flex-1 gap-2">
           <Skeleton width="40%" height="1rem" />
           <Skeleton height="0.75rem" />
           <Skeleton width="80%" height="0.75rem" />
         </div>
       </div>
-      <div class="empty">
+      <div class="border-input rounded-lg border border-dashed">
         <EmptyState
           icon={Inbox}
           title="No keys yet"
@@ -362,169 +387,3 @@
 </div>
 
 <Toaster />
-
-<style>
-  /* A component index beside the sections on wide screens, above them on narrow ones. */
-  .layout {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--cc-space-8);
-  }
-  .sections {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    min-width: 0;
-  }
-  .sections :global(h2[id]) {
-    scroll-margin-top: var(--cc-space-6);
-  }
-  .index {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
-    gap: var(--cc-space-4);
-    align-content: start;
-    padding: var(--cc-space-4);
-    border: 1px solid var(--cc-border);
-    border-radius: var(--cc-radius-md);
-    background: var(--cc-surface-raised);
-    font-size: var(--cc-font-size-sm);
-  }
-  .index-group {
-    display: grid;
-    align-content: start;
-    gap: var(--cc-space-1);
-  }
-  .index .index-title {
-    margin: 0;
-    color: var(--cc-text-muted);
-    font-family: var(--cc-font-sans);
-    font-size: var(--cc-font-size-xs);
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-  }
-  .index ul {
-    display: grid;
-    align-content: start;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-  .index a {
-    display: grid;
-    gap: 0.125rem;
-    padding: var(--cc-space-1) var(--cc-space-2);
-    border-radius: var(--cc-radius-sm);
-    color: var(--cc-text);
-    text-decoration: none;
-  }
-  .index a small {
-    color: var(--cc-text-muted);
-    font-size: var(--cc-font-size-xs);
-    line-height: 1.4;
-  }
-  .index a:hover {
-    background: var(--cc-surface-hover);
-  }
-  /* The section in view gets a tint, weight and an inset bar. */
-  .index a[aria-current='location'] {
-    background: var(--cc-accent-soft);
-    box-shadow: inset 2px 0 0 var(--cc-accent);
-    font-weight: 600;
-  }
-  .index a:focus-visible {
-    outline: var(--cc-focus-width) solid var(--cc-focus);
-    outline-offset: var(--cc-focus-offset);
-  }
-  .index-wrap summary {
-    display: flex;
-    align-items: center;
-    min-height: 2.75rem;
-    padding-inline: var(--cc-space-3);
-    border: 1px solid var(--cc-border-strong);
-    border-radius: var(--cc-radius-md);
-    background: var(--cc-surface-raised);
-    font-size: var(--cc-font-size-sm);
-    font-weight: 600;
-    cursor: pointer;
-  }
-  .index-wrap[open] summary {
-    margin-bottom: var(--cc-space-3);
-  }
-  .index-wrap summary:focus-visible {
-    outline: var(--cc-focus-width) solid var(--cc-focus);
-    outline-offset: var(--cc-focus-offset);
-  }
-  .index-top {
-    grid-column: 1 / -1;
-    font-weight: 600;
-  }
-  @media (min-width: 64rem) {
-    .layout {
-      grid-template-columns: 13rem minmax(0, 1fr);
-    }
-    .index-wrap summary {
-      display: none;
-    }
-    .index-wrap {
-      position: sticky;
-      top: var(--cc-space-4);
-      align-self: start;
-    }
-    .index {
-      grid-template-columns: minmax(0, 1fr);
-      max-height: calc(100dvh - var(--cc-space-8));
-      overflow-y: auto;
-      padding: 0 var(--cc-space-2) 0 0;
-      border: 0;
-      background: none;
-    }
-    .index-top {
-      grid-column: auto;
-    }
-  }
-
-  section {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--cc-space-4);
-    padding-bottom: var(--cc-space-10);
-  }
-  h2 {
-    font-size: var(--cc-font-size-xl);
-  }
-  h3 {
-    margin: 0;
-    font-size: var(--cc-font-size-lg);
-  }
-  .row {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--cc-space-3);
-  }
-  .form {
-    display: grid;
-    gap: var(--cc-space-4);
-    max-width: 28rem;
-  }
-  .muted {
-    max-width: 60ch;
-    color: var(--cc-text-muted);
-  }
-  .skeletons {
-    display: flex;
-    align-items: center;
-    gap: var(--cc-space-4);
-    max-width: 24rem;
-  }
-  .lines {
-    display: grid;
-    flex: 1;
-    gap: var(--cc-space-2);
-  }
-  .empty {
-    border: 1px dashed var(--cc-border-strong);
-    border-radius: var(--cc-radius-lg);
-  }
-</style>

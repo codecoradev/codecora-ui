@@ -14,9 +14,11 @@
   ];
 </script>
 
-<section aria-labelledby="c-inputs">
-  <h2 id="c-inputs">Combobox, Slider, FieldGroup</h2>
-  <div class="form">
+<section aria-labelledby="c-inputs" class="grid grid-cols-1 gap-4 pb-10">
+  <h2 id="c-inputs" class="text-[length:var(--cc-font-size-xl)] font-bold">
+    Combobox, Slider, FieldGroup
+  </h2>
+  <div class="grid max-w-md gap-4">
     <Field label="Region" description="Type to filter.">
       {#snippet children(control)}
         <Combobox {...control} items={regions} bind:value={region} />
@@ -51,20 +53,3 @@
     </FieldGroup>
   </div>
 </section>
-
-<style>
-  section {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--cc-space-4);
-    padding-bottom: var(--cc-space-10);
-  }
-  h2 {
-    font-size: var(--cc-font-size-xl);
-  }
-  .form {
-    display: grid;
-    gap: var(--cc-space-4);
-    max-width: 28rem;
-  }
-</style>

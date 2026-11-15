@@ -139,6 +139,11 @@
     { label: 'Error rate', value: '0.4%', note: 'within the 1% target' },
   ]);
 
+  const h2 = 'font-display text-[length:var(--cc-font-size-lg)] font-bold';
+  const muted = 'text-muted-foreground text-[length:var(--cc-font-size-sm)]';
+  const panelSection = 'grid min-w-0 grid-cols-1 gap-4';
+  const panelHead = 'flex flex-wrap items-end justify-between gap-3';
+
   const activity = [
     { who: 'Ada', what: 'created key analytics-export', when: '5 h ago' },
     { who: 'Grace', what: 'changed the scope of dashboard', when: 'yesterday' },
@@ -176,9 +181,14 @@
 
     {#snippet footer({ collapsed })}
       {#if !collapsed}
-        <div class="sidebar-foot">
+        <!-- minmax(0, 1fr): long trigger values truncate instead of widening the sidebar. -->
+        <div class="mt-auto grid grid-cols-1 gap-3 text-[length:var(--cc-font-size-sm)]">
           <!-- The same popovers as the playground toolbar. -->
-          <div class="appearance" role="group" aria-label="Appearance">
+          <div
+            class="flex flex-wrap gap-2 *:max-w-full *:min-w-0"
+            role="group"
+            aria-label="Appearance"
+          >
             <AppearanceControls {appearance} compact />
           </div>
           <Field label="Sidebar">
@@ -196,15 +206,18 @@
               />
             {/snippet}
           </Field>
-          <a href={resolve('/components')}>Back to the playground</a>
+          <a
+            class="text-primary underline-offset-text focus-visible:outline-ring focus-visible:outline-2 focus-visible:outline-offset-2"
+            href={resolve('/components')}>Back to the playground</a
+          >
         </div>
       {/if}
     {/snippet}
 
     {#snippet header()}
-      <div class="page-head">
-        <h1>{current}</h1>
-        <div class="actions">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <h1 class="font-display text-[length:var(--cc-font-size-2xl)] font-bold">{current}</h1>
+        <div class="flex flex-wrap gap-2 max-[47.99rem]:[&_.cc-button]:px-3">
           <Button variant="secondary" icon={Funnel} onclick={() => (filterOpen = true)}>
             Filters
           </Button>
@@ -220,26 +233,31 @@
       </div>
     {/snippet}
 
-    <div class="content">
+    <div class="grid max-w-6xl grid-cols-1 gap-6 px-4 pt-5 pb-12 md:px-8">
       <section aria-labelledby="usage">
-        <h2 id="usage" class="visually-label">Usage summary</h2>
-        <dl class="stats">
+        <h2 id="usage" class="sr-only">Usage summary</h2>
+        <!-- One bordered strip divided by rules, not a grid of identical cards. -->
+        <dl class="border-border bg-card grid grid-cols-2 rounded-md border md:grid-cols-4">
           {#each stats as stat (stat.label)}
-            <div>
-              <dt>{stat.label}</dt>
-              <dd>{stat.value}</dd>
-              <dd class="note">{stat.note}</dd>
+            <div
+              class="border-border grid gap-1 border-b p-4 odd:border-r nth-last-[-n+2]:border-b-0 md:border-r md:border-b-0 md:last:border-r-0"
+            >
+              <dt class={muted}>{stat.label}</dt>
+              <dd class="font-display text-[length:var(--cc-font-size-2xl)] tabular-nums">
+                {stat.value}
+              </dd>
+              <dd class="{muted} font-sans tabular-nums">{stat.note}</dd>
             </div>
           {/each}
         </dl>
       </section>
 
-      <section aria-labelledby="chart-title" class="panel">
-        <div class="panel-head">
-          <h2 id="chart-title">Calls per day</h2>
-          <p class="muted">Last 14 days, {total.toLocaleString('en')} calls in total</p>
+      <section aria-labelledby="chart-title" class={panelSection}>
+        <div class={panelHead}>
+          <h2 id="chart-title" class={h2}>Calls per day</h2>
+          <p class={muted}>Last 14 days, {total.toLocaleString('en')} calls in total</p>
         </div>
-        <div class="chart">
+        <div class="border-border bg-card grid gap-2 rounded-md border p-3">
           <svg
             viewBox="0 0 560 160"
             role="img"
@@ -247,9 +265,18 @@
               days.length - 1
             ]}. Lowest {Math.min(...daily)}, highest {peak}."
             preserveAspectRatio="none"
+            class="h-40 w-full"
           >
             {#each [0, 1, 2, 3] as i (i)}
-              <line x1="0" x2="560" y1={i * 40 + 0.5} y2={i * 40 + 0.5} class="grid" />
+              <line
+                x1="0"
+                x2="560"
+                y1={i * 40 + 0.5}
+                y2={i * 40 + 0.5}
+                class="stroke-border"
+                stroke-width="1"
+                vector-effect="non-scaling-stroke"
+              />
             {/each}
             {#each daily as value, i (i)}
               <rect
@@ -258,24 +285,28 @@
                 width="24"
                 height={(value / peak) * 150}
                 rx="3"
-                class="bar"
+                class="fill-primary"
               >
                 <title>{days[i]}: {value.toLocaleString('en')} calls</title>
               </rect>
             {/each}
           </svg>
-          <ol class="days" aria-hidden="true">
+          <!-- One label per bar, in the same 14 columns as the bars; every other one on phones. -->
+          <ol
+            class="text-muted-foreground grid grid-cols-14 text-center text-[length:var(--cc-font-size-xs)] whitespace-nowrap tabular-nums"
+            aria-hidden="true"
+          >
             {#each days as day (day)}
-              <li>{day}</li>
+              <li class="max-[47.99rem]:even:invisible">{day}</li>
             {/each}
           </ol>
         </div>
       </section>
 
-      <section aria-labelledby="keys-title" class="panel">
-        <div class="panel-head">
-          <h2 id="keys-title">API keys</h2>
-          <div class="search">
+      <section aria-labelledby="keys-title" class={panelSection}>
+        <div class={panelHead}>
+          <h2 id="keys-title" class={h2}>API keys</h2>
+          <div class="w-[min(var(--container-2xs),100%)]">
             <Field label="Search keys">
               {#snippet children(control)}
                 <Input
@@ -326,7 +357,7 @@
                       <th scope="col">Status</th>
                       <th scope="col" class="num">Calls (30 d)</th>
                       <th scope="col">Last used</th>
-                      <th scope="col"><span class="visually-label">Actions</span></th>
+                      <th scope="col"><span class="sr-only">Actions</span></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -361,11 +392,11 @@
                 </Table>
               {/if}
             {:else}
-              <ul class="activity">
+              <ul class="grid gap-3">
                 {#each activity as item (item.what)}
                   <li>
                     <strong>{item.who}</strong>
-                    {item.what} <span class="muted">· {item.when}</span>
+                    {item.what} <span class={muted}>· {item.when}</span>
                   </li>
                 {/each}
               </ul>
@@ -408,198 +439,3 @@
 />
 
 <Toaster />
-
-<style>
-  ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-  /* minmax(0, 1fr): long trigger values truncate instead of widening the sidebar. */
-  .sidebar-foot {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--cc-space-3);
-    margin-top: auto;
-    font-size: var(--cc-font-size-sm);
-  }
-  .appearance {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--cc-space-2);
-  }
-  .appearance > :global(*) {
-    min-width: 0;
-    max-width: 100%;
-  }
-  a {
-    color: var(--cc-accent);
-    text-underline-offset: 0.2em;
-  }
-  a:focus-visible {
-    outline: 2px solid var(--cc-focus);
-    outline-offset: 2px;
-  }
-
-  .page-head {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--cc-space-3);
-  }
-  h1 {
-    margin: 0;
-    font-family: var(--cc-font-display);
-    font-size: var(--cc-font-size-2xl);
-  }
-  .actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--cc-space-2);
-  }
-  .content {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--cc-space-6);
-    max-width: 72rem;
-    padding: var(--cc-space-5) var(--cc-space-4) var(--cc-space-12);
-  }
-  h2 {
-    margin: 0;
-    font-family: var(--cc-font-display);
-    font-size: var(--cc-font-size-lg);
-  }
-  .visually-label {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
-  }
-  .muted {
-    margin: 0;
-    color: var(--cc-text-muted);
-    font-size: var(--cc-font-size-sm);
-  }
-
-  /* One bordered strip divided by rules, not a grid of identical cards. */
-  .stats {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    margin: 0;
-    border: 1px solid var(--cc-border);
-    border-radius: var(--cc-radius-md);
-    background: var(--cc-surface-raised);
-  }
-  .stats > div {
-    display: grid;
-    gap: var(--cc-space-1);
-    padding: var(--cc-space-4);
-    border-bottom: 1px solid var(--cc-border);
-  }
-  .stats > div:nth-child(odd) {
-    border-right: 1px solid var(--cc-border);
-  }
-  .stats > div:nth-last-child(-n + 2) {
-    border-bottom: 0;
-  }
-  dt {
-    color: var(--cc-text-muted);
-    font-size: var(--cc-font-size-sm);
-  }
-  dd {
-    margin: 0;
-    font-family: var(--cc-font-display);
-    font-size: var(--cc-font-size-2xl);
-    font-variant-numeric: tabular-nums;
-  }
-  dd.note {
-    color: var(--cc-text-muted);
-    font-family: var(--cc-font-sans);
-    font-size: var(--cc-font-size-sm);
-  }
-
-  .panel {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--cc-space-4);
-    min-width: 0;
-  }
-  .panel-head {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: end;
-    justify-content: space-between;
-    gap: var(--cc-space-3);
-  }
-  .search {
-    width: min(18rem, 100%);
-  }
-  .chart {
-    display: grid;
-    gap: var(--cc-space-2);
-    padding: var(--cc-space-3);
-    border: 1px solid var(--cc-border);
-    border-radius: var(--cc-radius-md);
-    background: var(--cc-surface-raised);
-  }
-  .chart svg {
-    width: 100%;
-    height: 10rem;
-  }
-  /* One label per bar, in the same 14 columns as the bars; every other one on phones. */
-  .days {
-    display: grid;
-    grid-template-columns: repeat(14, minmax(0, 1fr));
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    color: var(--cc-text-muted);
-    font-size: var(--cc-font-size-xs);
-    font-variant-numeric: tabular-nums;
-    text-align: center;
-    white-space: nowrap;
-  }
-  @media (max-width: 47.99rem) {
-    .days li:nth-child(even) {
-      visibility: hidden;
-    }
-  }
-  .grid {
-    stroke: var(--cc-border);
-    stroke-width: 1;
-    vector-effect: non-scaling-stroke;
-  }
-  .bar {
-    fill: var(--cc-accent);
-  }
-  .activity {
-    display: grid;
-    gap: var(--cc-space-3);
-  }
-
-  @media (min-width: 48rem) {
-    .content {
-      padding-inline: var(--cc-space-8);
-    }
-    .stats {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-    }
-    .stats > div,
-    .stats > div:nth-child(odd),
-    .stats > div:nth-last-child(-n + 2) {
-      border-right: 1px solid var(--cc-border);
-      border-bottom: 0;
-    }
-    .stats > div:last-child {
-      border-right: 0;
-    }
-  }
-  @media (max-width: 47.99rem) {
-    .actions :global(.cc-button) {
-      padding-inline: var(--cc-space-3);
-    }
-  }
-</style>
