@@ -29,3 +29,12 @@
 @source './Select.svelte';
 @source './Combobox.svelte';
 @source './ToggleGroup.svelte';
+@source './Tabs.svelte';
+@source './Accordion.svelte';
+@source './Breadcrumb.svelte';
+@source './Pagination.svelte';
+@source './AppShell.svelte';
+@source './Sidebar.svelte';
+@source './Table.svelte';
+@source './DataTable.svelte';
+@source './CodeBlock.svelte';

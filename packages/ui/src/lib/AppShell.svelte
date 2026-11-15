@@ -8,6 +8,7 @@
 -->
 <script lang="ts">
   import type { Snippet } from 'svelte';
+  import { cn, type ClassValue } from './cn.js';
   import Icon from './internal/Icon.svelte';
   import IconButton from './IconButton.svelte';
   import Sheet from './Sheet.svelte';
@@ -30,6 +31,7 @@
     /** Content of the page header bar (title, actions). */
     header?: Snippet;
     children: Snippet;
+    class?: ClassValue;
   }
 
   let {
@@ -43,6 +45,7 @@
     footer,
     header,
     children,
+    class: className,
   }: Props = $props();
 
   let drawerOpen = $state(false);
@@ -55,16 +58,32 @@
 
   const uid = $props.id();
 
+  const bottomItem = cn(
+    'font-inherit text-muted-foreground aria-[current=page]:text-primary focus-visible:outline-ring grid min-h-14 w-full cursor-pointer justify-items-center gap-0.5 border-0 bg-transparent px-1 py-2 text-[length:var(--cc-font-size-xs)] no-underline focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:-outline-offset-2 aria-[current=page]:font-semibold',
+  );
+
   function select(item: NavItem) {
     drawerOpen = false;
     onselect?.(item);
   }
 </script>
 
-<div class="cc-shell">
-  <a class="skip" href="#{uid}-main">Skip to content</a>
+<!-- Desktop (md, 48rem): the sidebar takes its own width, the content the rest. -->
+<div
+  class={cn(
+    'cc-shell bg-background text-foreground grid min-h-dvh font-sans text-base/[var(--cc-leading-normal)] md:flex',
+    className,
+  )}
+>
+  <a
+    class="z-skip bg-card text-foreground focus-visible:outline-ring absolute top-2 left-2 -translate-y-2/1 rounded-md px-3 py-2 focus-visible:translate-none focus-visible:outline-[length:var(--cc-focus-width)]"
+    href="#{uid}-main">Skip to content</a
+  >
 
-  <aside class="side" data-theme={sidebarTheme}>
+  <aside
+    class="md:border-border md:bg-muted md:text-foreground hidden md:sticky md:top-0 md:block md:h-dvh md:flex-none md:border-r"
+    data-theme={sidebarTheme}
+  >
     <Sidebar
       groups={nav}
       {current}
@@ -76,10 +95,16 @@
     />
   </aside>
 
-  <div class="body">
+  <div class="min-w-0 pb-18 md:flex-1 md:pb-0">
     <!-- The banner landmark: the menu button, the mobile brand and the page header sit inside it. -->
-    <header class={['topbar', !header && 'bare']}>
-      <span class="menu">
+    <!-- Without a page header the bar holds nothing on a wide screen: no empty landmark. -->
+    <header
+      class={[
+        'topbar border-border bg-card flex flex-wrap items-center gap-3 border-b px-4 py-3 md:px-8',
+        !header && 'bare md:hidden',
+      ]}
+    >
+      <span class="inline-flex md:hidden">
         <IconButton
           icon={MenuIcon}
           label="Open navigation"
@@ -87,20 +112,28 @@
           onclick={() => (drawerOpen = true)}
         />
       </span>
-      {#if brand}<span class="mobile-brand">{@render brand({ collapsed: false })}</span>{/if}
-      {#if header}<div class="header">{@render header()}</div>{/if}
+      {#if brand}<span class="font-display font-semibold md:hidden"
+          >{@render brand({ collapsed: false })}</span
+        >{/if}
+      {#if header}<div class="min-w-0 shrink grow basis-full md:flex-1">
+          {@render header()}
+        </div>{/if}
     </header>
 
-    <main id="{uid}-main" tabindex="-1">{@render children()}</main>
+    <main id="{uid}-main" class="focus:outline-none" tabindex="-1">{@render children()}</main>
   </div>
 
   {#if bottomItems.length > 0}
-    <nav class="bottom" aria-label="Primary">
-      <ul>
+    <nav
+      class="z-sticky border-border bg-card fixed inset-x-0 bottom-0 border-t md:hidden"
+      aria-label="Primary"
+    >
+      <ul class="m-0 flex list-none p-0">
         {#each bottomItems as item (item.id)}
-          <li>
+          <li class="flex-1">
             {#if item.href !== undefined}
               <a
+                class={bottomItem}
                 href={item.href}
                 aria-current={current === item.id ? 'page' : undefined}
                 onclick={() => onselect?.(item)}
@@ -110,6 +143,7 @@
               </a>
             {:else}
               <button
+                class={bottomItem}
                 type="button"
                 aria-current={current === item.id ? 'page' : undefined}
                 onclick={() => onselect?.(item)}
@@ -126,8 +160,9 @@
 </div>
 
 <Sheet bind:open={drawerOpen} side="left" title="Navigation" theme={sidebarTheme}>
-  <div class="drawer-nav">
+  <div>
     <Sidebar
+      class="w-full bg-transparent p-0"
       groups={nav}
       {current}
       collapsible={false}
@@ -137,137 +172,3 @@
     />
   </div>
 </Sheet>
-
-<style>
-  .cc-shell {
-    display: grid;
-    min-height: 100dvh;
-    background: var(--cc-surface);
-    color: var(--cc-text);
-    font-family: var(--cc-font-sans);
-    font-size: var(--cc-font-size-md);
-    line-height: var(--cc-leading-normal);
-  }
-  .skip {
-    position: absolute;
-    top: var(--cc-space-2);
-    left: var(--cc-space-2);
-    z-index: var(--cc-layer-skip);
-    padding: var(--cc-space-2) var(--cc-space-3);
-    border-radius: var(--cc-radius-md);
-    background: var(--cc-surface-raised);
-    color: var(--cc-text);
-    transform: translateY(-200%);
-  }
-  .skip:focus-visible {
-    transform: none;
-    outline: var(--cc-focus-width) solid var(--cc-focus);
-  }
-  .side {
-    display: none;
-  }
-  .body {
-    min-width: 0;
-    padding-bottom: 4.5rem;
-  }
-  .topbar {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--cc-space-3);
-    padding: var(--cc-space-3) var(--cc-space-4);
-    border-bottom: 1px solid var(--cc-border);
-    background: var(--cc-surface-raised);
-  }
-  .menu {
-    display: inline-flex;
-  }
-  .mobile-brand {
-    font-family: var(--cc-font-display);
-    font-weight: 600;
-  }
-  .header {
-    flex: 1 1 100%;
-    min-width: 0;
-  }
-  main:focus {
-    outline: none;
-  }
-  .bottom {
-    position: fixed;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: var(--cc-layer-sticky);
-    border-top: 1px solid var(--cc-border);
-    background: var(--cc-surface-raised);
-  }
-  .bottom ul {
-    display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: 1fr;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-  .bottom :is(a, button) {
-    display: grid;
-    justify-items: center;
-    gap: 2px;
-    width: 100%;
-    min-height: 3.5rem;
-    padding: var(--cc-space-2) var(--cc-space-1);
-    border: 0;
-    background: transparent;
-    color: var(--cc-text-muted);
-    font: inherit;
-    font-size: var(--cc-font-size-xs);
-    text-decoration: none;
-    cursor: pointer;
-  }
-  .bottom [aria-current='page'] {
-    color: var(--cc-accent);
-    font-weight: 600;
-  }
-  .bottom :is(a, button):focus-visible {
-    outline: var(--cc-focus-width) solid var(--cc-focus);
-    outline-offset: -2px;
-  }
-  .drawer-nav :global(.cc-sidebar) {
-    width: 100%;
-    padding: 0;
-    background: transparent;
-  }
-  @media (min-width: 48rem) {
-    .cc-shell {
-      grid-template-columns: auto minmax(0, 1fr);
-    }
-    .side {
-      position: sticky;
-      top: 0;
-      display: block;
-      height: 100dvh;
-      border-right: 1px solid var(--cc-border);
-      background: var(--cc-surface-sunken);
-      color: var(--cc-text);
-    }
-    .body {
-      padding-bottom: 0;
-    }
-    .menu,
-    .mobile-brand,
-    .bottom {
-      display: none;
-    }
-    .topbar {
-      padding-inline: var(--cc-space-8);
-    }
-    /* Without a page header the bar holds nothing on a wide screen: no empty landmark. */
-    .topbar.bare {
-      display: none;
-    }
-    .header {
-      flex: 1;
-    }
-  }
-</style>

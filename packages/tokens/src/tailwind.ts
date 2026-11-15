@@ -59,6 +59,8 @@ export const tailwindKeys: Readonly<Record<string, string>> = {
   'ease-exit': 'var(--cc-ease-exit)',
   'ease-move': 'var(--cc-ease-in-out)',
   'ease-spring': 'var(--cc-ease-spring)',
+  // A comfortable reading measure for long text: max-w-measure.
+  'container-measure': '72ch',
 };
 
 /**
@@ -157,6 +159,8 @@ export const tailwindUtilities: Readonly<Record<string, Record<string, string>>>
       'font-optical-sizing',
     ].map((p) => [p, 'inherit']),
   ),
+  // Code shows the characters as typed: no ligature turns <!-- or -> into an arrow.
+  'ligatures-none': { 'font-variant-ligatures': 'none' },
 };
 
 /**
@@ -192,6 +196,32 @@ export const formAnimations: Readonly<
   'listbox-out': {
     animation: 'cc-listbox-out var(--cc-duration-instant) var(--cc-ease-exit) forwards',
     keyframes: { 'cc-listbox-out': 'to { opacity: 0; transform: scale(0.96); }' },
+  },
+};
+
+/**
+ * The accordion keyframe animations: `animate-<name>`. Tailwind emits the keyframes only
+ * where a component uses the animation; the component adds the
+ * `motion-reduce:` fallback its motion needs.
+ */
+export const accordionAnimations: Readonly<
+  Record<string, { animation: string; keyframes: Record<string, Record<string, string>> }>
+> = {
+  // The accordion panel opens to the height bits-ui measures.
+  'accordion-open': {
+    animation: 'cc-accordion-open var(--cc-duration-normal) var(--cc-ease-out)',
+    keyframes: {
+      from: { height: '0', opacity: '0' },
+      to: { height: 'var(--bits-accordion-content-height)' },
+    },
+  },
+  // bits-ui keeps the panel mounted until the exit animation finishes.
+  'accordion-close': {
+    animation: 'cc-accordion-close var(--cc-duration-fast) var(--cc-ease-exit) forwards',
+    keyframes: {
+      from: { height: 'var(--bits-accordion-content-height)' },
+      to: { height: '0', opacity: '0' },
+    },
   },
 };
 
@@ -251,6 +281,16 @@ export function tailwindThemeCss(): string {
     ...Object.values(formAnimations).flatMap((a) =>
       Object.entries(a.keyframes).map(([name, body]) => `@keyframes ${name} { ${body} }`),
     ),
+    ...Object.entries(accordionAnimations).flatMap(([k, { animation, keyframes }]) => [
+      `--animate-${k}: ${animation};`,
+      `@keyframes ${animation.split(' ')[0]} {`,
+      ...Object.entries(keyframes).flatMap(([step, decls]) => [
+        `  ${step} {`,
+        ...Object.entries(decls).map(([p, v]) => `    ${p}: ${v};`),
+        '  }',
+      ]),
+      '}',
+    ]),
   ])}\n}\n`;
 
   const utilities = Object.entries(tailwindUtilities)

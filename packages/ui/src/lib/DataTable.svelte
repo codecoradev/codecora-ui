@@ -8,6 +8,7 @@
 <script lang="ts" generics="T">
   import type { Snippet } from 'svelte';
   import Checkbox from './Checkbox.svelte';
+  import { cn, type ClassValue } from './cn.js';
   import EmptyState from './EmptyState.svelte';
   import Glyph from './internal/Glyph.svelte';
   import Pagination from './Pagination.svelte';
@@ -52,6 +53,7 @@
     toolbar?: Snippet;
     /** Replaces the toolbar while rows are selected. */
     bulk?: Snippet<[{ selected: string[]; clear: () => void }]>;
+    class?: ClassValue;
   }
 
   let {
@@ -71,6 +73,7 @@
     cell,
     toolbar,
     bulk,
+    class: className,
   }: Props = $props();
 
   const read = (row: T, column: Column<T>): unknown =>
@@ -137,22 +140,22 @@
     sort?.key === column.key ? (sort.direction === 'asc' ? 'ascending' : 'descending') : undefined;
 </script>
 
-<div class="cc-datatable">
+<div class={cn('cc-datatable grid gap-3', className)}>
   <VisuallyHidden><span role="status">{loading ? `Loading ${label}` : ''}</span></VisuallyHidden>
   {#if active.length > 0 && bulk}
-    <div class="bar" role="status">
+    <div class="min-h-control flex flex-wrap items-center gap-3" role="status">
       <span>{active.length} selected</span>
       {@render bulk({ selected: active, clear: () => (selected = []) })}
     </div>
   {:else if toolbar}
-    <div class="bar">{@render toolbar()}</div>
+    <div class="min-h-control flex flex-wrap items-center gap-3">{@render toolbar()}</div>
   {/if}
 
   <Table {label}>
     <thead>
       <tr>
         {#if selectable}
-          <th scope="col" class="check">
+          <th scope="col" class="w-1/100">
             <Checkbox
               label="Select all rows on this page"
               labelHidden
@@ -166,9 +169,19 @@
         {#each columns as column (column.key)}
           <th scope="col" class:num={column.numeric} aria-sort={ariaSort(column)}>
             {#if column.sortable}
-              <button type="button" class="sort" onclick={() => toggleSort(column)}>
+              <button
+                type="button"
+                class="font-inherit focus-visible:outline-ring inline-flex cursor-pointer items-center gap-1 border-0 bg-transparent p-0 text-inherit focus-visible:rounded-sm focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)]"
+                onclick={() => toggleSort(column)}
+              >
                 {column.label}
-                <span class="arrow" class:on={sort?.key === column.key} data-dir={sort?.direction}>
+                <span
+                  class={[
+                    'inline-flex data-[dir=asc]:rotate-180',
+                    sort?.key === column.key ? 'opacity-100' : 'opacity-35',
+                  ]}
+                  data-dir={sort?.direction}
+                >
                   <Glyph name="chevron-down" />
                 </span>
               </button>
@@ -199,7 +212,7 @@
           {@const key = rowKey(row)}
           <tr data-selected={chosen.has(key) ? 'true' : undefined}>
             {#if selectable}
-              <td class="check">
+              <td class="w-1/100">
                 <Checkbox
                   label="Select {nameOf(row)}"
                   labelHidden
@@ -227,55 +240,8 @@
   </Table>
 
   {#if pageSize && sorted.length > pageSize}
-    <div class="pager">
+    <div class="flex justify-end">
       <Pagination count={sorted.length} perPage={pageSize} bind:page />
     </div>
   {/if}
 </div>
-
-<style>
-  .cc-datatable {
-    display: grid;
-    gap: var(--cc-space-3);
-  }
-  .bar {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--cc-space-3);
-    min-height: var(--cc-control-h);
-  }
-  .check {
-    width: 1%;
-  }
-  .sort {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--cc-space-1);
-    padding: 0;
-    border: 0;
-    background: none;
-    color: inherit;
-    font: inherit;
-    cursor: pointer;
-  }
-  .sort:focus-visible {
-    outline: var(--cc-focus-width) solid var(--cc-focus);
-    outline-offset: var(--cc-focus-offset);
-    border-radius: var(--cc-radius-sm);
-  }
-  .arrow {
-    display: inline-flex;
-    opacity: 0.35;
-  }
-  .arrow.on {
-    opacity: 1;
-  }
-  .arrow[data-dir='asc'] {
-    transform: rotate(180deg);
-  }
-  .pager {
-    display: flex;
-    justify-content: flex-end;
-  }
-</style>

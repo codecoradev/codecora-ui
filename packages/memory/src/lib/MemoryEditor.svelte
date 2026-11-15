@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Alert, Button, Field, Input, Select, Textarea } from '@codecora/ui';
+  import { Alert, Button, cn, Field, Input, Select, Textarea, type ClassValue } from '@codecora/ui';
   import type { Memory, MemoryDraft } from './types.js';
 
   interface Props {
@@ -10,6 +10,7 @@
     /** Called with the cleaned draft; a thrown error is shown in the form. */
     onsave: (draft: MemoryDraft) => void | Promise<void>;
     oncancel?: () => void;
+    class?: ClassValue;
   }
 
   let {
@@ -17,6 +18,7 @@
     types = ['fact', 'decision', 'procedure', 'context'],
     onsave,
     oncancel,
+    class: className,
   }: Props = $props();
 
   // A draft: the form starts from the memory and does not follow later changes to it.
@@ -64,7 +66,7 @@
   }
 </script>
 
-<form class="cc-memory-editor" onsubmit={submit} novalidate>
+<form class={cn('cc-memory-editor grid gap-4', className)} onsubmit={submit} novalidate>
   {#if failure}
     <Alert tone="danger" title="Not saved">{failure}</Alert>
   {/if}
@@ -94,7 +96,7 @@
     </Field>
   {/if}
 
-  <div class="actions">
+  <div class="flex flex-wrap justify-end gap-2">
     {#if oncancel}
       <Button variant="ghost" onclick={oncancel} disabled={saving}>Cancel</Button>
     {/if}
@@ -103,16 +105,3 @@
     </Button>
   </div>
 </form>
-
-<style>
-  .cc-memory-editor {
-    display: grid;
-    gap: var(--cc-space-4);
-  }
-  .actions {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    gap: var(--cc-space-2);
-  }
-</style>

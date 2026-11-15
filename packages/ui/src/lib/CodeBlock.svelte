@@ -5,14 +5,16 @@
 -->
 <script lang="ts">
   import Button from './Button.svelte';
+  import { cn, type ClassValue } from './cn.js';
 
   interface Props {
     code: string;
     /** Names the block for assistive tech and shows as a caption, for example "bash". */
     language?: string;
+    class?: ClassValue;
   }
 
-  let { code, language }: Props = $props();
+  let { code, language, class: className }: Props = $props();
 
   let status = $state<'idle' | 'copied' | 'failed'>('idle');
   let timer: ReturnType<typeof setTimeout> | undefined;
@@ -47,55 +49,18 @@
   }
 </script>
 
-<figure class="cc-code">
-  <figcaption>
+<figure class={cn('cc-code border-border bg-muted m-0 rounded-md border', className)}>
+  <figcaption
+    class="border-border text-muted-foreground flex items-center justify-between border-b py-1 pr-2 pl-3 font-mono text-[length:var(--cc-font-size-xs)]"
+  >
     <span>{language ?? 'code'}</span>
     <Button variant="ghost" onclick={copy}>{label[status]}</Button>
   </figcaption>
   <!-- A scrollable code block must be keyboard reachable (axe: scrollable-region-focusable). -->
   <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
-  <pre tabindex="0" aria-label={language ? `${language} code` : 'Code'}><code bind:this={codeEl}
-      >{code}</code
-    ></pre>
-  <span class="live" role="status" aria-live="polite">{message[status]}</span>
+  <pre
+    class="ligatures-none focus-visible:outline-ring m-0 overflow-x-auto p-3 font-mono text-[length:var(--cc-font-size-sm)] focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:-outline-offset-2"
+    tabindex="0"
+    aria-label={language ? `${language} code` : 'Code'}><code bind:this={codeEl}>{code}</code></pre>
+  <span class="sr-only m-0" role="status" aria-live="polite">{message[status]}</span>
 </figure>
-
-<style>
-  .cc-code {
-    margin: 0;
-    border: 1px solid var(--cc-border);
-    border-radius: var(--cc-radius-md);
-    background: var(--cc-surface-sunken);
-  }
-  figcaption {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: var(--cc-space-1) var(--cc-space-2) var(--cc-space-1) var(--cc-space-3);
-    border-bottom: 1px solid var(--cc-border);
-    color: var(--cc-text-muted);
-    font-family: var(--cc-font-mono);
-    font-size: var(--cc-font-size-xs);
-  }
-  pre {
-    margin: 0;
-    overflow-x: auto;
-    padding: var(--cc-space-3);
-    font-family: var(--cc-font-mono);
-    font-size: var(--cc-font-size-sm);
-    /* Code shows the characters as typed: no ligature turns <!-- or -> into an arrow. */
-    font-variant-ligatures: none;
-  }
-  pre:focus-visible {
-    outline: var(--cc-focus-width) solid var(--cc-focus);
-    outline-offset: -2px;
-  }
-  .live {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
-  }
-</style>

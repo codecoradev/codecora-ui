@@ -5,6 +5,7 @@ import { semanticTokens } from './schema.js';
 import {
   darkSelector,
   shadcnExtensions,
+  accordionAnimations,
   tailwindAnimations,
   tailwindKeyframes,
   formAnimations,
@@ -124,6 +125,17 @@ describe('theme.css compiled by Tailwind', () => {
     expect(inherit).toBeGreaterThan(-1);
     expect(out.indexOf('font-size: var(--cc-font-size-sm)')).toBeGreaterThan(inherit);
     expect(out.indexOf('line-height: var(--cc-leading-normal)')).toBeGreaterThan(inherit);
+  });
+
+  it('animates the accordion with the motion tokens and emits only the keyframes in use', async () => {
+    const out = await build(['data-[state=open]:animate-accordion-open']);
+    expect(out).toContain(
+      'animation: cc-accordion-open var(--cc-duration-normal) var(--cc-ease-out)',
+    );
+    expect(out).toMatch(/@keyframes cc-accordion-open \{/);
+    expect(out).not.toContain('@keyframes cc-accordion-close');
+    for (const name of Object.keys(accordionAnimations))
+      expect(await build([`animate-${name}`])).toContain(`.animate-${name} {`);
   });
 
   it('emits dark: with the theme selector and registers --tw-duration', async () => {

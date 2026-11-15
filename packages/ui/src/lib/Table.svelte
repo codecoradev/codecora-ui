@@ -5,6 +5,7 @@
 -->
 <script lang="ts">
   import type { Snippet } from 'svelte';
+  import { cn, type ClassValue } from './cn.js';
 
   interface Props {
     /** Names the table; shown to assistive technology and as the caption. */
@@ -16,9 +17,10 @@
      */
     regionLabel?: string;
     children: Snippet;
+    class?: ClassValue;
   }
 
-  let { label, regionLabel, children }: Props = $props();
+  let { label, regionLabel, children, class: className }: Props = $props();
 
   let wrap = $state<HTMLElement>();
   let overflowing = $state(false);
@@ -43,82 +45,31 @@
 </script>
 
 <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+<!-- relative: contains the visually hidden caption and header labels. -->
 <div
-  class="cc-table-wrap"
+  class={cn(
+    'cc-table-wrap border-border bg-card focus-visible:outline-ring relative overflow-x-auto rounded-md border focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)]',
+    className,
+  )}
   bind:this={wrap}
   role={overflowing ? 'region' : undefined}
   aria-label={overflowing ? (regionLabel ?? `${label} (scrollable)`) : undefined}
   tabindex={overflowing ? 0 : undefined}
 >
-  <table class="cc-table">
-    <caption class="cc-table-caption">{label}</caption>
+  <!-- Styles the cells you write; a selected row (data-selected or aria-selected) is tinted and marked. -->
+  <table
+    class={[
+      'cc-table w-full border-collapse text-[length:var(--cc-font-size-md)]',
+      '[&_:is(th,td)]:border-border [&_:is(th,td)]:px-cell-x [&_:is(th,td)]:py-cell-y [&_:is(th,td)]:border-b [&_:is(th,td)]:text-left [&_:is(th,td)]:align-middle',
+      '[&_thead_th]:bg-muted [&_thead_th]:text-muted-foreground [&_thead_th]:text-[length:var(--cc-font-size-sm)] [&_thead_th]:font-semibold [&_thead_th]:whitespace-nowrap',
+      '[&_tbody_tr:last-child>*]:border-b-0',
+      '[&_tbody_tr]:duration-fast [&_tbody_tr]:ease-enter [&_tbody_tr]:transition-[background-color,box-shadow] motion-reduce:[&_tbody_tr]:transition-none',
+      '[&_tbody_tr:hover]:bg-accent',
+      '[&_tbody_tr:is([data-selected=true],[aria-selected=true])]:bg-primary-soft [&_tbody_tr:is([data-selected=true],[aria-selected=true])]:[box-shadow:inset_var(--cc-row-marker)_0_0_var(--primary)]',
+      '[&_.num]:text-right [&_.num]:font-mono [&_.num]:tabular-nums',
+    ]}
+  >
+    <caption class="cc-table-caption sr-only m-0">{label}</caption>
     {@render children()}
   </table>
 </div>
-
-<style>
-  .cc-table-wrap {
-    position: relative; /* contains the visually hidden caption and header labels */
-    overflow-x: auto;
-    border: 1px solid var(--cc-border);
-    border-radius: var(--cc-radius-md);
-    background: var(--cc-surface-raised);
-  }
-  .cc-table-wrap:focus-visible {
-    outline: var(--cc-focus-width) solid var(--cc-focus);
-    outline-offset: var(--cc-focus-offset);
-  }
-  .cc-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: var(--cc-font-size-md);
-  }
-  .cc-table-caption {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
-  }
-  .cc-table :global(th),
-  .cc-table :global(td) {
-    padding: var(--cc-cell-py) var(--cc-cell-px);
-    text-align: left;
-    vertical-align: middle;
-    border-bottom: 1px solid var(--cc-border);
-  }
-  .cc-table :global(thead th) {
-    background: var(--cc-surface-sunken);
-    color: var(--cc-text-muted);
-    font-size: var(--cc-font-size-sm);
-    font-weight: 600;
-    white-space: nowrap;
-  }
-  .cc-table :global(tbody tr:last-child > *) {
-    border-bottom: 0;
-  }
-  .cc-table :global(tbody tr) {
-    transition:
-      background-color var(--cc-duration-fast) var(--cc-ease-out),
-      box-shadow var(--cc-duration-fast) var(--cc-ease-out);
-  }
-  .cc-table :global(tbody tr:hover) {
-    background: var(--cc-surface-hover);
-  }
-  .cc-table :global(tbody tr[data-selected='true']),
-  .cc-table :global(tbody tr[aria-selected='true']) {
-    background: var(--cc-accent-soft);
-    box-shadow: inset var(--cc-row-marker) 0 0 var(--cc-accent);
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .cc-table :global(tbody tr) {
-      transition: none;
-    }
-  }
-  .cc-table :global(.num) {
-    text-align: right;
-    font-family: var(--cc-font-mono);
-    font-variant-numeric: tabular-nums;
-  }
-</style>
