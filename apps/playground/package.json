@@ -23,6 +23,8 @@
     "@lucide/svelte": "^1.64.0",
     "@sveltejs/adapter-static": "^4.0.0",
     "@sveltejs/kit": "^3.1.0",
-    "phosphor-svelte": "3.1.1"
+    "@tailwindcss/vite": "^4.3.5",
+    "phosphor-svelte": "3.1.1",
+    "tailwindcss": "^4.3.5"
   }
 }

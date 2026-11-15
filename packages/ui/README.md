@@ -23,6 +23,17 @@ Components read `--cc-*` tokens, so load `@codecora/tokens/tokens.css` and set
 `data-theme` on an ancestor. Icons are props; this package has no icon
 dependency. Every control works with the keyboard alone and at 375 px.
 
+The components are moving to Tailwind 4 utilities (D13,
+[docs/tailwind-migration.md](../../docs/tailwind-migration.md)). `cn()` joins
+class values and resolves Tailwind conflicts with the last one winning; each
+component merges its `class` prop through it as it migrates:
+
+```ts
+import { cn } from '@codecora/ui';
+
+cn('rounded-md px-4', active && 'bg-accent', className); // className overrides
+```
+
 Touch targets are 44 px tall in the comfortable density and 32 px in the compact
 density (above the WCAG 2.2 minimum of 24 px, below the 44 px recommendation), so
 use comfortable on touch-first screens.

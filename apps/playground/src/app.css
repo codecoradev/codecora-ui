@@ -1,0 +1,11 @@
+/*
+ * Tailwind 4 for the playground (D13, #155). Theme variables and utilities
+ * only: preflight stays off while pages and components are still plain CSS.
+ *
+ * source(none): Tailwind generates no utility from the plain-CSS sources yet,
+ * because their class names (grid, table, hidden, ring, border) would match
+ * Tailwind utilities and restyle them. Sources are added as they migrate.
+ */
+@layer theme, base, components, utilities;
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities) source(none);
