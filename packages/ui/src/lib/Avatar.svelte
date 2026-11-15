@@ -1,6 +1,22 @@
 <!-- A person or workspace: the image when it loads, otherwise initials from `name`. -->
+<script module lang="ts">
+  import { tv } from './internal/variants.js';
+
+  const avatar = tv({
+    base: 'cc-avatar bg-muted text-foreground inset-ring-border inline-flex flex-none items-center justify-center overflow-hidden rounded-full font-semibold inset-ring select-none',
+    variants: {
+      size: {
+        sm: 'size-6 text-[length:var(--cc-font-size-xs)]',
+        md: 'size-9 text-[length:var(--cc-font-size-sm)]',
+        lg: 'size-14 text-[length:var(--cc-font-size-lg)]',
+      },
+    },
+  });
+</script>
+
 <script lang="ts">
   import { Avatar } from 'bits-ui';
+  import { cn } from './cn.js';
 
   interface Props {
     /** Full name; names the avatar and supplies the initials. */
@@ -21,55 +37,12 @@
   );
 </script>
 
-<Avatar.Root class={['cc-avatar', `cc-avatar-${size}`]} role="img" aria-label={name}>
-  {#if src}<Avatar.Image {src} alt="" class="img" />{/if}
-  <Avatar.Fallback class="fallback">{initials}</Avatar.Fallback>
+<Avatar.Root class={cn(avatar({ size }), `cc-avatar-${size}`)} role="img" aria-label={name}>
+  <!-- bits-ui shows the image once it has loaded; it fades in over the initials' place. -->
+  {#if src}<Avatar.Image
+      {src}
+      alt=""
+      class="animate-fade-in size-full object-cover motion-reduce:animate-none"
+    />{/if}
+  <Avatar.Fallback>{initials}</Avatar.Fallback>
 </Avatar.Root>
-
-<style>
-  :global(.cc-avatar) {
-    display: inline-flex;
-    flex: none;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    border-radius: var(--cc-radius-pill);
-    background: var(--cc-surface-sunken);
-    box-shadow: inset 0 0 0 1px var(--cc-border);
-    color: var(--cc-text);
-    font-weight: 600;
-    user-select: none;
-  }
-  :global(.cc-avatar-sm) {
-    width: 1.5rem;
-    height: 1.5rem;
-    font-size: var(--cc-font-size-xs);
-  }
-  :global(.cc-avatar-md) {
-    width: 2.25rem;
-    height: 2.25rem;
-    font-size: var(--cc-font-size-sm);
-  }
-  :global(.cc-avatar-lg) {
-    width: 3.5rem;
-    height: 3.5rem;
-    font-size: var(--cc-font-size-lg);
-  }
-  :global(.cc-avatar .img) {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    /* bits-ui shows the image once it has loaded; it fades in over the initials' place. */
-    animation: cc-avatar-in var(--cc-duration-normal) var(--cc-ease-out);
-  }
-  @keyframes cc-avatar-in {
-    from {
-      opacity: 0;
-    }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    :global(.cc-avatar .img) {
-      animation: none;
-    }
-  }
-</style>

@@ -3,6 +3,7 @@
   import type { Snippet } from 'svelte';
   import type { HTMLAnchorAttributes } from 'svelte/elements';
   import VisuallyHidden from './VisuallyHidden.svelte';
+  import { cn } from './cn.js';
 
   interface Props extends Omit<HTMLAnchorAttributes, 'children' | 'href'> {
     href: string;
@@ -16,25 +17,13 @@
 <a
   {...rest}
   {href}
-  class={['cc-link', className]}
+  class={cn(
+    'cc-link text-primary underline-offset-text hover:text-primary-hover underline',
+    'focus-visible:outline-ring focus-visible:rounded-sm focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)] focus-visible:outline-solid',
+    className,
+  )}
   target={external ? '_blank' : rest.target}
   rel={external ? 'noopener noreferrer' : rest.rel}
 >
   {@render children()}{#if external}<VisuallyHidden>, opens in a new tab</VisuallyHidden>{/if}
 </a>
-
-<style>
-  .cc-link {
-    color: var(--cc-accent);
-    text-decoration: underline;
-    text-underline-offset: 0.2em;
-  }
-  .cc-link:hover {
-    color: var(--cc-accent-hover);
-  }
-  .cc-link:focus-visible {
-    outline: var(--cc-focus-width) solid var(--cc-focus);
-    outline-offset: var(--cc-focus-offset);
-    border-radius: var(--cc-radius-sm);
-  }
-</style>

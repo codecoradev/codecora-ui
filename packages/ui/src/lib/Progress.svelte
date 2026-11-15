@@ -15,42 +15,20 @@
   const percent = $derived(Math.round((Math.min(Math.max(value, 0), max) / max) * 100));
 </script>
 
-<div class="cc-progress">
-  <div class="head">
+<div class="cc-progress grid gap-1">
+  <div class="flex justify-between text-[length:var(--cc-font-size-sm)]">
     <span>{label}</span>
-    {#if showValue}<span class="value">{percent}%</span>{/if}
+    {#if showValue}<span class="text-muted-foreground font-mono tabular-nums">{percent}%</span>{/if}
   </div>
-  <Progress.Root {value} {max} aria-label={label} class="track">
-    <div class="fill" style:width="{percent}%"></div>
+  <Progress.Root
+    {value}
+    {max}
+    aria-label={label}
+    class="bg-muted inset-ring-border h-2 overflow-hidden rounded-full inset-ring"
+  >
+    <div
+      class="bg-primary duration-normal ease-enter h-full rounded-full transition-[width]"
+      style:width="{percent}%"
+    ></div>
   </Progress.Root>
 </div>
-
-<style>
-  .cc-progress {
-    display: grid;
-    gap: var(--cc-space-1);
-  }
-  .head {
-    display: flex;
-    justify-content: space-between;
-    font-size: var(--cc-font-size-sm);
-  }
-  .value {
-    color: var(--cc-text-muted);
-    font-family: var(--cc-font-mono);
-    font-variant-numeric: tabular-nums;
-  }
-  :global(.cc-progress .track) {
-    overflow: hidden;
-    height: 0.5rem;
-    border-radius: var(--cc-radius-pill);
-    background: var(--cc-surface-sunken);
-    box-shadow: inset 0 0 0 1px var(--cc-border);
-  }
-  .fill {
-    height: 100%;
-    border-radius: var(--cc-radius-pill);
-    background: var(--cc-accent);
-    transition: width var(--cc-duration-normal) var(--cc-ease-out);
-  }
-</style>

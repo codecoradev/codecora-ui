@@ -1,6 +1,35 @@
+<script module lang="ts">
+  import { tv } from './internal/variants.js';
+
+  /** Enabled: neither :disabled nor aria-disabled (a disabled link). */
+  const button = tv({
+    base: [
+      'cc-button min-h-control px-control-x font-inherit inline-flex cursor-pointer items-center justify-center gap-2 rounded-md border leading-none font-medium whitespace-nowrap no-underline',
+      // Colours ease, a press gives a little: it shrinks to --cc-press-scale (1 under reduced motion).
+      'duration-fast ease-enter transition-[background-color,border-color,scale] [transition-duration:var(--cc-duration-fast),var(--cc-duration-fast),var(--cc-duration-instant)]',
+      'not-disabled:not-aria-disabled:active:[scale:var(--cc-press-scale)]',
+      'focus-visible:outline-ring focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)] focus-visible:outline-solid',
+      'disabled:cursor-not-allowed disabled:opacity-55 aria-disabled:cursor-not-allowed aria-disabled:opacity-55',
+    ],
+    variants: {
+      variant: {
+        primary:
+          'bg-primary text-primary-foreground not-disabled:not-aria-disabled:hover:bg-primary-hover border-transparent',
+        secondary:
+          'border-input bg-card text-foreground not-disabled:not-aria-disabled:hover:bg-accent',
+        ghost:
+          'text-foreground not-disabled:not-aria-disabled:hover:bg-accent border-transparent bg-transparent',
+        danger:
+          'bg-destructive text-destructive-foreground border-transparent not-disabled:not-aria-disabled:hover:bg-[color-mix(in_srgb,var(--cc-danger)_88%,var(--cc-text))]',
+      },
+    },
+  });
+</script>
+
 <script lang="ts">
   import type { Snippet } from 'svelte';
   import type { HTMLAnchorAttributes, HTMLButtonAttributes } from 'svelte/elements';
+  import { cn } from './cn.js';
   import Icon from './internal/Icon.svelte';
   import Spinner from './Spinner.svelte';
   import type { IconComponent } from './types.js';
@@ -34,6 +63,7 @@
   }: Props = $props();
 
   const inactive = $derived(disabled || loading);
+  const classes = $derived(cn(button({ variant }), `cc-button-${variant}`, className));
 </script>
 
 <!-- A link styled as a button when href is set; a disabled link drops its href. -->
@@ -44,7 +74,7 @@
     href={inactive ? undefined : href}
     role={inactive ? 'link' : undefined}
     aria-disabled={inactive || undefined}
-    class={['cc-button', `cc-button-${variant}`, className]}
+    class={classes}
   >
     {#if loading}<Spinner label={loadingLabel} />{:else if icon}<Icon {icon} />{/if}
     {@render children()}
@@ -56,74 +86,9 @@
     {type}
     disabled={inactive}
     aria-busy={loading || undefined}
-    class={['cc-button', `cc-button-${variant}`, className]}
+    class={classes}
   >
     {#if loading}<Spinner label={loadingLabel} />{:else if icon}<Icon {icon} />{/if}
     {@render children()}
   </button>
 {/if}
-
-<style>
-  .cc-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--cc-space-2);
-    min-height: var(--cc-control-h);
-    padding-inline: var(--cc-control-px);
-    border: 1px solid transparent;
-    border-radius: var(--cc-radius-md);
-    font: inherit;
-    font-weight: 500;
-    line-height: 1;
-    text-decoration: none;
-    white-space: nowrap;
-    cursor: pointer;
-    transition:
-      background-color var(--cc-duration-fast) var(--cc-ease-out),
-      border-color var(--cc-duration-fast) var(--cc-ease-out),
-      scale var(--cc-duration-instant) var(--cc-ease-out);
-  }
-  /* A press gives a little: it shrinks to --cc-press-scale (1 under reduced motion). */
-  .cc-button:not(:disabled, [aria-disabled='true']):active {
-    scale: var(--cc-press-scale);
-  }
-  .cc-button:focus-visible {
-    outline: var(--cc-focus-width) solid var(--cc-focus);
-    outline-offset: var(--cc-focus-offset);
-  }
-  .cc-button:is(:disabled, [aria-disabled='true']) {
-    opacity: 0.55;
-    cursor: not-allowed;
-  }
-
-  .cc-button-primary {
-    background: var(--cc-accent);
-    color: var(--cc-accent-text);
-  }
-  .cc-button-primary:not(:disabled, [aria-disabled='true']):hover {
-    background: var(--cc-accent-hover);
-  }
-  .cc-button-secondary {
-    background: var(--cc-surface-raised);
-    color: var(--cc-text);
-    border-color: var(--cc-border-strong);
-  }
-  .cc-button-secondary:not(:disabled, [aria-disabled='true']):hover {
-    background: var(--cc-surface-hover);
-  }
-  .cc-button-ghost {
-    background: transparent;
-    color: var(--cc-text);
-  }
-  .cc-button-ghost:not(:disabled, [aria-disabled='true']):hover {
-    background: var(--cc-surface-hover);
-  }
-  .cc-button-danger {
-    background: var(--cc-danger);
-    color: var(--cc-danger-text);
-  }
-  .cc-button-danger:not(:disabled, [aria-disabled='true']):hover {
-    background: color-mix(in srgb, var(--cc-danger) 88%, var(--cc-text));
-  }
-</style>

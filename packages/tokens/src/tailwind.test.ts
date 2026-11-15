@@ -9,6 +9,7 @@ import {
   tailwindAnimations,
   tailwindKeyframes,
   formAnimations,
+  displayAnimations,
   tailwindKeys,
   tailwindThemeCss,
   tailwindUtilities,
@@ -136,6 +137,52 @@ describe('theme.css compiled by Tailwind', () => {
     expect(out).not.toContain('@keyframes cc-accordion-close');
     for (const name of Object.keys(accordionAnimations))
       expect(await build([`animate-${name}`])).toContain(`.animate-${name} {`);
+  });
+
+  it('compiles every display animation with its keyframes, and only when used', async () => {
+    expect(await build(['p-4'])).not.toContain('@keyframes');
+    for (const [name, { value, keyframes }] of Object.entries(displayAnimations)) {
+      const out = await build([`animate-${name}`, `motion-reduce:animate-${name}`]);
+      expect(out).toMatch(
+        new RegExp(`\\.animate-${name} \\{\\s+animation: ${value.replace(/[()]/g, '\\$&')};`),
+      );
+      expect(out).toMatch(/@media \(prefers-reduced-motion: reduce\)/);
+      const kf = keyframes.match(/@keyframes ([\w-]+)/)![1]!;
+      expect(value.startsWith(`${kf} `)).toBe(true);
+      expect(out).toContain(`@keyframes ${kf} {`);
+    }
+  });
+
+  it('keeps the spinner, skeleton and entry timings of the plain CSS', async () => {
+    const out = await build([
+      'animate-spinner',
+      'motion-reduce:animate-spinner-reduced',
+      'animate-skeleton',
+      'animate-settle-in',
+      'animate-fade-in',
+    ]);
+    expect(out).toContain('animation: cc-spin 0.8s linear infinite');
+    expect(out).toContain('animation: cc-spin 2.4s linear infinite');
+    expect(out).toContain('animation: cc-pulse 1.4s ease-in-out infinite');
+    expect(out).toContain('animation: cc-settle-in var(--cc-duration-normal) var(--cc-ease-out)');
+    expect(out).toContain('animation: cc-fade-in var(--cc-duration-normal) var(--cc-ease-out)');
+    expect(out).toMatch(/@keyframes cc-spin \{\s+to \{\s+transform: rotate\(360deg\);/);
+    expect(out).toMatch(/@keyframes cc-pulse \{\s+50% \{\s+opacity: 0\.45;/);
+    // One cc-spin, though two animations use it.
+    expect(out.match(/@keyframes cc-spin/g)).toHaveLength(1);
+  });
+
+  it('adds the measure, font-inherit and underline helpers', async () => {
+    const out = await build([
+      'max-w-description',
+      'max-w-measure',
+      'font-inherit',
+      'underline-offset-text',
+    ]);
+    expect(out).toContain('max-width: 40ch');
+    expect(out).toContain('max-width: 72ch');
+    expect(out).toContain('font-family: inherit');
+    expect(out).toContain('text-underline-offset: 0.2em');
   });
 
   it('emits dark: with the theme selector and registers --tw-duration', async () => {
