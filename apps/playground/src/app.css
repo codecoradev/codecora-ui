@@ -13,3 +13,5 @@
 @import './lib/playground.css' layer(base);
 @import '@codecora/ui/source.css';
 @import '@codecora/memory/source.css';
+@import '@codecora/icons/source.css';
+@import '@codecora/brand/source.css';

@@ -19,6 +19,8 @@ components. Dependencies: none beyond Svelte; assets are imported with Vite's
 <Mark product="uteke" size={32} label="Uteke" />
 ```
 
+- `Mark` is written with Tailwind utilities, so the app runs Tailwind 4 and
+  imports `@codecora/brand/source.css` after `tailwindcss`.
 - `Favicons` puts the product's `<link>` tags in the document head.
 - `Mark` renders the mark as an image; it is decorative (empty `alt`) unless you
   pass `label`.

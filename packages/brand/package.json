@@ -17,13 +17,16 @@
       "svelte": "./dist/index.js",
       "default": "./dist/index.js"
     },
-    "./assets/*": "./dist/assets/*"
+    "./assets/*": "./dist/assets/*",
+    "./source.css": "./dist/source.css"
   },
   "files": [
     "dist",
     "!dist/**/*.test.*"
   ],
-  "sideEffects": false,
+  "sideEffects": [
+    "**/*.css"
+  ],
   "scripts": {
     "build": "svelte-package -i src/lib -o dist && publint",
     "check": "svelte-check --tsconfig ./tsconfig.json --fail-on-warnings",

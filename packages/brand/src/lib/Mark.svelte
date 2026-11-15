@@ -20,18 +20,10 @@
 </script>
 
 <img
-  class={['cc-mark', className]}
+  class={['cc-mark inline-block flex-none object-contain', className]}
   src={mark.mark}
   alt={label ?? ''}
   width={size}
   height={size}
   decoding="async"
 />
-
-<style>
-  .cc-mark {
-    display: inline-block;
-    flex: none;
-    object-fit: contain;
-  }
-</style>

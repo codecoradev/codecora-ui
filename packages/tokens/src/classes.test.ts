@@ -17,6 +17,8 @@ import { tailwindKeys, tailwindThemeCss, tailwindUtilities } from './tailwind.js
 const root = join(import.meta.dirname, '../../..');
 const roots = [
   'packages/ui/src/lib',
+  'packages/icons/src/lib',
+  'packages/brand/src/lib',
   'packages/memory/src/lib',
   'registry/blocks',
   'apps/playground/src',

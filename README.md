@@ -53,8 +53,9 @@ bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.1.0/code
 bun add https://github.com/codecoradev/codecora-ui/releases/download/v0.1.0/codecora-brand-0.1.0.tgz
 ```
 
-Install only what you use: `@codecora/ui` needs `@codecora/tokens`; icons and
-brand stand alone. Publishing to npm under `@codecora/*` starts once the scope is
+Install only what you use: `@codecora/ui`, `@codecora/icons` and
+`@codecora/brand` need Tailwind 4 with `@codecora/tokens/theme.css`, plus the
+`source.css` of each package you use. Publishing to npm under `@codecora/*` starts once the scope is
 set up (#15); the import names stay the same.
 
 ## Quick start
@@ -64,6 +65,7 @@ set up (#15); the import names stay the same.
 @import 'tailwindcss';
 @import '@codecora/tokens/theme.css';
 @import '@codecora/ui/source.css';
+@import '@codecora/icons/source.css'; /* when you use Icon */
 ```
 
 ```svelte
