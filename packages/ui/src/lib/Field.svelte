@@ -37,7 +37,8 @@
   );
 </script>
 
-<div data-slot="field" class="grid gap-1">
+<!-- content-start: a stretched field (a form row beside a taller field) keeps its control at h-control. -->
+<div data-slot="field" class="grid content-start gap-1">
   <label for={id} class="text-sm leading-[inherit] font-medium">
     {label}{#if required}<span class="text-destructive" aria-hidden="true"> *</span>{/if}
   </label>
