@@ -69,7 +69,7 @@
           // In an invalid group the danger border stays on the checked radio too.
           'not-group-aria-invalid/radios:data-[state=checked]:border-primary',
           'group-aria-invalid/radios:border-destructive group-aria-invalid/radios:inset-ring-destructive group-aria-invalid/radios:inset-ring',
-          'focus-visible:outline-ring focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)]',
+          'focus-visible:outline-ring focus-visible:outline-focus focus-visible:outline-offset-focus',
           'data-disabled:cursor-not-allowed data-disabled:opacity-55',
         )}
       >

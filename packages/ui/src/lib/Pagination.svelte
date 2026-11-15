@@ -7,7 +7,7 @@
       'cc-page min-h-control min-w-control font-inherit text-foreground inline-grid cursor-pointer place-items-center rounded-md border border-transparent bg-transparent px-2 tabular-nums',
       'duration-fast ease-enter transition-[background-color,color,border-color] motion-reduce:transition-none',
       'hover:bg-accent data-selected:border-primary data-selected:bg-primary data-selected:text-primary-foreground',
-      'focus-visible:outline-ring focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)]',
+      'focus-visible:outline-ring focus-visible:outline-focus focus-visible:outline-offset-focus',
       'disabled:cursor-not-allowed disabled:opacity-55',
     ],
     variants: { step: { true: 'cc-page-step' } },

@@ -59,7 +59,7 @@
   const uid = $props.id();
 
   const bottomItem = cn(
-    'font-inherit text-muted-foreground aria-[current=page]:text-primary focus-visible:outline-ring grid min-h-14 w-full cursor-pointer justify-items-center gap-0.5 border-0 bg-transparent px-1 py-2 text-xs leading-[inherit] no-underline focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:-outline-offset-2 aria-[current=page]:font-semibold',
+    'font-inherit text-muted-foreground aria-[current=page]:text-primary focus-visible:outline-ring focus-visible:outline-focus grid min-h-14 w-full cursor-pointer justify-items-center gap-0.5 border-0 bg-transparent px-1 py-2 text-xs leading-[inherit] no-underline focus-visible:-outline-offset-2 aria-[current=page]:font-semibold',
   );
 
   function select(item: NavItem) {
@@ -76,7 +76,7 @@
   )}
 >
   <a
-    class="z-skip bg-card text-foreground focus-visible:outline-ring absolute top-2 left-2 -translate-y-2/1 rounded-md px-3 py-2 focus-visible:translate-none focus-visible:outline-[length:var(--cc-focus-width)]"
+    class="z-skip bg-card text-foreground focus-visible:outline-ring focus-visible:outline-focus absolute top-2 left-2 -translate-y-2/1 rounded-md px-3 py-2 focus-visible:translate-none"
     href="#{uid}-main">Skip to content</a
   >
 

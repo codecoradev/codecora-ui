@@ -35,7 +35,7 @@
             <li>
               <!-- The theme picked in the toolbar gets the accent bar, not colour alone. -->
               <a
-                class="group text-foreground hover:bg-accent focus-visible:outline-ring flex min-h-11 items-center gap-3 rounded-md px-2 py-1 no-underline focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)] aria-[current=true]:[box-shadow:inset_var(--cc-row-marker)_0_0_var(--primary)]"
+                class="group text-foreground hover:bg-accent focus-visible:outline-ring focus-visible:outline-focus focus-visible:outline-offset-focus flex min-h-11 items-center gap-3 rounded-md px-2 py-1 no-underline aria-[current=true]:[box-shadow:inset_var(--cc-row-marker)_0_0_var(--primary)]"
                 href={resolve('/themes/[theme]', { theme: name })}
                 aria-current={name === current ? 'true' : undefined}
               >

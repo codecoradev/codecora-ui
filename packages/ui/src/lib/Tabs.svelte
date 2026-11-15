@@ -75,7 +75,7 @@
           'cc-tab min-h-control px-control-x font-inherit text-muted-foreground -mb-px flex-none cursor-pointer border-0 border-b-2 border-transparent bg-transparent font-medium',
           'not-data-disabled:hover:text-foreground data-[state=active]:border-b-primary data-[state=active]:text-foreground in-data-indicator:data-[state=active]:border-b-transparent',
           'data-disabled:cursor-not-allowed data-disabled:border-dashed data-disabled:border-b-current data-disabled:opacity-55',
-          'focus-visible:outline-ring focus-visible:rounded-sm focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:-outline-offset-2',
+          'focus-visible:outline-ring focus-visible:outline-focus focus-visible:rounded-sm focus-visible:-outline-offset-2',
         )}
       >
         {item.label}
@@ -98,7 +98,7 @@
   {#each items as item (item.value)}
     <Tabs.Content
       value={item.value}
-      class="cc-tab-panel focus-visible:outline-ring pt-4 focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)]"
+      class="cc-tab-panel focus-visible:outline-ring focus-visible:outline-focus focus-visible:outline-offset-focus pt-4"
       >{@render panel(item.value)}</Tabs.Content
     >
   {/each}

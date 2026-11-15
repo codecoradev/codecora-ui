@@ -84,17 +84,17 @@ headings and other tight text), `max-w-description` (40ch) and `max-w-measure`
 Tailwind's own `ease-out` and `ease-in-out` curves.
 
 **CodeCora-only tokens** keep the `--cc-` prefix: Tailwind has no namespace
-for them. Read them with an arbitrary value
-(`outline-[length:var(--cc-focus-width)]`, `[stroke-width:var(--cc-icon-stroke)]`)
-or through the utilities named here.
+for them, so `theme.css` gives each a named utility. Use the name, not an
+arbitrary value: `outline-focus`, not `outline-[length:var(--cc-focus-width)]`
+(the class lint rejects the long form).
 
 | Variable | Use |
 |---|---|
-| `--cc-focus-width`, `--cc-focus-offset` | Focus ring thickness (at least 2px) and offset |
-| `--cc-icon-size`, `--cc-icon-stroke` | Icon size (`size-icon`) and stroke width; `@codecora/icons` reads them too |
-| `--cc-badge-radius`, `--cc-badge-case`, `--cc-badge-tracking`, `--cc-badge-font` | The theme's badge and label shape |
+| `--cc-focus-width`, `--cc-focus-offset` | Focus ring thickness (at least 2px) and offset: `outline-focus`, `outline-offset-focus` |
+| `--cc-icon-size`, `--cc-icon-stroke` | Icon size and stroke width: `size-icon`, `stroke-icon`; `@codecora/icons` reads them too |
+| `--cc-badge-radius`, `--cc-badge-case`, `--cc-badge-tracking`, `--cc-badge-font` | The theme's badge and label shape: `rounded-badge`, `case-badge`, `tracking-badge`, `font-badge` |
 | `--cc-row-marker` | Width of the accent bar on a selected row |
-| `--cc-press-scale` | A pressed button's scale (0.98; 1 under reduced motion) |
+| `--cc-press-scale` | A pressed button's scale (0.98; 1 under reduced motion): `active:scale-press` |
 | `--cc-duration-instant`, `-fast`, `-normal`, `-slow` | 70, 140, 240, 400 ms: `duration-instant` ... `duration-slow` |
 | `--cc-layer-sticky`, `-overlay`, `-modal`, `-popover`, `-tooltip`, `-toast`, `-skip` | Stacking order: `z-sticky` ... `z-skip` |
 | `--cc-primary-<accent>` (+ `-hover`, `-foreground`), `--cc-ring-<accent>` | Internal: each theme's tuned accent palette, read by `data-accent` |

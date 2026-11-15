@@ -13,7 +13,7 @@
 
   /** Exits run one step shorter than entries; reduced motion drops the keyframes. */
   const panelRecipe = tv({
-    base: 'cc-modal z-modal border-border bg-popover text-foreground shadow-modal focus-visible:outline-ring fixed grid content-start gap-3 overflow-y-auto p-5 font-sans focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:-outline-offset-2 focus-visible:outline-solid motion-reduce:animate-none motion-reduce:data-[state=closed]:animate-none',
+    base: 'cc-modal z-modal border-border bg-popover text-foreground shadow-modal focus-visible:outline-ring focus-visible:outline-focus fixed grid content-start gap-3 overflow-y-auto p-5 font-sans focus-visible:-outline-offset-2 focus-visible:outline-solid motion-reduce:animate-none motion-reduce:data-[state=closed]:animate-none',
     variants: {
       placement: {
         // Opacity eases; only the movement springs.
@@ -38,7 +38,7 @@
 
   /** Square icon button in the corner: close here, dismiss in Toaster. */
   export const closeButton =
-    'inline-flex size-control flex-none cursor-pointer items-center justify-center -m-2 rounded-md border-0 bg-transparent p-0 text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)] focus-visible:outline-ring focus-visible:outline-solid';
+    'inline-flex size-control flex-none cursor-pointer items-center justify-center -m-2 rounded-md border-0 bg-transparent p-0 text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:outline-focus focus-visible:outline-offset-focus focus-visible:outline-ring focus-visible:outline-solid';
 </script>
 
 <script lang="ts">

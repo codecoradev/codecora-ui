@@ -314,7 +314,7 @@
     </p>
     <details class="group">
       <summary
-        class="border-input bg-card focus-visible:outline-ring inline-flex min-h-11 cursor-pointer items-center rounded-md border px-3 text-sm leading-[inherit] font-semibold group-open:mb-3 focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)]"
+        class="border-input bg-card focus-visible:outline-ring focus-visible:outline-focus focus-visible:outline-offset-focus inline-flex min-h-11 cursor-pointer items-center rounded-md border px-3 text-sm leading-[inherit] font-semibold group-open:mb-3"
         >Use the tokens</summary
       >
       <CodeBlock code={snippet} language="css" />

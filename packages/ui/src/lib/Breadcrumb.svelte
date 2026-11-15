@@ -30,7 +30,7 @@
           <!-- 0.2em of the list's text size. -->
           <a
             href={item.href}
-            class="text-muted-foreground hover:text-foreground focus-visible:outline-ring underline underline-offset-[calc(var(--text-sm)*0.2)] focus-visible:rounded-sm focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)]"
+            class="text-muted-foreground hover:text-foreground focus-visible:outline-ring focus-visible:outline-focus focus-visible:outline-offset-focus underline underline-offset-[calc(var(--text-sm)*0.2)] focus-visible:rounded-sm"
             >{item.label}</a
           >
         {:else}

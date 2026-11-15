@@ -31,7 +31,7 @@
 </script>
 
 <svg
-  class="cc-glyph size-icon flex-none [stroke-width:var(--cc-icon-stroke)]"
+  class="cc-glyph size-icon stroke-icon flex-none"
   viewBox="0 0 24 24"
   fill="none"
   stroke="currentColor"

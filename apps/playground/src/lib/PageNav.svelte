@@ -23,7 +23,7 @@
     (link.under !== undefined && page.url.pathname.startsWith(link.under));
 
   const focus =
-    'focus-visible:outline-ring focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)]';
+    'focus-visible:outline-ring focus-visible:outline-focus focus-visible:outline-offset-focus';
   /* 44 px rows: the comfortable target the components use. The current page changes
      colour, weight and gets an underline bar. */
   const item = `text-muted-foreground hover:bg-accent hover:text-foreground aria-[current=page]:text-foreground inline-flex min-h-11 items-center rounded-md px-2 no-underline aria-[current=page]:rounded-none aria-[current=page]:font-semibold aria-[current=page]:[box-shadow:inset_0_-2px_0_var(--primary)] max-[47.99rem]:flex-none ${focus}`;

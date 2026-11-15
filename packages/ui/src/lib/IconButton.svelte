@@ -7,8 +7,8 @@
       'cc-icon-button size-control inline-flex cursor-pointer items-center justify-center rounded-md border p-0',
       // The background eases; a press shrinks to --cc-press-scale (1 under reduced motion).
       'duration-fast ease-enter transition-[background-color,scale] [transition-duration:var(--cc-duration-fast),var(--cc-duration-instant)]',
-      'not-disabled:hover:bg-accent not-disabled:active:[scale:var(--cc-press-scale)]',
-      'focus-visible:outline-ring focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)] focus-visible:outline-solid',
+      'not-disabled:hover:bg-accent not-disabled:active:scale-press',
+      'focus-visible:outline-ring focus-visible:outline-focus focus-visible:outline-offset-focus focus-visible:outline-solid',
       'disabled:cursor-not-allowed disabled:opacity-55',
     ],
     variants: {

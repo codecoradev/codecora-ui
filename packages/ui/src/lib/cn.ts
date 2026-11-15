@@ -15,12 +15,20 @@ export const twMergeExtension = {
     ease: ['enter', 'exit', 'move', 'spring'],
     leading: ['heading'],
     container: ['description', 'measure'],
+    radius: ['badge'],
+    font: ['badge'],
+    tracking: ['badge'],
   },
   classGroups: {
     duration: [{ duration: ['instant', 'fast', 'normal', 'slow'] }],
     z: [{ z: ['sticky', 'overlay', 'modal', 'popover', 'tooltip', 'toast', 'skip'] }],
     // font: inherit, not a font family: `font-mono` after it must not remove it.
     'font-inherit': ['font-inherit'],
+    'outline-w': [{ outline: ['focus'] }],
+    'outline-offset': [{ 'outline-offset': ['focus'] }],
+    'stroke-w': [{ stroke: ['icon'] }],
+    scale: [{ scale: ['press'] }],
+    'text-transform': ['case-badge'],
   },
 };
 

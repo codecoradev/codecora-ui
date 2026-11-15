@@ -18,7 +18,7 @@
   /* Every crumb after the first leads with the separator. */
   const after = 'before:mr-2 before:content-[var(--pg-crumb-separator)]';
   const pager =
-    'focus-visible:outline-ring inline-flex min-h-11 items-center gap-1 rounded-md border px-3 text-sm leading-[inherit] no-underline focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)]';
+    'focus-visible:outline-ring inline-flex min-h-11 items-center gap-1 rounded-md border px-3 text-sm leading-[inherit] no-underline focus-visible:outline-focus focus-visible:outline-offset-focus';
 </script>
 
 <svelte:head>

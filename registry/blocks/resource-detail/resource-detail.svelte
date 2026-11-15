@@ -195,7 +195,7 @@
           {#snippet trigger({ props })}
             <button
               type="button"
-              class="bg-primary text-primary-foreground hover:bg-primary-hover focus-visible:outline-ring min-h-control min-w-control inline-flex cursor-pointer items-center justify-center rounded-e-md border-0 border-s border-s-[color-mix(in_srgb,var(--primary-foreground)_35%,transparent)] focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)]"
+              class="bg-primary text-primary-foreground hover:bg-primary-hover focus-visible:outline-ring min-h-control min-w-control focus-visible:outline-focus focus-visible:outline-offset-focus inline-flex cursor-pointer items-center justify-center rounded-e-md border-0 border-s border-s-[color-mix(in_srgb,var(--primary-foreground)_35%,transparent)]"
               {...props}
             >
               <ChevronDown size={16} aria-hidden="true" />

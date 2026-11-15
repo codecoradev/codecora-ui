@@ -31,7 +31,8 @@ export const revertedVariables: Readonly<Record<string, string>> = Object.fromEn
  * the variable of the same name the themes declare (`--radius-md: var(--radius-md)`).
  */
 export const themeKeys: Readonly<Record<string, string>> = Object.fromEntries(
-  Object.entries(tailwindKeys).filter(([key]) => /^(radius|font)-/.test(key)),
+  // The badge keys are CodeCora's own; shadcn never writes them.
+  Object.entries(tailwindKeys).filter(([key]) => /^(radius|font)-(?!badge$)/.test(key)),
 );
 
 /** `registry` with the cc-theme item's package ranges and variables filled in. */

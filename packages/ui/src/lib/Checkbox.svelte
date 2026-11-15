@@ -69,7 +69,7 @@
       'data-[state=checked]:bg-primary not-aria-invalid:data-[state=checked]:border-primary',
       'data-[state=indeterminate]:bg-primary not-aria-invalid:data-[state=indeterminate]:border-primary',
       'aria-invalid:border-destructive aria-invalid:inset-ring-destructive aria-invalid:inset-ring',
-      'focus-visible:outline-ring focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)]',
+      'focus-visible:outline-ring focus-visible:outline-focus focus-visible:outline-offset-focus',
       'data-disabled:cursor-not-allowed data-disabled:opacity-55',
       // The mark: opacity eases, only the scale springs. Unchecking takes the shorter exit.
       '[&_svg]:[transition:opacity_var(--cc-duration-fast)_var(--ease-enter),scale_var(--cc-duration-slow)_var(--ease-spring)]',

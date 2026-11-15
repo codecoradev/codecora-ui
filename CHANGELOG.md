@@ -20,6 +20,7 @@ maintainer picks the version.
 - **Kept.** Tokens Tailwind has no namespace for keep the `cc-` prefix: `--cc-focus-width`, `--cc-focus-offset`, `--cc-icon-size`, `--cc-icon-stroke`, `--cc-badge-*`, `--cc-row-marker`, `--cc-press-scale`, `--cc-duration-*`, `--cc-layer-*`.
 - **Type scale.** Components use Tailwind's `text-xs` ... `text-3xl`. `xs`, `sm`, `base` and `lg` are unchanged; `xl`, `2xl` and `3xl` are now 1.25, 1.5 and 1.875rem (were 1.375, 1.75 and 2.25rem), so those headings are slightly smaller. Headings set `leading-heading` (1.2) themselves.
 - **TypeScript.** `shadcnBridge` and `shadcnExtensions` are removed; `themeVariables` is now the list of colour variable names (plus `radius`), `semanticTokens` lists the new names and `cssVar('background')` returns `var(--background)`. New: `colorTokens`, `colorVariables`, `accentVariables`, `aliasVariables`, `themeKeys`, `densityVariables`. `ease` is keyed `enter|exit|move|spring`, `fontSize` is Tailwind's scale, `leading` is `{ heading }`, and `Theme.radius` has no `pill`.
+- **Named utilities for the CodeCora-only tokens.** `outline-focus`, `outline-offset-focus`, `stroke-icon`, `scale-press`, `rounded-badge`, `font-badge`, `tracking-badge` and `case-badge` replace arbitrary values such as `outline-[length:var(--cc-focus-width)]`; `cn()` resolves them against Tailwind's own utilities (#180).
 - **Runtime dependencies.** `@codecora/ui` now depends on `tailwind-merge` and `tailwind-variants` (`cn()` and the variants), about 27 KB gzip together in the browser.
 
 ## [0.7.0] - 2026-11-04

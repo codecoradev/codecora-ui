@@ -11,7 +11,7 @@
   const control = tv({
     base: [
       'min-h-control font-inherit flex w-full cursor-pointer items-center gap-3 rounded-md border-0 bg-transparent px-3 text-left no-underline',
-      'hover:bg-accent focus-visible:outline-ring focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:-outline-offset-2',
+      'hover:bg-accent focus-visible:outline-ring focus-visible:outline-focus focus-visible:-outline-offset-2',
     ],
     variants: {
       part: {

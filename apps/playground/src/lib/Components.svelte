@@ -89,7 +89,7 @@
   const muted = 'text-muted-foreground max-w-[var(--pg-measure-intro)]';
   /* The section in view gets a tint, weight and an inset bar. */
   const link =
-    'text-foreground hover:bg-accent aria-[current=location]:bg-primary-soft focus-visible:outline-ring grid gap-0.5 rounded-sm px-2 py-1 no-underline focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)] aria-[current=location]:font-semibold aria-[current=location]:[box-shadow:inset_2px_0_0_var(--primary)]';
+    'text-foreground hover:bg-accent aria-[current=location]:bg-primary-soft focus-visible:outline-ring grid gap-0.5 rounded-sm px-2 py-1 no-underline focus-visible:outline-focus focus-visible:outline-offset-focus aria-[current=location]:font-semibold aria-[current=location]:[box-shadow:inset_2px_0_0_var(--primary)]';
 
   function save() {
     saving = true;
@@ -104,7 +104,7 @@
 <div class="grid grid-cols-1 gap-8 lg:grid-cols-[calc(var(--spacing)*52)_minmax(0,1fr)]">
   <details class="group lg:sticky lg:top-4 lg:self-start" bind:open={indexOpen}>
     <summary
-      class="border-input bg-card focus-visible:outline-ring flex min-h-11 cursor-pointer items-center rounded-md border px-3 text-sm leading-[inherit] font-semibold group-open:mb-3 focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)] lg:hidden"
+      class="border-input bg-card focus-visible:outline-ring focus-visible:outline-focus focus-visible:outline-offset-focus flex min-h-11 cursor-pointer items-center rounded-md border px-3 text-sm leading-[inherit] font-semibold group-open:mb-3 lg:hidden"
       >Jump to a section</summary
     >
     <nav
