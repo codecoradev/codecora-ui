@@ -2,7 +2,7 @@
 name: CodeCora UI
 description: One design system, many themes; product identity on shared structure and accessibility.
 rounded:
-  pill: "999px"
+  full: "9999px"
 spacing:
   "1": "0.25rem"
   "2": "0.5rem"

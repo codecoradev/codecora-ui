@@ -28,7 +28,7 @@ rounded:
   sm: "3px"
   md: "6px"
   lg: "10px"
-  pill: "999px"
+  full: "9999px"
 ---
 
 # Design System: CodeCora UI, sepia theme

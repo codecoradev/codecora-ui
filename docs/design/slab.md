@@ -30,7 +30,7 @@ rounded:
   sm: "0"
   md: "0"
   lg: "0"
-  pill: "999px"
+  full: "9999px"
 ---
 
 # Design System: CodeCora UI, slab theme

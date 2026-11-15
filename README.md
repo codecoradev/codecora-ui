@@ -217,14 +217,14 @@ Navigation drawer at 375 px:
 ## Documentation
 
 - [docs/architecture.md](docs/architecture.md): packages, tokens and how products consume them
-- [docs/decisions.md](docs/decisions.md): locked decisions D1–D12
+- [docs/decisions.md](docs/decisions.md): locked decisions D1–D13
 - [docs/roadmap.md](docs/roadmap.md): milestones M0–M4 and the issue map
 - [DESIGN.md](DESIGN.md) and [docs/design/](docs/design): rules every theme shares, one file per theme
 - [CHANGELOG.md](CHANGELOG.md)
 
 ## Contributing
 
-Bug fixes are welcome. Changes to direction (new packages, decisions D1–D12)
+Bug fixes are welcome. Changes to direction (new packages, decisions D1–D13)
 start with an issue. See [CONTRIBUTING.md](CONTRIBUTING.md) and
 [AGENTS.md](AGENTS.md) for the workflow and the local gates.
 

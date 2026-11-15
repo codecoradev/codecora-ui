@@ -44,6 +44,10 @@ import { cn } from '@codecora/ui';
 cn('rounded-md px-4', active && 'bg-accent', className); // className overrides
 ```
 
+`cn()` and the component variants run `tailwind-merge` and
+`tailwind-variants` in the browser: two runtime dependencies, about 27 KB gzip
+together, that every app using `@codecora/ui` loads.
+
 Touch targets are 44 px tall in the comfortable density and 32 px in the compact
 density (above the WCAG 2.2 minimum of 24 px, below the 44 px recommendation), so
 use comfortable on touch-first screens.

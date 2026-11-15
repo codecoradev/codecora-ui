@@ -14,7 +14,7 @@ web
 
 ## Product Purpose
 
-One general UI system for every CodeCora product: design tokens, mixable themes, Svelte 5 components on bits-ui, icons, brand marks, and the Uteke memory domain layer. It succeeds when a fix made once reaches every app, and when each product keeps its own identity on shared structure and accessibility. See [docs/decisions.md](docs/decisions.md) (D1–D12) and [docs/architecture.md](docs/architecture.md).
+One general UI system for every CodeCora product: design tokens, mixable themes, Svelte 5 components on bits-ui, icons, brand marks, and the Uteke memory domain layer. It succeeds when a fix made once reaches every app, and when each product keeps its own identity on shared structure and accessibility. See [docs/decisions.md](docs/decisions.md) (D1–D13) and [docs/architecture.md](docs/architecture.md).
 
 ## Positioning
 
