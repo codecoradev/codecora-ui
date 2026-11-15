@@ -91,6 +91,11 @@ describe('Field with Input', () => {
     expect(input).toBeInvalid();
     expect(input).toHaveAccessibleDescription(/Error:\s*Enter a valid email/);
   });
+
+  it('packs its rows at the top, so a stretched field does not grow the control', () => {
+    const { container } = render(Field, { label: 'Email', children: control });
+    expect(container.querySelector('[data-slot=field]')).toHaveClass('grid', 'content-start');
+  });
 });
 
 describe('Field with a real Input', () => {
