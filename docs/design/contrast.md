@@ -28,7 +28,7 @@ rounded:
   sm: "2px"
   md: "4px"
   lg: "6px"
-  pill: "999px"
+  full: "9999px"
 ---
 
 # Design System: CodeCora UI, contrast theme

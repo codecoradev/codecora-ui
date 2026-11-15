@@ -48,7 +48,7 @@ rounded:
   sm: "4px"
   md: "6px"
   lg: "10px"
-  pill: "999px"
+  full: "9999px"
 spacing:
   "1": "0.25rem"
   "2": "0.5rem"

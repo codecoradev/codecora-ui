@@ -28,7 +28,7 @@ rounded:
   sm: "8px"
   md: "14px"
   lg: "22px"
-  pill: "999px"
+  full: "9999px"
 ---
 
 # Design System: CodeCora UI, soft theme
