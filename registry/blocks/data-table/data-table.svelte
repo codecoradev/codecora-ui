@@ -69,7 +69,7 @@
   ];
 </script>
 
-<section class="cc-data-table grid grid-cols-1 gap-4" aria-label={title}>
+<section data-slot="data-table" class="grid grid-cols-1 gap-4" aria-label={title}>
   <h2 class="leading-heading text-lg">{title}</h2>
   <DataTable
     label={title}

@@ -107,7 +107,11 @@
   <Button variant="primary" onclick={() => browser.create()}>New memory</Button>
 {/snippet}
 
-<section class={cn('cc-memory-list grid min-w-0 gap-3', className)} aria-labelledby="{uid}-title">
+<section
+  data-slot="memory-list"
+  class={cn('grid min-w-0 gap-3', className)}
+  aria-labelledby="{uid}-title"
+>
   <header class="flex items-center justify-between gap-3">
     <h2 id="{uid}-title" class="font-display leading-heading m-0 text-lg font-bold">
       {label}

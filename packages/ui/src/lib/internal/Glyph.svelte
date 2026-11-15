@@ -31,7 +31,8 @@
 </script>
 
 <svg
-  class="cc-glyph size-icon stroke-icon flex-none"
+  data-slot="glyph"
+  class="size-icon stroke-icon flex-none"
   viewBox="0 0 24 24"
   fill="none"
   stroke="currentColor"

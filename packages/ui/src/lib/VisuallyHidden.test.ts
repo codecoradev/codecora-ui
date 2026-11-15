@@ -16,12 +16,12 @@ describe('VisuallyHidden', () => {
     const el = screen.getByText('Status').parentElement;
     expect(el).toHaveAttribute('id', 'status');
     expect(el).toHaveAttribute('aria-live', 'polite');
-    expect(el).toHaveClass('cc-visually-hidden');
+    expect(el).toHaveAttribute('data-slot', 'visually-hidden');
   });
 
   it('keeps the hiding class when a class is passed', () => {
     render(VisuallyHidden, { children: text('Label'), class: 'extra' });
     const el = screen.getByText('Label').parentElement;
-    expect(el).toHaveClass('cc-visually-hidden', 'extra');
+    expect(el).toHaveClass('sr-only', 'extra');
   });
 });

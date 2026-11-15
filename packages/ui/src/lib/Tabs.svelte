@@ -56,13 +56,14 @@
   });
 </script>
 
-<Tabs.Root bind:value class={cn('cc-tabs', className)}>
+<Tabs.Root bind:value data-slot="tabs" class={cn(className)}>
   <!-- The tabs sit 1px over the list's border (-mb-px), which would make the list
        scroll vertically too and draw a scrollbar: overflow-y-hidden. The underline
        is inside the box, so nothing is lost. -->
   <Tabs.List
     bind:ref={list}
-    class="cc-tabs-list border-border relative flex gap-1 overflow-x-auto overflow-y-hidden border-b"
+    data-slot="tabs-list"
+    class="border-border relative flex gap-1 overflow-x-auto overflow-y-hidden border-b"
     aria-label={label}
     data-indicator={indicator ? '' : undefined}
   >
@@ -71,8 +72,9 @@
       <Tabs.Trigger
         value={item.value}
         disabled={item.disabled}
+        data-slot="tab"
         class={cn(
-          'cc-tab min-h-control px-control-x font-inherit text-muted-foreground -mb-px flex-none cursor-pointer border-0 border-b-2 border-transparent bg-transparent font-medium',
+          'min-h-control px-control-x font-inherit text-muted-foreground -mb-px flex-none cursor-pointer border-0 border-b-2 border-transparent bg-transparent font-medium',
           'not-data-disabled:hover:text-foreground data-[state=active]:border-b-primary data-[state=active]:text-foreground in-data-indicator:data-[state=active]:border-b-transparent',
           'data-disabled:cursor-not-allowed data-disabled:border-dashed data-disabled:border-b-current data-disabled:opacity-55',
           'focus-visible:outline-ring focus-visible:outline-focus focus-visible:rounded-sm focus-visible:-outline-offset-2',
@@ -84,8 +86,9 @@
     {#if indicator}
       <!-- A 1px bar scaled to the tab's width: transform only, so the spring may move it. -->
       <span
+        data-slot="tab-indicator"
         class={[
-          'cc-tab-indicator bg-primary pointer-events-none absolute bottom-0 left-0 h-0.5 w-px origin-left',
+          'bg-primary pointer-events-none absolute bottom-0 left-0 h-0.5 w-px origin-left',
           settled &&
             'duration-slow ease-spring transition-[translate,scale] motion-reduce:transition-none',
         ]}
@@ -98,7 +101,8 @@
   {#each items as item (item.value)}
     <Tabs.Content
       value={item.value}
-      class="cc-tab-panel focus-visible:outline-ring focus-visible:outline-focus focus-visible:outline-offset-focus pt-4"
+      data-slot="tab-panel"
+      class="focus-visible:outline-ring focus-visible:outline-focus focus-visible:outline-offset-focus pt-4"
       >{@render panel(item.value)}</Tabs.Content
     >
   {/each}

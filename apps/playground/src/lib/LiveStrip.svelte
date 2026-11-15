@@ -104,7 +104,7 @@
     {/each}
   </div>
 
-  <div class="flex flex-wrap items-end gap-x-5 gap-y-3 [&>.cc-badge]:self-center">
+  <div class="flex flex-wrap items-end gap-x-5 gap-y-3 [&>[data-slot=badge]]:self-center">
     <div class="max-w-2xs shrink grow basis-48">
       <Field label="Key name">
         {#snippet children(control)}

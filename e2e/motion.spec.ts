@@ -15,7 +15,7 @@ async function open(page: Page) {
 
 /** Presses the first primary button and reads its scale while it is held down. */
 async function pressedScale(page: Page) {
-  const button = page.locator('.cc-button-primary:not(:disabled)').first();
+  const button = page.locator('[data-slot=button][data-variant=primary]:not(:disabled)').first();
   await button.scrollIntoViewIfNeeded();
   const box = (await button.boundingBox())!;
   await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
@@ -43,11 +43,13 @@ test.describe('when motion is allowed', () => {
         .first()
         .evaluate((el, p) => getComputedStyle(el).getPropertyValue(p), property);
 
-    expect(await read('.cc-button', 'transition-property')).toContain('scale');
-    expect(await read('.cc-icon-button', 'transition-property')).toContain('scale');
-    expect(await read('.cc-input', 'transition-property')).toContain('border-color');
-    expect(await read('.cc-radio', 'transition-property')).toContain('border-color');
-    expect(seconds(await read('.cc-table tbody tr', 'transition-duration'))).toBeGreaterThan(0);
+    expect(await read('[data-slot=button]', 'transition-property')).toContain('scale');
+    expect(await read('[data-slot=icon-button]', 'transition-property')).toContain('scale');
+    expect(await read('[data-slot=input]', 'transition-property')).toContain('border-color');
+    expect(await read('[data-slot=radio]', 'transition-property')).toContain('border-color');
+    expect(
+      seconds(await read('[data-slot=table] tbody tr', 'transition-duration')),
+    ).toBeGreaterThan(0);
   });
 
   test('a radio dot and a field error arrive with an animation', async ({ page }) => {
@@ -57,8 +59,8 @@ test.describe('when motion is allowed', () => {
         .locator(selector)
         .first()
         .evaluate((el) => getComputedStyle(el).animationName);
-    expect(await name('.cc-radio .dot')).toContain('cc-dot-pop');
-    expect(await name('.cc-field .error')).toContain('cc-error-in');
+    expect(await name('[data-slot=radio] .dot')).toContain('cc-dot-pop');
+    expect(await name('[data-slot=field] .error')).toContain('cc-error-in');
   });
 });
 
@@ -79,15 +81,15 @@ test.describe('when the user asks for reduced motion', () => {
         .evaluate((el, p) => getComputedStyle(el).getPropertyValue(p), property);
 
     for (const selector of [
-      '.cc-button',
-      '.cc-icon-button',
-      '.cc-input',
-      '.cc-radio',
-      '.cc-table tbody tr',
+      '[data-slot=button]',
+      '[data-slot=icon-button]',
+      '[data-slot=input]',
+      '[data-slot=radio]',
+      '[data-slot=table] tbody tr',
     ]) {
       expect(seconds(await read(selector, 'transition-duration')), selector).toBe(0);
     }
-    expect(await read('.cc-radio .dot', 'animation-name')).toBe('none');
-    expect(await read('.cc-field .error', 'animation-name')).toBe('none');
+    expect(await read('[data-slot=radio] .dot', 'animation-name')).toBe('none');
+    expect(await read('[data-slot=field] .error', 'animation-name')).toBe('none');
   });
 });

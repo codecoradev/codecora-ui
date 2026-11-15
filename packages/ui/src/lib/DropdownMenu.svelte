@@ -42,18 +42,22 @@
       {side}
       sideOffset={6}
       aria-label={label}
-      class="cc-menu z-popover border-border bg-popover text-foreground shadow-popover animate-popover-in data-[state=closed]:animate-popover-out min-w-48 origin-[var(--bits-dropdown-menu-content-transform-origin)] rounded-md border p-1 font-sans motion-reduce:animate-none motion-reduce:data-[state=closed]:animate-none"
+      data-slot="menu"
+      class="z-popover border-border bg-popover text-foreground shadow-popover animate-popover-in data-[state=closed]:animate-popover-out min-w-48 origin-[var(--bits-dropdown-menu-content-transform-origin)] rounded-md border p-1 font-sans motion-reduce:animate-none motion-reduce:data-[state=closed]:animate-none"
     >
       {#each items as item (item.label)}
         {#if item.separatorBefore}<DropdownMenu.Separator
-            class="cc-menu-rule bg-border my-1 h-px"
+            data-slot="menu-rule"
+            class="bg-border my-1 h-px"
           />{/if}
         <DropdownMenu.Item
           onSelect={item.onselect}
           disabled={item.disabled}
+          data-slot="menu-item"
+          data-danger={item.danger || undefined}
           class={[
-            'cc-menu-item min-h-control px-control-x data-highlighted:bg-accent flex cursor-pointer items-center gap-2 rounded-sm data-disabled:cursor-not-allowed data-disabled:opacity-55',
-            item.danger && 'cc-menu-danger text-destructive',
+            'min-h-control px-control-x data-highlighted:bg-accent flex cursor-pointer items-center gap-2 rounded-sm data-disabled:cursor-not-allowed data-disabled:opacity-55',
+            item.danger && 'text-destructive',
           ]}
         >
           {#if item.icon}<Icon icon={item.icon} />{/if}

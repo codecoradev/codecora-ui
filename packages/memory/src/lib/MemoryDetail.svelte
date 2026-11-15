@@ -83,7 +83,8 @@
 </script>
 
 <section
-  class={cn('cc-memory-detail grid min-w-0 content-start gap-4', className)}
+  data-slot="memory-detail"
+  class={cn('grid min-w-0 content-start gap-4', className)}
   aria-labelledby="{uid}-title"
 >
   {#if browser.mode === 'new'}

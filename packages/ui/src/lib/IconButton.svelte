@@ -4,7 +4,7 @@
 
   const iconButton = tv({
     base: [
-      'cc-icon-button size-control inline-flex cursor-pointer items-center justify-center rounded-md border p-0',
+      'size-control inline-flex cursor-pointer items-center justify-center rounded-md border p-0',
       // The background eases; a press shrinks to --cc-press-scale (1 under reduced motion).
       'duration-fast ease-enter transition-[background-color,scale] [transition-duration:var(--cc-duration-fast),var(--cc-duration-instant)]',
       'not-disabled:hover:bg-accent not-disabled:active:scale-press',
@@ -48,7 +48,9 @@
   {...rest}
   {type}
   aria-label={label}
-  class={cn(iconButton({ variant }), `cc-icon-button-${variant}`, className)}
+  data-slot="icon-button"
+  data-variant={variant}
+  class={cn(iconButton({ variant }), className)}
 >
   <Icon {icon} />
 </button>

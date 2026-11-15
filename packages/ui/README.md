@@ -44,6 +44,19 @@ import { cn } from '@codecora/ui';
 cn('rounded-md px-4', active && 'bg-accent', className); // className overrides
 ```
 
+Each part carries a `data-slot` attribute named after it, as in shadcn
+(`data-slot="button"`, `data-slot="modal-footer"`, `data-slot="glyph"`), and
+the prop that picks its look is reflected as a data attribute
+(`data-variant`, `data-tone`, `data-size`, `data-side`). Target those from app
+CSS or a Tailwind arbitrary variant instead of a class:
+
+```svelte
+<div class="[&_[data-slot=button]]:px-3">…</div>
+<style>
+  [data-slot='button'][data-variant='primary'] { min-width: 8rem; }
+</style>
+```
+
 `cn()` and the component variants run `tailwind-merge` and
 `tailwind-variants` in the browser: two runtime dependencies, about 27 KB gzip
 together, that every app using `@codecora/ui` loads.

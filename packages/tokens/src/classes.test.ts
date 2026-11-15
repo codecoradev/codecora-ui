@@ -301,8 +301,10 @@ export const classStrings = (source: string): string[] => {
 };
 
 const tokens = (s: string) => s.split(/\s+/).filter(Boolean);
-/** Hook classes (`cc-button`) and group/peer markers carry no style of their own. */
-const hook = (t: string) => /^cc-[\w-]+$/.test(t) || /^(group|peer)(\/[\w-]+)?$/.test(t);
+/** Group/peer markers (`group/choice`) carry no style of their own. */
+const marker = (t: string) => /^(group|peer)(\/[\w-]+)?$/.test(t);
+/** A hook class (`cc-button`): parts are marked with data-slot (and data-variant, data-tone, …). */
+const hookClass = (t: string) => /^cc-[\w-]+$/.test(t);
 /** The utility without its variants (`hover:`, `data-[state=open]:`) and `!`. */
 const utility = (t: string) => t.slice(lastOutside(t, ':') + 1).replace(/^!|!$/g, '');
 
@@ -378,6 +380,7 @@ export function violations(classList: string | string[], file: string, timing = 
   const utilities = list.map(utility);
   for (const t of list) {
     const u = utility(t);
+    if (hookClass(t)) out.push(`${t}: hook class, use data-slot`);
     if (palette.test(u))
       out.push(`${t}: palette colour, use a theme role (bg-primary, text-muted-foreground)`);
     const value = u.match(/-\[(.*)\]$/) ?? u.match(/^\[(.*)\]$/);
@@ -454,6 +457,8 @@ describe('class lint rules', () => {
     ['h-[var(--spacing-control)]', 'use h-control'],
     ['px-[var(--spacing-control-x)]', 'use px-control-x'],
     ['size-[var(--cc-icon-size)]', 'use size-icon'],
+    ['cc-button', 'cc-button: hook class, use data-slot'],
+    ['cc-badge-success px-2', 'cc-badge-success: hook class, use data-slot'],
   ])('rejects %s', (s, reason) => {
     expect(violations(s, 'packages/ui/src/lib/X.svelte').join('\n')).toContain(reason);
   });
@@ -468,6 +473,8 @@ describe('class lint rules', () => {
     'motion-reduce:transition-none',
     'transition-[background-color,border-color] duration-fast ease-enter',
     'data-[state=open]:[&_svg]:rotate-180',
+    'group/choice peer [&_[data-slot=glyph]]:text-primary [[data-slot=toggle]+&]:border-s',
+    'animate-dot-in [--cc-icon-size:var(--text-sm)]',
     'max-h-[85dvh] font-[inherit] w-[50%] [font:inherit] text-[currentcolor] top-[50%] -translate-x-[50%] [max-height:85dvh]',
   ])('accepts %s', (s) => {
     expect(violations(s, 'packages/ui/src/lib/X.svelte')).toEqual([]);
@@ -643,7 +650,13 @@ describe('migrated files', () => {
       ];
       const unknown = strings
         .flatMap(tokens)
-        .filter((t) => !hook(t) && /[-:[/]/.test(t) && !knownIn(t, name.startsWith('apps/')))
+        .filter(
+          (t) =>
+            !marker(t) &&
+            !hookClass(t) &&
+            /[-:[/]/.test(t) &&
+            !knownIn(t, name.startsWith('apps/')),
+        )
         .map((t) => `${t}: not a Tailwind or theme class`);
       expect([...found, ...unknown]).toEqual([]);
     });

@@ -26,7 +26,8 @@
 </script>
 
 <span
-  class={['cc-icon [&_svg]:size-icon [&_svg]:stroke-icon inline-flex flex-none', className]}
+  data-slot="icon"
+  class={['[&_svg]:size-icon [&_svg]:stroke-icon inline-flex flex-none', className]}
   role={label ? 'img' : undefined}
   aria-label={label}
   aria-hidden={label ? undefined : 'true'}

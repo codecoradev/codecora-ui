@@ -34,7 +34,11 @@
   );
 </script>
 
-<fieldset class="cc-fieldgroup m-0 grid min-w-0 gap-1 border-0 p-0" aria-describedby={describedby}>
+<fieldset
+  data-slot="fieldgroup"
+  class="m-0 grid min-w-0 gap-1 border-0 p-0"
+  aria-describedby={describedby}
+>
   <legend class="mb-1 p-0 text-sm leading-[inherit] font-medium">
     {legend}{#if required}<span class="text-destructive" aria-hidden="true"> *</span>{/if}
   </legend>

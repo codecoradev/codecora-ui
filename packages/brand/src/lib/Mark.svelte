@@ -20,7 +20,8 @@
 </script>
 
 <img
-  class={['cc-mark inline-block flex-none object-contain', className]}
+  data-slot="mark"
+  class={['inline-block flex-none object-contain', className]}
   src={mark.mark}
   alt={label ?? ''}
   width={size}

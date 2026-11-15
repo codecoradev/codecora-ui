@@ -64,32 +64,37 @@
 <Dialog.Root bind:open>
   <Dialog.Portal>
     <Dialog.Overlay
-      class="cc-palette-overlay z-overlay bg-overlay animate-overlay-in data-[state=closed]:animate-overlay-out fixed inset-0 motion-reduce:animate-none motion-reduce:data-[state=closed]:animate-none"
+      data-slot="palette-overlay"
+      class="z-overlay bg-overlay animate-overlay-in data-[state=closed]:animate-overlay-out fixed inset-0 motion-reduce:animate-none motion-reduce:data-[state=closed]:animate-none"
     />
     <!-- Opacity eases; only the movement springs. Exits run one step shorter. -->
     <Dialog.Content
-      class="cc-palette z-modal border-border bg-popover text-foreground shadow-modal animate-palette-in data-[state=closed]:animate-palette-out fixed top-[min(20%,2*calc(var(--spacing)*16))] left-1/2 w-[min(36rem,calc(100vw-2*calc(var(--spacing)*4)))] -translate-x-1/2 overflow-hidden rounded-lg border font-sans motion-reduce:animate-none motion-reduce:data-[state=closed]:animate-none"
+      data-slot="palette"
+      class="z-modal border-border bg-popover text-foreground shadow-modal animate-palette-in data-[state=closed]:animate-palette-out fixed top-[min(20%,2*calc(var(--spacing)*16))] left-1/2 w-[min(36rem,calc(100vw-2*calc(var(--spacing)*4)))] -translate-x-1/2 overflow-hidden rounded-lg border font-sans motion-reduce:animate-none motion-reduce:data-[state=closed]:animate-none"
       aria-label={label}
     >
-      <Dialog.Title class="cc-palette-title sr-only">{label}</Dialog.Title>
-      <Command.Root class="cc-palette-root">
+      <Dialog.Title data-slot="palette-title" class="sr-only">{label}</Dialog.Title>
+      <Command.Root data-slot="palette-root">
         <Command.Input
           {placeholder}
-          class="cc-palette-input min-h-control border-border px-control-x focus-visible:outline-ring placeholder:text-muted-foreground focus-visible:outline-focus w-full border-0 border-b bg-transparent text-inherit [font:inherit] focus-visible:-outline-offset-2 focus-visible:outline-solid"
+          data-slot="palette-input"
+          class="min-h-control border-border px-control-x focus-visible:outline-ring placeholder:text-muted-foreground focus-visible:outline-focus w-full border-0 border-b bg-transparent text-inherit [font:inherit] focus-visible:-outline-offset-2 focus-visible:outline-solid"
           aria-label={label}
         />
         <Command.List
-          class="cc-palette-list max-h-[min(5*calc(var(--spacing)*16),50dvh)] overflow-y-auto p-1"
+          data-slot="palette-list"
+          class="max-h-[min(5*calc(var(--spacing)*16),50dvh)] overflow-y-auto p-1"
         >
           <Command.Viewport>
             <Command.Empty
-              class="cc-palette-empty px-control-x text-muted-foreground py-4 text-center"
-              >{emptyText}</Command.Empty
+              data-slot="palette-empty"
+              class="px-control-x text-muted-foreground py-4 text-center">{emptyText}</Command.Empty
             >
             {#each groups as group (group.heading)}
               <Command.Group>
                 <Command.GroupHeading
-                  class="cc-palette-heading px-control-x text-muted-foreground pt-2 pb-1 text-xs leading-[inherit] font-semibold"
+                  data-slot="palette-heading"
+                  class="px-control-x text-muted-foreground pt-2 pb-1 text-xs leading-[inherit] font-semibold"
                   >{group.heading}</Command.GroupHeading
                 >
                 <Command.GroupItems>
@@ -98,7 +103,8 @@
                       value={item.value}
                       keywords={[item.label, ...(item.keywords ?? [])]}
                       onSelect={() => run(item)}
-                      class="cc-palette-item min-h-control px-control-x data-selected:bg-accent flex cursor-pointer items-center gap-3 rounded-sm"
+                      data-slot="palette-item"
+                      class="min-h-control px-control-x data-selected:bg-accent flex cursor-pointer items-center gap-3 rounded-sm"
                     >
                       {#if item.icon}<Icon icon={item.icon} />{/if}
                       <span class="flex-1">{item.label}</span>

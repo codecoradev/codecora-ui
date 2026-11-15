@@ -66,7 +66,10 @@
   {/snippet}
 
   {#snippet header()}
-    <div class="cc-dashboard-header flex w-full flex-wrap items-center justify-between gap-3">
+    <div
+      data-slot="dashboard-header"
+      class="flex w-full flex-wrap items-center justify-between gap-3"
+    >
       <h1 class="leading-heading text-lg">{title}</h1>
       <div class="flex gap-2">
         {#if actions}
@@ -78,7 +81,7 @@
     </div>
   {/snippet}
 
-  <div class="cc-dashboard-page grid gap-6 p-6 max-md:p-4">
+  <div data-slot="dashboard-page" class="grid gap-6 p-6 max-md:p-4">
     {@render children()}
   </div>
 </AppShell>

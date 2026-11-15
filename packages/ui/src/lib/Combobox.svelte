@@ -64,7 +64,7 @@
     if (next) search = '';
   }}
 >
-  <div class="cc-combobox relative flex items-center">
+  <div data-slot="combobox" class="relative flex items-center">
     <Combobox.Input
       {id}
       {placeholder}
@@ -76,8 +76,9 @@
         search = event.currentTarget.value;
         open = true;
       }}
+      data-slot="combobox-input"
       class={cn(
-        'cc-combobox-input min-h-control border-input bg-card ps-control-x font-inherit text-foreground w-full rounded-md border pe-[calc(var(--spacing-control-x)+1.75rem)]',
+        'min-h-control border-input bg-card ps-control-x font-inherit text-foreground w-full rounded-md border pe-[calc(var(--spacing-control-x)+1.75rem)]',
         'placeholder:text-muted-foreground',
         'aria-invalid:border-destructive aria-invalid:inset-ring-destructive aria-invalid:inset-ring',
         'focus-visible:outline-ring focus-visible:outline-focus focus-visible:outline-offset-1',
@@ -85,7 +86,8 @@
       )}
     />
     <Combobox.Trigger
-      class="cc-combobox-trigger text-muted-foreground absolute end-2 inline-grid cursor-pointer place-items-center rounded-sm border-0 bg-transparent p-1"
+      data-slot="combobox-trigger"
+      class="text-muted-foreground absolute end-2 inline-grid cursor-pointer place-items-center rounded-sm border-0 bg-transparent p-1"
       aria-label="Show options"
     >
       <Glyph name="chevron-down" />
@@ -93,20 +95,22 @@
   </div>
   <Combobox.Portal>
     <Combobox.Content
+      data-slot="combobox-content"
       class={cn(
-        'cc-combobox-content z-popover border-border bg-popover text-foreground shadow-popover max-h-[min(20rem,var(--bits-combobox-content-available-height))] min-w-[var(--bits-combobox-anchor-width)] origin-[var(--bits-combobox-content-transform-origin)] overflow-y-auto rounded-md border p-1 font-sans',
+        'z-popover border-border bg-popover text-foreground shadow-popover max-h-[min(20rem,var(--bits-combobox-content-available-height))] min-w-[var(--bits-combobox-anchor-width)] origin-[var(--bits-combobox-content-transform-origin)] overflow-y-auto rounded-md border p-1 font-sans',
         // bits-ui keeps the list mounted until the exit animation finishes.
         'animate-listbox-in data-[state=closed]:animate-listbox-out motion-reduce:data-[state]:animate-none',
       )}
       sideOffset={4}
     >
-      <Combobox.Viewport class="cc-combobox-viewport">
+      <Combobox.Viewport data-slot="combobox-viewport">
         {#each shown as item (item.value)}
           <Combobox.Item
             value={item.value}
             label={item.label}
             disabled={item.disabled}
-            class="cc-combobox-item min-h-control px-control-x data-highlighted:bg-accent flex cursor-pointer items-center justify-between gap-3 rounded-sm data-disabled:cursor-not-allowed data-disabled:opacity-55"
+            data-slot="combobox-item"
+            class="min-h-control px-control-x data-highlighted:bg-accent flex cursor-pointer items-center justify-between gap-3 rounded-sm data-disabled:cursor-not-allowed data-disabled:opacity-55"
           >
             {#snippet children({ selected })}
               <span>{item.label}</span>

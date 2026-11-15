@@ -7,6 +7,7 @@
 </script>
 
 <kbd
-  class="cc-kbd border-input bg-card text-foreground inline-block min-w-6 rounded-sm border border-b-2 px-2 py-0.25 text-center font-mono text-xs leading-[calc(var(--text-xs)*1.4)] [font-variant-ligatures:none]"
+  data-slot="kbd"
+  class="border-input bg-card text-foreground inline-block min-w-6 rounded-sm border border-b-2 px-2 py-0.25 text-center font-mono text-xs leading-[calc(var(--text-xs)*1.4)] [font-variant-ligatures:none]"
   >{@render children()}</kbd
 >

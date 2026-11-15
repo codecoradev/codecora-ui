@@ -47,15 +47,16 @@
   aria-label={label}
   aria-describedby={describedby}
   aria-invalid={invalid || undefined}
+  data-slot="radios"
   class={cn(
-    'cc-radios group/radios flex gap-x-6 gap-y-1',
-    `cc-radios-${orientation}`,
+    'group/radios flex gap-x-6 gap-y-1',
     orientation === 'vertical' ? 'flex-col' : 'flex-row flex-wrap',
   )}
 >
   {#each items as item (item.value)}
     <div
-      class="cc-choice group/choice min-h-control py-control-y flex items-start gap-3"
+      data-slot="choice"
+      class="group/choice min-h-control py-control-y flex items-start gap-3"
       data-disabled={disabled || item.disabled || undefined}
     >
       <RadioGroup.Item
@@ -63,8 +64,9 @@
         value={item.value}
         disabled={item.disabled}
         aria-describedby={item.description ? `${uid}-${item.value}-hint` : undefined}
+        data-slot="radio"
         class={cn(
-          'cc-radio border-input bg-card inline-grid size-5 flex-none cursor-pointer place-items-center rounded-full border p-0',
+          'border-input bg-card inline-grid size-5 flex-none cursor-pointer place-items-center rounded-full border p-0',
           'duration-fast ease-enter transition-[border-color] motion-reduce:transition-none',
           // In an invalid group the danger border stays on the checked radio too.
           'not-group-aria-invalid/radios:data-[state=checked]:border-primary',

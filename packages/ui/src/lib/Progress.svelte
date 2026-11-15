@@ -15,7 +15,7 @@
   const percent = $derived(Math.round((Math.min(Math.max(value, 0), max) / max) * 100));
 </script>
 
-<div class="cc-progress grid gap-1">
+<div data-slot="progress" class="grid gap-1">
   <div class="flex justify-between text-sm leading-[inherit]">
     <span>{label}</span>
     {#if showValue}<span class="text-muted-foreground font-mono tabular-nums">{percent}%</span>{/if}

@@ -15,7 +15,8 @@
 
 <section
   {...rest}
-  class={cn('cc-card border-border bg-card text-foreground rounded-lg border', className)}
+  data-slot="card"
+  class={cn('border-border bg-card text-foreground rounded-lg border', className)}
 >
   {#if header}<header class="border-border font-display border-b p-4 font-semibold">
       {@render header()}

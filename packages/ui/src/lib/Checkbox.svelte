@@ -48,7 +48,8 @@
 </script>
 
 <div
-  class="cc-choice group/choice min-h-control py-control-y flex items-start gap-3"
+  data-slot="choice"
+  class="group/choice min-h-control py-control-y flex items-start gap-3"
   data-disabled={disabled || undefined}
 >
   <Checkbox.Root
@@ -62,8 +63,9 @@
     onCheckedChange={onchange}
     aria-describedby={described}
     aria-invalid={invalid || undefined}
+    data-slot="box"
     class={cn(
-      'cc-box border-input bg-card text-primary-foreground inline-grid size-5 flex-none cursor-pointer place-items-center rounded-sm border p-0',
+      'border-input bg-card text-primary-foreground inline-grid size-5 flex-none cursor-pointer place-items-center rounded-sm border p-0',
       'duration-fast ease-enter transition-[background-color,border-color] motion-reduce:transition-none',
       // An invalid box keeps its danger border when checked.
       'data-[state=checked]:bg-primary not-aria-invalid:data-[state=checked]:border-primary',
