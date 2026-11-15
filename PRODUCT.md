@@ -14,11 +14,11 @@ web
 
 ## Product Purpose
 
-One general UI system for every CodeCora product: design tokens, mixable themes, Svelte 5 components on bits-ui, icons, brand marks, and the Uteke memory domain layer. It succeeds when a fix made once reaches every app, and when each product keeps its own identity on shared structure and accessibility. See [docs/decisions.md](docs/decisions.md) (D1–D13) and [docs/architecture.md](docs/architecture.md).
+One general UI system for every CodeCora product: design tokens, mixable themes, Svelte 5 components on bits-ui, icons, brand marks, and the Uteke memory domain layer. It succeeds when a fix made once reaches every app, and when each product keeps its own identity on shared structure and accessibility. See [docs/decisions.md](docs/decisions.md) (D1–D12) and [docs/architecture.md](docs/architecture.md).
 
 ## Positioning
 
-One system, many themes, mixable per element (`data-theme`, `data-accent`, `data-density`). Products differ in accent, fonts, radius and icon weight, not in structure or accessibility. Since D13 the base is Tailwind 4 with shadcn token names: components are Tailwind utilities on semantic roles (`bg-background`, `text-muted-foreground`, `bg-primary`), so a Tailwind or shadcn reference applies without translation. The move is in progress ([docs/tailwind-migration.md](docs/tailwind-migration.md)).
+One system, many themes, mixable per element (`data-theme`, `data-accent`, `data-density`). Products differ in accent, fonts, radius and icon weight, not in structure or accessibility. Components are Tailwind 4 utilities on the shadcn variable names (D13), so Tailwind and shadcn snippets work on every theme; every consuming app runs Tailwind 4 with `@codecora/tokens/theme.css`.
 
 ## Operating Context
 

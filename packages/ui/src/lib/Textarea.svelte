@@ -16,7 +16,7 @@
   bind:value
   aria-invalid={invalid || undefined}
   class={cn(
-    'cc-textarea border-input bg-card px-control-x font-inherit text-foreground min-h-[calc(var(--cc-control-h)*2)] w-full resize-y rounded-md border py-2 leading-[var(--cc-leading-normal)]',
+    'cc-textarea border-input bg-card px-control-x font-inherit text-foreground min-h-[calc(var(--spacing-control)*2)] w-full resize-y rounded-md border py-2 leading-normal',
     'duration-fast ease-enter transition-[border-color,box-shadow] motion-reduce:transition-none',
     'placeholder:text-muted-foreground',
     'focus-visible:outline-ring focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-1',

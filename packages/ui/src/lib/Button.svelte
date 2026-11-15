@@ -20,7 +20,7 @@
         ghost:
           'text-foreground not-disabled:not-aria-disabled:hover:bg-accent border-transparent bg-transparent',
         danger:
-          'bg-destructive text-destructive-foreground border-transparent not-disabled:not-aria-disabled:hover:bg-[color-mix(in_srgb,var(--cc-danger)_88%,var(--cc-text))]',
+          'bg-destructive text-destructive-foreground border-transparent not-disabled:not-aria-disabled:hover:bg-[color-mix(in_srgb,var(--destructive)_88%,var(--foreground))]',
       },
     },
   });

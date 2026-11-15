@@ -59,7 +59,7 @@
   const uid = $props.id();
 
   const bottomItem = cn(
-    'font-inherit text-muted-foreground aria-[current=page]:text-primary focus-visible:outline-ring grid min-h-14 w-full cursor-pointer justify-items-center gap-0.5 border-0 bg-transparent px-1 py-2 text-[length:var(--cc-font-size-xs)] no-underline focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:-outline-offset-2 aria-[current=page]:font-semibold',
+    'font-inherit text-muted-foreground aria-[current=page]:text-primary focus-visible:outline-ring grid min-h-14 w-full cursor-pointer justify-items-center gap-0.5 border-0 bg-transparent px-1 py-2 text-xs leading-[inherit] no-underline focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:-outline-offset-2 aria-[current=page]:font-semibold',
   );
 
   function select(item: NavItem) {
@@ -71,7 +71,7 @@
 <!-- Desktop (md, 48rem): the sidebar takes its own width, the content the rest. -->
 <div
   class={cn(
-    'cc-shell bg-background text-foreground grid min-h-dvh font-sans text-base/[var(--cc-leading-normal)] md:flex',
+    'cc-shell bg-background text-foreground grid min-h-dvh font-sans text-base/normal md:flex',
     className,
   )}
 >

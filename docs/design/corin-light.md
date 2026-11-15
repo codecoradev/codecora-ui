@@ -2,27 +2,27 @@
 name: CodeCora UI, corin-light theme
 description: Corin by day; warm paper surfaces, teal only on actions, the same shape and mono as corin.
 colors:
-  surface: "#FBF8F1"
-  surface-raised: "#FFFDF8"
-  surface-sunken: "#F3EEE3"
-  surface-hover: "#E7E0D2"
+  background: "#FBF8F1"
+  card: "#FFFDF8"
+  muted: "#F3EEE3"
+  accent: "#E7E0D2"
   border: "#E7E0D2"
-  border-strong: "#8A826D"
-  text: "#2E2A1F"
-  text-muted: "#6E6650"
-  danger: "oklch(51% 0.15 30)"
-  danger-text: "oklch(99% 0.004 30)"
+  input: "#8A826D"
+  foreground: "#2E2A1F"
+  muted-foreground: "#6E6650"
+  destructive: "oklch(51% 0.15 30)"
+  destructive-foreground: "oklch(99% 0.004 30)"
   success: "oklch(48% 0.115 157)"
-  success-text: "oklch(98% 0.006 157)"
+  success-foreground: "oklch(98% 0.006 157)"
   warning: "oklch(49% 0.1 65)"
-  warning-text: "oklch(99% 0.004 65)"
-  accent: "#0B6D66"
-  accent-hover: "#07564F"
-  accent-text: "#FFFDF8"
+  warning-foreground: "oklch(99% 0.004 65)"
+  primary: "#0B6D66"
+  primary-hover: "#07564F"
+  primary-foreground: "#FFFDF8"
 typography:
   display:
     fontFamily: "ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif"
-    fontSize: "2.25rem"
+    fontSize: "1.875rem"
     fontWeight: 600
     lineHeight: 1.2
   title:
@@ -58,16 +58,16 @@ spacing:
   "8": "2rem"
 components:
   button-primary:
-    backgroundColor: "{colors.accent}"
-    textColor: "{colors.accent-text}"
+    backgroundColor: "{colors.primary}"
+    textColor: "{colors.primary-foreground}"
     rounded: "{rounded.md}"
     height: "2.75rem"
     padding: "0 0.875rem"
   button-primary-hover:
-    backgroundColor: "{colors.accent-hover}"
+    backgroundColor: "{colors.primary-hover}"
   input:
-    backgroundColor: "{colors.surface-raised}"
-    textColor: "{colors.text}"
+    backgroundColor: "{colors.card}"
+    textColor: "{colors.foreground}"
     rounded: "{rounded.md}"
     height: "2.75rem"
 ---
@@ -93,22 +93,22 @@ Corin by day is the same console on warm paper. Cream surfaces keep long session
 Cream paper with a single deep teal and muted status signals.
 
 ### Primary
-- **Paper Teal** (`accent`): primary actions, links, the selected item and the focus ring. Deepens to `accent-hover`; labels on it use cream `accent-text`.
+- **Paper Teal** (`primary`): primary actions, links, the selected item and the focus ring. Deepens to `primary-hover`; labels on it use cream `primary-foreground`.
 
 ### Neutral
-- **Paper** (`surface`): the page.
-- **Cream** (`surface-raised`): cards, popovers and inputs.
-- **Deckle** (`surface-sunken`): wells and inset areas below the page.
-- **Tea Stain** (`surface-hover`, also `border`): hover tint and hairlines.
-- **Pencil** (`border-strong`): control boundaries (3:1).
-- **Ink** (`text`) and **Umber** (`text-muted`): body and secondary text.
+- **Paper** (`background`): the page.
+- **Cream** (`card`): cards, popovers and inputs.
+- **Deckle** (`muted`): wells and inset areas below the page.
+- **Tea Stain** (`accent`, also `border`): hover tint and hairlines.
+- **Pencil** (`input`): control boundaries (3:1).
+- **Ink** (`foreground`) and **Umber** (`muted-foreground`): body and secondary text.
 
 ### Departures from Corin's light palette
 
 Every surface and text value is Corin's own, and the teal is Corin's hue a shade darker (the hover teal and the label colour on it are derived, since Corin has none). Five values are not Corin's, because Corin's do not pass WCAG AA:
-- `accent` `#0B6D66` replaces Corin's teal `#0E7C74`, which is 4.0:1 as text on its own tint (badges, the current nav item) and 4.4:1 on a sunken surface, both under 4.5:1. A real-browser axe scan found it.
-- `border-strong` `#8A826D` replaces Corin's `overlay` `#A39A85`, which is 2.6:1 on the page (needs 3:1 for a control boundary).
-- `danger` is `oklch(51% 0.15 30)` instead of `#C25B4E` (4.0:1 as text on the page, 3.4:1 on its own tint).
+- `primary` `#0B6D66` replaces Corin's teal `#0E7C74`, which is 4.0:1 as text on its own tint (badges, the current nav item) and 4.4:1 on a sunken surface, both under 4.5:1. A real-browser axe scan found it.
+- `input` `#8A826D` replaces Corin's `overlay` `#A39A85`, which is 2.6:1 on the page (needs 3:1 for a control boundary).
+- `destructive` is `oklch(51% 0.15 30)` instead of `#C25B4E` (4.0:1 as text on the page, 3.4:1 on its own tint).
 - `success` is `oklch(48% 0.115 157)` instead of `#3E9B6C` (3.2:1 and 2.8:1).
 - `warning` is `oklch(49% 0.1 65)` instead of `#C07A3A` (3.3:1 and 2.8:1).
 

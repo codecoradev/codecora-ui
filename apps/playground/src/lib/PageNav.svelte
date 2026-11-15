@@ -26,7 +26,7 @@
     'focus-visible:outline-ring focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)]';
   /* 44 px rows: the comfortable target the components use. The current page changes
      colour, weight and gets an underline bar. */
-  const item = `text-muted-foreground hover:bg-accent hover:text-foreground aria-[current=page]:text-foreground inline-flex min-h-11 items-center rounded-md px-2 no-underline aria-[current=page]:rounded-none aria-[current=page]:font-semibold aria-[current=page]:[box-shadow:inset_0_-2px_0_var(--cc-accent)] max-[47.99rem]:flex-none ${focus}`;
+  const item = `text-muted-foreground hover:bg-accent hover:text-foreground aria-[current=page]:text-foreground inline-flex min-h-11 items-center rounded-md px-2 no-underline aria-[current=page]:rounded-none aria-[current=page]:font-semibold aria-[current=page]:[box-shadow:inset_0_-2px_0_var(--primary)] max-[47.99rem]:flex-none ${focus}`;
 </script>
 
 <div
@@ -40,7 +40,7 @@
        right edge, so the pages past it read as more. -->
   <nav
     aria-label="Playground pages"
-    class="flex flex-wrap gap-1 text-[length:var(--cc-font-size-sm)] max-[47.99rem]:-mx-4 max-[47.99rem]:[scrollbar-width:none] max-[47.99rem]:flex-nowrap max-[47.99rem]:overflow-x-auto max-[47.99rem]:[mask-image:linear-gradient(to_right,var(--cc-text)_calc(100%-var(--cc-space-10)),transparent)] max-[47.99rem]:ps-4 max-[47.99rem]:pe-10"
+    class="flex flex-wrap gap-1 text-sm leading-[inherit] max-[47.99rem]:-mx-4 max-[47.99rem]:[scrollbar-width:none] max-[47.99rem]:flex-nowrap max-[47.99rem]:overflow-x-auto max-[47.99rem]:[mask-image:linear-gradient(to_right,var(--foreground)_calc(100%-calc(var(--spacing)*10)),transparent)] max-[47.99rem]:ps-4 max-[47.99rem]:pe-10"
   >
     {#each links as link (link.href)}
       <a class={item} href={link.href} aria-current={isCurrent(link) ? 'page' : undefined}

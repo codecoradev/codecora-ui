@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from 'node:fs';
 // Source, not dist: release.yml runs the tests before the packages are built.
-import { shadcnBridge, tailwindKeys, themeVariables } from '../packages/tokens/src/index.js';
+import { tailwindKeys, themeVariables } from '../packages/tokens/src/index.js';
 import { describe, expect, it } from 'vitest';
 import { withTheme } from './theme.js';
 
@@ -42,8 +42,43 @@ describe('registry', () => {
 
   it('theme item hands every shadcn variable back to theme.css, in light and dark', () => {
     // theme.css declares them; the values shadcn wrote into :root and .dark would win.
-    const names = Object.keys(themeVariables).sort();
-    expect(names).toEqual(expect.arrayContaining(Object.keys(shadcnBridge)));
+    const names = [...themeVariables].sort();
+    // The names shadcn-svelte writes, chart and sidebar included.
+    const shadcn = [
+      'background',
+      'foreground',
+      'card',
+      'card-foreground',
+      'popover',
+      'popover-foreground',
+      'primary',
+      'primary-foreground',
+      'secondary',
+      'secondary-foreground',
+      'muted',
+      'muted-foreground',
+      'accent',
+      'accent-foreground',
+      'destructive',
+      'border',
+      'input',
+      'ring',
+      'radius',
+      'chart-1',
+      'chart-2',
+      'chart-3',
+      'chart-4',
+      'chart-5',
+      'sidebar',
+      'sidebar-foreground',
+      'sidebar-primary',
+      'sidebar-primary-foreground',
+      'sidebar-accent',
+      'sidebar-accent-foreground',
+      'sidebar-border',
+      'sidebar-ring',
+    ];
+    expect(names).toEqual(expect.arrayContaining(shadcn));
     for (const mode of ['light', 'dark'] as const) {
       const vars = built()?.cssVars?.[mode] ?? {};
       expect(Object.keys(vars).sort(), mode).toEqual(names);
@@ -56,7 +91,10 @@ describe('registry', () => {
     expect(Object.keys(keys).sort()).toEqual(
       ['font-display', 'font-mono', 'font-sans', 'radius-lg', 'radius-md', 'radius-sm'].sort(),
     );
-    for (const [key, value] of Object.entries(keys)) expect(value, key).toBe(tailwindKeys[key]);
+    for (const [key, value] of Object.entries(keys)) {
+      expect(value, key).toBe(tailwindKeys[key]);
+      expect(value, key).toBe(`var(--${key})`);
+    }
   });
 
   it('theme item asks for the package versions it is built with', () => {

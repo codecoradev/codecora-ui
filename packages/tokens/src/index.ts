@@ -1,11 +1,16 @@
 export {
   accentNames,
+  accentVariables,
+  aliasVariables,
+  colorTokens,
+  colorVariables,
   cssVar,
   densities,
   semanticTokens,
   themeNames,
   type AccentColors,
   type AccentName,
+  type ColorToken,
   type Density,
   type SemanticToken,
   type Theme,
@@ -13,15 +18,15 @@ export {
   type ThemeName,
 } from './schema.js';
 export { themes } from './themes.js';
-export { shadcnBridge } from './css.js';
+export { densityVariables } from './css.js';
 export {
   formAnimations,
-  shadcnExtensions,
   accordionAnimations,
   tailwindAnimations,
   tailwindKeyframes,
   displayAnimations,
   tailwindKeys,
+  themeKeys,
   tailwindUtilities,
   themeVariables,
 } from './tailwind.js';

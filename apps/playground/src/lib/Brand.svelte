@@ -27,7 +27,7 @@
 {#each productNames as name (name)}
   {@const product = marks[name]}
   <section aria-labelledby="b-{name}" class="grid grid-cols-1 gap-4 pb-10">
-    <h2 id="b-{name}" class="text-[length:var(--cc-font-size-xl)] font-bold">{product.label}</h2>
+    <h2 id="b-{name}" class="leading-heading text-xl font-bold">{product.label}</h2>
     <p class="text-muted-foreground">
       {kinds[product.kind]}{product.rasterSize
         ? `, ${product.rasterSize} px: never scaled past its master`
@@ -44,11 +44,11 @@
       </div>
     </div>
 
-    <h3 class="text-[length:var(--cc-font-size-lg)] font-bold">Favicon set</h3>
+    <h3 class="leading-heading text-lg font-bold">Favicon set</h3>
     <ul class="grid grid-cols-[repeat(auto-fill,minmax(calc(var(--spacing)*52),1fr))] gap-3">
       {#each iconRows(name) as row (row.label)}
         <li
-          class="border-border flex items-center gap-3 rounded-sm border p-3 text-[length:var(--cc-font-size-sm)]"
+          class="border-border flex items-center gap-3 rounded-sm border p-3 text-sm leading-[inherit]"
         >
           <img src={row.src} alt="" width={row.size} height={row.size} />
           <code>{row.label}</code>
@@ -59,13 +59,13 @@
 {/each}
 
 <section aria-labelledby="b-usage" class="grid grid-cols-1 gap-4 pb-10">
-  <h2 id="b-usage" class="text-[length:var(--cc-font-size-xl)] font-bold">Using it</h2>
+  <h2 id="b-usage" class="leading-heading text-xl font-bold">Using it</h2>
   <!-- A scrollable code block must be keyboard reachable (axe: scrollable-region-focusable). -->
   <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
   <pre
     tabindex="0"
     aria-label="Brand package usage"
-    class="border-border bg-muted overflow-x-auto rounded-md border p-4 font-mono text-[length:var(--cc-font-size-sm)]"><code
+    class="border-border bg-muted overflow-x-auto rounded-md border p-4 font-mono text-sm leading-[inherit]"><code
       >{`import { Mark, Favicons } from '@codecora/brand';
 
 <Favicons product="uteke" />   // in the root layout

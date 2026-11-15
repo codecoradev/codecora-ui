@@ -51,10 +51,8 @@
     <PageNav />
 
     <div class="grid gap-3">
-      <h1 class="text-[length:var(--cc-font-size-3xl)] font-bold text-balance">{title}</h1>
-      <p
-        class="text-muted-foreground max-w-[var(--pg-measure-intro)] text-[length:var(--cc-font-size-lg)]"
-      >
+      <h1 class="leading-heading text-3xl font-bold text-balance">{title}</h1>
+      <p class="text-muted-foreground max-w-[var(--pg-measure-intro)] text-lg leading-[inherit]">
         {lead}
       </p>
     </div>
@@ -80,7 +78,7 @@
   </main>
 
   <footer
-    class="border-border text-muted-foreground mx-auto mt-10 flex max-w-6xl flex-wrap items-center gap-x-3 gap-y-2 border-t pt-6 text-[length:var(--cc-font-size-sm)]"
+    class="border-border text-muted-foreground mx-auto mt-10 flex max-w-6xl flex-wrap items-center gap-x-3 gap-y-2 border-t pt-6 text-sm leading-[inherit]"
   >
     <span>Theme pages:</span>
     {#each themeNames as name (name)}

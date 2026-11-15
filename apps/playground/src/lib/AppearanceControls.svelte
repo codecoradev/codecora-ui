@@ -31,8 +31,7 @@
   const value = 'min-w-0 truncate';
   /* The axis name is a quiet caption before the value; phones keep the values only,
      the swatches carry the axis to the eye. */
-  const axis =
-    'text-muted-foreground text-[length:var(--cc-font-size-xs)] font-normal max-[30rem]:sr-only';
+  const axis = 'text-muted-foreground text-xs leading-[inherit] font-normal max-[30rem]:sr-only';
   /* A theme swatch: its surface and accent split on the diagonal. */
   const swatch = 'border-input size-4 flex-none rounded-sm border';
   const chev = 'size-4 [stroke-width:var(--cc-icon-stroke)]';
@@ -43,7 +42,7 @@
     <Button {...props} variant="secondary">
       <span class={triggerText}
         ><span
-          class="{swatch} bg-transparent bg-[linear-gradient(135deg,var(--cc-surface)_50%,var(--cc-accent)_50%)]"
+          class="{swatch} bg-transparent bg-[linear-gradient(135deg,var(--background)_50%,var(--primary)_50%)]"
           data-theme={appearance.theme}
           aria-hidden="true"
         ></span><span class={value}

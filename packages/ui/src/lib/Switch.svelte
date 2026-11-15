@@ -52,10 +52,7 @@
       class="group-data-disabled/choice:text-muted-foreground cursor-pointer group-data-disabled/choice:cursor-not-allowed"
       >{label}</label
     >
-    {#if description}<p
-        id={hintId}
-        class="text-muted-foreground m-0 text-[length:var(--cc-font-size-sm)]"
-      >
+    {#if description}<p id={hintId} class="text-muted-foreground m-0 text-sm leading-[inherit]">
         {description}
       </p>{/if}
   </div>

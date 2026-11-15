@@ -139,8 +139,8 @@
     { label: 'Error rate', value: '0.4%', note: 'within the 1% target' },
   ]);
 
-  const h2 = 'font-display text-[length:var(--cc-font-size-lg)] font-bold';
-  const muted = 'text-muted-foreground text-[length:var(--cc-font-size-sm)]';
+  const h2 = 'font-display text-lg leading-heading font-bold';
+  const muted = 'text-muted-foreground text-sm leading-[inherit]';
   const panelSection = 'grid min-w-0 grid-cols-1 gap-4';
   const panelHead = 'flex flex-wrap items-end justify-between gap-3';
 
@@ -182,7 +182,7 @@
     {#snippet footer({ collapsed })}
       {#if !collapsed}
         <!-- minmax(0, 1fr): long trigger values truncate instead of widening the sidebar. -->
-        <div class="mt-auto grid grid-cols-1 gap-3 text-[length:var(--cc-font-size-sm)]">
+        <div class="mt-auto grid grid-cols-1 gap-3 text-sm leading-[inherit]">
           <!-- The same popovers as the playground toolbar. -->
           <div
             class="flex flex-wrap gap-2 *:max-w-full *:min-w-0"
@@ -216,7 +216,7 @@
 
     {#snippet header()}
       <div class="flex flex-wrap items-center justify-between gap-3">
-        <h1 class="font-display text-[length:var(--cc-font-size-2xl)] font-bold">{current}</h1>
+        <h1 class="font-display leading-heading text-2xl font-bold">{current}</h1>
         <div class="flex flex-wrap gap-2 max-[47.99rem]:[&_.cc-button]:px-3">
           <Button variant="secondary" icon={Funnel} onclick={() => (filterOpen = true)}>
             Filters
@@ -243,7 +243,7 @@
               class="border-border grid gap-1 border-b p-4 odd:border-r nth-last-[-n+2]:border-b-0 md:border-r md:border-b-0 md:last:border-r-0"
             >
               <dt class={muted}>{stat.label}</dt>
-              <dd class="font-display text-[length:var(--cc-font-size-2xl)] tabular-nums">
+              <dd class="font-display text-2xl leading-[inherit] tabular-nums">
                 {stat.value}
               </dd>
               <dd class="{muted} font-sans tabular-nums">{stat.note}</dd>
@@ -293,7 +293,7 @@
           </svg>
           <!-- One label per bar, in the same 14 columns as the bars; every other one on phones. -->
           <ol
-            class="text-muted-foreground grid grid-cols-14 text-center text-[length:var(--cc-font-size-xs)] whitespace-nowrap tabular-nums"
+            class="text-muted-foreground grid grid-cols-14 text-center text-xs leading-[inherit] whitespace-nowrap tabular-nums"
             aria-hidden="true"
           >
             {#each days as day (day)}

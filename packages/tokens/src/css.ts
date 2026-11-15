@@ -1,41 +1,48 @@
-// CSS output. Cascade layers make the result independent of import order:
-// base (primitives, derived tints) < theme < modifier (data-density,
-// data-accent). Unlayered app CSS still overrides any token.
+// The token layers of theme.css. Themes declare the shadcn variable names and
+// Tailwind's theme keys directly (D13); tokens Tailwind has no namespace for
+// keep the `--cc-` prefix. Cascade layers inside Tailwind's `base` make the
+// result independent of import order: base (primitives, derived values) <
+// theme < modifier (data-density, data-accent). Utilities always win over a
+// token, and unlayered app CSS still overrides any token.
 import { SOFT_WEIGHT } from './contrast.js';
-import {
-  density,
-  duration,
-  ease,
-  fontSize,
-  layer as layers,
-  leading,
-  press,
-  space,
-} from './scale.js';
+import { density, duration, ease, layer as layers, press } from './scale.js';
 import {
   accentNames,
+  accentVariables,
+  aliasVariables,
+  colorVariables,
   densities,
   kebab,
-  semanticTokens,
-  statusNames,
+  softVariables,
+  type AccentName,
   type Density,
-  type SemanticToken,
   type Theme,
   type ThemeShadow,
 } from './schema.js';
 
-export const LAYERS = '@layer cc.base, cc.theme, cc.modifier;';
+export const LAYERS = '@layer base.cc.base, base.cc.theme, base.cc.modifier;';
 
-/** Elements where a token can change, so derived values must be recomputed there. */
-const SCOPES = ':root, [data-theme], [data-accent]';
+/** Elements where a theme or an accent can change, so derived values are re-declared there. */
+export const SCOPES = ':root, [data-theme], [data-accent]';
 
-/** Soft drops tinted by the theme's scrim, for themes that set no `shadow`. */
+/** Soft drops tinted by the theme's overlay, for themes that set no `shadow`. */
 const defaultShadow: ThemeShadow = {
-  popover:
-    '0 var(--cc-space-2) var(--cc-space-6) color-mix(in srgb, var(--cc-scrim) 50%, transparent)',
-  modal:
-    '0 var(--cc-space-4) var(--cc-space-10) color-mix(in srgb, var(--cc-scrim) 60%, transparent)',
+  popover: '0 0.5rem 1.5rem color-mix(in srgb, var(--overlay) 50%, transparent)',
+  modal: '0 1rem 2.5rem color-mix(in srgb, var(--overlay) 60%, transparent)',
 };
+
+/** Tailwind spacing keys `data-density` switches: `h-control`, `px-control-x`, `gap-stack`. */
+export const densityVariables: Readonly<Record<keyof (typeof density)['comfortable'], string>> = {
+  controlH: 'spacing-control',
+  controlPx: 'spacing-control-x',
+  controlPy: 'spacing-control-y',
+  gap: 'spacing-stack',
+  cellPx: 'spacing-cell-x',
+  cellPy: 'spacing-cell-y',
+};
+
+/** Variables that follow `--primary` or `--ring`, so `data-accent` must re-declare them. */
+const followsAccent = new Set(Object.values(accentVariables));
 
 type Decls = [name: string, value: string][];
 
@@ -44,50 +51,59 @@ const block = (selector: string, decls: Decls, indent = '  ') =>
 
 const layer = (name: string, body: string[]) => `@layer ${name} {\n${body.join('\n\n')}\n}\n`;
 
-const prefixed = (prefix: string, entries: Record<string, string>): Decls =>
-  Object.entries(entries).map(([k, v]) => [`--cc-${prefix}-${k}`, v]);
-
 const densityDecls = (d: Density): Decls =>
-  Object.entries(density[d]).map(([k, v]) => [`--cc-${kebab(k)}`, v]);
+  Object.entries(density[d]).map(([k, v]) => [
+    `--${densityVariables[k as keyof typeof densityVariables]}`,
+    v,
+  ]);
 
-/** Primitives, density and accent modifiers, derived tints. Required by every theme file. */
+/** Internal per-theme palette of one accent, read by `data-accent`: `--cc-primary-violet`. */
+const accentPalette = (a: AccentName) => ({
+  accent: `--cc-primary-${a}`,
+  accentHover: `--cc-primary-${a}-hover`,
+  accentText: `--cc-primary-${a}-foreground`,
+  focus: `--cc-ring-${a}`,
+});
+
+/** The four accent variables, read from one accent's palette. */
+const accentDecls = (a: AccentName): Decls =>
+  Object.entries(accentPalette(a)).map(([k, v]): [string, string] => [
+    `--${accentVariables[k as keyof typeof accentVariables]}`,
+    `var(${v})`,
+  ]);
+
+/** Motion, stacking, density defaults, derived values and the modifiers. */
 export function baseCss(): string {
-  const soft = (name: string): [string, string] => [
-    `--cc-${name}-soft`,
-    `color-mix(in srgb, var(--cc-${name}) ${Math.round(SOFT_WEIGHT * 100)}%, var(--cc-surface))`,
-  ];
-  const base = layer('cc.base', [
+  const base = layer('base.cc.base', [
     block(':root', [
-      ...prefixed('space', space),
-      ...prefixed('font-size', fontSize),
-      ...prefixed('leading', leading),
-      ...prefixed('duration', duration),
-      ...prefixed('layer', layers),
-      ...prefixed('ease', ease),
-      ...prefixed('press', press),
+      ...Object.entries(ease).map(([k, v]): [string, string] => [`--ease-${k}`, v]),
+      ...Object.entries(duration).map(([k, v]): [string, string] => [`--cc-duration-${k}`, v]),
+      ...Object.entries(layers).map(([k, v]): [string, string] => [`--cc-layer-${k}`, v]),
+      ['--cc-press-scale', press.scale],
       ...densityDecls('comfortable'),
     ]),
-    block(SCOPES, ['accent', ...statusNames].map(soft)),
+    block(SCOPES, [
+      ...softVariables.map((name): [string, string] => [
+        `--${name}-soft`,
+        `color-mix(in srgb, var(--${name}) ${Math.round(SOFT_WEIGHT * 100)}%, var(--background))`,
+      ]),
+      ...Object.entries(aliasVariables)
+        .filter(([, source]) => followsAccent.has(source))
+        .map(([name, source]): [string, string] => [`--${name}`, `var(--${source})`]),
+    ]),
     `  @media (prefers-reduced-motion: reduce) {\n${block(
       ':root',
       [
         ...Object.keys(duration).map((k): [string, string] => [`--cc-duration-${k}`, '0ms']),
-        ['--cc-ease-spring', 'var(--cc-ease-out)'],
+        ['--ease-spring', 'var(--ease-enter)'],
         ['--cc-press-scale', '1'],
       ],
       '    ',
     )}\n  }`,
   ]);
-  const modifier = layer('cc.modifier', [
+  const modifier = layer('base.cc.modifier', [
     ...densities.map((d) => block(`[data-density='${d}']`, densityDecls(d))),
-    ...accentNames.map((a) =>
-      block(`[data-accent='${a}']`, [
-        ['--cc-accent', `var(--cc-accent-${a})`],
-        ['--cc-accent-hover', `var(--cc-accent-${a}-hover)`],
-        ['--cc-accent-text', `var(--cc-accent-${a}-text)`],
-        ['--cc-focus', `var(--cc-accent-${a}-focus)`],
-      ]),
-    ),
+    ...accentNames.map((a) => block(`[data-accent='${a}']`, accentDecls(a))),
   ]);
   return `${LAYERS}\n\n${base}\n${modifier}`;
 }
@@ -102,94 +118,35 @@ export function themeCss(theme: Theme): string {
     theme.name === 'neutral'
       ? `:where(:root), [data-theme='neutral']`
       : `[data-theme='${theme.name}']`;
+  const value: Record<string, string> = Object.fromEntries(
+    Object.entries(colors).map(([k, v]) => [colorVariables[k as keyof typeof colors], v]),
+  );
   const decls: Decls = [
     ['color-scheme', theme.colorScheme],
-    ...Object.entries(colors).map(([k, v]): [string, string] => [`--cc-${kebab(k)}`, v]),
-    ...accentNames.flatMap((a): Decls => [
-      [`--cc-accent-${a}`, accents[a].accent],
-      [`--cc-accent-${a}-hover`, accents[a].accentHover],
-      [`--cc-accent-${a}-text`, accents[a].accentText],
-      [`--cc-accent-${a}-focus`, accents[a].focus],
-    ]),
-    ['--cc-accent', `var(--cc-accent-${defaultAccent})`],
-    ['--cc-accent-hover', `var(--cc-accent-${defaultAccent}-hover)`],
-    ['--cc-accent-text', `var(--cc-accent-${defaultAccent}-text)`],
-    ['--cc-focus', `var(--cc-accent-${defaultAccent}-focus)`],
-    ...prefixed('radius', theme.radius),
-    ...prefixed('font', theme.font),
-    ...prefixed('icon', theme.icon),
+    ...Object.entries(value).map(([k, v]): [string, string] => [`--${k}`, v]),
+    // Aliases of theme colours repeat the value; those that follow the accent live in base.
+    ...Object.entries(aliasVariables)
+      .filter(([, source]) => !followsAccent.has(source))
+      .map(([name, source]): [string, string] => [`--${name}`, value[source]!]),
+    ...accentNames.flatMap((a): Decls =>
+      Object.entries(accentPalette(a)).map(([k, v]): [string, string] => [
+        v,
+        accents[a][k as keyof (typeof accents)[typeof a]],
+      ]),
+    ),
+    ...accentDecls(defaultAccent),
+    ...Object.entries(theme.radius).map(([k, v]): [string, string] => [`--radius-${k}`, v]),
+    ['--radius', theme.radius.md],
+    ...Object.entries(theme.font).map(([k, v]): [string, string] => [`--font-${k}`, v]),
+    ...Object.entries(theme.icon).map(([k, v]): [string, string] => [`--cc-icon-${k}`, v]),
     ...Object.entries(theme.shape).map(([k, v]): [string, string] => [`--cc-${kebab(k)}`, v]),
-    ...prefixed('shadow', { ...(theme.shadow ?? defaultShadow) }),
+    ...Object.entries(theme.shadow ?? defaultShadow).map(([k, v]): [string, string] => [
+      `--shadow-${k}`,
+      v,
+    ]),
     // A themed region paints itself, so nested themes show their own surface.
-    ['color', 'var(--cc-text)'],
-    ['background-color', 'var(--cc-surface)'],
+    ['color', 'var(--foreground)'],
+    ['background-color', 'var(--background)'],
   ];
-  return `${LAYERS}\n\n${layer('cc.theme', [block(selector, decls)])}`;
-}
-
-const isColor = (t: string) =>
-  !/^(radius|font|icon|control|gap|cell|badge|focus-|row|shadow)/.test(t);
-
-/** Tailwind 4 preset: `bg-cc-surface`, `text-cc-text-muted`, `rounded-cc-md`, `font-cc-mono`. */
-export function tailwindCss(): string {
-  const decls: Decls = [
-    ...semanticTokens
-      .filter(isColor)
-      .map((t): [string, string] => [`--color-cc-${t}`, `var(--cc-${t})`]),
-    ...semanticTokens
-      .filter((t) => /^(radius|font)-/.test(t))
-      .map((t): [string, string] => [`--${t.replace('-', '-cc-')}`, `var(--cc-${t})`]),
-    ...Object.keys(ease).map((k): [string, string] => [`--ease-cc-${k}`, `var(--cc-ease-${k})`]),
-  ];
-  // `inline` makes utilities read the variables, so nested themes repaint.
-  return `${block('@theme inline', decls, '')}\n`;
-}
-
-/**
- * shadcn-svelte variables (without `--`) and the CodeCora token each one reads.
- * The registry's theme item writes the same map into an app's `:root` and `.dark`.
- */
-export const shadcnBridge: Readonly<Record<string, SemanticToken>> = {
-  background: 'surface',
-  foreground: 'text',
-  card: 'surface-raised',
-  'card-foreground': 'text',
-  popover: 'surface-raised',
-  'popover-foreground': 'text',
-  primary: 'accent',
-  'primary-foreground': 'accent-text',
-  secondary: 'surface-sunken',
-  'secondary-foreground': 'text',
-  muted: 'surface-sunken',
-  'muted-foreground': 'text-muted',
-  accent: 'surface-hover',
-  'accent-foreground': 'text',
-  destructive: 'danger',
-  'destructive-foreground': 'danger-text',
-  border: 'border',
-  input: 'border-strong',
-  ring: 'focus',
-  radius: 'radius-md',
-  'chart-1': 'accent',
-  'chart-2': 'success',
-  'chart-3': 'warning',
-  'chart-4': 'danger',
-  'chart-5': 'text-muted',
-  sidebar: 'surface-sunken',
-  'sidebar-foreground': 'text',
-  'sidebar-primary': 'accent',
-  'sidebar-primary-foreground': 'accent-text',
-  'sidebar-accent': 'surface-hover',
-  'sidebar-accent-foreground': 'text',
-  'sidebar-border': 'border',
-  'sidebar-ring': 'focus',
-};
-
-/** shadcn-svelte variables mapped onto CodeCora tokens. */
-export function shadcnCss(): string {
-  const decls = Object.entries(shadcnBridge).map(([k, v]): [string, string] => [
-    `--${k}`,
-    `var(--cc-${v})`,
-  ]);
-  return `${LAYERS}\n\n${layer('cc.base', [block(SCOPES, decls)])}`;
+  return `${LAYERS}\n\n${layer('base.cc.theme', [block(selector, decls)])}`;
 }

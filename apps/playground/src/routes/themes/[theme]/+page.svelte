@@ -18,7 +18,7 @@
   /* Every crumb after the first leads with the separator. */
   const after = 'before:mr-2 before:content-[var(--pg-crumb-separator)]';
   const pager =
-    'focus-visible:outline-ring inline-flex min-h-11 items-center gap-1 rounded-md border px-3 text-[length:var(--cc-font-size-sm)] no-underline focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)]';
+    'focus-visible:outline-ring inline-flex min-h-11 items-center gap-1 rounded-md border px-3 text-sm leading-[inherit] no-underline focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)]';
 </script>
 
 <svelte:head>
@@ -29,11 +29,11 @@
 <div class="min-h-dvh px-4 pt-8 pb-16 md:px-8" data-theme={data.theme}>
   <header class="mx-auto grid max-w-6xl gap-3 pb-8">
     <PageNav />
-    <h1 class="text-[length:var(--cc-font-size-3xl)] font-bold">
+    <h1 class="leading-heading text-3xl font-bold">
       {themes[data.theme].label} theme
     </h1>
     <nav aria-label="Breadcrumb">
-      <ol class="text-muted-foreground flex flex-wrap gap-2 text-[length:var(--cc-font-size-sm)]">
+      <ol class="text-muted-foreground flex flex-wrap gap-2 text-sm leading-[inherit]">
         <li><a class={crumb} href={resolve('/')}>Overview</a></li>
         <li class={after}><a class={crumb} href={resolve('/tokens')}>Tokens</a></li>
         <li class={after} aria-current="page">{themes[data.theme].label}</li>

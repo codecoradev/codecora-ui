@@ -109,7 +109,7 @@
 
 <section class={cn('cc-memory-list grid min-w-0 gap-3', className)} aria-labelledby="{uid}-title">
   <header class="flex items-center justify-between gap-3">
-    <h2 id="{uid}-title" class="font-display m-0 text-[length:var(--cc-font-size-lg)] font-bold">
+    <h2 id="{uid}-title" class="font-display leading-heading m-0 text-lg font-bold">
       {label}
     </h2>
     {#if caps.create}
@@ -139,7 +139,7 @@
     {/if}
   </div>
 
-  <p class="text-muted-foreground m-0 min-h-lh text-[length:var(--cc-font-size-sm)]" role="status">
+  <p class="text-muted-foreground m-0 min-h-lh text-sm leading-[inherit]" role="status">
     {#if !browser.loading && !browser.error}
       {browser.items.length}{browser.hasMore ? '+' : ''}
       {browser.items.length === 1 ? 'memory' : 'memories'}{browser.filtered ? ' match' : ''}
@@ -194,7 +194,7 @@
           >
             <span class="line-clamp-2 wrap-anywhere">{preview(memory.content)}</span>
             <span
-              class="text-muted-foreground flex flex-wrap items-center gap-x-2 gap-y-1 text-[length:var(--cc-font-size-xs)]"
+              class="text-muted-foreground flex flex-wrap items-center gap-x-2 gap-y-1 text-xs leading-[inherit]"
             >
               {#if memory.pinned}<Badge tone="accent">Pinned</Badge>{/if}
               <span class="font-semibold">{memory.memoryType}</span>

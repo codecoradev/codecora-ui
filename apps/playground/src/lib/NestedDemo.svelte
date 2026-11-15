@@ -2,10 +2,10 @@
   // Themes nest per element: a light document with a dark console beside it,
   // an accent switched on one toolbar, and density switched on the console.
   const pane = 'gap-stack grid content-start justify-items-start p-6';
-  const label = 'text-muted-foreground text-[length:var(--cc-font-size-xs)]';
-  const h3 = 'text-[length:var(--cc-font-size-xl)] font-bold';
+  const label = 'text-muted-foreground text-xs leading-[inherit]';
+  const h3 = 'text-xl leading-heading font-bold';
   const action =
-    'min-h-control px-control-x bg-primary text-primary-foreground hover:bg-primary-hover cursor-pointer rounded-md border-0 py-px font-sans text-[length:var(--cc-font-size-sm)] leading-normal font-medium';
+    'min-h-control px-control-x bg-primary text-primary-foreground hover:bg-primary-hover cursor-pointer rounded-md border-0 py-px font-sans text-sm leading-normal font-medium';
   const line = 'py-cell-y border-border border-b';
   const num = 'text-muted-foreground me-2 font-mono tabular-nums';
 </script>
@@ -24,7 +24,7 @@
       without leaving the theme.
     </p>
     <div
-      class="gap-stack text-muted-foreground flex flex-wrap items-center text-[length:var(--cc-font-size-xs)]"
+      class="gap-stack text-muted-foreground flex flex-wrap items-center text-xs leading-[inherit]"
       data-accent="blue"
     >
       <code>data-accent="blue"</code>
@@ -38,14 +38,14 @@
       <code>data-theme="corin" data-density="compact"</code>
     </p>
     <h3 class={h3}>Console</h3>
-    <ul class="w-full text-[length:var(--cc-font-size-sm)]">
+    <ul class="w-full text-sm leading-[inherit]">
       <li class={line}><span class={num}>01a18</span> recall · 3 results</li>
       <li class={line}><span class={num}>01a19</span> remember · stored</li>
       <li class="{line} text-warning"><span class={num}>01a1a</span> quota at 90%</li>
     </ul>
     <button type="button" class={action}>Run recall</button>
     <footer
-      class="gap-stack text-muted-foreground mt-2 grid w-full justify-items-start rounded-md p-4 text-[length:var(--cc-font-size-xs)]"
+      class="gap-stack text-muted-foreground mt-2 grid w-full justify-items-start rounded-md p-4 text-xs leading-[inherit]"
       data-theme="neutral"
       data-density="comfortable"
     >

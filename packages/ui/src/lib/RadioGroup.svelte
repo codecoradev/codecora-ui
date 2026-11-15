@@ -88,7 +88,7 @@
         >
         {#if item.description}<p
             id="{uid}-{item.value}-hint"
-            class="text-muted-foreground m-0 text-[length:var(--cc-font-size-sm)]"
+            class="text-muted-foreground m-0 text-sm leading-[inherit]"
           >
             {item.description}
           </p>{/if}

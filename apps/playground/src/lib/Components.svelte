@@ -84,12 +84,12 @@
   );
 
   const section = 'grid grid-cols-1 gap-4 pb-10';
-  const h2 = 'text-[length:var(--cc-font-size-xl)] font-bold';
+  const h2 = 'text-xl leading-heading font-bold';
   const row = 'flex flex-wrap items-center gap-3';
   const muted = 'text-muted-foreground max-w-[var(--pg-measure-intro)]';
   /* The section in view gets a tint, weight and an inset bar. */
   const link =
-    'text-foreground hover:bg-accent aria-[current=location]:bg-primary-soft focus-visible:outline-ring grid gap-0.5 rounded-sm px-2 py-1 no-underline focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)] aria-[current=location]:font-semibold aria-[current=location]:[box-shadow:inset_2px_0_0_var(--cc-accent)]';
+    'text-foreground hover:bg-accent aria-[current=location]:bg-primary-soft focus-visible:outline-ring grid gap-0.5 rounded-sm px-2 py-1 no-underline focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)] aria-[current=location]:font-semibold aria-[current=location]:[box-shadow:inset_2px_0_0_var(--primary)]';
 
   function save() {
     saving = true;
@@ -104,11 +104,11 @@
 <div class="grid grid-cols-1 gap-8 lg:grid-cols-[calc(var(--spacing)*52)_minmax(0,1fr)]">
   <details class="group lg:sticky lg:top-4 lg:self-start" bind:open={indexOpen}>
     <summary
-      class="border-input bg-card focus-visible:outline-ring flex min-h-11 cursor-pointer items-center rounded-md border px-3 text-[length:var(--cc-font-size-sm)] font-semibold group-open:mb-3 focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)] lg:hidden"
+      class="border-input bg-card focus-visible:outline-ring flex min-h-11 cursor-pointer items-center rounded-md border px-3 text-sm leading-[inherit] font-semibold group-open:mb-3 focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)] lg:hidden"
       >Jump to a section</summary
     >
     <nav
-      class="border-border bg-card grid grid-cols-[repeat(auto-fill,minmax(calc(var(--spacing)*36),1fr))] content-start gap-4 rounded-md border p-4 text-[length:var(--cc-font-size-sm)] lg:max-h-[calc(100dvh-var(--cc-space-8))] lg:grid-cols-1 lg:overflow-y-auto lg:border-0 lg:bg-transparent lg:p-0 lg:pr-2"
+      class="border-border bg-card grid grid-cols-[repeat(auto-fill,minmax(calc(var(--spacing)*36),1fr))] content-start gap-4 rounded-md border p-4 text-sm leading-[inherit] lg:max-h-[calc(100dvh-calc(var(--spacing)*8))] lg:grid-cols-1 lg:overflow-y-auto lg:border-0 lg:bg-transparent lg:p-0 lg:pr-2"
       aria-label="Sections on this page"
     >
       <a
@@ -119,7 +119,7 @@
       {#each catalogue as { group, sections } (group)}
         <div class="grid content-start gap-1">
           <p
-            class="text-muted-foreground font-sans text-[length:var(--cc-font-size-xs)] font-semibold tracking-[var(--pg-tracking-label)] uppercase"
+            class="text-muted-foreground font-sans text-xs leading-[inherit] font-semibold tracking-[var(--pg-tracking-label)] uppercase"
           >
             {group}
           </p>
@@ -131,7 +131,7 @@
                   href="#{section.id}"
                   aria-current={active === section.id ? 'location' : undefined}
                   ><span>{section.title}</span><small
-                    class="text-muted-foreground text-[length:var(--cc-font-size-xs)] leading-[var(--pg-leading-small)]"
+                    class="text-muted-foreground text-xs leading-[var(--pg-leading-small)]"
                     >{section.components.join(', ')}</small
                   ></a
                 >
@@ -207,7 +207,7 @@
         </Field>
       </div>
 
-      <h3 id="c-invalid" class="text-[length:var(--cc-font-size-lg)] font-bold">Invalid state</h3>
+      <h3 id="c-invalid" class="leading-heading text-lg font-bold">Invalid state</h3>
       <p class={muted}>
         An icon and a screen-reader "Error:" prefix back the red text, and the control gets a
         stronger border, so the state never depends on colour alone.

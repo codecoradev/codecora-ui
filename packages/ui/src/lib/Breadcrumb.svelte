@@ -19,20 +19,18 @@
 </script>
 
 <nav aria-label={label} class={cn('cc-breadcrumb', className)}>
-  <ol
-    class="m-0 flex list-none flex-wrap items-center gap-1 p-0 text-[length:var(--cc-font-size-sm)]"
-  >
+  <ol class="m-0 flex list-none flex-wrap items-center gap-1 p-0 text-sm leading-[inherit]">
     {#each items as item, i (i)}
       {@const current = i === items.length - 1}
       <!-- The chevrons are 1rem: the icon size, overridden on the glyph itself. -->
       <li
-        class="[&_.cc-glyph]:text-muted-foreground inline-flex items-center gap-1 [&_.cc-glyph]:[--cc-icon-size:var(--cc-space-4)]"
+        class="[&_.cc-glyph]:text-muted-foreground inline-flex items-center gap-1 [&_.cc-glyph]:[--cc-icon-size:calc(var(--spacing)*4)]"
       >
         {#if item.href && !current}
           <!-- 0.2em of the list's text size. -->
           <a
             href={item.href}
-            class="text-muted-foreground hover:text-foreground focus-visible:outline-ring underline underline-offset-[calc(var(--cc-font-size-sm)*0.2)] focus-visible:rounded-sm focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)]"
+            class="text-muted-foreground hover:text-foreground focus-visible:outline-ring underline underline-offset-[calc(var(--text-sm)*0.2)] focus-visible:rounded-sm focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)]"
             >{item.label}</a
           >
         {:else}

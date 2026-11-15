@@ -38,6 +38,19 @@ describe('cn with the CodeCora theme names', () => {
     expect(cn('font-inherit text-sm', 'font-sans')).toBe('font-inherit text-sm font-sans');
   });
 
+  it('replaces a max width with the measure keys', () => {
+    expect(cn('max-w-md', 'max-w-measure')).toBe('max-w-measure');
+    expect(cn('max-w-description', 'max-w-prose')).toBe('max-w-prose');
+  });
+
+  it('keeps a line height beside a later font size, as Tailwind 4 renders it', () => {
+    expect(cn('leading-heading text-lg')).toBe('leading-heading text-lg');
+    expect(cn('font-display leading-heading m-0 text-lg font-bold')).toContain('leading-heading');
+    expect(cn('text-sm leading-[inherit]', 'text-lg')).toBe('leading-[inherit] text-lg');
+    expect(cn('leading-heading', 'text-lg/7')).toBe('text-lg/7');
+    expect(cn('leading-heading', 'leading-normal')).toBe('leading-normal');
+  });
+
   it('keeps colour and size utilities apart', () => {
     expect(cn('text-muted-foreground', 'text-sm')).toBe('text-muted-foreground text-sm');
     expect(cn('shadow-popover', 'shadow-primary')).toBe('shadow-popover shadow-primary');
@@ -53,10 +66,14 @@ describe('cn with the CodeCora theme names', () => {
     const ease = Object.keys(tailwindKeys)
       .filter((k) => k.startsWith('ease-'))
       .map((k) => k.slice('ease-'.length));
+    const leading = Object.keys(tailwindKeys)
+      .filter((k) => k.startsWith('leading-'))
+      .map((k) => k.slice('leading-'.length));
     const utilities = Object.keys(tailwindUtilities);
     expect(twMergeExtension.theme.spacing).toEqual(spacing);
     expect(twMergeExtension.theme.shadow).toEqual(shadow);
     expect(twMergeExtension.theme.ease).toEqual(ease);
+    expect(twMergeExtension.theme.leading).toEqual(leading);
     expect(twMergeExtension.classGroups.duration[0]!.duration.map((d) => `duration-${d}`)).toEqual(
       utilities.filter((u) => u.startsWith('duration-')),
     );

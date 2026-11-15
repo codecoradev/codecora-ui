@@ -1,64 +1,52 @@
-// Tailwind 4 theme (D13): shadcn variable names, Tailwind theme keys, our
-// utilities and the `dark` variant, on top of every CodeCora theme.
-//
-// Transition (phases 2 to 9 of #155): the shadcn names read the `--cc-*`
-// tokens, which stay the source the contrast gate checks. Phase 10 flips it:
-// the themes then declare the shadcn names directly and `--cc-*` goes away.
-import { baseCss, shadcnBridge, themeCss } from './css.js';
-import { duration, layer as layers } from './scale.js';
-import { themeNames, type SemanticToken } from './schema.js';
+// Tailwind 4 theme (D13): `@codecora/tokens/theme.css`. The themes declare
+// the shadcn colour names and Tailwind's theme keys directly (css.ts); this
+// file maps them to utilities, adds our utilities, keyframe animations and
+// the `dark` variant, and assembles the stylesheet.
+import { baseCss, densityVariables, themeCss } from './css.js';
+import { duration, ease, layer as layers, leading, space } from './scale.js';
+import { colorTokens, themeNames } from './schema.js';
 import { themes } from './themes.js';
 
-/** Roles shadcn has no variable for, named in its `<role>` / `<role>-foreground` pattern. */
-export const shadcnExtensions: Readonly<Record<string, SemanticToken>> = {
-  'primary-hover': 'accent-hover',
-  'primary-soft': 'accent-soft',
-  'destructive-soft': 'danger-soft',
-  success: 'success',
-  'success-foreground': 'success-text',
-  'success-soft': 'success-soft',
-  warning: 'warning',
-  'warning-foreground': 'warning-text',
-  'warning-soft': 'warning-soft',
-  overlay: 'scrim',
-};
-
-/** Every variable `theme.css` declares, without `--`, and the token it reads. */
-export const themeVariables: Readonly<Record<string, SemanticToken>> = {
-  ...shadcnBridge,
-  ...shadcnExtensions,
-};
-
-/** Variables that are not colours (`--radius` is the shadcn base radius). */
-const nonColour = new Set(['radius']);
+/**
+ * Every colour variable `theme.css` declares, without `--`: the shadcn names
+ * (chart and sidebar included) and the extensions in the same
+ * `<role>` / `<role>-foreground` pattern (`primary-hover`, `success`, ...).
+ * Each is a Tailwind colour (`bg-background`, `text-muted-foreground`), plus
+ * `--radius`, the shadcn base radius.
+ */
+export const themeVariables: readonly string[] = [...colorTokens, 'radius'];
 
 /**
- * Tailwind theme keys and the CodeCora token each reads. Keys outside these
- * stay Tailwind's defaults, including the type scale (`text-xl` is 1.25rem as
- * in the Tailwind docs).
+ * Tailwind theme keys the themes declare as variables of the same name, so a
+ * utility reads the variable (`rounded-md` is `var(--radius-md)`) and nested
+ * themes, accents and densities repaint their subtree.
  */
+export const themeKeys: readonly string[] = [
+  'radius-sm',
+  'radius-md',
+  'radius-lg',
+  'font-sans',
+  'font-display',
+  'font-mono',
+  ...Object.values(densityVariables),
+  'shadow-popover',
+  'shadow-modal',
+  ...Object.keys(ease).map((k) => `ease-${k}`),
+];
+
+/**
+ * Every Tailwind theme key `theme.css` adds or replaces, and its value. Keys
+ * outside these stay Tailwind's defaults, including the type scale (`text-xl`
+ * is 1.25rem as in the Tailwind docs) and the easing curves.
+ */
+/** `var(--name)`: a theme key that reads the variable a theme declares. */
+const readVariable = (name: string): string => `var(--${name})`;
+
 export const tailwindKeys: Readonly<Record<string, string>> = {
-  'radius-sm': 'var(--cc-radius-sm)',
-  'radius-md': 'var(--cc-radius-md)',
-  'radius-lg': 'var(--cc-radius-lg)',
-  'font-sans': 'var(--cc-font-sans)',
-  'font-display': 'var(--cc-font-display)',
-  'font-mono': 'var(--cc-font-mono)',
-  // Sizes `data-density` switches: h-control, px-control-x, gap-stack, py-cell-y.
-  'spacing-control': 'var(--cc-control-h)',
-  'spacing-control-x': 'var(--cc-control-px)',
-  'spacing-control-y': 'var(--cc-control-py)',
-  'spacing-stack': 'var(--cc-gap)',
-  'spacing-cell-x': 'var(--cc-cell-px)',
-  'spacing-cell-y': 'var(--cc-cell-py)',
-  'spacing-icon': 'var(--cc-icon-size)',
-  'shadow-popover': 'var(--cc-shadow-popover)',
-  'shadow-modal': 'var(--cc-shadow-modal)',
-  // New names, so Tailwind's own ease-out and ease-in-out keep their curves.
-  'ease-enter': 'var(--cc-ease-out)',
-  'ease-exit': 'var(--cc-ease-exit)',
-  'ease-move': 'var(--cc-ease-in-out)',
-  'ease-spring': 'var(--cc-ease-spring)',
+  ...Object.fromEntries(themeKeys.map((name) => [name, readVariable(name)])),
+  // @codecora/icons reads the icon size too, so it keeps its cc- name.
+  'spacing-icon': readVariable('cc-icon-size'),
+  ...Object.fromEntries(Object.entries(leading).map(([k, v]) => [`leading-${k}`, v])),
   // The measure of a short description (EmptyState): max-w-description.
   'container-description': '40ch',
   // A comfortable reading measure for long text: max-w-measure.
@@ -76,15 +64,15 @@ export const tailwindKeyframes: Readonly<Record<string, Record<string, Record<st
   'cc-fade-out': { to: { opacity: '0' } },
   // Centered dialog and command palette: the movement adds to the element's
   // own centring (`-translate-1/2`), which sits in `translate`, not `transform`.
-  'cc-dialog-in': { from: { transform: 'translateY(var(--cc-space-3)) scale(0.97)' } },
+  'cc-dialog-in': { from: { transform: `translateY(${space[3]}) scale(0.97)` } },
   'cc-dialog-out': {
-    to: { opacity: '0', transform: 'translateY(var(--cc-space-2)) scale(0.98)' },
+    to: { opacity: '0', transform: `translateY(${space[2]}) scale(0.98)` },
   },
   'cc-palette-in': {
-    from: { transform: 'translateY(calc(-1 * var(--cc-space-2))) scale(0.97)' },
+    from: { transform: `translateY(-${space[2]}) scale(0.97)` },
   },
   'cc-palette-out': {
-    to: { opacity: '0', transform: 'translateY(calc(-1 * var(--cc-space-1))) scale(0.98)' },
+    to: { opacity: '0', transform: `translateY(-${space[1]}) scale(0.98)` },
   },
   'cc-sheet-right-in': { from: { transform: 'translateX(100%)' } },
   'cc-sheet-right-out': { to: { transform: 'translateX(100%)' } },
@@ -95,14 +83,14 @@ export const tailwindKeyframes: Readonly<Record<string, Record<string, Record<st
   // Popover, Tooltip, DropdownMenu: scale from the anchor (transform-origin).
   'cc-popover-in': { from: { opacity: '0', transform: 'scale(0.96)' } },
   'cc-popover-out': { to: { opacity: '0', transform: 'scale(0.96)' } },
-  'cc-toast-in': { from: { transform: 'translateY(var(--cc-space-3))' } },
-  'cc-toast-out': { to: { opacity: '0', transform: 'translateY(var(--cc-space-2))' } },
+  'cc-toast-in': { from: { transform: `translateY(${space[3]})` } },
+  'cc-toast-out': { to: { opacity: '0', transform: `translateY(${space[2]})` } },
 };
 
-const enter = (name: string, d = 'normal', e = 'out') =>
-  `${name} var(--cc-duration-${d}) var(--cc-ease-${e})`;
+const enter = (name: string, d = 'normal', e = 'enter') =>
+  `${name} var(--cc-duration-${d}) var(--ease-${e})`;
 const exit = (name: string, d = 'fast') =>
-  `${name} var(--cc-duration-${d}) var(--cc-ease-exit) forwards`;
+  `${name} var(--cc-duration-${d}) var(--ease-exit) forwards`;
 
 /**
  * `animate-*` utilities for the overlays (`animate-dialog-in`,
@@ -154,12 +142,11 @@ export const displayAnimations: Readonly<Record<string, { value: string; keyfram
   },
   // Arrives where it stays: a short settle into place, no spring in the reading flow.
   'settle-in': {
-    value: 'cc-settle-in var(--cc-duration-normal) var(--cc-ease-out)',
-    keyframes:
-      '@keyframes cc-settle-in {\n  from {\n    opacity: 0;\n    transform: translateY(calc(-1 * var(--cc-space-1)));\n  }\n}',
+    value: 'cc-settle-in var(--cc-duration-normal) var(--ease-enter)',
+    keyframes: `@keyframes cc-settle-in {\n  from {\n    opacity: 0;\n    transform: translateY(-${space[1]});\n  }\n}`,
   },
   'fade-in': {
-    value: 'cc-fade-in var(--cc-duration-normal) var(--cc-ease-out)',
+    value: 'cc-fade-in var(--cc-duration-normal) var(--ease-enter)',
     keyframes: '@keyframes cc-fade-in {\n  from {\n    opacity: 0;\n  }\n}',
   },
 };
@@ -213,15 +200,15 @@ export const formAnimations: Readonly<
 > = {
   // A field error arrives where it stays: a short settle, no spring.
   'error-in': {
-    animation: 'cc-error-in var(--cc-duration-normal) var(--cc-ease-out)',
+    animation: 'cc-error-in var(--cc-duration-normal) var(--ease-enter)',
     keyframes: {
-      'cc-error-in': 'from { opacity: 0; transform: translateY(calc(-1 * var(--cc-space-1))); }',
+      'cc-error-in': `from { opacity: 0; transform: translateY(-${space[1]}); }`,
     },
   },
   // A radio dot: opacity eases, only the scale springs.
   'dot-in': {
     animation:
-      'cc-dot-fade var(--cc-duration-fast) var(--cc-ease-out), cc-dot-pop var(--cc-duration-slow) var(--cc-ease-spring)',
+      'cc-dot-fade var(--cc-duration-fast) var(--ease-enter), cc-dot-pop var(--cc-duration-slow) var(--ease-spring)',
     keyframes: {
       'cc-dot-fade': 'from { opacity: 0; }',
       'cc-dot-pop': 'from { scale: 0.4; }',
@@ -229,11 +216,11 @@ export const formAnimations: Readonly<
   },
   // Select and Combobox lists; bits-ui keeps a list mounted until its exit ends.
   'listbox-in': {
-    animation: 'cc-listbox-in var(--cc-duration-fast) var(--cc-ease-out)',
+    animation: 'cc-listbox-in var(--cc-duration-fast) var(--ease-enter)',
     keyframes: { 'cc-listbox-in': 'from { opacity: 0; transform: scale(0.96); }' },
   },
   'listbox-out': {
-    animation: 'cc-listbox-out var(--cc-duration-instant) var(--cc-ease-exit) forwards',
+    animation: 'cc-listbox-out var(--cc-duration-instant) var(--ease-exit) forwards',
     keyframes: { 'cc-listbox-out': 'to { opacity: 0; transform: scale(0.96); }' },
   },
 };
@@ -248,7 +235,7 @@ export const accordionAnimations: Readonly<
 > = {
   // The accordion panel opens to the height bits-ui measures.
   'accordion-open': {
-    animation: 'cc-accordion-open var(--cc-duration-normal) var(--cc-ease-out)',
+    animation: 'cc-accordion-open var(--cc-duration-normal) var(--ease-enter)',
     keyframes: {
       from: { height: '0', opacity: '0' },
       to: { height: 'var(--bits-accordion-content-height)' },
@@ -256,16 +243,13 @@ export const accordionAnimations: Readonly<
   },
   // bits-ui keeps the panel mounted until the exit animation finishes.
   'accordion-close': {
-    animation: 'cc-accordion-close var(--cc-duration-fast) var(--cc-ease-exit) forwards',
+    animation: 'cc-accordion-close var(--cc-duration-fast) var(--ease-exit) forwards',
     keyframes: {
       from: { height: 'var(--bits-accordion-content-height)' },
       to: { height: '0', opacity: '0' },
     },
   },
 };
-
-/** Elements where a token can change, so the shadcn variables must be re-read there. */
-const SCOPES = ':root, [data-theme], [data-accent]';
 
 /**
  * `dark:` follows the nearest theme: it matches an element whose closest
@@ -291,20 +275,21 @@ export function darkSelector(): string {
  * and unlayered app CSS still overrides any token.
  */
 export function tailwindThemeCss(): string {
-  const tokens = [baseCss(), ...themeNames.map((n) => themeCss(themes[n]))]
-    .join('\n')
-    .replace(/(?<![\w.-])cc\.(base|theme|modifier)\b/g, 'base.cc.$1');
+  const tokens = [baseCss(), ...themeNames.map((n) => themeCss(themes[n]))].join('\n');
   const indent = (lines: string[]) => lines.map((l) => `  ${l}`).join('\n');
 
-  const variables = `@layer base.cc.base {\n  ${SCOPES} {\n${indent(
-    Object.entries(themeVariables).map(([k, v]) => `  --${k}: var(--cc-${v});`),
-  )}\n  }\n}\n`;
+  // The themes declare these variables themselves; `reference` keeps Tailwind
+  // from declaring them again on :root, where the key would read itself.
+  const own = new Set(themeKeys);
+  const declared = `@theme inline reference {\n${indent(
+    themeKeys.map((k) => `--${k}: var(--${k});`),
+  )}\n}\n`;
 
   const theme = `@theme inline {\n${indent([
-    ...Object.keys(themeVariables)
-      .filter((k) => !nonColour.has(k))
-      .map((k) => `--color-${k}: var(--${k});`),
-    ...Object.entries(tailwindKeys).map(([k, v]) => `--${k}: ${v};`),
+    ...colorTokens.map((k) => `--color-${k}: var(--${k});`),
+    ...Object.entries(tailwindKeys)
+      .filter(([k]) => !own.has(k))
+      .map(([k, v]) => `--${k}: ${v};`),
     ...Object.entries(tailwindAnimations).map(([k, v]) => `--animate-${k}: ${v};`),
     // Inside @theme, Tailwind emits a keyframe only when an animate-* utility uses it.
     ...Object.entries(tailwindKeyframes).flatMap(([name, frames]) => [
@@ -350,5 +335,5 @@ export function tailwindThemeCss(): string {
   // register it here too, or a child's plain `transition` would inherit it.
   const property = '@property --tw-duration {\n  syntax: "*";\n  inherits: false;\n}\n';
 
-  return [tokens, variables, theme, utilities, property, variant].join('\n');
+  return [tokens, declared, theme, utilities, property, variant].join('\n');
 }

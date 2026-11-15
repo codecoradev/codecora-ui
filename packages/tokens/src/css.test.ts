@@ -1,38 +1,59 @@
 import { describe, expect, it } from 'vitest';
-import { LAYERS, baseCss, shadcnBridge, shadcnCss, tailwindCss, themeCss } from './css.js';
+import { LAYERS, SCOPES, baseCss, themeCss } from './css.js';
 import { duration, ease, spring } from './scale.js';
-import { accentNames, semanticTokens, themeNames } from './schema.js';
+import {
+  accentNames,
+  accentVariables,
+  aliasVariables,
+  colorTokens,
+  colorVariables,
+  semanticTokens,
+  softVariables,
+  themeNames,
+} from './schema.js';
 import { themes } from './themes.js';
 
-const declared = (css: string) => new Set([...css.matchAll(/(--cc-[\w-]+):/g)].map((m) => m[1]));
+const declared = (css: string) => new Set([...css.matchAll(/--([\w-]+):/g)].map((m) => m[1]));
 
-describe('base.css', () => {
+describe('base layer', () => {
   const css = baseCss();
 
-  it('declares the layer order first, so import order never matters', () => {
+  it('declares the layer order first, inside Tailwind base, so import order never matters', () => {
     expect(css.startsWith(LAYERS)).toBe(true);
+    expect(LAYERS).toBe('@layer base.cc.base, base.cc.theme, base.cc.modifier;');
   });
 
   it('puts density and accent modifiers in the modifier layer', () => {
-    const modifier = css.slice(css.indexOf('@layer cc.modifier {'));
-    expect(modifier).toContain("[data-density='compact']");
-    for (const a of accentNames) expect(modifier).toContain(`[data-accent='${a}']`);
+    const modifier = css.slice(css.indexOf('@layer base.cc.modifier {'));
+    expect(modifier).toMatch(/\[data-density='compact'\] \{\s+--spacing-control: 2rem;/);
+    for (const a of accentNames)
+      expect(modifier).toContain(
+        `[data-accent='${a}'] {\n    --primary: var(--cc-primary-${a});\n    --primary-hover: var(--cc-primary-${a}-hover);\n    --primary-foreground: var(--cc-primary-${a}-foreground);\n    --ring: var(--cc-ring-${a});`,
+      );
   });
 
-  it('recomputes derived tints wherever a theme or accent changes', () => {
-    expect(css).toMatch(/:root, \[data-theme\], \[data-accent\] \{\s+--cc-accent-soft:/);
+  it('re-declares tints and accent aliases wherever a theme or accent changes', () => {
+    const scoped = css.slice(css.indexOf(`${SCOPES} {`));
+    expect(SCOPES).toBe(':root, [data-theme], [data-accent]');
+    for (const name of softVariables)
+      expect(scoped).toContain(
+        `--${name}-soft: color-mix(in srgb, var(--${name}) 14%, var(--background));`,
+      );
+    for (const name of ['chart-1', 'sidebar-primary', 'sidebar-primary-foreground', 'sidebar-ring'])
+      expect(scoped).toContain(`--${name}: var(--${aliasVariables[name]});`);
   });
 
-  it('declares the motion scale', () => {
+  it('declares the motion scale under Tailwind easing names and cc- durations', () => {
     for (const k of ['instant', 'fast', 'normal', 'slow'])
       expect(css).toContain(`--cc-duration-${k}: ${duration[k as keyof typeof duration]};`);
-    for (const k of ['out', 'in-out', 'exit', 'spring']) expect(css).toContain(`--cc-ease-${k}: `);
+    for (const k of ['enter', 'move', 'exit', 'spring']) expect(css).toContain(`--ease-${k}: `);
+    expect(css).not.toMatch(/--ease-(in|out|in-out):/);
   });
 
   it('zeroes every duration and calms the spring for reduced motion', () => {
     const reduced = css.slice(css.indexOf('@media (prefers-reduced-motion: reduce)'));
     for (const k of Object.keys(duration)) expect(reduced).toContain(`--cc-duration-${k}: 0ms;`);
-    expect(reduced).toContain('--cc-ease-spring: var(--cc-ease-out);');
+    expect(reduced).toContain('--ease-spring: var(--ease-enter);');
     // A press is scale, not time, so reduced motion turns it off by making it 1.
     expect(css).toContain('--cc-press-scale: 0.98;');
     expect(reduced).toContain('--cc-press-scale: 1;');
@@ -55,13 +76,41 @@ describe('spring easing', () => {
   });
 });
 
-describe('theme files', () => {
+describe('themes', () => {
+  it('list every colour variable once, from the colour, accent, alias and tint maps', () => {
+    const derived = [
+      ...Object.values(colorVariables),
+      ...Object.values(accentVariables),
+      ...Object.keys(aliasVariables),
+      ...softVariables.map((v) => `${v}-soft`),
+    ];
+    expect([...colorTokens].sort()).toEqual([...new Set(derived)].sort());
+    expect(derived).toHaveLength(colorTokens.length);
+  });
+
   for (const name of themeNames)
-    it(`${name} defines every semantic token together with base.css`, () => {
+    it(`${name} declares every semantic token together with the base layer`, () => {
       const all = declared(baseCss() + themeCss(themes[name]));
-      const missing = semanticTokens.filter((t) => !all.has(`--cc-${t}`));
+      const missing = semanticTokens.filter((t) => !all.has(t));
       expect(missing).toEqual([]);
     });
+
+  it('declares only the shadcn names, Tailwind keys and cc- tokens', () => {
+    const all = declared(baseCss() + themeNames.map((n) => themeCss(themes[n])).join('\n'));
+    const known = new Set<string>(semanticTokens);
+    const internal = /^cc-(primary|ring)-[a-z]+(-hover|-foreground)?$/;
+    expect([...all].filter((v) => !known.has(v!) && !internal.test(v!))).toEqual([]);
+  });
+
+  it('writes the theme colours under their shadcn names', () => {
+    const css = themeCss(themes.corin);
+    expect(css).toContain(`--background: ${themes.corin.colors.surface};`);
+    expect(css).toContain(`--muted-foreground: ${themes.corin.colors.textMuted};`);
+    expect(css).toContain(`--popover: ${themes.corin.colors.surfaceRaised};`);
+    expect(css).toContain(`--primary: var(--cc-primary-${themes.corin.defaultAccent});`);
+    expect(css).toContain(`--radius: ${themes.corin.radius.md};`);
+    expect(css).not.toMatch(/--cc-(surface|text|accent|danger|scrim|radius|font|shadow)/);
+  });
 
   it('applies neutral to the page at zero specificity, other themes by attribute', () => {
     expect(themeCss(themes.neutral)).toContain(":where(:root), [data-theme='neutral'] {");
@@ -69,30 +118,6 @@ describe('theme files', () => {
   });
 
   it('paints a themed region, so nested themes show their own surface', () => {
-    expect(themeCss(themes.uteke)).toContain('background-color: var(--cc-surface);');
-  });
-});
-
-describe('integrations', () => {
-  it('Tailwind preset reads the variables under a cc- namespace', () => {
-    const css = tailwindCss();
-    expect(css).toMatch(/^@theme inline \{/);
-    expect(css).toContain('--color-cc-surface: var(--cc-surface);');
-    expect(css).toContain('--radius-cc-md: var(--cc-radius-md);');
-    expect(css).toContain('--font-cc-mono: var(--cc-font-mono);');
-    for (const k of Object.keys(ease))
-      expect(css).toContain(`--ease-cc-${k}: var(--cc-ease-${k});`);
-  });
-
-  it('shadcn bridge maps its variables onto tokens in every scope', () => {
-    const css = shadcnCss();
-    expect(css).toContain('--primary: var(--cc-accent);');
-    expect(css).toContain('--ring: var(--cc-focus);');
-    expect(css).toContain(':root, [data-theme], [data-accent] {');
-  });
-
-  it('shadcn bridge covers the chart and sidebar variables shadcn-svelte writes', () => {
-    for (const name of ['chart-1', 'chart-5', 'sidebar', 'sidebar-ring'])
-      expect(shadcnCss()).toContain(`--${name}: var(--cc-${shadcnBridge[name]});`);
+    expect(themeCss(themes.uteke)).toContain('background-color: var(--background);');
   });
 });

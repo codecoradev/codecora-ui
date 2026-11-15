@@ -58,8 +58,7 @@
       ></span>
       <div class="grid flex-1 gap-1">
         <strong>{item.title}</strong>
-        {#if item.description}<span
-            class="text-muted-foreground text-[length:var(--cc-font-size-sm)]"
+        {#if item.description}<span class="text-muted-foreground text-sm leading-[inherit]"
             >{item.description}</span
           >{/if}
       </div>

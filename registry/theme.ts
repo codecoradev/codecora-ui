@@ -15,19 +15,20 @@ export interface ThemeVersions {
 
 /**
  * `@codecora/tokens/theme.css` declares every shadcn variable (`--background`,
- * `--primary`, ... and our extensions) in Tailwind's base layer. shadcn writes
+ * `--primary`, ... and our extensions) on each theme, in Tailwind's base layer. shadcn writes
  * its own values into the app's `:root` and `.dark` without a layer, which
  * would win over them, and the CLI can only set those variables, not delete
  * them: `revert-layer` sets each one back to the value theme.css declares.
  */
 export const revertedVariables: Readonly<Record<string, string>> = Object.fromEntries(
-  Object.keys(themeVariables).map((name) => [name, 'revert-layer']),
+  themeVariables.map((name) => [name, 'revert-layer']),
 );
 
 /**
  * Theme keys shadcn also writes into the app's `@theme inline` block (radius
  * and fonts). That block comes after the theme.css import, so its values would
- * win; the item writes theme.css's own values there instead.
+ * win; the item writes theme.css's own values there instead: each key reads
+ * the variable of the same name the themes declare (`--radius-md: var(--radius-md)`).
  */
 export const themeKeys: Readonly<Record<string, string>> = Object.fromEntries(
   Object.entries(tailwindKeys).filter(([key]) => /^(radius|font)-/.test(key)),

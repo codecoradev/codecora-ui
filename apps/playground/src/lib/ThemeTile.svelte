@@ -32,9 +32,9 @@
   const ratio = (a: string, b: string) => contrastRatio(parseColor(a), parseColor(b)).toFixed(1);
   const lightness = (value: string) => /oklch\(\s*([\d.]+)%/.exec(value)?.[1];
 
-  const muted = 'text-muted-foreground text-[length:var(--cc-font-size-sm)]';
+  const muted = 'text-muted-foreground text-sm leading-[inherit]';
   const surface = 'h-7 rounded-md border';
-  const proof = 'bg-muted rounded-md px-3 py-2 text-[length:var(--cc-font-size-sm)]';
+  const proof = 'bg-muted rounded-md px-3 py-2 text-sm leading-[inherit]';
   const num = 'font-mono tabular-nums';
   const pair = 'inline-flex items-center gap-2';
 </script>
@@ -48,7 +48,7 @@
 >
   <header class="flex items-start justify-between gap-3">
     <div class="grid min-w-0 gap-1">
-      <h4 id="tile-{name}" class="font-display text-[length:var(--cc-font-size-xl)] font-bold">
+      <h4 id="tile-{name}" class="font-display text-xl leading-[inherit] font-bold">
         <!-- The title opens the theme page, so it looks like a link at rest. -->
         <a
           class="decoration-input underline-offset-text focus-visible:outline-ring text-inherit underline decoration-2 hover:decoration-current focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)]"
@@ -57,10 +57,7 @@
       </h4>
       <p class={muted}>{northStars[name]}</p>
     </div>
-    <span
-      class="font-display text-[length:var(--cc-font-size-3xl)] leading-none font-semibold"
-      aria-hidden="true">Aa</span
-    >
+    <span class="font-display text-3xl leading-none font-semibold" aria-hidden="true">Aa</span>
   </header>
 
   <!-- Its surfaces in order, at the control radius: round themes read as pills. -->
@@ -100,19 +97,19 @@
   <div class="flex flex-wrap items-center gap-2" aria-hidden="true">
     <!-- The filled action as the theme draws it: accent, radius, label colour. -->
     <span
-      class="min-h-control px-control-x bg-primary text-primary-foreground inline-flex items-center rounded-md text-[length:var(--cc-font-size-sm)] font-semibold"
+      class="min-h-control px-control-x bg-primary text-primary-foreground inline-flex items-center rounded-md text-sm leading-[inherit] font-semibold"
       >Save</span
     >
     <!-- The focus ring, drawn on so its width and offset can be compared. -->
     <span
-      class="min-h-control px-control-x border-input bg-card outline-ring inline-flex items-center rounded-md border text-[length:var(--cc-font-size-sm)] outline-[length:var(--cc-focus-width)] outline-offset-[var(--cc-focus-offset)]"
+      class="min-h-control px-control-x border-input bg-card outline-ring inline-flex items-center rounded-md border text-sm leading-[inherit] outline-[length:var(--cc-focus-width)] outline-offset-[var(--cc-focus-offset)]"
       >Focused</span
     >
     <Badge tone="success">Active</Badge>
     <Badge tone="danger">Revoked</Badge>
     <!-- A floating layer: the theme's own shadow and large radius. -->
     <span
-      class="border-border bg-card shadow-popover inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-[length:var(--cc-font-size-sm)]"
+      class="border-border bg-card shadow-popover inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm leading-[inherit]"
       >Saved <span class="text-muted-foreground font-mono tabular-nums">now</span></span
     >
   </div>

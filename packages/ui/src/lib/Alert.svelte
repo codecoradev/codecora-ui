@@ -41,6 +41,6 @@
   <Glyph name={glyph} />
   <div class="grid gap-1">
     {#if title}<p class="m-0 font-semibold">{title}</p>{/if}
-    <div class="text-[length:var(--cc-font-size-sm)]">{@render children()}</div>
+    <div class="text-sm leading-[inherit]">{@render children()}</div>
   </div>
 </div>

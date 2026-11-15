@@ -31,7 +31,7 @@
 </script>
 
 <div class="cc-slider grid gap-2">
-  <div class="flex justify-between text-[length:var(--cc-font-size-sm)]">
+  <div class="flex justify-between text-sm leading-[inherit]">
     <span id="{uid}-label">{label}</span>
     {#if showValue}<span class="text-muted-foreground font-mono tabular-nums">{format(value)}</span
       >{/if}

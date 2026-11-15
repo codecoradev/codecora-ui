@@ -59,7 +59,7 @@
   class="border-border bg-card mt-5 grid gap-4 rounded-lg border p-4"
   aria-labelledby="strip-title"
 >
-  <h2 id="strip-title" class="text-[length:var(--cc-font-size-md)] font-bold">
+  <h2 id="strip-title" class="leading-heading text-base font-bold">
     Pick a theme, watch the components follow
   </h2>
 
@@ -67,7 +67,7 @@
        Positioned, so each button's offsetLeft is measured from the rail. Phones keep the
        names in one row that scrolls sideways, faded at the edge so it reads as more. -->
   <div
-    class="relative flex flex-wrap gap-2 max-[47.99rem]:-mx-4 max-[47.99rem]:snap-x max-[47.99rem]:snap-proximity max-[47.99rem]:scroll-px-4 max-[47.99rem]:[scrollbar-width:none] max-[47.99rem]:flex-nowrap max-[47.99rem]:overflow-x-auto max-[47.99rem]:[mask-image:linear-gradient(to_right,transparent,var(--cc-text)_var(--cc-space-4),var(--cc-text)_calc(100%-var(--cc-space-8)),transparent)] max-[47.99rem]:px-4 max-[47.99rem]:py-1"
+    class="relative flex flex-wrap gap-2 max-[47.99rem]:-mx-4 max-[47.99rem]:snap-x max-[47.99rem]:snap-proximity max-[47.99rem]:scroll-px-4 max-[47.99rem]:[scrollbar-width:none] max-[47.99rem]:flex-nowrap max-[47.99rem]:overflow-x-auto max-[47.99rem]:[mask-image:linear-gradient(to_right,transparent,var(--foreground)_calc(var(--spacing)*4),var(--foreground)_calc(100%-calc(var(--spacing)*8)),transparent)] max-[47.99rem]:px-4 max-[47.99rem]:py-1"
     role="toolbar"
     tabindex="-1"
     aria-label="Theme"
@@ -89,12 +89,10 @@
       >
         <!-- The picked theme gets a heavier frame and a check, not colour alone. -->
         <span
-          class="border-input bg-background text-foreground group-hover:bg-accent inline-flex min-h-11 min-w-11 items-center gap-2 rounded-md border px-3 text-[length:var(--cc-font-size-sm)] group-aria-pressed:[box-shadow:0_0_0_2px_var(--cc-surface),0_0_0_4px_var(--cc-text)]"
+          class="border-input bg-background text-foreground group-hover:bg-accent inline-flex min-h-11 min-w-11 items-center gap-2 rounded-md border px-3 text-sm leading-[inherit] group-aria-pressed:[box-shadow:0_0_0_2px_var(--background),0_0_0_4px_var(--foreground)]"
           data-theme={option}
         >
-          <span
-            class="font-display text-[length:var(--cc-font-size-lg)] leading-none font-semibold"
-            aria-hidden="true">Aa</span
+          <span class="font-display text-lg leading-none font-semibold" aria-hidden="true">Aa</span
           ><!-- The theme's default accent. --><span
             class="bg-primary size-2 flex-none rounded-full"
             aria-hidden="true"
@@ -124,7 +122,7 @@
       Save key
     </Button>
   </div>
-  <p class="flex flex-wrap gap-x-5 gap-y-1 text-[length:var(--cc-font-size-sm)]">
+  <p class="flex flex-wrap gap-x-5 gap-y-1 text-sm leading-[inherit]">
     <Link href="#themes-title">What each theme changes</Link>
     <Link href={resolve('/components')}>Every component in every state</Link>
   </p>

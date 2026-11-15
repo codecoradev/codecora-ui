@@ -8,6 +8,19 @@ changesets (`packages/*/CHANGELOG.md`).
 
 ## [Unreleased]
 
+### Migration: Tailwind-first tokens (D13, #155)
+
+The themes now declare the shadcn variable names and Tailwind's theme keys
+directly; the `--cc-*` names that have a Tailwind home are gone. Breaking for
+consumers of `@codecora/tokens`, `@codecora/ui` and `@codecora/memory`; the
+maintainer picks the version.
+
+- **One stylesheet.** `@codecora/tokens/theme.css` is the only CSS export. `tokens.css`, `base.css`, `themes/*.css`, the `tailwind.css` preset (`bg-cc-*`, `rounded-cc-*`, `ease-cc-*`) and the `shadcn.css` bridge are removed. Every app runs Tailwind 4 and imports, after `tailwindcss`: `@codecora/tokens/theme.css`, `@codecora/ui/source.css` (and `@codecora/memory/source.css` for the memory components).
+- **Renamed variables.** Colours take the shadcn names (`--cc-surface` → `--background`, `--cc-surface-raised` → `--card` and `--popover`, `--cc-surface-sunken` → `--muted`, `--cc-surface-hover` → `--accent`, `--cc-border-strong` → `--input`, `--cc-text` → `--foreground`, `--cc-text-muted` → `--muted-foreground`, `--cc-accent*` → `--primary*` (`-text` → `-foreground`), `--cc-focus` → `--ring`, `--cc-danger*` → `--destructive*`, `--cc-success|warning-text` → `--success|warning-foreground`, `--cc-scrim` → `--overlay`). Non-colour tokens move to Tailwind's namespaces: `--radius-sm|md|lg`, `--font-sans|display|mono`, `--spacing-control`, `--spacing-control-x|y`, `--spacing-stack`, `--spacing-cell-x|y`, `--shadow-popover|modal`, `--ease-enter|exit|move|spring` (from `--cc-ease-out|exit|in-out|spring`). `--cc-space-*`, `--cc-font-size-*`, `--cc-leading-*` and `--cc-radius-pill` are removed: use Tailwind's spacing, `text-*`, `leading-heading` (1.2) or `leading-normal`, and `rounded-full`. Apps that override a token rename the override; the full table is in the [tokens README](packages/tokens/README.md#migrating-from---cc--07).
+- **Kept.** Tokens Tailwind has no namespace for keep the `cc-` prefix: `--cc-focus-width`, `--cc-focus-offset`, `--cc-icon-size`, `--cc-icon-stroke`, `--cc-badge-*`, `--cc-row-marker`, `--cc-press-scale`, `--cc-duration-*`, `--cc-layer-*`.
+- **Type scale.** Components use Tailwind's `text-xs` ... `text-3xl`. `xs`, `sm`, `base` and `lg` are unchanged; `xl`, `2xl` and `3xl` are now 1.25, 1.5 and 1.875rem (were 1.375, 1.75 and 2.25rem), so those headings are slightly smaller. Headings set `leading-heading` (1.2) themselves.
+- **TypeScript.** `shadcnBridge` and `shadcnExtensions` are removed; `themeVariables` is now the list of colour variable names (plus `radius`), `semanticTokens` lists the new names and `cssVar('background')` returns `var(--background)`. New: `colorTokens`, `colorVariables`, `accentVariables`, `aliasVariables`, `themeKeys`, `densityVariables`. `ease` is keyed `enter|exit|move|spring`, `fontSize` is Tailwind's scale, `leading` is `{ heading }`, and `Theme.radius` has no `pill`.
+
 ## [0.7.0] - 2026-11-04
 
 `@codecora/tokens` 0.7.0, `@codecora/ui` 0.6.0 and `@codecora/memory` 0.3.1. `@codecora/icons` and `@codecora/brand` stay at 0.1.0. Install from the GitHub Release tarballs (see the README); npm publishing is still pending (#15).

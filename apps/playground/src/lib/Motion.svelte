@@ -43,39 +43,39 @@
     {
       id: 'dialog',
       name: 'Dialog',
-      enter: 'fade normal · ease-out, rise slow · spring',
+      enter: 'fade normal · ease-enter, rise slow · spring',
       exit: 'fade and drop fast · ease-exit',
     },
     {
       id: 'sheet',
       name: 'Sheet',
-      enter: 'slide normal · ease-out',
+      enter: 'slide normal · ease-enter',
       exit: 'slide fast · ease-exit',
     },
     {
       id: 'palette',
       name: 'CommandPalette',
-      enter: 'fade normal · ease-out, drop slow · spring',
+      enter: 'fade normal · ease-enter, drop slow · spring',
       exit: 'fade and lift fast · ease-exit',
     },
     {
       id: 'popover',
       name: 'Popover',
-      enter: 'fade and scale fast · ease-out',
+      enter: 'fade and scale fast · ease-enter',
       exit: 'fade and scale instant · ease-exit',
     },
     {
       id: 'toast',
       name: 'Toast',
-      enter: 'fade normal · ease-out, rise slow · spring',
+      enter: 'fade normal · ease-enter, rise slow · spring',
       exit: 'fade and drop fast · ease-exit',
     },
   ];
 
   const curves: { name: keyof typeof ease; use: string }[] = [
-    { name: 'out', use: 'Entries: fast start, soft landing.' },
+    { name: 'enter', use: 'Entries: fast start, soft landing.' },
     { name: 'exit', use: 'Exits: leaves at full speed.' },
-    { name: 'in-out', use: 'Moving between two resting places.' },
+    { name: 'move', use: 'Moving between two resting places.' },
     { name: 'spring', use: 'Movement and scale only, never opacity or colour.' },
   ];
 
@@ -97,68 +97,71 @@
     {
       name: 'Button',
       steps: [
-        ['Press', 'scales to --cc-press-scale instant · ease-out; reduced motion keeps it at 1'],
-        ['Hover', 'fill fast · ease-out'],
+        ['Press', 'scales to --cc-press-scale instant · ease-enter; reduced motion keeps it at 1'],
+        ['Hover', 'fill fast · ease-enter'],
       ],
     },
     {
       name: 'Accordion',
       steps: [
-        ['Open', 'height and fade normal · ease-out'],
-        ['Close', 'fast · ease-exit; chevron turns fast · in-out'],
+        ['Open', 'height and fade normal · ease-enter'],
+        ['Close', 'fast · ease-exit; chevron turns fast · ease-move'],
       ],
     },
     { name: 'Tabs', steps: [['Select', 'underline slides slow · spring']] },
     {
       name: 'Tooltip',
       steps: [
-        ['Enter', 'fade and scale fast · ease-out'],
+        ['Enter', 'fade and scale fast · ease-enter'],
         ['Exit', 'instant · ease-exit'],
       ],
     },
     {
       name: 'DropdownMenu',
       steps: [
-        ['Enter', 'fade and scale fast · ease-out'],
+        ['Enter', 'fade and scale fast · ease-enter'],
         ['Exit', 'instant · ease-exit'],
       ],
     },
     {
       name: 'Select',
       steps: [
-        ['Enter', 'fade and scale fast · ease-out'],
+        ['Enter', 'fade and scale fast · ease-enter'],
         ['Exit', 'instant · ease-exit'],
       ],
     },
     {
       name: 'Combobox',
       steps: [
-        ['Enter', 'fade and scale fast · ease-out'],
+        ['Enter', 'fade and scale fast · ease-enter'],
         ['Exit', 'instant · ease-exit'],
       ],
     },
     {
       name: 'Checkbox',
       steps: [
-        ['Check', 'fill fast · ease-out, mark slow · spring'],
+        ['Check', 'fill fast · ease-enter, mark slow · spring'],
         ['Uncheck', 'instant · ease-exit'],
       ],
     },
     {
       name: 'Slider',
       steps: [
-        ['Step', 'keyboard steps glide fast · ease-out'],
-        ['Hold', 'thumb grows fast · ease-out; drags never lag'],
+        ['Step', 'keyboard steps glide fast · ease-enter'],
+        ['Hold', 'thumb grows fast · ease-enter; drags never lag'],
       ],
     },
-    { name: 'ToggleGroup', steps: [['Change', 'fill and colour fast · ease-out']] },
-    { name: 'Pagination', steps: [['Change', 'fill and colour fast · ease-out']] },
-    { name: 'Avatar', steps: [['Load', 'image fades in normal · ease-out']] },
-    { name: 'Alert', steps: [['Arrive', 'fade and settle normal · ease-out']] },
-    { name: 'RadioGroup', steps: [['Select', 'dot fades fast · ease-out, scales slow · spring']] },
-    { name: 'Field', steps: [['Error', 'fade and settle normal · ease-out']] },
-    { name: 'Input', steps: [['Invalid', 'border and ring fast · ease-out']] },
-    { name: 'Table', steps: [['Row', 'hover and selection fill fast · ease-out']] },
+    { name: 'ToggleGroup', steps: [['Change', 'fill and colour fast · ease-enter']] },
+    { name: 'Pagination', steps: [['Change', 'fill and colour fast · ease-enter']] },
+    { name: 'Avatar', steps: [['Load', 'image fades in normal · ease-enter']] },
+    { name: 'Alert', steps: [['Arrive', 'fade and settle normal · ease-enter']] },
+    {
+      name: 'RadioGroup',
+      steps: [['Select', 'dot fades fast · ease-enter, scales slow · spring']],
+    },
+    { name: 'Field', steps: [['Error', 'fade and settle normal · ease-enter']] },
+    { name: 'Input', steps: [['Invalid', 'border and ring fast · ease-enter']] },
+    { name: 'Table', steps: [['Row', 'hover and selection fill fast · ease-enter']] },
   ];
 
   const plans = [
@@ -189,14 +192,14 @@
 
   const snippet = `.panel {
   transition:
-    opacity var(--cc-duration-normal) var(--cc-ease-out),
-    transform var(--cc-duration-slow) var(--cc-ease-spring);
+    opacity var(--cc-duration-normal) var(--ease-enter),
+    transform var(--cc-duration-slow) var(--ease-spring);
 }
 .panel[data-state='closed'] {
   transition-duration: var(--cc-duration-fast);
-  transition-timing-function: var(--cc-ease-exit);
+  transition-timing-function: var(--ease-exit);
 }
-/* Under prefers-reduced-motion the tokens are 0ms and the spring is ease-out. */`;
+/* Under prefers-reduced-motion the tokens are 0ms and the spring is ease-enter. */`;
 
   $effect(() => {
     const query = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -213,11 +216,11 @@
     const root = document.documentElement.style;
     const names = [
       ...Object.keys(duration).map((k) => `--cc-duration-${k}`),
-      '--cc-ease-spring',
+      '--ease-spring',
       '--cc-press-scale',
     ];
     const reduced: Record<string, string> = {
-      '--cc-ease-spring': 'var(--cc-ease-out)',
+      '--ease-spring': 'var(--ease-enter)',
       '--cc-press-scale': '1',
     };
     for (const name of names) root.setProperty(name, reduced[name] ?? '0ms');
@@ -272,18 +275,17 @@
     stopping = true;
   }
 
-  const note = 'text-muted-foreground text-[length:var(--cc-font-size-sm)]';
-  const h2 = 'text-[length:var(--cc-font-size-xl)] font-bold';
-  const h3 = 'text-[length:var(--cc-font-size-md)] font-bold';
-  const meta = 'text-muted-foreground text-[length:var(--cc-font-size-sm)]';
+  const note = 'text-muted-foreground text-sm leading-[inherit]';
+  const h2 = 'text-xl leading-heading font-bold';
+  const h3 = 'text-base leading-heading font-bold';
+  const meta = 'text-muted-foreground text-sm leading-[inherit]';
   const track = 'bg-muted @container block rounded-full p-1';
   const dot = 'bg-primary block size-4 rounded-full';
   /* The far end of the track: its width (100cqi) less the dot's own. */
   const moveTo = '[transform:translateX(var(--pg-track-end))]';
   const card =
     'border-border bg-card grid content-start justify-items-start gap-3 rounded-md border p-4';
-  const dl =
-    'grid grid-cols-[var(--pg-cols-term)] gap-x-3 gap-y-1 text-[length:var(--cc-font-size-sm)]';
+  const dl = 'grid grid-cols-[var(--pg-cols-term)] gap-x-3 gap-y-1 text-sm leading-[inherit]';
 </script>
 
 <div class="grid gap-10">
@@ -291,7 +293,7 @@
     <Switch
       bind:checked={reduce}
       label="Reduce motion"
-      description="Applies what the tokens do under prefers-reduced-motion: every duration 0 ms, spring falls back to ease-out."
+      description="Applies what the tokens do under prefers-reduced-motion: every duration 0 ms, spring falls back to ease-enter."
     />
     {#if systemReduces}
       <p class={note}>
@@ -308,11 +310,11 @@
       >
     </div>
     <p class={note}>
-      Durations run with <code>ease-out</code>. Curves run at <code>slow</code> so their shape shows.
+      Durations run with <code>ease-enter</code>. Curves run at <code>slow</code> so their shape shows.
     </p>
     <details class="group">
       <summary
-        class="border-input bg-card focus-visible:outline-ring inline-flex min-h-11 cursor-pointer items-center rounded-md border px-3 text-[length:var(--cc-font-size-sm)] font-semibold group-open:mb-3 focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)]"
+        class="border-input bg-card focus-visible:outline-ring inline-flex min-h-11 cursor-pointer items-center rounded-md border px-3 text-sm leading-[inherit] font-semibold group-open:mb-3 focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)]"
         >Use the tokens</summary
       >
       <CodeBlock code={snippet} language="css" />
@@ -327,7 +329,7 @@
           <span class={track} aria-hidden="true">
             <span
               class={[dot, moved && moveTo]}
-              style:transition="transform var(--cc-duration-{step}) var(--cc-ease-out)"
+              style:transition="transform var(--cc-duration-{step}) var(--ease-enter)"
             ></span>
           </span>
         </li>
@@ -338,7 +340,7 @@
           <span class={track} aria-hidden="true">
             <span
               class={[dot, moved && moveTo]}
-              style:transition="transform var(--cc-duration-slow) var(--cc-ease-{name})"
+              style:transition="transform var(--cc-duration-slow) var(--ease-{name})"
             ></span>
           </span>
         </li>

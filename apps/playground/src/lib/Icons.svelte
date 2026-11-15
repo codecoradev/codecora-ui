@@ -13,7 +13,7 @@
   const names = Object.keys(lucide) as (keyof typeof lucide)[];
 
   const section = 'grid grid-cols-1 gap-4 pb-10';
-  const h2 = 'text-[length:var(--cc-font-size-xl)] font-bold';
+  const h2 = 'text-xl leading-heading font-bold';
   const row = 'flex flex-wrap items-center gap-3';
   const inline = 'flex flex-wrap items-center gap-2';
 </script>
@@ -31,7 +31,7 @@
         class="border-border bg-card text-foreground flex flex-wrap items-center gap-4 rounded-md border px-4 py-3"
       >
         <span class="min-w-20 font-semibold">{themes[name].label}</span>
-        <span class="text-muted-foreground min-w-40 font-mono text-[length:var(--cc-font-size-sm)]"
+        <span class="text-muted-foreground min-w-40 font-mono text-sm leading-[inherit]"
           >stroke {themes[name].icon.stroke}, size {themes[name].icon.size}</span
         >
         <span class={row} aria-hidden="true">
@@ -85,7 +85,7 @@
   <ul class="grid grid-cols-[repeat(auto-fill,minmax(calc(var(--spacing)*36),1fr))] gap-2">
     {#each names as name (name)}
       <li
-        class="border-border flex items-center gap-2 rounded-sm border px-3 py-2 text-[length:var(--cc-font-size-sm)]"
+        class="border-border flex items-center gap-2 rounded-sm border px-3 py-2 text-sm leading-[inherit]"
       >
         <Icon icon={lucide[name]} />
         <span>{name}</span>

@@ -163,7 +163,7 @@
   );
   // The time column; on phones it starts the second line, so it aligns left.
   const time =
-    'text-muted-foreground text-end text-[length:var(--cc-font-size-sm)] tabular-nums max-sm:text-start';
+    'text-muted-foreground text-end text-sm leading-[inherit] tabular-nums max-sm:text-start';
   const views = $derived([
     { value: 'featured', label: `${featuredLabel} ${featuredCount}` },
     { value: 'all', label: `${allLabel} ${tools.length}` },
@@ -177,7 +177,7 @@
     <div class="flex min-w-0 gap-4">
       <Avatar {name} size="lg" />
       <div>
-        <h1 class="m-0 flex flex-wrap items-center gap-2 text-[length:var(--cc-font-size-xl)]">
+        <h1 class="leading-heading m-0 flex flex-wrap items-center gap-2 text-xl">
           {name}
           {#if badge}<Badge tone={badge.tone}>{badge.label}</Badge>{/if}
         </h1>
@@ -207,16 +207,14 @@
   </header>
 
   <section aria-labelledby="groups-title">
-    <h2 class="mx-0 mt-0 mb-3 text-[length:var(--cc-font-size-lg)]" id="groups-title">
+    <h2 class="leading-heading mx-0 mt-0 mb-3 text-lg" id="groups-title">
       {groupsTitle}
     </h2>
     <div class="border-border bg-card rounded-lg border">
       {#each groups as group (group.label)}
         <div class="border-border not-first:border-t">
           <div class="flex items-center justify-between gap-3 px-4 py-2">
-            <h3
-              class="text-muted-foreground m-0 text-[length:var(--cc-font-size-sm)] font-semibold"
-            >
+            <h3 class="text-muted-foreground leading-heading m-0 text-sm font-semibold">
               {group.label}
             </h3>
             {#if group.actionLabel}
@@ -227,7 +225,7 @@
           </div>
           {#if group.rows.length === 0}
             {#if group.empty}
-              <p class="text-muted-foreground m-0 px-4 py-3 text-[length:var(--cc-font-size-sm)]">
+              <p class="text-muted-foreground m-0 px-4 py-3 text-sm leading-[inherit]">
                 {group.empty}
               </p>
             {/if}
@@ -237,7 +235,7 @@
                 <!-- One column per cell, so badges, times and menus line up from row to row;
                      on phones the label takes a line and the rest share the next. -->
                 <li
-                  class="grid grid-cols-[minmax(0,1fr)_5rem_9.5rem_var(--cc-control-h)] items-center gap-3 px-4 py-2 max-sm:grid-cols-[auto_minmax(0,1fr)_var(--cc-control-h)]"
+                  class="grid grid-cols-[minmax(0,1fr)_5rem_9.5rem_var(--spacing-control)] items-center gap-3 px-4 py-2 max-sm:grid-cols-[auto_minmax(0,1fr)_var(--spacing-control)]"
                 >
                   <span class="min-w-0 wrap-anywhere max-sm:col-span-full">{row.label}</span>
                   <span>
@@ -263,7 +261,7 @@
   </section>
 
   <section aria-labelledby="tools-title">
-    <h2 class="mx-0 mt-0 mb-3 text-[length:var(--cc-font-size-lg)]" id="tools-title">
+    <h2 class="leading-heading mx-0 mt-0 mb-3 text-lg" id="tools-title">
       {toolsTitle}
     </h2>
     <div class="flex flex-wrap items-center justify-between gap-3">

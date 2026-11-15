@@ -3,8 +3,9 @@
 // strings in every file already written with utilities (a .svelte file
 // without a <style> block, and its tv()/cn() calls, plus the variables and
 // prop defaults those read). Strings built elsewhere (imported constants,
-// .ts modules) are not followed. Files still on plain CSS
-// are covered by usage.test.ts until they migrate.
+// .ts modules) are not followed. A file with a <style> block is skipped:
+// every component, block and page is on utilities, so only a file whose
+// markup holds a "<style>" string (the playground layout's {@html}) is left out.
 import { readdirSync, readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { dirname, join, relative } from 'node:path';
@@ -513,6 +514,33 @@ describe('migrated files', () => {
       }
       return seen.get(t)!;
     };
+  });
+
+  it('reads only variables that something declares', () => {
+    // theme.css, Tailwind's own theme and internals, bits-ui, the playground's
+    // own --pg-* globals and properties a file declares itself.
+    const require = createRequire(import.meta.url);
+    const tw = dirname(require.resolve('tailwindcss/package.json'));
+    const declaredIn = (css: string) => [...css.matchAll(/(--[\w-]+)\s*:/g)].map((m) => m[1]!);
+    const playgroundCss = join(root, 'apps/playground/src/lib/playground.css');
+    const declared = new Set([
+      ...declaredIn(tailwindThemeCss()),
+      ...declaredIn(readFileSync(join(tw, 'theme.css'), 'utf8')),
+      ...declaredIn(readFileSync(playgroundCss, 'utf8')),
+    ]);
+    const allowed = (name: string) => declared.has(name) || /^--(tw-|bits-)/.test(name);
+    const unknown = files.flatMap((file) => {
+      const source = readFileSync(file, 'utf8');
+      const own = new Set(declaredIn(source));
+      return (
+        [...source.matchAll(/var\((--[\w-]+)/g)]
+          .map((m) => m[1]!)
+          // A name built at run time (`var(--radius-${size})`) ends in `-`: not checkable here.
+          .filter((name) => !name.endsWith('-') && !allowed(name) && !own.has(name))
+          .map((name) => `${relative(root, file)}: ${name}`)
+      );
+    });
+    expect(unknown).toEqual([]);
   });
 
   it('knows Tailwind and theme classes and rejects a typo', () => {

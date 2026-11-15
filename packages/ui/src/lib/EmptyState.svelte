@@ -21,9 +21,8 @@
   {#if icon}<span class="text-muted-foreground mb-2 inline-flex [&_.cc-icon_svg]:size-8"
       ><Icon {icon} /></span
     >{/if}
-  <svelte:element
-    this={`h${level}`}
-    class="font-display m-0 text-[length:var(--cc-font-size-lg)] font-bold">{title}</svelte:element
+  <svelte:element this={`h${level}`} class="font-display leading-heading m-0 text-lg font-bold"
+    >{title}</svelte:element
   >
   {#if description}<p class="max-w-description text-muted-foreground m-0 text-pretty">
       {description}

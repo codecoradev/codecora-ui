@@ -2,23 +2,23 @@
 name: CodeCora UI, soft theme
 description: The Pebble.
 colors:
-  surface: "oklch(98% 0.008 30)"
-  surface-raised: "oklch(99.5% 0.004 30)"
-  surface-sunken: "oklch(95.5% 0.012 30)"
-  surface-hover: "oklch(93% 0.016 30)"
+  background: "oklch(98% 0.008 30)"
+  card: "oklch(99.5% 0.004 30)"
+  muted: "oklch(95.5% 0.012 30)"
+  accent: "oklch(93% 0.016 30)"
   border: "oklch(89% 0.018 30)"
-  border-strong: "oklch(55% 0.03 30)"
-  text: "oklch(25% 0.025 30)"
-  text-muted: "oklch(46% 0.03 30)"
-  danger: "oklch(47% 0.18 27)"
-  danger-text: "oklch(99% 0.004 27)"
+  input: "oklch(55% 0.03 30)"
+  foreground: "oklch(25% 0.025 30)"
+  muted-foreground: "oklch(46% 0.03 30)"
+  destructive: "oklch(47% 0.18 27)"
+  destructive-foreground: "oklch(99% 0.004 27)"
   success: "oklch(46% 0.15 150)"
-  success-text: "oklch(98% 0.006 150)"
+  success-foreground: "oklch(98% 0.006 150)"
   warning: "oklch(47% 0.1 70)"
-  warning-text: "oklch(99% 0.004 70)"
-  accent: "oklch(50% 0.17 295)"
-  accent-hover: "oklch(44% 0.17 295)"
-  accent-text: "oklch(99% 0.004 295)"
+  warning-foreground: "oklch(99% 0.004 70)"
+  primary: "oklch(50% 0.17 295)"
+  primary-hover: "oklch(44% 0.17 295)"
+  primary-foreground: "oklch(99% 0.004 295)"
 typography:
   body:
     fontFamily: "ui-rounded, 'Nunito', 'SF Pro Rounded', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif"
@@ -57,7 +57,7 @@ Radius 8px for inline pieces, 14px for controls and cards, 22px for dialogs, pil
 
 ### Shadows
 
-Popovers and dialogs use wider, fainter drops than the default (35% and 45% of the scrim, blurred over `--cc-space-8` and `--cc-space-16`).
+Popovers and dialogs use wider, fainter drops than the default (35% and 45% of the overlay, blurred over `2rem` and `4rem`).
 
 ### Shape hooks
 

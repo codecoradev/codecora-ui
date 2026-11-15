@@ -98,7 +98,7 @@
   <div class="flex flex-wrap items-center gap-4" role={tone === 'danger' ? 'alert' : 'status'}>
     <span class={mark} aria-hidden="true"><Glyph size={20} /></span>
     <div class="min-w-0 shrink grow basis-56">
-      <h2 class="m-0 text-[length:var(--cc-font-size-xl)]" id="{uid}-title">{title}</h2>
+      <h2 class="leading-heading m-0 text-xl" id="{uid}-title">{title}</h2>
       {#if description}<p class="text-muted-foreground m-0">{description}</p>{/if}
     </div>
     {#if actionLabel}
@@ -113,7 +113,7 @@
     >
       {#each stats as stat (stat.label)}
         <div class="bg-card grid gap-1 px-4 py-3">
-          <dt class="text-muted-foreground text-[length:var(--cc-font-size-sm)]">{stat.label}</dt>
+          <dt class="text-muted-foreground text-sm leading-[inherit]">{stat.label}</dt>
           <dd
             class={cn(
               'm-0 wrap-anywhere',
@@ -137,6 +137,6 @@
   {/if}
 
   {#if note}
-    <p class="text-muted-foreground m-0 text-[length:var(--cc-font-size-sm)]">{note}</p>
+    <p class="text-muted-foreground m-0 text-sm leading-[inherit]">{note}</p>
   {/if}
 </section>

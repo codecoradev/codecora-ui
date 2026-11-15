@@ -26,12 +26,12 @@
   ];
 
   const cell = 'border-border border-b p-3 text-left align-top';
-  const colHead = `${cell} text-muted-foreground text-[length:var(--cc-font-size-sm)] font-semibold`;
-  const rowHead = `${cell} text-[length:var(--cc-font-size-sm)] font-medium whitespace-nowrap`;
+  const colHead = `${cell} text-muted-foreground text-sm leading-[inherit] font-semibold`;
+  const rowHead = `${cell} text-sm leading-[inherit] font-medium whitespace-nowrap`;
 </script>
 
 <section aria-labelledby="c-matrix" class="grid grid-cols-1 gap-4 pb-10">
-  <h2 id="c-matrix" class="text-[length:var(--cc-font-size-xl)] font-bold">State matrix</h2>
+  <h2 id="c-matrix" class="leading-heading text-xl font-bold">State matrix</h2>
   <p class="text-muted-foreground max-w-[var(--pg-measure-intro)]">
     Every state a control can be in, in the theme and density chosen above. Hover and focus need
     your pointer and keyboard: hover a control, or press Tab to see the focus ring each theme draws.
@@ -222,7 +222,7 @@
     <pre
       tabindex="0"
       aria-label="Component props"
-      class="mt-3 overflow-x-auto font-mono text-[length:var(--cc-font-size-sm)]"><code
+      class="mt-3 overflow-x-auto font-mono text-sm leading-[inherit]"><code
         >{`<Button variant="primary|secondary|ghost|danger" icon={Icon} loading loadingLabel="Saving" href disabled />
 <IconButton icon={Icon} label="Required, names the action" variant disabled />
 <Field label description error required>

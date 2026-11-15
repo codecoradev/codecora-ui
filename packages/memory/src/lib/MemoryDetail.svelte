@@ -26,7 +26,7 @@
 
   const uid = $props.id();
   const title = cn(
-    'font-display focus-visible:outline-ring m-0 flex flex-wrap items-center gap-2 text-[length:var(--cc-font-size-lg)] font-bold focus:outline-none focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)] focus-visible:outline-solid',
+    'font-display focus-visible:outline-ring leading-heading m-0 flex flex-wrap items-center gap-2 text-lg font-bold focus:outline-none focus-visible:outline-[length:var(--cc-focus-width)] focus-visible:outline-offset-[var(--cc-focus-offset)] focus-visible:outline-solid',
   );
   const memory = $derived(browser.selected);
   const caps = $derived(browser.capabilities);
@@ -131,9 +131,7 @@
       <Alert tone="danger" title="That did not work">{failure}</Alert>
     {/if}
 
-    <p
-      class="max-w-measure m-0 leading-[var(--cc-leading-normal)] wrap-anywhere whitespace-pre-wrap"
-    >
+    <p class="max-w-measure m-0 leading-normal wrap-anywhere whitespace-pre-wrap">
       {memory.content}
     </p>
 
@@ -146,7 +144,7 @@
     {/if}
 
     <dl
-      class="border-border [&_dt]:text-muted-foreground m-0 grid grid-cols-[repeat(auto-fit,minmax(min(100%,calc(var(--spacing)*40)),1fr))] gap-3 border-t pt-4 [&_dd]:m-0 [&_dd]:tabular-nums [&_dt]:text-[length:var(--cc-font-size-xs)]"
+      class="border-border [&_dt]:text-muted-foreground m-0 grid grid-cols-[repeat(auto-fit,minmax(min(100%,calc(var(--spacing)*40)),1fr))] gap-3 border-t pt-4 [&_dd]:m-0 [&_dd]:tabular-nums [&_dt]:text-xs [&_dt]:leading-[inherit]"
     >
       {#if caps.namespaces === 'full'}
         <div>
@@ -174,7 +172,7 @@
       </div>
       <div>
         <dt>ID</dt>
-        <dd class="font-mono text-[length:var(--cc-font-size-xs)] wrap-anywhere">{memory.id}</dd>
+        <dd class="font-mono text-xs leading-[inherit] wrap-anywhere">{memory.id}</dd>
       </div>
     </dl>
 
