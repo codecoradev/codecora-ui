@@ -16,7 +16,8 @@
       "types": "./dist/index.d.ts",
       "svelte": "./dist/index.js",
       "default": "./dist/index.js"
-    }
+    },
+    "./source.css": "./dist/source.css"
   },
   "files": [
     "dist",

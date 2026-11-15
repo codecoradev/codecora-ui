@@ -3,11 +3,14 @@
  * theme. Preflight stays off while pages and components are still plain CSS;
  * it comes in with the pages (#165).
  *
- * No sources yet (source(none), and no @codecora/ui/source.css until the
- * first components migrate in #160): the plain-CSS class names (grid, table,
- * inline, border, ring) would match Tailwind utilities and restyle them.
+ * The playground's own pages are not scanned yet (source(none)): their
+ * plain-CSS class names (grid, table, inline, border, ring) would match
+ * Tailwind utilities and restyle them; they join as they migrate (#165). The
+ * packages' source.css files list only their migrated components.
  */
 @layer theme, base, components, utilities;
 @import 'tailwindcss/theme.css' layer(theme);
 @import 'tailwindcss/utilities.css' layer(utilities) source(none);
 @import '@codecora/tokens/theme.css';
+@import '@codecora/ui/source.css';
+@import '@codecora/memory/source.css';
