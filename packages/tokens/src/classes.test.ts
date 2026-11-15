@@ -330,7 +330,7 @@ const namespacePrefix: Record<string, string> = {
   radius: 'rounded',
   font: 'font',
   tracking: 'tracking',
-  spacing: 'h|w|p|gap|size',
+  spacing: 'h',
   shadow: 'shadow',
   ease: 'ease',
   leading: 'leading',
@@ -349,11 +349,14 @@ export const namedUtility = new Map<string, string>([
     const ns = key.slice(0, key.indexOf('-'));
     return v ? [[v, `${namespacePrefix[ns] ?? ns}-${key.slice(ns.length + 1)}`] as const] : [];
   }),
-  ...Object.entries(tailwindUtilities).flatMap(([name, decls]) => {
-    const values = Object.values(decls);
-    const v = /^var\((--[\w-]+)\)$/.exec(values[0] ?? '')?.[1];
-    return v && values.every((x) => x === values[0]) ? [[v, name] as const] : [];
-  }),
+  // Each declaration that only reads a variable (outline-focus also sets
+  // outline-style, which is not such a read).
+  ...Object.entries(tailwindUtilities).flatMap(([name, decls]) =>
+    Object.values(decls).flatMap((value) => {
+      const v = /^var\((--[\w-]+)\)$/.exec(value)?.[1];
+      return v ? [[v, name] as const] : [];
+    }),
+  ),
 ]);
 
 /** True when an arbitrary value needs no token by the rules above. */
@@ -443,7 +446,7 @@ describe('class lint rules', () => {
     ['active:[scale:var(--cc-press-scale)]', 'use scale-press'],
     ['rounded-[var(--cc-badge-radius)]', 'use rounded-badge'],
     ['font-[family-name:var(--cc-badge-font)]', 'use font-badge'],
-    ['h-[var(--spacing-control)]', 'use h|w|p|gap|size-control'],
+    ['h-[var(--spacing-control)]', 'use h-control'],
   ])('rejects %s', (s, reason) => {
     expect(violations(s, 'packages/ui/src/lib/X.svelte').join('\n')).toContain(reason);
   });

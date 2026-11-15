@@ -281,6 +281,32 @@ describe('overlay animations', () => {
   });
 });
 
+describe('named utilities for the CodeCora-only tokens', () => {
+  it('render what the arbitrary form they replace renders', async () => {
+    const out = await build([
+      'outline-focus',
+      'outline-offset-focus',
+      'stroke-icon',
+      'scale-press',
+      'case-badge',
+      'rounded-badge',
+      'font-badge',
+      'tracking-badge',
+    ]);
+    // A focus ring keeps a solid style, as outline-2 or outline-[length:...] would.
+    expect(out).toMatch(
+      /\.outline-focus \{\s+outline-style: var\(--tw-outline-style, solid\);\s+outline-width: var\(--cc-focus-width\);/,
+    );
+    expect(out).toContain('outline-offset: var(--cc-focus-offset)');
+    expect(out).toContain('stroke-width: var(--cc-icon-stroke)');
+    expect(out).toContain('scale: var(--cc-press-scale)');
+    expect(out).toContain('text-transform: var(--cc-badge-case)');
+    expect(out).toContain('border-radius: var(--cc-badge-radius)');
+    expect(out).toContain('font-family: var(--cc-badge-font)');
+    expect(out).toContain('letter-spacing: var(--cc-badge-tracking)');
+  });
+});
+
 describe('dark: follows the nearest theme', () => {
   const selector = `:where(${darkSelector()})`;
 
