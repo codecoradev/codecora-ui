@@ -330,7 +330,8 @@ const namespacePrefix: Record<string, string> = {
   radius: 'rounded',
   font: 'font',
   tracking: 'tracking',
-  spacing: 'h',
+  // Spacing keys fit any spacing utility; the message keeps the class's own (px-, size-).
+  spacing: '*',
   shadow: 'shadow',
   ease: 'ease',
   leading: 'leading',
@@ -392,7 +393,9 @@ export function violations(classList: string | string[], file: string, timing = 
         ? /^(?:[a-z-]+:)?var\((--[\w-]+)\)$/.exec(value[1]!)?.[1]
         : undefined;
     if (read && namedUtility.has(read))
-      out.push(`${t}: reads ${read}, use ${namedUtility.get(read)}`);
+      out.push(
+        `${t}: reads ${read}, use ${namedUtility.get(read)!.replace(/^\*/, u.indexOf('-[') > 0 ? u.slice(0, u.indexOf('-[')) : 'h')}`,
+      );
     if (/^(duration|delay)-\d+$/.test(u))
       out.push(`${t}: literal duration, use duration-instant|fast|normal|slow`);
     if (/^ease-(linear|in|out|in-out)$/.test(u))
@@ -447,6 +450,8 @@ describe('class lint rules', () => {
     ['rounded-[var(--cc-badge-radius)]', 'use rounded-badge'],
     ['font-[family-name:var(--cc-badge-font)]', 'use font-badge'],
     ['h-[var(--spacing-control)]', 'use h-control'],
+    ['px-[var(--spacing-control-x)]', 'use px-control-x'],
+    ['size-[var(--cc-icon-size)]', 'use size-icon'],
   ])('rejects %s', (s, reason) => {
     expect(violations(s, 'packages/ui/src/lib/X.svelte').join('\n')).toContain(reason);
   });
