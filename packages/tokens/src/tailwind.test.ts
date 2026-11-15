@@ -5,6 +5,8 @@ import { semanticTokens } from './schema.js';
 import {
   darkSelector,
   shadcnExtensions,
+  tailwindAnimations,
+  tailwindKeyframes,
   tailwindKeys,
   tailwindThemeCss,
   tailwindUtilities,
@@ -108,6 +110,83 @@ describe('theme.css compiled by Tailwind', () => {
     const rule = out.slice(out.indexOf('.dark\\:bg-card'));
     expect(rule).toContain('[data-theme=corin]');
     expect(out).toMatch(/@property --tw-duration \{\s+syntax: "\*";\s+inherits: false;/);
+  });
+});
+
+describe('overlay animations', () => {
+  const names = Object.keys(tailwindAnimations).map((k) => `animate-${k}`);
+
+  it('compile to animate-* utilities with their keyframes', async () => {
+    const out = await build(names);
+    for (const [key, value] of Object.entries(tailwindAnimations))
+      expect(out).toContain(`.animate-${key} {\n  animation: ${value};`);
+    for (const name of Object.keys(tailwindKeyframes))
+      expect(out).toContain(`@keyframes ${name} {`);
+  });
+
+  it('emit no keyframes nobody uses', async () => {
+    const out = await build(['animate-popover-in']);
+    expect(out).toContain('@keyframes cc-popover-in');
+    expect(out).not.toContain('@keyframes cc-dialog-in');
+  });
+
+  it('use only keyframes that exist, timed by the duration and easing tokens', () => {
+    for (const value of Object.values(tailwindAnimations))
+      for (const part of value.split(/,(?![^(]*\))/)) {
+        const [name] = part.trim().split(' ');
+        expect(Object.keys(tailwindKeyframes)).toContain(name);
+        expect(part).toMatch(/var\(--cc-duration-(instant|fast|normal|slow)\) var\(--cc-ease-/);
+      }
+  });
+
+  it('spring only movement and run exits one step shorter with ease-exit', () => {
+    const steps = ['instant', 'fast', 'normal', 'slow'];
+    const step = (v: string) =>
+      Math.max(...[...v.matchAll(/--cc-duration-(\w+)/g)].map((m) => steps.indexOf(m[1]!)));
+    for (const [key, value] of Object.entries(tailwindAnimations)) {
+      for (const part of value.split(/,(?![^(]*\))/).filter((p) => p.includes('ease-spring'))) {
+        const frames = Object.values(tailwindKeyframes[part.trim().split(' ')[0]!]!);
+        for (const decls of frames) expect(Object.keys(decls)).toEqual(['transform']);
+      }
+      if (!key.endsWith('-out')) continue;
+      expect(value).toMatch(/var\(--cc-ease-exit\) forwards$/);
+      const entry = tailwindAnimations[key.replace(/-out$/, '-in')]!;
+      const enterStep = Math.min(
+        ...[...entry.matchAll(/--cc-duration-(\w+)\) var\(--cc-ease-out/g)].map((m) =>
+          steps.indexOf(m[1]!),
+        ),
+      );
+      expect(step(value), key).toBe(enterStep - 1);
+    }
+  });
+
+  it('honour reduced motion: durations drop to 0ms and the motion-reduce classes win', async () => {
+    expect(css).toMatch(
+      /@media \(prefers-reduced-motion: reduce\) \{[^}]*--cc-duration-normal: 0ms;[^}]*--cc-ease-spring: var\(--cc-ease-out\)/,
+    );
+    const out = await build([
+      'animate-dialog-in',
+      'data-[state=closed]:animate-dialog-out',
+      'motion-reduce:animate-none',
+      'motion-reduce:data-[state=closed]:animate-none',
+    ]);
+    const closed = out.indexOf(
+      '.data-\\[state\\=closed\\]\\:animate-dialog-out[data-state="closed"]',
+    );
+    expect(closed).toBeGreaterThan(-1);
+    // The open state: one class, so motion-reduce:animate-none (one class, emitted later) wins.
+    expect(out).toMatch(/\.motion-reduce\\:animate-none \{\s+animation: none;/);
+    // The closed state is class + attribute; only a rule with the same two parts, emitted
+    // after it, beats it, so components add motion-reduce:data-[state=closed]:animate-none.
+    const reduceClosed = out.indexOf(
+      '.motion-reduce\\:data-\\[state\\=closed\\]\\:animate-none[data-state="closed"]',
+    );
+    expect(reduceClosed).toBeGreaterThan(closed);
+    expect(out.slice(reduceClosed)).toMatch(/^[^{]*\{\s+animation: none;/);
+    // ...and it sits inside the reduced-motion media block (no top-level `}` in between).
+    const media = out.lastIndexOf('@media (prefers-reduced-motion: reduce)', reduceClosed);
+    expect(media).toBeGreaterThan(-1);
+    expect(out.slice(media, reduceClosed)).not.toMatch(/\n\}/);
   });
 });
 

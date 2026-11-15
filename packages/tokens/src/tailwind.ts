@@ -61,6 +61,71 @@ export const tailwindKeys: Readonly<Record<string, string>> = {
   'ease-spring': 'var(--cc-ease-spring)',
 };
 
+/**
+ * Keyframes for the overlay motion in DESIGN.md, named `cc-*` so they never
+ * meet an app's own. Entries fade with ease-out while only the movement
+ * springs; exits end on their last frame (`forwards`), which bits-ui waits for
+ * before it unmounts the content.
+ */
+export const tailwindKeyframes: Readonly<Record<string, Record<string, Record<string, string>>>> = {
+  'cc-fade-in': { from: { opacity: '0' } },
+  'cc-fade-out': { to: { opacity: '0' } },
+  // Centered dialog and command palette: the movement adds to the element's
+  // own centring (`-translate-1/2`), which sits in `translate`, not `transform`.
+  'cc-dialog-in': { from: { transform: 'translateY(var(--cc-space-3)) scale(0.97)' } },
+  'cc-dialog-out': {
+    to: { opacity: '0', transform: 'translateY(var(--cc-space-2)) scale(0.98)' },
+  },
+  'cc-palette-in': {
+    from: { transform: 'translateY(calc(-1 * var(--cc-space-2))) scale(0.97)' },
+  },
+  'cc-palette-out': {
+    to: { opacity: '0', transform: 'translateY(calc(-1 * var(--cc-space-1))) scale(0.98)' },
+  },
+  'cc-sheet-right-in': { from: { transform: 'translateX(100%)' } },
+  'cc-sheet-right-out': { to: { transform: 'translateX(100%)' } },
+  'cc-sheet-left-in': { from: { transform: 'translateX(-100%)' } },
+  'cc-sheet-left-out': { to: { transform: 'translateX(-100%)' } },
+  'cc-sheet-bottom-in': { from: { transform: 'translateY(100%)' } },
+  'cc-sheet-bottom-out': { to: { transform: 'translateY(100%)' } },
+  // Popover, Tooltip, DropdownMenu: scale from the anchor (transform-origin).
+  'cc-popover-in': { from: { opacity: '0', transform: 'scale(0.96)' } },
+  'cc-popover-out': { to: { opacity: '0', transform: 'scale(0.96)' } },
+  'cc-toast-in': { from: { transform: 'translateY(var(--cc-space-3))' } },
+  'cc-toast-out': { to: { opacity: '0', transform: 'translateY(var(--cc-space-2))' } },
+};
+
+const enter = (name: string, d = 'normal', e = 'out') =>
+  `${name} var(--cc-duration-${d}) var(--cc-ease-${e})`;
+const exit = (name: string, d = 'fast') =>
+  `${name} var(--cc-duration-${d}) var(--cc-ease-exit) forwards`;
+
+/**
+ * `animate-*` utilities for the overlays (`animate-dialog-in`,
+ * `data-[state=closed]:animate-dialog-out`). Every one reads the duration and
+ * easing tokens, so reduced motion drops them to 0ms; components also add
+ * `motion-reduce:animate-none` (plus `motion-reduce:data-[state=closed]:animate-none`
+ * beside an exit) to drop the keyframes, as DESIGN.md asks.
+ */
+export const tailwindAnimations: Readonly<Record<string, string>> = {
+  'overlay-in': enter('cc-fade-in'),
+  'overlay-out': exit('cc-fade-out'),
+  'dialog-in': `${enter('cc-fade-in')}, ${enter('cc-dialog-in', 'slow', 'spring')}`,
+  'dialog-out': exit('cc-dialog-out'),
+  'palette-in': `${enter('cc-fade-in')}, ${enter('cc-palette-in', 'slow', 'spring')}`,
+  'palette-out': exit('cc-palette-out'),
+  'sheet-right-in': enter('cc-sheet-right-in'),
+  'sheet-right-out': exit('cc-sheet-right-out'),
+  'sheet-left-in': enter('cc-sheet-left-in'),
+  'sheet-left-out': exit('cc-sheet-left-out'),
+  'sheet-bottom-in': enter('cc-sheet-bottom-in'),
+  'sheet-bottom-out': exit('cc-sheet-bottom-out'),
+  'popover-in': enter('cc-popover-in', 'fast'),
+  'popover-out': exit('cc-popover-out', 'instant'),
+  'toast-in': `${enter('cc-fade-in')}, ${enter('cc-toast-in', 'slow', 'spring')}`,
+  'toast-out': exit('cc-toast-out'),
+};
+
 /** Utilities with no Tailwind theme namespace: `duration-fast`, `z-popover`. */
 export const tailwindUtilities: Readonly<Record<string, Record<string, string>>> = {
   ...Object.fromEntries(
@@ -118,6 +183,17 @@ export function tailwindThemeCss(): string {
       .filter((k) => !nonColour.has(k))
       .map((k) => `--color-${k}: var(--${k});`),
     ...Object.entries(tailwindKeys).map(([k, v]) => `--${k}: ${v};`),
+    ...Object.entries(tailwindAnimations).map(([k, v]) => `--animate-${k}: ${v};`),
+    // Inside @theme, Tailwind emits a keyframe only when an animate-* utility uses it.
+    ...Object.entries(tailwindKeyframes).flatMap(([name, frames]) => [
+      `@keyframes ${name} {`,
+      ...Object.entries(frames).flatMap(([at, decls]) => [
+        `  ${at} {`,
+        ...Object.entries(decls).map(([p, v]) => `    ${p}: ${v};`),
+        '  }',
+      ]),
+      '}',
+    ]),
   ])}\n}\n`;
 
   const utilities = Object.entries(tailwindUtilities)

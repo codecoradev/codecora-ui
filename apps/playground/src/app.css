@@ -7,10 +7,15 @@
  * plain-CSS class names (grid, table, inline, border, ring) would match
  * Tailwind utilities and restyle them; they join as they migrate (#165). The
  * packages' source.css files list only their migrated components.
+ *
+ * The playground chrome (element defaults, the global focus ring) sits in
+ * the base layer, so a component's utilities win over it, as its scoped CSS
+ * did before.
  */
 @layer theme, base, components, utilities;
 @import 'tailwindcss/theme.css' layer(theme);
 @import 'tailwindcss/utilities.css' layer(utilities) source(none);
 @import '@codecora/tokens/theme.css';
+@import './lib/playground.css' layer(base);
 @import '@codecora/ui/source.css';
 @import '@codecora/memory/source.css';
