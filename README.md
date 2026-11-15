@@ -19,9 +19,11 @@ product fleet and open to any Svelte app.
 - **Accessible by construction.** Every theme and accent passes WCAG AA in CI
   (the `contrast` theme targets 7:1). Every component works with the keyboard
   alone and at 375 px.
-- **No framework lock-in.** Components are plain CSS on semantic `--cc-*`
-  tokens. Tailwind 4 and shadcn-svelte are optional bridges, not requirements.
-  Works in SvelteKit 2, SvelteKit 3, plain Vite and Tauri.
+- **Tailwind 4 first (D13, in progress).** Tokens take the shadcn names
+  (`bg-background`, `bg-primary`, `text-muted-foreground`), so Tailwind and
+  shadcn references apply without translation. Until the
+  [migration](docs/tailwind-migration.md) is done, components are plain CSS on
+  `--cc-*` tokens. Works in SvelteKit 2, SvelteKit 3, plain Vite and Tauri.
 - **Fix once, reach everywhere.** Shared behaviour lives in the packages;
   product identity lives in themes.
 
@@ -211,14 +213,14 @@ Navigation drawer at 375 px:
 ## Documentation
 
 - [docs/architecture.md](docs/architecture.md): packages, tokens and how products consume them
-- [docs/decisions.md](docs/decisions.md): locked decisions D1–D12
+- [docs/decisions.md](docs/decisions.md): locked decisions D1–D13
 - [docs/roadmap.md](docs/roadmap.md): milestones M0–M4 and the issue map
 - [DESIGN.md](DESIGN.md) and [docs/design/](docs/design): rules every theme shares, one file per theme
 - [CHANGELOG.md](CHANGELOG.md)
 
 ## Contributing
 
-Bug fixes are welcome. Changes to direction (new packages, decisions D1–D12)
+Bug fixes are welcome. Changes to direction (new packages, decisions D1–D13)
 start with an issue. See [CONTRIBUTING.md](CONTRIBUTING.md) and
 [AGENTS.md](AGENTS.md) for the workflow and the local gates.
 

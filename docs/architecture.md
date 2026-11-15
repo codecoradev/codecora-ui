@@ -50,7 +50,7 @@ Every theme must pass WCAG AA contrast for text and UI pairs (checked in CI).
 
 ### Components (`@codecora/ui`)
 
-- Built on bits-ui; styled with plain CSS reading semantic tokens only.
+- Built on bits-ui. Since D13 styled with Tailwind 4 utilities on semantic roles (shadcn names), variants through `tailwind-variants`, `class` merged with `cn()`; components not yet migrated still use plain CSS on `--cc-*` ([tailwind-migration.md](tailwind-migration.md)).
 - Svelte 5 runes, `svelte ^5.33` peer, no `$app/*` imports (works in
   SvelteKit 2, SvelteKit 3 and Vite SPAs such as Corin).
 - Packaged with `svelte-package`: `.svelte` sources ship and compile in the

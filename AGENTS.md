@@ -4,7 +4,7 @@ Working conventions for everyone working in this repo: shared design tokens,
 themes and Svelte 5 components for CodeCora products.
 
 Read before changing anything:
-[docs/decisions.md](docs/decisions.md) (locked decisions D1–D12),
+[docs/decisions.md](docs/decisions.md) (locked decisions D1–D13),
 [docs/architecture.md](docs/architecture.md) and
 [docs/roadmap.md](docs/roadmap.md) (milestones M0–M4, issue map).
 
@@ -27,7 +27,7 @@ Boundaries that reviews enforce:
 
 - Dependencies point down only: `memory -> ui -> tokens`. `@codecora/ui` never imports an icon set or anything product-specific.
 - Product-only UI (billing, admin, quotas of any one product) never enters this repo.
-- Components read semantic `--cc-*` tokens only; raw colour literals live in `packages/tokens` and nowhere else.
+- Components use semantic token utilities only (D13: `bg-background`, `text-muted-foreground`, `bg-primary`; `--cc-*` in files not yet migrated); no palette colours (`bg-blue-500`) or arbitrary colour values; raw colour literals live in `packages/tokens` and nowhere else. Migration plan: [docs/tailwind-migration.md](docs/tailwind-migration.md).
 - Svelte 5 runes, `svelte ^5.33` peer, no `$app/*` imports: packages must work in SvelteKit 2, SvelteKit 3 and plain Vite apps.
 - Every theme passes WCAG AA; every component works with the keyboard alone and at 375 px.
 
@@ -52,7 +52,7 @@ merge → cleanup → release (bump + CHANGELOG + tag). 1 issue = 1 branch = 1 P
 - PR body uses exactly `## What` / `## Why` / `## Testing`; one logical change per PR, issue first for anything larger.
 - **The review verdict is the result, not a green check.** Before merging: all checks green, the review comment for the same head commit reports no blocking findings (a review that did not complete is not a pass), PR comments read, branch up to date.
 - Squash merge to `develop` (message = PR title + body), delete the branch, close the issue, sync `develop`.
-- External contributions: bug fixes are welcome; changes to direction (new packages, decisions D1–D12) need maintainer agreement in an issue first.
+- External contributions: bug fixes are welcome; changes to direction (new packages, decisions D1–D13) need maintainer agreement in an issue first.
 
 ## Before committing — mandatory checks
 
