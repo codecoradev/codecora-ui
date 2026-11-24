@@ -22,7 +22,7 @@ jobs:
     # for branches of this repository. Fork PRs are reviewed by a maintainer.
     if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 40
     env:
       # Anthropic workload identity federation (organization secrets or variables).
       # When all four are set, the job exchanges its GitHub OIDC token for a
@@ -111,3 +111,6 @@ jobs:
           cora-api-key: ${{ steps.wif.outputs.token || secrets.CORA_API_KEY }}
           cora-base-url: ${{ steps.wif.outputs.token && 'https://api.anthropic.com/v1' || secrets.CORA_BASE_URL }}
           cora-model: ${{ steps.wif.outputs.token && (secrets.ANTHROPIC_MODEL || vars.ANTHROPIC_MODEL || 'claude-opus-5-5') || secrets.CORA_MODEL }}
+
+          review-timeout-seconds: ${{ secrets.CORA_REVIEW_TIMEOUT_SECONDS }}
+          max-attempts: ${{ secrets.CORA_MAX_ATTEMPTS }}
